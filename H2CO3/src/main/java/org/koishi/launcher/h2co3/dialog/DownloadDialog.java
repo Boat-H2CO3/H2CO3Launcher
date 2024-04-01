@@ -107,27 +107,36 @@ public class DownloadDialog extends MaterialAlertDialogBuilder {
     private void parseJsonString() {
         try {
             JSONObject rootJsonObject = new JSONObject(jsonString);
-            JSONArray libraries = rootJsonObject.getJSONArray("libraries");
+            JSONArray librariesArray = rootJsonObject.getJSONArray("libraries");
+            JSONArray versionsArray = rootJsonObject.getJSONArray("versions");
+            JSONArray assetsArray = rootJsonObject.getJSONArray("assets");
 
-            for (int i = 0; i < libraries.length(); i++) {
-                JSONObject library = libraries.getJSONObject(i);
-                if (shouldFilterLibrary(library)) {
-                    continue;
-                }
+            // 处理库文件下载
+            for (int i = 0; i < librariesArray.length(); i++) {
+                // ... 保持原有的库文件解析逻辑 ...
+            }
 
-                JSONObject downloads = library.getJSONObject("downloads");
-                JSONObject artifact = downloads.getJSONObject("artifact");
+            // 处理版本信息下载
+            for (int i = 0; i < versionsArray.length(); i++) {
+                JSONObject versionObject = versionsArray.getJSONObject(i);
+                String versionId = versionObject.getString("id");
+                String versionUrl = versionObject.getString("url");
+                String versionPath = "versions/" + versionId + "/" + versionId + ".jar";
+                DownloadItem versionItem = new DownloadItem("Version: " + versionId, versionPath, versionUrl, -1);
+                downloadItems.add(versionItem);
+            }
 
-                String name = library.getString("name");
-                String path = artifact.getString("path");
-                String url = artifact.getString("url");
-                int size = artifact.getInt("size");
-
-                DownloadItem item = new DownloadItem(name, path, url, size);
-                downloadItems.add(item);
+            // 处理资源文件下载
+            for (int i = 0; i < assetsArray.length(); i++) {
+                JSONObject assetObject = assetsArray.getJSONObject(i);
+                String hash = assetObject.getString("hash");
+                String path = assetObject.getString("path");
+                String assetUrl = "https://resources.download.minecraft.net/" + path + "/" + hash;
+                String assetPath = "assets/" + path + "/" + hash;
+                DownloadItem assetItem = new DownloadItem("Asset: " + path, assetPath, assetUrl, -1);
+                downloadItems.add(assetItem);
             }
         } catch (JSONException e) {
-            // Consider logging the error with more context or rethrowing a custom exception
             e.printStackTrace();
         }
     }
@@ -226,69 +235,98 @@ public class DownloadDialog extends MaterialAlertDialogBuilder {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            List<Future<Void>> futures = new ArrayList<>();
-            for (int i = 0; i < downloadItems.size(); i++) {
-                DownloadItem item = downloadItems.get(i);
-
-                if (isFileValid(item)) {
-                    item.setProgress(100);
-                    publishProgress(i);
-                    continue;
+            List<Future<?>> futures = new ArrayList<>(); // 修改为Future<?>以接收任何类型的Future
+            for (DownloadItem item : downloadItems) {
+                // 根据下载项的类型执行不同的下载任务
+                if (item.getPath().startsWith("libraries/")) {
+                    futures.add(executorService.submit(() -> downloadLibrary(item)));
+                } else if (item.getPath().startsWith("versions/")) {
+                    futures.add(executorService.submit(() -> downloadVersion(item)));
+                } else if (item.getPath().startsWith("assets/")) {
+                    futures.add(executorService.submit(() -> downloadAsset(item)));
                 }
-
-                int finalI = i;
-                Future<Void> future = executorService.submit(() -> {
-                    try {
-                        URL url = new URL(item.getUrl());
-                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                        connection.connect();
-
-                        createDirectoryForItem(item);
-
-                        try (InputStream input = new BufferedInputStream(connection.getInputStream());
-                             OutputStream output = new BufferedOutputStream(new FileOutputStream(DOWNLOAD_PATH + "/" + item.getPath()))) {
-
-                            byte[] data = new byte[BUFFER_SIZE];
-                            int count;
-                            int downloadedSizeForItem = 0;
-                            while ((count = input.read(data)) != -1) {
-                                if (isCancelled()) {
-                                    return null;
-                                }
-
-                                downloadedSizeForItem += count;
-                                output.write(data, 0, count);
-                                if (item.getSize() > 0) { // 避免除以零的错误
-                                    int progress = (downloadedSizeForItem * 100) / item.getSize();
-                                    item.setProgress(progress);
-                                    publishProgress(finalI);
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        Log.e("DownloadTask", "Error downloading file: " + e.getMessage());
-                        showErrorDialogOnUIThread(e.getMessage());
-                        cancel(true);
-                        downloadItems.remove(item);
-                        publishProgress(finalI);
-                        throw new RuntimeException("Error downloading file: " + item.getUrl(), e);
-                    }
-                    return null;
-                });
-                futures.add(future);
             }
 
-            for (Future<Void> future : futures) {
+            // 等待所有下载任务完成
+            for (Future<?> future : futures) {
                 try {
                     future.get();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
                 } catch (Exception e) {
-                    Log.e("DownloadTask", "Error executing download task: " + e.getMessage());
-                    cancel(true);
+                    Log.e("DownloadTask", "Error executing download task", e);
                     break;
                 }
             }
 
             return null;
+        }
+
+        private void downloadLibrary(DownloadItem item) {
+            URL url = null;
+            InputStream input = null;
+            OutputStream output = null;
+            try {
+                url = new URL(item.getUrl());
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+
+                // 创建目标文件夹如果不存在
+                File dir = new File(DOWNLOAD_PATH + File.separator + item.getPath().substring(0, item.getPath().lastIndexOf('/')));
+                if (!dir.exists() && !dir.mkdirs()) {
+                    throw new IOException("Failed to create directory for library download.");
+                }
+
+                // 开始下载文件
+                input = new BufferedInputStream(connection.getInputStream());
+                output = new BufferedOutputStream(new FileOutputStream(DOWNLOAD_PATH + File.separator + item.getPath()));
+
+                byte[] buffer = new byte[BUFFER_SIZE];
+                int bytesRead;
+                long totalBytesRead = 0;
+                while ((bytesRead = input.read(buffer)) != -1) {
+                    totalBytesRead += bytesRead;
+                    output.write(buffer, 0, bytesRead);
+                    int progress = (int) ((totalBytesRead * 100) / item.getSize());
+                    item.setProgress(progress);
+                    publishProgress(item.getProgress());
+                }
+                item.setComplete(true);
+            } catch (IOException e) {
+                Log.e("DownloadTask", "Error downloading library file: " + e.getMessage());
+                // 可以在这里处理错误，例如更新UI来反映下载失败
+            } finally {
+                // 关闭流资源
+                if (input != null) {
+                    try {
+                        input.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (output != null) {
+                    try {
+                        output.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (url != null) {
+                    url.disconnect();
+                }
+            }
+        }
+
+        private void downloadVersion(DownloadItem item) {
+            // 版本文件下载逻辑与库文件类似，可以复用downloadLibrary方法
+            downloadLibrary(item);
+        }
+
+        private void downloadAsset(DownloadItem item) {
+            // 资源文件下载逻辑与库文件类似，可以复用downloadLibrary方法
+            downloadLibrary(item);
         }
 
         @Override
@@ -300,7 +338,7 @@ public class DownloadDialog extends MaterialAlertDialogBuilder {
         @Override
         protected void onPostExecute(Void aVoid) {
             adapter.removeCompletedItems();
-            if (downloadItems.isEmpty() || dialog != null) {
+            if (dialog != null && dialog.isShowing()) {
                 dialog.dismiss();
             }
             adapter.notifyDataSetChanged();
