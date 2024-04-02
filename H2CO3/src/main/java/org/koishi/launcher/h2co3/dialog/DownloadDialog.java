@@ -113,7 +113,21 @@ public class DownloadDialog extends MaterialAlertDialogBuilder {
 
             // 处理库文件下载
             for (int i = 0; i < librariesArray.length(); i++) {
-                // ... 保持原有的库文件解析逻辑 ...
+                JSONObject library = librariesArray.getJSONObject(i);
+                if (shouldFilterLibrary(library)) {
+                    continue;
+                }
+
+                JSONObject downloads = library.getJSONObject("downloads");
+                JSONObject artifact = downloads.getJSONObject("artifact");
+
+                String name = library.getString("name");
+                String path = artifact.getString("path");
+                String url = artifact.getString("url");
+                int size = artifact.getInt("size");
+
+                DownloadItem item = new DownloadItem(name, path, url, size);
+                downloadItems.add(item);
             }
 
             // 处理版本信息下载
