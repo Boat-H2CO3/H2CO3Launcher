@@ -267,36 +267,34 @@ public class DownloadDialog extends MaterialAlertDialogBuilder {
             URL url = null;
             InputStream input = null;
             OutputStream output = null;
+
             try {
                 url = new URL(item.getUrl());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);
                 connection.connect();
 
-                // 创建目标文件夹如果不存在
-                File dir = new File(DOWNLOAD_PATH + File.separator + item.getPath().substring(0, item.getPath().lastIndexOf('/')));
-                if (!dir.exists() && !dir.mkdirs()) {
-                    throw new IOException("Failed to create directory for library download.");
+                File file = new File(DOWNLOAD_PATH + File.separator + item.getPath());
+                if (!file.exists() && !file.createNewFile()) {
+                    throw new IOException("Failed to create file for library download.");
                 }
 
-                // 开始下载文件
                 input = new BufferedInputStream(connection.getInputStream());
-                output = new BufferedOutputStream(new FileOutputStream(DOWNLOAD_PATH + File.separator + item.getPath()));
+                output = new BufferedOutputStream(new FileOutputStream(file));
 
                 byte[] buffer = new byte[BUFFER_SIZE];
                 int bytesRead;
                 long totalBytesRead = 0;
                 while ((bytesRead = input.read(buffer)) != -1) {
                     totalBytesRead += bytesRead;
+                    int currentProgress = (int) ((totalBytesRead * 100) / item.getSize());
+                    item.setProgress(currentProgress); // 使用DownloadItem的setProgress方法更新进度
                     output.write(buffer, 0, bytesRead);
-                    int progress = (int) ((totalBytesRead * 100) / item.getSize());
-                    item.setProgress(progress);
-                    publishProgress(item.getProgress());
                 }
-                item.setComplete(true);
+                item.setProgress(100); // 下载完成后设置进度为100%
             } catch (IOException e) {
-                Log.e("DownloadTask", "Error downloading library file: " + e.getMessage());
-                // 可以在这里处理错误，例如更新UI来反映下载失败
+                Log.e("DownloadTask", "Error downloading library file", e);
+                // 这里可以添加错误处理逻辑，例如更新UI来反映下载失败
             } finally {
                 // 关闭流资源
                 if (input != null) {
@@ -314,7 +312,7 @@ public class DownloadDialog extends MaterialAlertDialogBuilder {
                     }
                 }
                 if (url != null) {
-                    url.disconnect();
+                    connection.disconnect(); // 断开连接
                 }
             }
         }
@@ -333,6 +331,13 @@ public class DownloadDialog extends MaterialAlertDialogBuilder {
         protected void onProgressUpdate(Integer... values) {
             adapter.notifyItemChanged(values[0]);
             adapter.removeCompletedItems();
+        }
+
+        // 在 DownloadTask 类中的某个合适的地方调用这个方法
+        protected void publishProgress(Integer progress) {
+            if (progress != null) {
+                this.publishProgress(progress);
+            }
         }
 
         @Override
