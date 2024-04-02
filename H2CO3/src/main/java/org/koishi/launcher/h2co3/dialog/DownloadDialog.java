@@ -265,12 +265,13 @@ public class DownloadDialog extends MaterialAlertDialogBuilder {
 
         private void downloadLibrary(DownloadItem item) {
             URL url = null;
+            HttpURLConnection connection = null;
             InputStream input = null;
             OutputStream output = null;
 
             try {
                 url = new URL(item.getUrl());
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);
                 connection.connect();
 
