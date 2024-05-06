@@ -30,10 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class QuiltAPIVersionList extends VersionList<QuiltAPIRemoteVersion> {
 
-    private final DownloadProvider downloadProvider;
-
     public QuiltAPIVersionList(DownloadProvider downloadProvider) {
-        this.downloadProvider = downloadProvider;
     }
 
     @Override

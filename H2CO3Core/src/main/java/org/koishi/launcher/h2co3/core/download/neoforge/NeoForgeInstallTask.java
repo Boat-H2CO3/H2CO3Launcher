@@ -4,6 +4,8 @@ package org.koishi.launcher.h2co3.core.download.neoforge;
 import static org.koishi.launcher.h2co3.core.utils.StringUtils.removePrefix;
 import static org.koishi.launcher.h2co3.core.utils.StringUtils.removeSuffix;
 
+import android.os.Build;
+
 import org.koishi.launcher.h2co3.core.download.DefaultDependencyManager;
 import org.koishi.launcher.h2co3.core.download.LibraryAnalyzer;
 import org.koishi.launcher.h2co3.core.download.Version;
@@ -46,7 +48,9 @@ public final class NeoForgeInstallTask extends Task<Version> {
 
     public static Task<Version> install(DefaultDependencyManager dependencyManager, Version version, Path installer) throws IOException, VersionMismatchException {
         Optional<String> gameVersion = dependencyManager.getGameRepository().getGameVersion(version);
-        if (!gameVersion.isPresent()) throw new IOException();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (gameVersion.isEmpty()) throw new IOException();
+        }
         try (FileSystem fs = CompressingUtils.createReadOnlyZipFileSystem(installer)) {
             String installProfileText = FileTools.readText(fs.getPath("install_profile.json"));
             Map<?, ?> installProfile = JsonUtils.fromNonNullJson(installProfileText, Map.class);
