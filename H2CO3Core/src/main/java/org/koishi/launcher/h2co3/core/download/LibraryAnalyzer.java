@@ -121,7 +121,8 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
     }
 
     public boolean hasModLoader() {
-        return libraries.keySet().stream().map(LibraryType::fromPatchId)
+        return libraries.keySet().stream()
+                .map(LibraryType::fromPatchId)
                 .filter(Objects::nonNull)
                 .anyMatch(LibraryType::isModLoader);
     }
