@@ -42,7 +42,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public class DefaultCacheRepository extends CacheRepository {
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
@@ -132,15 +131,20 @@ public class DefaultCacheRepository extends CacheRepository {
 
         try {
             // check if this library is from Forge
-            List<LibraryIndex> libraries = index.getLibraries().stream()
-                    .filter(it -> it.getName().equals(library.getName()))
-                    .collect(Collectors.toList());
-            for (LibraryIndex libIndex : libraries) {
-                if (fileExists(SHA1, libIndex.getHash())) {
-                    Path file = getFile(SHA1, libIndex.getHash());
-                    if (libIndex.getType().equalsIgnoreCase(LibraryIndex.TYPE_FORGE)) {
-                        if (LibraryDownloadTask.checksumValid(file.toFile(), library.getChecksums()))
-                            return Optional.of(file);
+            List<LibraryIndex> libraries = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                libraries = index.getLibraries().stream()
+                        .filter(it -> it.getName().equals(library.getName()))
+                        .toList();
+            }
+            if (libraries != null) {
+                for (LibraryIndex libIndex : libraries) {
+                    if (fileExists(SHA1, libIndex.getHash())) {
+                        Path file = getFile(SHA1, libIndex.getHash());
+                        if (libIndex.getType().equalsIgnoreCase(LibraryIndex.TYPE_FORGE)) {
+                            if (LibraryDownloadTask.checksumValid(file.toFile(), library.getChecksums()))
+                                return Optional.of(file);
+                        }
                     }
                 }
             }

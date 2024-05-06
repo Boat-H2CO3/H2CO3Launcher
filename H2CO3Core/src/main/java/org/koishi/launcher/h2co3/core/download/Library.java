@@ -1,5 +1,6 @@
 package org.koishi.launcher.h2co3.core.download;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.JsonParseException;
@@ -162,6 +163,7 @@ public class Library implements Comparable<Library>, Validation {
         return getGroupId().equals(groupId) && getArtifactId().equals(artifactId);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("name", getName()).toString();

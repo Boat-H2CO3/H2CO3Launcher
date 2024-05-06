@@ -31,10 +31,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class FabricAPIVersionList extends VersionList<FabricAPIRemoteVersion> {
 
-    private final DownloadProvider downloadProvider;
-
     public FabricAPIVersionList(DownloadProvider downloadProvider) {
-        this.downloadProvider = downloadProvider;
     }
 
     @Override

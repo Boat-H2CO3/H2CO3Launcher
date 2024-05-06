@@ -1,5 +1,7 @@
 package org.koishi.launcher.h2co3.core.download;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonParseException;
 import com.google.gson.annotations.SerializedName;
 
@@ -51,6 +53,7 @@ public class DownloadInfo implements Validation {
         return size;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("url", url).append("sha1", sha1).append("size", size).toString();

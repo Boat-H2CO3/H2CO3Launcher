@@ -23,24 +23,16 @@ import com.google.gson.annotations.SerializedName;
 import org.koishi.launcher.h2co3.core.download.Version;
 import org.koishi.launcher.h2co3.core.utils.gson.tools.Validation;
 
-public final class ForgeInstallProfile implements Validation {
+public record ForgeInstallProfile(@SerializedName("install") ForgeInstall install,
+                                  @SerializedName("versionInfo") Version versionInfo) implements Validation {
 
-    @SerializedName("install")
-    private final ForgeInstall install;
-
-    @SerializedName("versionInfo")
-    private final Version versionInfo;
-
-    public ForgeInstallProfile(ForgeInstall install, Version versionInfo) {
-        this.install = install;
-        this.versionInfo = versionInfo;
-    }
-
-    public ForgeInstall getInstall() {
+    @Override
+    public ForgeInstall install() {
         return install;
     }
 
-    public Version getVersionInfo() {
+    @Override
+    public Version versionInfo() {
         return versionInfo;
     }
 

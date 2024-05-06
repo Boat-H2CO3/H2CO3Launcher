@@ -10,6 +10,7 @@ import org.koishi.launcher.h2co3.core.login.bean.UserBean;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.List;
@@ -134,10 +135,10 @@ public class H2CO3Auth {
     }
 
     private static void writeFileContent(File file, String content) throws IOException {
-        Files.write(file.toPath(), content.getBytes("UTF-8"));
+        Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8));
     }
 
     public static String readFileContent(File file) throws IOException {
-        return new String(Files.readAllBytes(file.toPath()), "UTF-8");
+        return new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
     }
 }

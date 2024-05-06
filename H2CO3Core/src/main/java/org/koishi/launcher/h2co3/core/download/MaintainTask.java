@@ -70,7 +70,7 @@ public class MaintainTask extends Task<Version> {
         String mainClass = version.resolve(null).getMainClass();
 
         if (mainClass != null && mainClass.equals(LibraryAnalyzer.LAUNCH_WRAPPER_MAIN)) {
-            version = maintainOptiFineLibrary(repository, maintainGameWithLaunchWrapper(unique(version), true), false);
+            version = maintainOptiFineLibrary(repository, maintainGameWithLaunchWrapper(unique(version)), false);
         } else if (mainClass != null && mainClass.equals(LibraryAnalyzer.MOD_LAUNCHER_MAIN)) {
             // Forge 1.13 and OptiFine
             version = maintainOptiFineLibrary(repository, maintainGameWithCpwModLauncher(repository, unique(version)), true);
@@ -104,14 +104,14 @@ public class MaintainTask extends Task<Version> {
         return newVersion.setPatches(version.getPatches()).markAsUnresolved();
     }
 
-    private static Version maintainGameWithLaunchWrapper(Version version, boolean reorderTweakClass) {
+    private static Version maintainGameWithLaunchWrapper(Version version) {
         LibraryAnalyzer libraryAnalyzer = LibraryAnalyzer.analyze(version);
         VersionLibraryBuilder builder = new VersionLibraryBuilder(version);
         String mainClass = null;
 
         // Installing Forge will override the Minecraft arguments in json, so LiteLoader and OptiFine Tweaker are being re-added.
         if (libraryAnalyzer.has(LITELOADER) && !libraryAnalyzer.hasModLauncher()) {
-            builder.replaceTweakClass(LibraryAnalyzer.LITELOADER_TWEAKER, LibraryAnalyzer.LITELOADER_TWEAKER, !reorderTweakClass, reorderTweakClass);
+            builder.replaceTweakClass(LibraryAnalyzer.LITELOADER_TWEAKER, LibraryAnalyzer.LITELOADER_TWEAKER, false, true);
         } else {
             builder.removeTweakClass(LibraryAnalyzer.LITELOADER_TWEAKER);
         }
@@ -119,7 +119,7 @@ public class MaintainTask extends Task<Version> {
         if (libraryAnalyzer.has(OPTIFINE)) {
             if (!libraryAnalyzer.has(LITELOADER) && !libraryAnalyzer.has(FORGE)) {
                 if (builder.hasTweakClass(LibraryAnalyzer.OPTIFINE_TWEAKERS[1])) {
-                    builder.replaceTweakClass(LibraryAnalyzer.OPTIFINE_TWEAKERS[1], LibraryAnalyzer.OPTIFINE_TWEAKERS[0], !reorderTweakClass, reorderTweakClass);
+                    builder.replaceTweakClass(LibraryAnalyzer.OPTIFINE_TWEAKERS[1], LibraryAnalyzer.OPTIFINE_TWEAKERS[0], false, true);
                 }
             } else {
                 if (libraryAnalyzer.hasModLauncher()) {
@@ -130,7 +130,7 @@ public class MaintainTask extends Task<Version> {
                     }
                 } else if (builder.hasTweakClass(LibraryAnalyzer.OPTIFINE_TWEAKERS[0])) {
                     // If forge or LiteLoader installed, OptiFine Forge Tweaker is needed.
-                    builder.replaceTweakClass(LibraryAnalyzer.OPTIFINE_TWEAKERS[0], LibraryAnalyzer.OPTIFINE_TWEAKERS[1], !reorderTweakClass, reorderTweakClass);
+                    builder.replaceTweakClass(LibraryAnalyzer.OPTIFINE_TWEAKERS[0], LibraryAnalyzer.OPTIFINE_TWEAKERS[1], false, true);
                 }
 
             }
@@ -145,7 +145,7 @@ public class MaintainTask extends Task<Version> {
             if (!hasForge) {
                 builder.removeTweakClass(forgeTweaker);
             } else if (!hasModLauncher && builder.hasTweakClass(forgeTweaker)) {
-                builder.replaceTweakClass(forgeTweaker, forgeTweaker, !reorderTweakClass, reorderTweakClass);
+                builder.replaceTweakClass(forgeTweaker, forgeTweaker, false, true);
             }
         }
 

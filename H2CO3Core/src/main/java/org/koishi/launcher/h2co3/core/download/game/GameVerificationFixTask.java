@@ -26,7 +26,7 @@ import org.koishi.launcher.h2co3.core.utils.task.Task;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public final class GameVerificationFixTask extends Task<Void> {
         LibraryAnalyzer analyzer = LibraryAnalyzer.analyze(version);
 
         if (jar.exists() && VersionNumber.compare(gameVersion, "1.6") < 0 && analyzer.has(LibraryAnalyzer.LibraryType.FORGE)) {
-            try (FileSystem fs = CompressingUtils.createWritableZipFileSystem(jar.toPath(), Charset.forName("UTF-8"))) {
+            try (FileSystem fs = CompressingUtils.createWritableZipFileSystem(jar.toPath(), StandardCharsets.UTF_8)) {
                 Files.deleteIfExists(fs.getPath("META-INF/MOJANG_C.DSA"));
                 Files.deleteIfExists(fs.getPath("META-INF/MOJANG_C.SF"));
             }

@@ -1,5 +1,7 @@
 package org.koishi.launcher.h2co3.core.download;
 
+import androidx.annotation.NonNull;
+
 import java.math.BigInteger;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -183,6 +185,7 @@ public final class VersionNumber implements Comparable<VersionNumber> {
         return items.compareTo(o.items);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return value;
@@ -225,54 +228,46 @@ public final class VersionNumber implements Comparable<VersionNumber> {
         void appendTo(StringBuilder buffer);
     }
 
-    private static final class LongItem implements Item {
-        public static final LongItem ZERO = new LongItem(0L);
-        private final long value;
-
-        LongItem(long value) {
-            this.value = value;
-        }
+    private record LongItem(long value) implements Item {
+            public static final LongItem ZERO = new LongItem(0L);
 
         public int getType() {
-            return LONG_ITEM;
-        }
-
-        public boolean isNull() {
-            return value == 0L;
-        }
-
-        public int compareTo(Item item) {
-            if (item == null) {
-                return value == 0L ? 0 : 1; // 1.0 == 1, 1.1 > 1
+                return LONG_ITEM;
             }
 
-            switch (item.getType()) {
-                case LONG_ITEM:
-                    long itemValue = ((LongItem) item).value;
-                    return Long.compare(value, itemValue);
-                case BIGINTEGER_ITEM:
-                    return -1;
+            public boolean isNull() {
+                return value == 0L;
+            }
 
-                case STRING_ITEM:
-                    return 1; // 1.1 > 1-sp
+            public int compareTo(Item item) {
+                if (item == null) {
+                    return value == 0L ? 0 : 1; // 1.0 == 1, 1.1 > 1
+                }
 
-                case LIST_ITEM:
-                    return 1; // 1.1 > 1-1
+                return switch (item.getType()) {
+                    case LONG_ITEM -> {
+                        long itemValue = ((LongItem) item).value;
+                        yield Long.compare(value, itemValue);
+                    }
+                    case BIGINTEGER_ITEM -> -1;
+                    case STRING_ITEM -> 1; // 1.1 > 1-sp
 
-                default:
-                    throw new AssertionError("invalid item: " + item.getClass());
+                    case LIST_ITEM -> 1; // 1.1 > 1-1
+
+                    default -> throw new AssertionError("invalid item: " + item.getClass());
+                };
+            }
+
+            @Override
+            public void appendTo(StringBuilder buffer) {
+                buffer.append(value);
+            }
+
+            @NonNull
+            public String toString() {
+                return Long.toString(value);
             }
         }
-
-        @Override
-        public void appendTo(StringBuilder buffer) {
-            buffer.append(value);
-        }
-
-        public String toString() {
-            return Long.toString(value);
-        }
-    }
 
     /**
      * Represents a numeric item in the version item list.
@@ -300,21 +295,15 @@ public final class VersionNumber implements Comparable<VersionNumber> {
                 return 1;
             }
 
-            switch (item.getType()) {
-                case LONG_ITEM:
-                    return 1;
-                case BIGINTEGER_ITEM:
-                    return value.compareTo(((BigIntegerItem) item).value);
+            return switch (item.getType()) {
+                case LONG_ITEM -> 1;
+                case BIGINTEGER_ITEM -> value.compareTo(((BigIntegerItem) item).value);
+                case STRING_ITEM -> 1; // 1.1 > 1-sp
 
-                case STRING_ITEM:
-                    return 1; // 1.1 > 1-sp
+                case LIST_ITEM -> 1; // 1.1 > 1-1
 
-                case LIST_ITEM:
-                    return 1; // 1.1 > 1-1
-
-                default:
-                    throw new AssertionError("invalid item: " + item.getClass());
-            }
+                default -> throw new AssertionError("invalid item: " + item.getClass());
+            };
         }
 
         @Override
@@ -322,59 +311,50 @@ public final class VersionNumber implements Comparable<VersionNumber> {
             buffer.append(value);
         }
 
+        @NonNull
         public String toString() {
             return value.toString();
         }
     }
 
     /**
-     * Represents a string in the version item list, usually a qualifier.
-     */
-    private static final class StringItem implements Item {
-        private final String value;
-
-        StringItem(String value) {
-            this.value = value;
-        }
+         * Represents a string in the version item list, usually a qualifier.
+         */
+        private record StringItem(String value) implements Item {
 
         public int getType() {
-            return STRING_ITEM;
-        }
-
-        public boolean isNull() {
-            return value.isEmpty();
-        }
-
-        public int compareTo(Item item) {
-            if (item == null) {
-                // 1-string > 1
-                return 1;
+                return STRING_ITEM;
             }
-            switch (item.getType()) {
-                case LONG_ITEM:
-                case BIGINTEGER_ITEM:
-                    return -1; // 1.any < 1.1 ?
 
-                case STRING_ITEM:
-                    return value.compareTo(((StringItem) item).value);
+            public boolean isNull() {
+                return value.isEmpty();
+            }
 
-                case LIST_ITEM:
-                    return -1; // 1.any < 1-1
+            public int compareTo(Item item) {
+                if (item == null) {
+                    // 1-string > 1
+                    return 1;
+                }
+                return switch (item.getType()) {
+                    case LONG_ITEM, BIGINTEGER_ITEM -> -1; // 1.any < 1.1 ?
 
-                default:
-                    throw new AssertionError("invalid item: " + item.getClass());
+                    case STRING_ITEM -> value.compareTo(((StringItem) item).value);
+                    case LIST_ITEM -> -1; // 1.any < 1-1
+
+                    default -> throw new AssertionError("invalid item: " + item.getClass());
+                };
+            }
+
+            @Override
+            public void appendTo(StringBuilder buffer) {
+                buffer.append(value);
+            }
+
+            @NonNull
+            public String toString() {
+                return value;
             }
         }
-
-        @Override
-        public void appendTo(StringBuilder buffer) {
-            buffer.append(value);
-        }
-
-        public String toString() {
-            return value;
-        }
-    }
 
     /**
      * Represents a version list item. This class is used both for the global item list and for sub-lists (which start
@@ -437,7 +417,7 @@ public final class VersionNumber implements Comparable<VersionNumber> {
                         Item r = right.hasNext() ? right.next() : null;
 
                         // if this is shorter, then invert the compare and mul with -1
-                        int result = l == null ? (r == null ? 0 : -1 * r.compareTo(l)) : l.compareTo(r);
+                        int result = l == null ? (r == null ? 0 : -1 * r.compareTo(null)) : l.compareTo(r);
 
                         if (result != 0) {
                             return result;
@@ -468,6 +448,7 @@ public final class VersionNumber implements Comparable<VersionNumber> {
             }
         }
 
+        @NonNull
         public String toString() {
             StringBuilder buffer = new StringBuilder();
             appendTo(buffer);
