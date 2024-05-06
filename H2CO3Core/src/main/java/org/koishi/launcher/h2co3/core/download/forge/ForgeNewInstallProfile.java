@@ -118,7 +118,7 @@ public class ForgeNewInstallProfile implements Validation {
         if (data == null)
             return new HashMap<>();
 
-        return data.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getClient()));
+        return data.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().client()));
     }
 
     @Override
@@ -203,23 +203,19 @@ public class ForgeNewInstallProfile implements Validation {
         }
     }
 
-    public static class Datum {
-        private final String client;
-
-        public Datum(String client) {
-            this.client = client;
-        }
+    public record Datum(String client) {
 
         /**
-         * Can be in the following formats:
-         * [value]: An artifact path.
-         * 'value': A string literal.
-         * value: A file in the installer package, to be extracted to a temp folder, and then have the absolute path in replacements.
-         *
-         * @return Value to use for the client install
-         */
-        public String getClient() {
-            return client;
+             * Can be in the following formats:
+             * [value]: An artifact path.
+             * 'value': A string literal.
+             * value: A file in the installer package, to be extracted to a temp folder, and then have the absolute path in replacements.
+             *
+             * @return Value to use for the client install
+             */
+            @Override
+            public String client() {
+                return client;
+            }
         }
-    }
 }
