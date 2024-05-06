@@ -32,7 +32,8 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.H2CO3.DynamicColors"
-        tools:targetApi="34">
+        tools:targetApi="34"
+        android:keepScreenOn="true">
         <activity
             android:name=".ui.MicrosoftLoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation"
