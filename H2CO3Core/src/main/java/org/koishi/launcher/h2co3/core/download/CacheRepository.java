@@ -40,6 +40,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -226,9 +227,6 @@ public class CacheRepository {
             if (eTagItem != null && eTagItem.eTag != null) {
                 conn.setRequestProperty("If-None-Match", eTagItem.eTag);
             }
-            // if (eTagItem != null && eTagItem.getRemoteLastModified() != null) {
-            //     conn.setRequestProperty("If-Modified-Since", eTagItem.getRemoteLastModified());
-            // }
         } finally {
             lock.readLock().unlock();
         }
@@ -243,7 +241,7 @@ public class CacheRepository {
     }
 
     public void cacheText(String text, URLConnection conn) throws IOException {
-        cacheBytes(text.getBytes("UTF-8"), conn);
+        cacheBytes(text.getBytes(StandardCharsets.UTF_8), conn);
     }
 
     public void cacheBytes(byte[] bytes, URLConnection conn) throws IOException {
@@ -291,15 +289,13 @@ public class CacheRepository {
     }
 
     @SafeVarargs
-    private final Map<String, ETagItem> joinETagIndexes(Collection<ETagItem>... indexes) {
+    private Map<String, ETagItem> joinETagIndexes(Collection<ETagItem>... indexes) {
         Map<String, ETagItem> eTags = new ConcurrentHashMap<>();
 
         Stream<ETagItem> stream = Arrays.stream(indexes).filter(Objects::nonNull).map(Collection::stream)
                 .reduce(Stream.empty(), Stream::concat);
 
-        stream.forEach(eTag -> {
-            eTags.compute(eTag.url, updateEntity(eTag));
-        });
+        stream.forEach(eTag -> eTags.compute(eTag.url, updateEntity(eTag)));
 
         return eTags;
     }
@@ -308,11 +304,11 @@ public class CacheRepository {
         try (FileChannel channel = FileChannel.open(indexFile, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE)) {
             FileLock lock = channel.lock();
             try {
-                ETagIndex indexOnDisk = JsonUtils.fromMaybeMalformedJson(new String(IOUtils.readFullyWithoutClosing(Channels.newInputStream(channel)), "UTF-8"), ETagIndex.class);
+                ETagIndex indexOnDisk = JsonUtils.fromMaybeMalformedJson(new String(IOUtils.readFullyWithoutClosing(Channels.newInputStream(channel)), StandardCharsets.UTF_8), ETagIndex.class);
                 Map<String, ETagItem> newIndex = joinETagIndexes(indexOnDisk == null ? null : indexOnDisk.eTag, index.values());
                 channel.truncate(0);
                 ETagIndex writeTo = new ETagIndex(newIndex.values());
-                channel.write(ByteBuffer.wrap(JsonUtils.GSON.toJson(writeTo).getBytes("UTF-8")));
+                channel.write(ByteBuffer.wrap(JsonUtils.GSON.toJson(writeTo).getBytes(StandardCharsets.UTF_8)));
                 this.index = newIndex;
             } finally {
                 lock.release();
@@ -451,12 +447,12 @@ public class CacheRepository {
             try (FileChannel channel = FileChannel.open(indexFile, StandardOpenOption.READ, StandardOpenOption.WRITE)) {
                 FileLock lock = channel.lock();
                 try {
-                    Map<String, Object> indexOnDisk = JsonUtils.fromMaybeMalformedJson(new String(IOUtils.readFullyWithoutClosing(Channels.newInputStream(channel)), "UTF-8"), new TypeToken<Map<String, Object>>() {
+                    Map<String, Object> indexOnDisk = JsonUtils.fromMaybeMalformedJson(new String(IOUtils.readFullyWithoutClosing(Channels.newInputStream(channel)), StandardCharsets.UTF_8), new TypeToken<Map<String, Object>>() {
                     }.getType());
                     if (indexOnDisk == null) indexOnDisk = new HashMap<>();
                     indexOnDisk.putAll(storage);
                     channel.truncate(0);
-                    channel.write(ByteBuffer.wrap(JsonUtils.GSON.toJson(storage).getBytes("UTF-8")));
+                    channel.write(ByteBuffer.wrap(JsonUtils.GSON.toJson(storage).getBytes(StandardCharsets.UTF_8)));
                     this.storage = indexOnDisk;
                 } finally {
                     lock.release();

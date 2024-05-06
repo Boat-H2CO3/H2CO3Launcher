@@ -20,6 +20,7 @@ import java.net.URL;
 import java.nio.file.AccessDeniedException;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.stream.Collectors;
@@ -127,7 +128,7 @@ public final class DownloadProviders {
             } else if (exception.getCause() instanceof SSLHandshakeException) {
                 return AndroidUtils.getLocalizedText(context, "install_failed_downloading_detail", url) + "\n" + "exception_ssl_handshake";
             } else {
-                return AndroidUtils.getLocalizedText(context, "install_failed_downloading_detail", url) + "\n" + StringUtils.getStackTrace(exception.getCause());
+                return AndroidUtils.getLocalizedText(context, "install_failed_downloading_detail", url) + "\n" + StringUtils.getStackTrace(Objects.requireNonNull(exception.getCause()));
             }
         } else if (exception instanceof ArtifactMalformedException) {
             return "exception_artifact_malformed";

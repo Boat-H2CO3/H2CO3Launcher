@@ -40,6 +40,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -47,6 +48,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.jar.JarEntry;
@@ -109,7 +111,7 @@ public class LibraryDownloadTask extends Task<Void> {
         while (entry != null) {
             byte[] eData = IOUtils.readFullyWithoutClosing(jar);
             if (entry.getName().equals("checksums.sha1")) {
-                hashes = new String(eData, "UTF-8").split("\n");
+                hashes = new String(eData, StandardCharsets.UTF_8).split("\n");
             }
             if (!entry.isDirectory()) {
                 files.put(entry.getName(), DigestUtils.digestToString("SHA-1", eData));
@@ -121,7 +123,7 @@ public class LibraryDownloadTask extends Task<Void> {
             boolean failed = !checksums.contains(files.get("checksums.sha1"));
             if (!failed) {
                 for (String hash : hashes) {
-                    if ((!hash.trim().equals("")) && (hash.contains(" "))) {
+                    if ((!hash.trim().isEmpty()) && (hash.contains(" "))) {
                         String[] e = hash.split(" ");
                         String validChecksum = e[0];
                         String target = hash.substring(validChecksum.length() + 1);
@@ -201,11 +203,12 @@ public class LibraryDownloadTask extends Task<Void> {
             // We should extract it letting the error message clearer.
             Exception t = task.getException();
             if (t instanceof DownloadException)
-                throw new LibraryDownloadException(library, t.getCause());
+                throw new LibraryDownloadException(library, Objects.requireNonNull(t.getCause()));
             else if (t instanceof CancellationException)
                 throw new CancellationException();
-            else
+            else if (t != null) {
                 throw new LibraryDownloadException(library, t);
+            }
         } else {
             if (xz) unpackLibrary(jar, Files.readAllBytes(xzFile.toPath()));
         }

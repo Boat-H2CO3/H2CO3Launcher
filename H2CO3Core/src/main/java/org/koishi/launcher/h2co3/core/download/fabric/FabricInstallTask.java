@@ -126,87 +126,14 @@ public final class FabricInstallTask extends Task<Version> {
         return new Version(LibraryAnalyzer.LibraryType.FABRIC.getPatchId(), loaderVersion, 30000, arguments, mainClass, libraries);
     }
 
-    public static class FabricInfo {
-        private final LoaderInfo loader;
-        private final IntermediaryInfo intermediary;
-        private final JsonObject launcherMeta;
-
-        public FabricInfo(LoaderInfo loader, IntermediaryInfo intermediary, JsonObject launcherMeta) {
-            this.loader = loader;
-            this.intermediary = intermediary;
-            this.launcherMeta = launcherMeta;
-        }
-
-        public LoaderInfo getLoader() {
-            return loader;
-        }
-
-        public IntermediaryInfo getIntermediary() {
-            return intermediary;
-        }
-
-        public JsonObject getLauncherMeta() {
-            return launcherMeta;
-        }
+    public record FabricInfo(LoaderInfo loader, IntermediaryInfo intermediary,
+                             JsonObject launcherMeta) {
     }
 
-    public static class LoaderInfo {
-        private final String separator;
-        private final int build;
-        private final String maven;
-        private final String version;
-        private final boolean stable;
-
-        public LoaderInfo(String separator, int build, String maven, String version, boolean stable) {
-            this.separator = separator;
-            this.build = build;
-            this.maven = maven;
-            this.version = version;
-            this.stable = stable;
-        }
-
-        public String getSeparator() {
-            return separator;
-        }
-
-        public int getBuild() {
-            return build;
-        }
-
-        public String getMaven() {
-            return maven;
-        }
-
-        public String getVersion() {
-            return version;
-        }
-
-        public boolean isStable() {
-            return stable;
-        }
+    public record LoaderInfo(String separator, int build, String maven, String version,
+                             boolean stable) {
     }
 
-    public static class IntermediaryInfo {
-        private final String maven;
-        private final String version;
-        private final boolean stable;
-
-        public IntermediaryInfo(String maven, String version, boolean stable) {
-            this.maven = maven;
-            this.version = version;
-            this.stable = stable;
-        }
-
-        public String getMaven() {
-            return maven;
-        }
-
-        public String getVersion() {
-            return version;
-        }
-
-        public boolean isStable() {
-            return stable;
-        }
+    public record IntermediaryInfo(String maven, String version, boolean stable) {
     }
 }

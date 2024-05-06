@@ -1,5 +1,8 @@
 package org.koishi.launcher.h2co3.core.download;
 
+import android.os.Build;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.JsonParseException;
@@ -76,7 +79,7 @@ public class Version implements Comparable<Version>, Validation {
         this(false, id, version, priority, null, arguments, mainClass, null, null, null, null, null, null, libraries, null, null, null, null, null, null, null, null, null, null);
     }
 
-    public Version(boolean resolved, String id, String version, Integer priority, String minecraftArguments, Arguments arguments, String mainClass, String inheritsFrom, String jar, AssetIndexInfo assetIndex, String assets, Integer complianceLevel, GameJavaVersion javaVersion, List<Library> libraries, List<CompatibilityRule> compatibilityRules, Map<DownloadType, DownloadInfo> downloads, Map<DownloadType, LoggingInfo> logging, ReleaseType type, Instant time, Instant releaseTime, Integer minimumLauncherVersion, Boolean hidden, Boolean root, List<Version> patches) {
+    public Version(boolean resolved, String id, String version, Integer priority, String minecraftArguments, Arguments arguments, String mainClass, String inheritsFrom, String jar, AssetIndexInfo assetIndex, String assets, Integer complianceLevel, @Nullable GameJavaVersion javaVersion, List<Library> libraries, List<CompatibilityRule> compatibilityRules, Map<DownloadType, DownloadInfo> downloads, Map<DownloadType, LoggingInfo> logging, ReleaseType type, Instant time, Instant releaseTime, Integer minimumLauncherVersion, Boolean hidden, Boolean root, List<Version> patches) {
         this.resolved = resolved;
         this.id = id;
         this.version = version;
@@ -201,8 +204,8 @@ public class Version implements Comparable<Version>, Validation {
         return hidden != null && hidden;
     }
 
-    private Version setHidden(Boolean hidden) {
-        return new Version(true, id, version, priority, minecraftArguments, arguments, mainClass, inheritsFrom, jar, assetIndex, assets, complianceLevel, javaVersion, libraries, compatibilityRules, downloads, logging, type, time, releaseTime, minimumLauncherVersion, hidden, root, patches);
+    private Version setHidden() {
+        return new Version(true, id, version, priority, minecraftArguments, arguments, mainClass, inheritsFrom, jar, assetIndex, assets, complianceLevel, javaVersion, libraries, compatibilityRules, downloads, logging, type, time, releaseTime, minimumLauncherVersion, true, root, patches);
     }
 
     public boolean isRoot() {
@@ -252,10 +255,10 @@ public class Version implements Comparable<Version>, Validation {
     public DownloadInfo getDownloadInfo() {
         DownloadInfo client = downloads == null ? null : downloads.get(DownloadType.CLIENT);
         String jarName = jar == null ? id : jar;
-        if (client == null)
-            return new DownloadInfo(String.format("%s%s/%s.jar", Constants.DEFAULT_VERSION_DOWNLOAD_URL, jarName, jarName));
-        else
-            return client;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Objects.requireNonNullElseGet(client, () -> new DownloadInfo(String.format("%s%s/%s.jar", Constants.DEFAULT_VERSION_DOWNLOAD_URL, jarName, jarName)));
+        }
+        return client;
     }
 
     public AssetIndexInfo getAssetIndex() {
@@ -328,11 +331,16 @@ public class Version implements Comparable<Version>, Validation {
 
         if (patches != null && !patches.isEmpty()) {
             // Assume patches themselves do not have patches recursively.
-            List<Version> sortedPatches = patches.stream()
-                    .sorted(Comparator.comparing(Version::getPriority))
-                    .collect(Collectors.toList());
-            for (Version patch : sortedPatches) {
-                thisVersion = patch.setJar(null).merge(thisVersion, true);
+            List<Version> sortedPatches = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                sortedPatches = patches.stream()
+                        .sorted(Comparator.comparing(Version::getPriority))
+                        .toList();
+            }
+            if (sortedPatches != null) {
+                for (Version patch : sortedPatches) {
+                    thisVersion = patch.setJar(null).merge(thisVersion, true);
+                }
             }
         }
 
@@ -340,7 +348,7 @@ public class Version implements Comparable<Version>, Validation {
     }
 
     private Version toPatch() {
-        return this.clearPatches().setHidden(true).setId("resolved." + getId());
+        return this.clearPatches().setHidden().setId("resolved." + getId());
     }
 
     /**
@@ -419,6 +427,7 @@ public class Version implements Comparable<Version>, Validation {
         return id.compareTo(o.id);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("id", id).toString();

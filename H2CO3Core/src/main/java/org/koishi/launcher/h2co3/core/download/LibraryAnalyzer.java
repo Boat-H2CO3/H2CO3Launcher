@@ -2,6 +2,8 @@ package org.koishi.launcher.h2co3.core.download;
 
 import static org.koishi.launcher.h2co3.core.utils.Pair.pair;
 
+import android.os.Build;
+
 import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
@@ -94,7 +96,7 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
     @NotNull
     @Override
     public Iterator<LibraryMark> iterator() {
-        return new Iterator<LibraryMark>() {
+        return new Iterator<>() {
             final Iterator<Map.Entry<String, Pair<Library, String>>> impl = libraries.entrySet().iterator();
 
             @Override
@@ -120,7 +122,7 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
 
     public boolean hasModLoader() {
         return libraries.keySet().stream().map(LibraryType::fromPatchId)
-                .filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull)
+                .filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull).filter(Objects::nonNull)
                 .anyMatch(LibraryType::isModLoader);
     }
 
@@ -231,8 +233,10 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
 
             private String scanVersion(Version version) {
                 Optional<Arguments> optArgument = version.getArguments();
-                if (!optArgument.isPresent()) {
-                    return null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (optArgument.isEmpty()) {
+                        return null;
+                    }
                 }
                 List<Argument> gameArguments = optArgument.get().getGame();
                 if (gameArguments == null) {
@@ -300,23 +304,22 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
         }
     }
 
-    public static class LibraryMark {
-        private final String libraryId;
-        private final String libraryVersion;
+    public record LibraryMark(String libraryId, String libraryVersion) {
+            public LibraryMark(@NotNull String libraryId, @Nullable String libraryVersion) {
+                this.libraryId = libraryId;
+                this.libraryVersion = libraryVersion;
+            }
 
-        public LibraryMark(@NotNull String libraryId, @Nullable String libraryVersion) {
-            this.libraryId = libraryId;
-            this.libraryVersion = libraryVersion;
-        }
+            @Override
+            @NotNull
+            public String libraryId() {
+                return libraryId;
+            }
 
-        @NotNull
-        public String getLibraryId() {
-            return libraryId;
+            @Override
+            @Nullable
+            public String libraryVersion() {
+                return libraryVersion;
+            }
         }
-
-        @Nullable
-        public String getLibraryVersion() {
-            return libraryVersion;
-        }
-    }
 }

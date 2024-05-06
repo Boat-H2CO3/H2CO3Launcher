@@ -75,21 +75,21 @@ public class ForgeOldInstallTask extends Task<Version> {
             ForgeInstallProfile installProfile = JsonUtils.fromNonNullJsonFully(stream, ForgeInstallProfile.class);
 
             // unpack the universal jar in the installer file.
-            Library forgeLibrary = new Library(installProfile.getInstall().getPath());
+            Library forgeLibrary = new Library(installProfile.install().getPath());
             File forgeFile = dependencyManager.getGameRepository().getLibraryFile(version, forgeLibrary);
             if (!FileTools.makeFile(forgeFile))
                 throw new IOException("Cannot make directory " + forgeFile.getParent());
 
-            ZipEntry forgeEntry = zipFile.getEntry(installProfile.getInstall().getFilePath());
+            ZipEntry forgeEntry = zipFile.getEntry(installProfile.install().getFilePath());
             try (InputStream is = zipFile.getInputStream(forgeEntry); OutputStream os = new FileOutputStream(forgeFile)) {
                 IOUtils.copyTo(is, os);
             }
 
-            setResult(installProfile.getVersionInfo()
+            setResult(installProfile.versionInfo()
                     .setPriority(30000)
                     .setId(LibraryAnalyzer.LibraryType.FORGE.getPatchId())
                     .setVersion(selfVersion));
-            dependencies.add(dependencyManager.checkLibraryCompletionAsync(installProfile.getVersionInfo(), true));
+            dependencies.add(dependencyManager.checkLibraryCompletionAsync(installProfile.versionInfo(), true));
         } catch (ZipException ex) {
             throw new ArtifactMalformedException("Malformed forge installer file", ex);
         }

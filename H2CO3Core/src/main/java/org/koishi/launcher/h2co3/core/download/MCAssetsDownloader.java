@@ -7,7 +7,6 @@
 package org.koishi.launcher.h2co3.core.download;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,7 +67,7 @@ public class MCAssetsDownloader {
 
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             InputStream inputStream = connection.getInputStream();
-            FileOutputStream outputStream = new FileOutputStream(new File(filePath));
+            FileOutputStream outputStream = new FileOutputStream(filePath);
 
             byte[] buffer = new byte[1024];
             int bytesRead;

@@ -18,6 +18,10 @@ package org.koishi.launcher.h2co3.core.download;/*
 
 import static org.koishi.launcher.h2co3.core.utils.Logging.LOG;
 
+import android.os.Build;
+
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
@@ -151,8 +155,10 @@ public class DefaultGameRepository implements GameRepository {
         // be consistent.
         return gameVersions.computeIfAbsent(getVersionJar(version), versionJar -> {
             Optional<String> gameVersion = GameVersion.minecraftVersion(versionJar);
-            if (!gameVersion.isPresent()) {
-                LOG.warning("Cannot find out game version of " + version.getId() + ", primary jar: " + versionJar + ", jar exists: " + versionJar.exists());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (gameVersion.isEmpty()) {
+                    LOG.warning("Cannot find out game version of " + version.getId() + ", primary jar: " + versionJar + ", jar exists: " + versionJar.exists());
+                }
             }
             return gameVersion;
         });
@@ -328,14 +334,13 @@ public class DefaultGameRepository implements GameRepository {
 
                 if (!id.equals(version.getId())) {
                     try {
-                        String from = id;
                         String to = version.getId();
-                        Path fromDir = getVersionRoot(from).toPath();
+                        Path fromDir = getVersionRoot(id).toPath();
                         Path toDir = getVersionRoot(to).toPath();
                         Files.move(fromDir, toDir);
 
-                        Path fromJson = toDir.resolve(from + ".json");
-                        Path fromJar = toDir.resolve(from + ".jar");
+                        Path fromJson = toDir.resolve(id + ".json");
+                        Path fromJar = toDir.resolve(id + ".jar");
                         Path toJson = toDir.resolve(to + ".json");
                         Path toJar = toDir.resolve(to + ".jar");
 
@@ -520,6 +525,7 @@ public class DefaultGameRepository implements GameRepository {
         return new ModManager(this, version);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return new ToStringBuilder(this)
