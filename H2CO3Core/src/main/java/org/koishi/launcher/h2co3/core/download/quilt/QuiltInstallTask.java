@@ -61,14 +61,11 @@ public final class QuiltInstallTask extends Task<Version> {
 
     private static String getMavenRepositoryByGroup(String maven) {
         Artifact artifact = Artifact.fromDescriptor(maven);
-        switch (artifact.getGroup()) {
-            case "net.fabricmc":
-                return "https://maven.fabricmc.net/";
-            case "org.quiltmc":
-                return "https://maven.quiltmc.org/repository/release/";
-            default:
-                return "https://maven.fabricmc.net/";
-        }
+        return switch (artifact.getGroup()) {
+            case "net.fabricmc" -> "https://maven.fabricmc.net/";
+            case "org.quiltmc" -> "https://maven.quiltmc.org/repository/release/";
+            default -> "https://maven.fabricmc.net/";
+        };
     }
 
     @Override
@@ -138,87 +135,14 @@ public final class QuiltInstallTask extends Task<Version> {
         return new Version(LibraryAnalyzer.LibraryType.QUILT.getPatchId(), loaderVersion, 30000, arguments, mainClass, libraries);
     }
 
-    public static class QuiltInfo {
-        private final LoaderInfo loader;
-        private final IntermediaryInfo hashed;
-        private final IntermediaryInfo intermediary;
-        private final JsonObject launcherMeta;
-
-        public QuiltInfo(LoaderInfo loader, IntermediaryInfo hashed, IntermediaryInfo intermediary, JsonObject launcherMeta) {
-            this.loader = loader;
-            this.hashed = hashed;
-            this.intermediary = intermediary;
-            this.launcherMeta = launcherMeta;
-        }
-
-        public LoaderInfo getLoader() {
-            return loader;
-        }
-
-        public IntermediaryInfo getHashed() {
-            return hashed;
-        }
-
-        public IntermediaryInfo getIntermediary() {
-            return intermediary;
-        }
-
-        public JsonObject getLauncherMeta() {
-            return launcherMeta;
-        }
+    public record QuiltInfo(LoaderInfo loader, IntermediaryInfo hashed,
+                            IntermediaryInfo intermediary, JsonObject launcherMeta) {
     }
 
-    public static class LoaderInfo {
-        private final String separator;
-        private final int build;
-        private final String maven;
-        private final String version;
-        private final boolean stable;
-
-        public LoaderInfo(String separator, int build, String maven, String version, boolean stable) {
-            this.separator = separator;
-            this.build = build;
-            this.maven = maven;
-            this.version = version;
-            this.stable = stable;
-        }
-
-        public String getSeparator() {
-            return separator;
-        }
-
-        public int getBuild() {
-            return build;
-        }
-
-        public String getMaven() {
-            return maven;
-        }
-
-        public String getVersion() {
-            return version;
-        }
-
-        public boolean isStable() {
-            return stable;
-        }
+    public record LoaderInfo(String separator, int build, String maven, String version,
+                             boolean stable) {
     }
 
-    public static class IntermediaryInfo {
-        private final String maven;
-        private final String version;
-
-        public IntermediaryInfo(String maven, String version) {
-            this.maven = maven;
-            this.version = version;
-        }
-
-        public String getMaven() {
-            return maven;
-        }
-
-        public String getVersion() {
-            return version;
-        }
+    public record IntermediaryInfo(String maven, String version) {
     }
 }
