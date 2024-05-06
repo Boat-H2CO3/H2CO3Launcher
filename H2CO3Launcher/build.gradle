@@ -84,13 +84,13 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.preference:preference:1.2.1'
 
-    implementation 'com.alibaba:fastjson:2.0.48'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.12'
+    implementation 'com.alibaba:fastjson:2.0.49'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.14'
     implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     implementation 'androidx.webkit:webkit:1.10.0'
     implementation "org.greenrobot:eventbus:3.3.1"
 
     implementation 'org.apache.commons:commons-compress:1.26.1'
     implementation 'com.jaredrummler:android-device-names:2.1.1'
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0-alpha01'
 }

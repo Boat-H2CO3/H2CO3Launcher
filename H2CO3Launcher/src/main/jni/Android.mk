@@ -174,6 +174,8 @@ LOCAL_CFLAGS += -DNOX11
 LOCAL_CFLAGS += -DNO_GBM
 LOCAL_CFLAGS += -Wimplicit-function-declaration
 
+LOCAL_LDLIBS := -llog -ldl -landroid
+
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
