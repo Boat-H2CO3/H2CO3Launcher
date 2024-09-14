@@ -13,15 +13,22 @@ class ExitActivity : H2CO3Activity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showMessageListView()
+
         val code = intent.getIntExtra(EXTRA_CODE, -1)
+        if (code == -1) {
+            // 错误处理：没有接收到有效的代码
+            finish()
+            return
+        }
 
         val exitDialog = H2CO3MessageDialog(this)
-            .setMessage("Minecraft exited with code:$code")
-            .setPositiveButton("Exit") { _: DialogInterface?, _: Int -> finish() }
-            .setOnDismissListener { _: DialogInterface? ->
-                finish()
+            .setMessage("Minecraft exited with code: $code")
+            .setPositiveButton("Exit") { _: DialogInterface, _: Int -> finish() }
+            .setOnDismissListener { _: DialogInterface ->
+                // 确保启动新活动前当前活动已经结束
                 startActivity(Intent(this, H2CO3MainActivity::class.java))
-            } as H2CO3MessageDialog
+            }
+
         exitDialog.show()
     }
 
@@ -30,13 +37,12 @@ class ExitActivity : H2CO3Activity() {
 
         @JvmStatic
         fun showExitMessage(ctx: Context, code: Int) {
-            val i = Intent(
-                ctx,
-                if (code == 0) H2CO3MainActivity::class.java else ExitActivity::class.java
-            )
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            i.putExtra(EXTRA_CODE, code)
-            ctx.startActivity(i)
+            val targetActivity = if (code == 0) H2CO3MainActivity::class.java else ExitActivity::class.java
+            val intent = Intent(ctx, targetActivity).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                putExtra(EXTRA_CODE, code)
+            }
+            ctx.startActivity(intent)
         }
     }
 }
