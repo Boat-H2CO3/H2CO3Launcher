@@ -10,7 +10,7 @@ import org.koishi.launcher.h2co3.resources.component.dialog.H2CO3MessageDialog
 
 @Keep
 class ExitActivity : H2CO3Activity() {
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showMessageListView()
 
@@ -21,15 +21,18 @@ class ExitActivity : H2CO3Activity() {
             return
         }
 
-        val exitDialog = H2CO3MessageDialog(this)
-            .setMessage("Minecraft exited with code: $code")
-            .setPositiveButton("Exit") { _: DialogInterface, _: Int -> finish() }
-            .setOnDismissListener { _: DialogInterface ->
-                // 确保启动新活动前当前活动已经结束
-                startActivity(Intent(this, H2CO3MainActivity::class.java))
-            }
+        showExitDialog(code)
+    }
 
-        exitDialog.show()
+    private fun showExitDialog(code: Int) {
+        H2CO3MessageDialog(this).apply {
+            setMessage("Minecraft exited with code: $code")
+            setPositiveButton("Exit") { _: DialogInterface, _: Int -> finish() }
+            setOnDismissListener { _: DialogInterface ->
+                // 确保启动新活动前当前活动已经结束
+                startActivity(Intent(this@ExitActivity, H2CO3MainActivity::class.java))
+            }
+        }.show()
     }
 
     companion object {
