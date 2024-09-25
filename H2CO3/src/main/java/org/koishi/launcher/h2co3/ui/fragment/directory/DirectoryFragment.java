@@ -227,25 +227,33 @@ public class DirectoryFragment extends H2CO3Fragment {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        String currentDir = gameHelper.getGameDirectory();
-        File f = new File(currentDir);
+@Override
+public void onResume() {
+    super.onResume();
+    String currentDir = gameHelper.getGameDirectory();
+    File f = new File(currentDir);
 
-        dirsJsonObj = getJsonObj();
+    dirsJsonObj = getJsonObj();
 
-        dirAdapter = new DirectoryListAdapter(getDirList(), requireActivity(), dirsJsonObj, gameHelper, this);
-        dirAdapter.updateData(getDirList());
+    // 更新目录适配器
+    dirAdapter = new DirectoryListAdapter(getDirList(), requireActivity(), dirsJsonObj, gameHelper, this);
+    dirAdapter.updateData(getDirList());
 
-        verAdapter = new MCVersionListAdapter(requireActivity(), new ArrayList<>(getVerList(gameHelper.getGameCurrentVersion())), this, gameHelper, gameHelper.getGameCurrentVersion());
-        verAdapter.updateData(getVerList(currentDir));
-
-        if (!f.isDirectory()) {
-            setDir(h2co3Directory);
-            H2CO3Tools.showMessage(H2CO3MessageManager.NotificationItem.Type.ERROR, getString(org.koishi.launcher.h2co3.library.R.string.ver_null_dir));
-        }
+    // 重新加载版本列表
+    List<String> versionList = getVerList(currentDir); // 获取新版本列表
+    if (verAdapter == null) {
+        verAdapter = new MCVersionListAdapter(requireActivity(), versionList, this, gameHelper, gameHelper.getGameCurrentVersion());
+        verRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        verRecyclerView.setAdapter(verAdapter);
+    } else {
+        verAdapter.updateData(versionList); // 更新版本适配器的数据
     }
+
+    if (!f.isDirectory()) {
+        setDir(h2co3Directory);
+        H2CO3Tools.showMessage(H2CO3MessageManager.NotificationItem.Type.ERROR, getString(org.koishi.launcher.h2co3.library.R.string.ver_null_dir));
+    }
+}
 
     private void setDir(String dir) {
         gameHelper.setGameDirectory(dir);
