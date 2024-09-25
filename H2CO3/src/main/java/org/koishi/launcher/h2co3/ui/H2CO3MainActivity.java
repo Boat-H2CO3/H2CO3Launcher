@@ -100,23 +100,29 @@ public class H2CO3MainActivity extends H2CO3Activity implements View.OnClickList
     }
 
     private void initFragment(H2CO3Fragment fragment) {
-        if (currentFragment != fragment) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(org.koishi.launcher.h2co3.library.R.anim.fragment_in, org.koishi.launcher.h2co3.library.R.anim.fragment_out, org.koishi.launcher.h2co3.library.R.anim.fragment_in_pop, org.koishi.launcher.h2co3.library.R.anim.fragment_out_pop);
-            if (fragment != null) {
-                if (fragment.isAdded()) {
-                    transaction.show(fragment);
-                } else {
-                    transaction.add(R.id.nav_host_fragment, fragment);
-                }
-                if (currentFragment != null) {
-                    transaction.hide(currentFragment);
-                }
-                currentFragment = fragment;
-                transaction.commit();
-            }
+    if (currentFragment != fragment && fragment != null) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(
+            org.koishi.launcher.h2co3.library.R.anim.fragment_in,
+            org.koishi.launcher.h2co3.library.R.anim.fragment_out,
+            org.koishi.launcher.h2co3.library.R.anim.fragment_in_pop,
+            org.koishi.launcher.h2co3.library.R.anim.fragment_out_pop
+        );
+
+        if (fragment.isAdded()) {
+            transaction.show(fragment);
+        } else {
+            transaction.add(R.id.nav_host_fragment, fragment);
         }
+
+        if (currentFragment != null) {
+            transaction.hide(currentFragment);
+        }
+
+        currentFragment = fragment;
+        transaction.commit();
     }
+}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
