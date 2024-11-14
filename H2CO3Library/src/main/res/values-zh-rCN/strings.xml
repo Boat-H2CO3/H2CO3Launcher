@@ -6,7 +6,7 @@
     <string name="assets_download">正在下载资源</string>
     <string name="assets_download_all">正在验证资源完整性</string>
     <string name="assets_index_malformed">下载的资源索引文件已损坏。</string>
-    <string name="about_desc">Boat_H2CO3 是一个 Android Minecraft 启动器，允许用户在 Android 设备上启动 Minecraft: Java Edition。\nBoat_H2CO3 由 Github:Boat-H2CO3 开发, 且大多数功能是基于 HMCLCore 修改的。\n该应用程序使用了 PojavLauncher、Boat、FoldCraftLauncher 和 HMCL-PE 的一些代码，因此如果您打算分发此应用程序，请遵循 GPL-v3 许可证</string>
+    <string name="about_desc">H2CO3Launcher 是一个 Android Minecraft 启动器，允许用户在 Android 设备上启动 Minecraft: Java Edition。\nH2CO3Launcher 由 Github:Boat-H2CO3 开发, 且大多数功能是基于 HMCLCore 修改的。\n该应用程序使用了 PojavLauncher、Boat、FoldCraftLauncher 和 HMCL-PE 的一些代码，因此如果您打算分发此应用程序，请遵循 GPL-v3 许可证</string>
 
     <string name="button_ok">确定</string>
     <string name="button_cancel">取消</string>
@@ -188,7 +188,7 @@
     <string name="ver_type_release">发布版</string>
     <string name="ver_if_remove">移除这个目录？</string>
 
-    <string name="welcome_permission_hint">Boat_H2CO3 需要一些必要的权限以确保其正常运行。</string>
+    <string name="welcome_permission_hint">H2CO3Launcher 需要一些必要的权限以确保其正常运行。</string>
     <string name="title_pri_ver_dir">版本隔离</string>
     <string name="title_game_memory">游戏运行内存 (MB)</string>
     <string name="title_window_resolution">窗口分辨率 (%)</string>

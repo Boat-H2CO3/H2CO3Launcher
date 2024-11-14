@@ -36,7 +36,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Boat_H2CO3"
+rootProject.name = "H2CO3Launcher"
 include ':H2CO3'
 include ':H2CO3Library'
 include ':H2CO3Launcher'

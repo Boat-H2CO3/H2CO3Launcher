@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public final class Logging {
-    public static final Logger LOG = Logger.getLogger("Boat_H2CO3");
+    public static final Logger LOG = Logger.getLogger("H2CO3Launcher");
     private static final ByteArrayOutputStream storedLogs = new ByteArrayOutputStream();
     private static volatile String[] accessTokens = new String[0];
 

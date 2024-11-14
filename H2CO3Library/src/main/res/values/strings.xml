@@ -5,14 +5,14 @@
   -->
 
 <resources>
-    <string name="app_name" translatable="false">Boat_H2CO3</string>
+    <string name="app_name" translatable="false">H2CO3Launcher</string>
     <string name="app_restart">Restart</string>
     <string name="action_sign_in">Sign</string>
     <string name="add_directory">New Directory</string>
     <string name="assets_download">Downloading Assets</string>
     <string name="assets_download_all">Validating assets integrity</string>
     <string name="assets_index_malformed">Index files of downloaded assets were corrupted.</string>
-    <string name="about_desc">Boat_H2CO3 is an Android Minecraft Launcher, allows user to launch Minecraft: Java Edition on Android device.  Boat_H2CO3 is developed by Boat-H2CO3.  Boat_H2CO3\'s most features are modified based on HMCLCore.  The app borrows and quotes some codes of PojavLauncher, Boat, FoldCraftLauncher and HMCL-PE, so if you are going to distribute this app, please follow GPL-v3 License.</string>
+    <string name="about_desc">H2CO3Launcher is an Android Minecraft Launcher, allows user to launch Minecraft: Java Edition on Android device.  H2CO3Launcher is developed by Boat-H2CO3.  H2CO3Launcher\'s most features are modified based on HMCLCore.  The app borrows and quotes some codes of PojavLauncher, Boat, FoldCraftLauncher and HMCL-PE, so if you are going to distribute this app, please follow GPL-v3 License.</string>
 
     <string name="button_ok">OK</string>
     <string name="button_cancel">Cancel</string>
@@ -228,7 +228,7 @@
     <string name="ver_type_release">Release</string>
     <string name="ver_if_remove">Remove this dir?</string>
 
-    <string name="welcome_permission_hint">Boat_H2CO3 needs some necessary permissions to ensure its normal operation.</string>
+    <string name="welcome_permission_hint">H2CO3Launcher needs some necessary permissions to ensure its normal operation.</string>
     <string name="title_pri_ver_dir">Private Version Directory</string>
     <string name="title_game_memory">Game memory (MB)</string>
     <string name="title_window_resolution">Window resolution (%)</string>

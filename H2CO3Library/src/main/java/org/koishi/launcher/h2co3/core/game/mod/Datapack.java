@@ -106,7 +106,7 @@ public class Datapack {
                 Files.write(packMcMeta, Arrays.asList("{",
                         "\t\"pack\": {",
                         "\t\t\"pack_format\": 4,",
-                        "\t\t\"description\": \"Modified by Boat_H2CO3.\"",
+                        "\t\t\"description\": \"Modified by H2CO3Launcher.\"",
                         "\t}",
                         "}"), StandardOpenOption.CREATE);
 

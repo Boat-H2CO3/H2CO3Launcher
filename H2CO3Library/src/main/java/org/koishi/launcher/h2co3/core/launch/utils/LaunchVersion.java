@@ -132,7 +132,7 @@ public class LaunchVersion {
     private String getString(H2CO3Settings gameLaunchSetting, String key) {
         return switch (key) {
             case "version_name" -> id;
-            case "launcher_name" -> "Boat_H2CO3";
+            case "launcher_name" -> "H2CO3Launcher";
             case "launcher_version" -> "1.0.0";
             case "version_type" -> type;
             case "assets_index_name" -> assetIndex != null ? assetIndex.id : assets;

@@ -21,7 +21,7 @@ public class H2CO3LauncherAboutFragment extends H2CO3Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_manage_launcher_about, container, false);
         H2CO3CardView openGithubView = findViewById(view, R.id.open_github);
-        openGithubView.setOnClickListener(v -> openUrl("https://github.com/Boat-H2CO3/Boat_H2CO3"));
+        openGithubView.setOnClickListener(v -> openUrl("https://github.com/Boat-H2CO3/H2CO3Launcher"));
         H2CO3TextView appVersion = findViewById(view, R.id.appVersion);
         try {
             PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);

@@ -96,7 +96,7 @@ public final class NetworkUtils {
         if (endsWithDomainSuffix(host, "d.pcs.baidu.com") || endsWithDomainSuffix(host, "baidupcs.com")) {
             connection.setRequestProperty("User-Agent", "pan.baidu.com");
         } else {
-            connection.setRequestProperty("User-Agent", "Boat_H2CO3/" + Build.getRadioVersion());
+            connection.setRequestProperty("User-Agent", "H2CO3Launcher/" + Build.getRadioVersion());
         }
         connection.setUseCaches(false);
         connection.setConnectTimeout(TIME_OUT);

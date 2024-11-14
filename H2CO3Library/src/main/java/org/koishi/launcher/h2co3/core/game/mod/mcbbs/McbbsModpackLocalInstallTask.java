@@ -113,7 +113,7 @@ public class McbbsModpackLocalInstallTask extends Task<Void> {
             Version patch = new Version(PATCH_NAME).setLibraries(manifest.getLibraries());
             dependencies.add(repository.saveAsync(version.addPatch(patch)));
         } else if (mcbbsPatch.isPresent()) {
-            // This mcbbs modpack was installed by Boat_H2CO3.
+            // This mcbbs modpack was installed by H2CO3Launcher.
             Version patch = mcbbsPatch.get().setLibraries(manifest.getLibraries());
             dependencies.add(repository.saveAsync(version.addPatch(patch)));
         } else {
