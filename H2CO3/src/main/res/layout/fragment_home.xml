@@ -79,7 +79,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="?colorOnError"
-                        android:text="注意：您正在使用Boat_H2CO3的测试版本" />
+                        android:text="注意：您正在使用H2CO3Launcher的测试版本" />
 
                 </LinearLayout>
 

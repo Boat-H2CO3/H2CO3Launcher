@@ -1,10 +1,10 @@
-Boat_H2CO3 end-user license agreements
+H2CO3Launcher end-user license agreements
 
 Before you using the software, please read the eula first.
 The software is developed by Boat-H2CO3(https://github.com/Boat-H2CO3).
 
 1. User's obligations
-1) Get a qualified device, Boat_H2CO3 requires Android 9.0 or higher.
+1) Get a qualified device, H2CO3Launcher requires Android 9.0 or higher.
 2) Pay for the cost of Internet access and other services.
 3) Take responsibility for all the consequences of your own use of the software.
 

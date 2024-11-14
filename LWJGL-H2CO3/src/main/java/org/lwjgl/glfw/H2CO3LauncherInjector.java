@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 /**
  * By ciniaohh
- * This class is for BOAT_H2CO3.
+ * This class is for H2CO3Launcher.
  */
 public class H2CO3LauncherInjector {
 

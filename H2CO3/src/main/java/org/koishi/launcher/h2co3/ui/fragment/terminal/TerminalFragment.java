@@ -31,7 +31,7 @@ public class TerminalFragment extends H2CO3Fragment implements View.OnClickListe
         view = inflater.inflate(R.layout.fragment_terminal, container, false);
         logWindow = view.findViewById(R.id.shell_log_window);
         editText = view.findViewById(R.id.shell_input);
-        logWindow.appendLog("Welcome to use Boat_H2CO3!\n");
+        logWindow.appendLog("Welcome to use H2CO3Launcher!\n");
         logWindow.appendLog("Here is the shell command line!\n");
         shellUtil = new ShellUtil(new File(H2CO3Tools.FILES_DIR).getParent(), output -> logWindow.appendLog("\t" + output + "\n"));
         shellUtil.start();

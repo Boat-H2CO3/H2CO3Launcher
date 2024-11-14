@@ -92,7 +92,7 @@ public class H2CO3Application extends Application implements ActivityLifecycleCa
     }
 
     private static class CustomEventListener implements CustomActivityOnCrash.EventListener {
-        private static final String TAG = "Boat_H2CO3";
+        private static final String TAG = "H2CO3Launcher";
 
         @Override
         public void onLaunchErrorActivity() {

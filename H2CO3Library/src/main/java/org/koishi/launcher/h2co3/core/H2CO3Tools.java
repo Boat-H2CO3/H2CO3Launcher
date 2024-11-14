@@ -101,7 +101,7 @@ public class H2CO3Tools {
         PUBLIC_FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/games/org.koishi.launcher/h2co3";
 
         LOG_DIR = PUBLIC_FILE_PATH + "/log";
-        CACHE_DIR = context.getCacheDir() + "/boat_h2co3/";
+        CACHE_DIR = context.getCacheDir() + "/H2CO3Launcher/";
 
         APP_DATA_PATH = "/data/data/org.koishi.launcher.h2co3";
         RUNTIME_DIR = APP_DATA_PATH + "/app_runtime";

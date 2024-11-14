@@ -54,11 +54,11 @@ public class LoginUtils {
         authRequest.setUsername(userName);
         authRequest.setPassword(password);
         AuthRequest.Agent agent = new AuthRequest.Agent();
-        agent.setName("Boat_H2CO3");
+        agent.setName("H2CO3Launcher");
         agent.setVersion(1.0);
         authRequest.setAgent(agent);
         authRequest.setRequestUser(true);
-        authRequest.setClientToken("Boat_H2CO3");
+        authRequest.setClientToken("H2CO3Launcher");
         return authRequest;
     }
 
