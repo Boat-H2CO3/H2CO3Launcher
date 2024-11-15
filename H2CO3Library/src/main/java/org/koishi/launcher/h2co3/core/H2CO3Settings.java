@@ -149,10 +149,36 @@ public class H2CO3Settings implements Serializable {
     }
 
     public Renderer getRenderer() {
-        return Renderer.RENDERER_GL4ES;
+        int rendererValue = H2CO3Tools.getH2CO3LauncherValue("h2co3_launcher_renderer", 0, Integer.class);
+        return switch (rendererValue) {
+            case 1 -> Renderer.RENDERER_VIRGL;
+            case 2 -> Renderer.RENDERER_LTW;
+            case 3 -> Renderer.RENDERER_VGPU;
+            case 4 -> Renderer.RENDERER_ZINK;
+            case 5 -> Renderer.RENDERER_FREEDRENO;
+            case 6 -> Renderer.RENDERER_CUSTOM;
+            default -> Renderer.RENDERER_GL4ES;
+        };
     }
 
     public void setRenderer(Renderer path) {
+        int rendererValue = switch (path) {
+            case RENDERER_VIRGL -> 1;
+            case RENDERER_LTW -> 2;
+            case RENDERER_VGPU -> 3;
+            case RENDERER_ZINK -> 4;
+            case RENDERER_FREEDRENO -> 5;
+            case RENDERER_CUSTOM -> 6;
+            default -> 0;
+        };
+        H2CO3Tools.setH2CO3LauncherValue("h2co3_launcher_renderer", rendererValue);
+    }
+
+    public int getRendererI() {
+        return H2CO3Tools.getH2CO3LauncherValue("h2co3_launcher_renderer", 0, Integer.class);
+    }
+
+    public void setRendererI(int path) {
         H2CO3Tools.setH2CO3LauncherValue("h2co3_launcher_renderer", path);
     }
 

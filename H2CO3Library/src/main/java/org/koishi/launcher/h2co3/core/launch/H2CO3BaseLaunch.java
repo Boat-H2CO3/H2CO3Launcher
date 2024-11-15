@@ -1,5 +1,7 @@
 package org.koishi.launcher.h2co3.core.launch;
 
+import static org.koishi.launcher.h2co3.core.launch.utils.H2CO3LaunchUtils.getLibraryPath;
+
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
@@ -26,7 +28,7 @@ public class H2CO3BaseLaunch {
         H2CO3LauncherBridge bridge = new H2CO3LauncherBridge(gameHelper);
         bridge.setLogPath(logFilePath);
         bridge.setGameDir(gameHelper.getGameDirectory());
-        bridge.setRenderer(H2CO3Settings.Renderer.RENDERER_GL4ES.toString());
+        bridge.setRenderer(gameHelper.getRenderer().toString());
         Thread gameThread = new Thread(() -> {
             try {
                 logStartInfo(bridge, task);
@@ -80,7 +82,7 @@ public class H2CO3BaseLaunch {
         printTaskTitle(bridge, task + " Arguments");
         String[] args = rebaseArgs(command, jre);
         logArguments(bridge, task, args);
-        bridge.setLdLibraryPath(H2CO3LaunchUtils.getLibraryPath(context, RendererPlugin.getSelected().getPath()));
+        bridge.setLdLibraryPath(getLibraryPath(context, null));
         printTaskTitle(bridge, task + " Logs");
         bridge.setupExitTrap(bridge);
         bridge.getCallback().onLog("Hook success");
@@ -112,7 +114,7 @@ public class H2CO3BaseLaunch {
         String[] args = rebaseArgs(context, gameHelper, width, height);
         logArguments(bridge, task, args);
         String javaPath = H2CO3LaunchUtils.getJavaPath(gameHelper);
-        bridge.setLdLibraryPath(H2CO3LaunchUtils.getLibraryPath(context, javaPath));
+        bridge.setLdLibraryPath(getLibraryPath(context, javaPath, gameHelper.getRenderer() == H2CO3Settings.Renderer.RENDERER_CUSTOM ? RendererPlugin.getSelected().getPath() : null));
         printTaskTitle(bridge, task + " Logs");
         bridge.setupExitTrap(bridge);
         bridge.getCallback().onLog("Hook success");

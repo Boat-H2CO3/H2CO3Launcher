@@ -52,6 +52,7 @@ import org.koishi.launcher.h2co3.resources.component.H2CO3Button;
 import org.koishi.launcher.h2co3.resources.component.H2CO3CardView;
 import org.koishi.launcher.h2co3.resources.component.H2CO3TextView;
 import org.koishi.launcher.h2co3.resources.component.dialog.H2CO3CustomViewDialog;
+import org.koishi.launcher.h2co3.resources.component.dialog.H2CO3MessageDialog;
 import org.koishi.launcher.h2co3.resources.component.dialog.H2CO3ProgressDialog;
 import org.koishi.launcher.h2co3.ui.H2CO3LauncherClientActivity;
 import org.koishi.launcher.h2co3.ui.MicrosoftLoginActivity;
@@ -217,12 +218,28 @@ public class HomeFragment extends H2CO3Fragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         if (v == playButton) {
-            startActivity(new Intent(requireActivity(), H2CO3LauncherClientActivity.class));
-            h2co3Settings.setH2CO3Launch(false);
-            attachControllerInterface();
+            showGameLaunchDialog();
         } else if (v == userListButton) {
             toggleUserListVisibility();
         }
+    }
+
+    private void showGameLaunchDialog() {
+        MaterialAlertDialogBuilder dialog = new H2CO3MessageDialog(requireContext())
+                .setTitle("请选择启动游戏的方式")
+                .setPositiveButton("POJAV", (dialogInterface, which) -> {
+                    launchGame(false);
+                })
+                .setNegativeButton("H2CO3Launcher", (dialogInterface, which) -> {
+                    launchGame(true);
+                });
+        dialog.show();
+    }
+
+    private void launchGame(boolean isH2CO3Launch) {
+        h2co3Settings.setH2CO3Launch(isH2CO3Launch);
+        startActivity(new Intent(requireActivity(), H2CO3LauncherClientActivity.class));
+        attachControllerInterface();
     }
 
     private void toggleUserListVisibility() {
@@ -275,10 +292,12 @@ public class HomeFragment extends H2CO3Fragment implements View.OnClickListener 
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
         refreshServerList();
         serverSpinner.setAdapter(serverAdapter);
@@ -289,7 +308,8 @@ public class HomeFragment extends H2CO3Fragment implements View.OnClickListener 
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
     }
 
@@ -343,7 +363,7 @@ public class HomeFragment extends H2CO3Fragment implements View.OnClickListener 
                 username = Objects.requireNonNull(loginNameInput.getText()).toString();
                 if (isValidUsername(username)) {
                     addUserAndReload(username);
-                }else {
+                } else {
                     H2CO3Tools.showMessage(H2CO3MessageManager.NotificationItem.Type.ERROR, "Invalid username");
                 }
         }
@@ -406,8 +426,8 @@ public class HomeFragment extends H2CO3Fragment implements View.OnClickListener 
                                 input.setMaxLines(1);
                                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                                 handleServerSelection(selection, String.valueOf(input.getText()));
-                            }else{
-                                H2CO3Tools.showMessage(H2CO3MessageManager.NotificationItem.Type.WARNING,  "输入内容不能为空");
+                            } else {
+                                H2CO3Tools.showMessage(H2CO3MessageManager.NotificationItem.Type.WARNING, "输入内容不能为空");
                             }
 
                         })
@@ -594,20 +614,20 @@ public class HomeFragment extends H2CO3Fragment implements View.OnClickListener 
         if (authResult.getSelectedProfile() != null) {
             h2co3Auth
                     .addUserToJson(
-                    authResult.getSelectedProfile().getName(),
-                    username,
-                    password,
-                    "2",
-                    currentBaseUrl,
-                    authResult.getSelectedProfile().getId(),
-                    UUID.randomUUID().toString(),
-                    "0",
-                    authResult.getAccessToken(),
-                    "0",
-                    "0",
-                    true,
-                    false
-            );
+                            authResult.getSelectedProfile().getName(),
+                            username,
+                            password,
+                            "2",
+                            currentBaseUrl,
+                            authResult.getSelectedProfile().getId(),
+                            UUID.randomUUID().toString(),
+                            "0",
+                            authResult.getAccessToken(),
+                            "0",
+                            "0",
+                            true,
+                            false
+                    );
             reLoadUsers();
             loginDialogAlert.dismiss();
         } else {

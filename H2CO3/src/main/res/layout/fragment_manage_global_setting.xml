@@ -28,6 +28,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <org.koishi.launcher.h2co3.resources.component.preference.H2CO3ListPreference
+                android:id="@+id/preference_choose_renderer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <org.koishi.launcher.h2co3.resources.component.preference.H2CO3SwitchPreference
                 android:id="@+id/preference_set_pri_ver_dir"
                 android:layout_width="match_parent"

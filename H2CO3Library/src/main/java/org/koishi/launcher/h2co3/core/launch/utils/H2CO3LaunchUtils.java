@@ -72,7 +72,7 @@ public class H2CO3LaunchUtils {
         return new File(javaPath + jreLibDir + "/server/libjvm.so").exists() ? "/server" : "/client";
     }
 
-    private static String getLibraryPath(Context context, String javaPath, String pluginLibPath) throws IOException {
+    public static String getLibraryPath(Context context, String javaPath, String pluginLibPath) throws IOException {
         String nativeDir = context.getApplicationInfo().nativeLibraryDir;
         String libDirName = Architecture.is64BitsDevice() ? "lib64" : "lib";
         String jreLibDir = getJreLibDir(javaPath);
@@ -145,7 +145,7 @@ public class H2CO3LaunchUtils {
         envMap.put("POJAV_NATIVEDIR", context.getApplicationInfo().nativeLibraryDir);
         envMap.put("TMPDIR", context.getCacheDir().getAbsolutePath());
         envMap.put("PATH", javaPath + "/bin:" + Os.getenv("PATH"));
-        envMap.put("LD_LIBRARY_PATH", getLibraryPath(context, null));
+        envMap.put("LD_LIBRARY_PATH", getLibraryPath(context, settings.getRenderer() == H2CO3Settings.Renderer.RENDERER_CUSTOM ? RendererPlugin.getSelected().getPath() : null));
         envMap.put("FORCE_VSYNC", "false");
         if (!javaPath.contains("jre8")) {
             String libName = javaPath.contains("jre17") ? "/libjsph17.so" : "/libjsph21.so";
@@ -294,7 +294,6 @@ public class H2CO3LaunchUtils {
     public static CommandBuilder getMcArgs(Context context, H2CO3Settings settings, int width, int height) throws Exception {
         H2CO3Tools.loadPaths(context);
         CommandBuilder args = new CommandBuilder();
-        settings.setRenderer(H2CO3Settings.Renderer.RENDERER_GL4ES);
 
         LaunchVersion version = LaunchVersion.fromDirectory(new File(settings.getGameCurrentVersion()));
         String javaPath = getJavaPath(settings);
@@ -337,8 +336,8 @@ public class H2CO3LaunchUtils {
         args.addDefault("-Djava.library.path=", getLibraryPath(context, javaPath, null));
         args.addDefault("-Djna.boot.library.path=", H2CO3Tools.NATIVE_LIB_DIR);
         args.addDefault("-Dfml.earlyprogresswindow=", "false");
-        args.addDefault("-Dorg.lwjgl.util.DebugLoader=", "true");
-        args.addDefault("-Dorg.lwjgl.util.Debug=", "true");
+        args.addDefault("-Dorg.lwjgl.util.DebugLoader=", "false");
+        args.addDefault("-Dorg.lwjgl.util.Debug=", "false");
         args.addDefault("-Dos.name=", "Linux");
         args.addDefault("-Dos.version=Android-", Build.VERSION.RELEASE);
         args.addDefault("-Dlwjgl.platform=", "H2CO3Launcher");
@@ -349,6 +348,11 @@ public class H2CO3LaunchUtils {
         args.addDefault("-Djava.rmi.server.useCodebaseOnly=", "true");
         args.addDefault("-Dcom.sun.jndi.rmi.object.trustURLCodebase=", "false");
         args.addDefault("-Dcom.sun.jndi.cosnaming.object.trustURLCodebase=", "false");
+        args.addDefault("-Dorg.lwjgl.freetype.libname=", context.getApplicationInfo().nativeLibraryDir + "/libfreetype.so");
+        args.addDefault("-Dsodium.checks.issue2561=", "false");
+        args.addDefault("-Dloader.disable_forked_guis=", "true");
+        args.addDefault("-Dglfwstub.initEgl=", "false");
+
 
         Charset encoding = OperatingSystem.NATIVE_CHARSET;
         String fileEncoding = args.addDefault("-Dfile.encoding=", encoding.name());

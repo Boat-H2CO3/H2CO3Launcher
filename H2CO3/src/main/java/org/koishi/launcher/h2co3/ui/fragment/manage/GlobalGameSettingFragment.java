@@ -22,7 +22,8 @@ public class GlobalGameSettingFragment extends H2CO3Fragment {
     private View view;
 
     private static final int JAVA_AUTO = 0;
-    private H2CO3ListPreference preferenceChooseJava;
+    private static final int RENDER_DEF = 0;
+    private H2CO3ListPreference preferenceChooseJava, preferenceChooseRenderer;
     private H2CO3SwitchPreference preferenceSetPriVerDir;
     private H2CO3RangeSliderPreference preferenceSetGameMemory;
     private H2CO3SliderPreference preferenceSetWindowResolution;
@@ -33,12 +34,14 @@ public class GlobalGameSettingFragment extends H2CO3Fragment {
         settings = new H2CO3Settings();
         view = inflater.inflate(R.layout.fragment_manage_global_setting, container, false);
         preferenceChooseJava = view.findViewById(R.id.preference_choose_java);
+        preferenceChooseRenderer = view.findViewById(R.id.preference_choose_renderer);
         preferenceSetPriVerDir = view.findViewById(R.id.preference_set_pri_ver_dir);
         preferenceSetGameMemory = view.findViewById(R.id.preference_set_game_memory);
         preferenceSetWindowResolution = view.findViewById(R.id.preference_set_window_resolution);
         preferenceSetJoinServer = view.findViewById(R.id.preference_set_join_server);
 
         initChooseJavaPreference();
+        initChooseRendererPreference();
         initSetPriVerDirPreference();
         initSetGameMemoryPreference();
         initSetWindowResolution();
@@ -119,5 +122,33 @@ public class GlobalGameSettingFragment extends H2CO3Fragment {
         });
 
         preferenceChooseJava.setValue(entries[settings.getJavaVer()]);
+    }
+
+    private void initChooseRendererPreference() {
+        Context context = requireContext();
+        String titleChooseRenderer = "Renderer";
+            preferenceChooseRenderer.setTitle(titleChooseRenderer);
+
+        String[] entries = {
+                H2CO3Settings.Renderer.RENDERER_GL4ES.name(),
+                H2CO3Settings.Renderer.RENDERER_LTW.name(),
+                H2CO3Settings.Renderer.RENDERER_VGPU.name(),
+                H2CO3Settings.Renderer.RENDERER_ZINK.name(),
+                H2CO3Settings.Renderer.RENDERER_FREEDRENO.name(),
+                H2CO3Settings.Renderer.RENDERER_CUSTOM.name()
+        };
+
+        preferenceChooseRenderer.setEntries(entries, (preference, newValue) -> {
+            int renderer = RENDER_DEF;
+            for (int i = 1; i < entries.length; i++) {
+                if (newValue.equals(entries[i])) {
+                    renderer = i;
+                    break;
+                }
+            }
+            settings.setRendererI(renderer);
+        });
+
+        preferenceChooseRenderer.setValue(entries[settings.getRendererI()]);
     }
 }
