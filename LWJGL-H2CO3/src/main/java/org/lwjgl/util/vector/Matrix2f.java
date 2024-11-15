@@ -313,10 +313,11 @@ public class Matrix2f extends Matrix implements Serializable {
 	 * Returns a string representation of this matrix
 	 */
 	public String toString() {
-        String buf = String.valueOf(m00) + ' ' + m10 + ' ' + '\n' +
-                m01 + ' ' + m11 + ' ' + '\n';
-        return buf;
-    }
+		StringBuilder buf = new StringBuilder();
+		buf.append(m00).append(' ').append(m10).append(' ').append('\n');
+		buf.append(m01).append(' ').append(m11).append(' ').append('\n');
+		return buf.toString();
+	}
 
 	/**
 	 * Negate this matrix

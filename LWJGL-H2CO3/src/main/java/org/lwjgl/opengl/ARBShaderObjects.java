@@ -5,31 +5,19 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT1;
-import static org.lwjgl.system.Checks.checkSafe;
-import static org.lwjgl.system.JNI.callPPPPV;
-import static org.lwjgl.system.JNI.callPPV;
-import static org.lwjgl.system.JNI.callPV;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
-import static org.lwjgl.system.MemoryUtil.memAlloc;
-import static org.lwjgl.system.MemoryUtil.memFree;
-import static org.lwjgl.system.MemoryUtil.memUTF8;
+import javax.annotation.*;
 
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.APIUtil;
-import org.lwjgl.system.MemoryStack;
+import java.nio.*;
+
+import org.lwjgl.*;
+
+import org.lwjgl.system.*;
 import org.lwjgl.system.MemoryUtil;
-import org.lwjgl.system.NativeType;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_shader_objects.txt">ARB_shader_objects</a> extension.
@@ -263,7 +251,7 @@ public class ARBShaderObjects {
         MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
         try {
             long stringAddress = APIUtil.apiArrayi(stack, MemoryUtil::memUTF8, string);
-            nglShaderSourceARB(shaderObj, string.length, stringAddress, stringAddress - ((long) string.length << 2));
+            nglShaderSourceARB(shaderObj, string.length, stringAddress, stringAddress - (string.length << 2));
             APIUtil.apiArrayFree(stringAddress, string.length);
         } finally {
             stack.setPointer(stackPointer);

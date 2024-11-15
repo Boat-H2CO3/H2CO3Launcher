@@ -5,14 +5,12 @@
  */
 package org.lwjgl.system.macosx;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import java.nio.*;
 
-import org.lwjgl.system.Library;
-import org.lwjgl.system.NativeType;
+import org.lwjgl.system.*;
 
-import java.nio.ByteBuffer;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Native bindings to &lt;CoreFoundation.h&gt;. */
 public class CoreFoundation {

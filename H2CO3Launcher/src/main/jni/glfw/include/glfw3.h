@@ -109,7 +109,7 @@ extern "C" {
 #include "h2co3Launcher_bridge.h"
 
 #if defined(GLFW_INCLUDE_VULKAN)
-#include <vulkan/vulkan.h>
+  #include <vulkan/vulkan.h>
 #endif /* Vulkan header */
 
 /* The Vulkan header may have indirectly included windows.h (because of
@@ -120,95 +120,95 @@ extern "C" {
  * all platforms.  Additionally, the Windows OpenGL header needs APIENTRY.
  */
 #if !defined(APIENTRY)
-#if defined(_WIN32)
-#define APIENTRY __stdcall
-#else
-#define APIENTRY
-#endif
-#define GLFW_APIENTRY_DEFINED
+ #if defined(_WIN32)
+  #define APIENTRY __stdcall
+ #else
+  #define APIENTRY
+ #endif
+ #define GLFW_APIENTRY_DEFINED
 #endif /* APIENTRY */
 
 /* Some Windows OpenGL headers need this.
  */
 #if !defined(WINGDIAPI) && defined(_WIN32)
-#define WINGDIAPI __declspec(dllimport)
-#define GLFW_WINGDIAPI_DEFINED
+ #define WINGDIAPI __declspec(dllimport)
+ #define GLFW_WINGDIAPI_DEFINED
 #endif /* WINGDIAPI */
 
 /* Some Windows GLU headers need this.
  */
 #if !defined(CALLBACK) && defined(_WIN32)
-#define CALLBACK __stdcall
-#define GLFW_CALLBACK_DEFINED
+ #define CALLBACK __stdcall
+ #define GLFW_CALLBACK_DEFINED
 #endif /* CALLBACK */
 
 /* Include the chosen OpenGL or OpenGL ES headers.
  */
 #if defined(GLFW_INCLUDE_ES1)
 
-#include <GLES/gl.h>
-#if defined(GLFW_INCLUDE_GLEXT)
-#include <GLES/glext.h>
-#endif
+ #include <GLES/gl.h>
+ #if defined(GLFW_INCLUDE_GLEXT)
+  #include <GLES/glext.h>
+ #endif
 
 #elif defined(GLFW_INCLUDE_ES2)
 
-#include <GLES2/gl2.h>
-#if defined(GLFW_INCLUDE_GLEXT)
-#include <GLES2/gl2ext.h>
-#endif
+ #include <GLES2/gl2.h>
+ #if defined(GLFW_INCLUDE_GLEXT)
+  #include <GLES2/gl2ext.h>
+ #endif
 
 #elif defined(GLFW_INCLUDE_ES3)
 
-#include <GLES3/gl3.h>
-#if defined(GLFW_INCLUDE_GLEXT)
-#include <GLES2/gl2ext.h>
-#endif
+ #include <GLES3/gl3.h>
+ #if defined(GLFW_INCLUDE_GLEXT)
+  #include <GLES2/gl2ext.h>
+ #endif
 
 #elif defined(GLFW_INCLUDE_ES31)
 
-#include <GLES3/gl31.h>
-#if defined(GLFW_INCLUDE_GLEXT)
-#include <GLES2/gl2ext.h>
-#endif
+ #include <GLES3/gl31.h>
+ #if defined(GLFW_INCLUDE_GLEXT)
+  #include <GLES2/gl2ext.h>
+ #endif
 
 #elif defined(GLFW_INCLUDE_ES32)
 
-#include <GLES3/gl32.h>
-#if defined(GLFW_INCLUDE_GLEXT)
-#include <GLES2/gl2ext.h>
-#endif
+ #include <GLES3/gl32.h>
+ #if defined(GLFW_INCLUDE_GLEXT)
+  #include <GLES2/gl2ext.h>
+ #endif
 
 #elif defined(GLFW_INCLUDE_GLCOREARB)
 
-#if defined(__APPLE__)
+ #if defined(__APPLE__)
 
-#include <OpenGL/gl3.h>
-#if defined(GLFW_INCLUDE_GLEXT)
-#include <OpenGL/gl3ext.h>
-#endif /*GLFW_INCLUDE_GLEXT*/
+  #include <OpenGL/gl3.h>
+  #if defined(GLFW_INCLUDE_GLEXT)
+   #include <OpenGL/gl3ext.h>
+  #endif /*GLFW_INCLUDE_GLEXT*/
 
-#else /*__APPLE__*/
+ #else /*__APPLE__*/
 
-#include <GL/glcorearb.h>
+  #include <GL/glcorearb.h>
 
-#endif /*__APPLE__*/
+ #endif /*__APPLE__*/
 
 #elif defined(GLFW_INCLUDE_GLU)
 
-#if defined(__APPLE__)
+ #if defined(__APPLE__)
 
-#if defined(GLFW_INCLUDE_GLU)
-#include <OpenGL/glu.h>
-#endif
+  #if defined(GLFW_INCLUDE_GLU)
+   #include <OpenGL/glu.h>
+  #endif
 
-#else /*__APPLE__*/
+ #else /*__APPLE__*/
 
-#if defined(GLFW_INCLUDE_GLU)
-#include <GL/glu.h>
-#endif
+  #if defined(GLFW_INCLUDE_GLU)
+   #include <GL/glu.h>
+  #endif
 
-#endif /*__APPLE__*/
+ #endif /*__APPLE__*/
 
 #elif !defined(GLFW_INCLUDE_NONE) && \
       !defined(__gl_h_) && \
@@ -230,28 +230,28 @@ extern "C" {
 #endif /* OpenGL and OpenGL ES headers */
 
 #if defined(GLFW_DLL) && defined(_GLFW_BUILD_DLL)
-/* GLFW_DLL must be defined by applications that are linking against the DLL
- * version of the GLFW library.  _GLFW_BUILD_DLL is defined by the GLFW
- * configuration header when compiling the DLL version of the library.
- */
-#error "You must not have both GLFW_DLL and _GLFW_BUILD_DLL defined"
+ /* GLFW_DLL must be defined by applications that are linking against the DLL
+  * version of the GLFW library.  _GLFW_BUILD_DLL is defined by the GLFW
+  * configuration header when compiling the DLL version of the library.
+  */
+ #error "You must not have both GLFW_DLL and _GLFW_BUILD_DLL defined"
 #endif
 
 /* GLFWAPI is used to declare public API functions for export
  * from the DLL / shared library / dynamic library.
  */
 #if defined(_WIN32) && defined(_GLFW_BUILD_DLL)
-/* We are building GLFW as a Win32 DLL */
-#define GLFWAPI __declspec(dllexport)
+ /* We are building GLFW as a Win32 DLL */
+ #define GLFWAPI __declspec(dllexport)
 #elif defined(_WIN32) && defined(GLFW_DLL)
-/* We are calling GLFW as a Win32 DLL */
-#define GLFWAPI __declspec(dllimport)
+ /* We are calling GLFW as a Win32 DLL */
+ #define GLFWAPI __declspec(dllimport)
 #elif defined(__GNUC__) && defined(_GLFW_BUILD_DLL)
-/* We are building GLFW as a shared / dynamic library */
-#define GLFWAPI __attribute__((visibility("default")))
+ /* We are building GLFW as a shared / dynamic library */
+ #define GLFWAPI __attribute__((visibility("default")))
 #else
-/* We are building or calling GLFW as a static library */
-#define GLFWAPI
+ /* We are building or calling GLFW as a static library */
+ #define GLFWAPI
 #endif
 
 
@@ -1220,7 +1220,7 @@ typedef struct GLFWcursor GLFWcursor;
  *
  *  @ingroup init
  */
-typedef void *(*GLFWallocatefun)(size_t size, void *user);
+typedef void* (* GLFWallocatefun)(size_t size, void* user);
 
 /*! @brief The function pointer type for memory reallocation callbacks.
  *
@@ -1265,7 +1265,7 @@ typedef void *(*GLFWallocatefun)(size_t size, void *user);
  *
  *  @ingroup init
  */
-typedef void *(*GLFWreallocatefun)(void *block, size_t size, void *user);
+typedef void* (* GLFWreallocatefun)(void* block, size_t size, void* user);
 
 /*! @brief The function pointer type for memory deallocation callbacks.
  *
@@ -1302,7 +1302,7 @@ typedef void *(*GLFWreallocatefun)(void *block, size_t size, void *user);
  *
  *  @ingroup init
  */
-typedef void (*GLFWdeallocatefun)(void *block, void *user);
+typedef void (* GLFWdeallocatefun)(void* block, void* user);
 
 /*! @brief The function pointer type for error callbacks.
  *
@@ -1326,7 +1326,7 @@ typedef void (*GLFWdeallocatefun)(void *block, void *user);
  *
  *  @ingroup init
  */
-typedef void (*GLFWerrorfun)(int, const char *);
+typedef void (* GLFWerrorfun)(int,const char*);
 
 /*! @brief The function pointer type for window position callbacks.
  *
@@ -1349,7 +1349,7 @@ typedef void (*GLFWerrorfun)(int, const char *);
  *
  *  @ingroup window
  */
-typedef void (*GLFWwindowposfun)(GLFWwindow *, int, int);
+typedef void (* GLFWwindowposfun)(GLFWwindow*,int,int);
 
 /*! @brief The function pointer type for window size callbacks.
  *
@@ -1371,7 +1371,7 @@ typedef void (*GLFWwindowposfun)(GLFWwindow *, int, int);
  *
  *  @ingroup window
  */
-typedef void (*GLFWwindowsizefun)(GLFWwindow *, int, int);
+typedef void (* GLFWwindowsizefun)(GLFWwindow*,int,int);
 
 /*! @brief The function pointer type for window close callbacks.
  *
@@ -1391,7 +1391,7 @@ typedef void (*GLFWwindowsizefun)(GLFWwindow *, int, int);
  *
  *  @ingroup window
  */
-typedef void (*GLFWwindowclosefun)(GLFWwindow *);
+typedef void (* GLFWwindowclosefun)(GLFWwindow*);
 
 /*! @brief The function pointer type for window content refresh callbacks.
  *
@@ -1411,7 +1411,7 @@ typedef void (*GLFWwindowclosefun)(GLFWwindow *);
  *
  *  @ingroup window
  */
-typedef void (*GLFWwindowrefreshfun)(GLFWwindow *);
+typedef void (* GLFWwindowrefreshfun)(GLFWwindow*);
 
 /*! @brief The function pointer type for window focus callbacks.
  *
@@ -1432,7 +1432,7 @@ typedef void (*GLFWwindowrefreshfun)(GLFWwindow *);
  *
  *  @ingroup window
  */
-typedef void (*GLFWwindowfocusfun)(GLFWwindow *, int);
+typedef void (* GLFWwindowfocusfun)(GLFWwindow*,int);
 
 /*! @brief The function pointer type for window iconify callbacks.
  *
@@ -1453,7 +1453,7 @@ typedef void (*GLFWwindowfocusfun)(GLFWwindow *, int);
  *
  *  @ingroup window
  */
-typedef void (*GLFWwindowiconifyfun)(GLFWwindow *, int);
+typedef void (* GLFWwindowiconifyfun)(GLFWwindow*,int);
 
 /*! @brief The function pointer type for window maximize callbacks.
  *
@@ -1474,7 +1474,7 @@ typedef void (*GLFWwindowiconifyfun)(GLFWwindow *, int);
  *
  *  @ingroup window
  */
-typedef void (*GLFWwindowmaximizefun)(GLFWwindow *, int);
+typedef void (* GLFWwindowmaximizefun)(GLFWwindow*,int);
 
 /*! @brief The function pointer type for framebuffer size callbacks.
  *
@@ -1495,7 +1495,7 @@ typedef void (*GLFWwindowmaximizefun)(GLFWwindow *, int);
  *
  *  @ingroup window
  */
-typedef void (*GLFWframebuffersizefun)(GLFWwindow *, int, int);
+typedef void (* GLFWframebuffersizefun)(GLFWwindow*,int,int);
 
 /*! @brief The function pointer type for window content scale callbacks.
  *
@@ -1516,7 +1516,7 @@ typedef void (*GLFWframebuffersizefun)(GLFWwindow *, int, int);
  *
  *  @ingroup window
  */
-typedef void (*GLFWwindowcontentscalefun)(GLFWwindow *, float, float);
+typedef void (* GLFWwindowcontentscalefun)(GLFWwindow*,float,float);
 
 /*! @brief The function pointer type for mouse button callbacks.
  *
@@ -1542,7 +1542,7 @@ typedef void (*GLFWwindowcontentscalefun)(GLFWwindow *, float, float);
  *
  *  @ingroup input
  */
-typedef void (*GLFWmousebuttonfun)(GLFWwindow *, int, int, int);
+typedef void (* GLFWmousebuttonfun)(GLFWwindow*,int,int,int);
 
 /*! @brief The function pointer type for cursor position callbacks.
  *
@@ -1565,7 +1565,7 @@ typedef void (*GLFWmousebuttonfun)(GLFWwindow *, int, int, int);
  *
  *  @ingroup input
  */
-typedef void (*GLFWcursorposfun)(GLFWwindow *, double, double);
+typedef void (* GLFWcursorposfun)(GLFWwindow*,double,double);
 
 /*! @brief The function pointer type for cursor enter/leave callbacks.
  *
@@ -1586,7 +1586,7 @@ typedef void (*GLFWcursorposfun)(GLFWwindow *, double, double);
  *
  *  @ingroup input
  */
-typedef void (*GLFWcursorenterfun)(GLFWwindow *, int);
+typedef void (* GLFWcursorenterfun)(GLFWwindow*,int);
 
 /*! @brief The function pointer type for scroll callbacks.
  *
@@ -1607,7 +1607,7 @@ typedef void (*GLFWcursorenterfun)(GLFWwindow *, int);
  *
  *  @ingroup input
  */
-typedef void (*GLFWscrollfun)(GLFWwindow *, double, double);
+typedef void (* GLFWscrollfun)(GLFWwindow*,double,double);
 
 /*! @brief The function pointer type for keyboard key callbacks.
  *
@@ -1633,7 +1633,7 @@ typedef void (*GLFWscrollfun)(GLFWwindow *, double, double);
  *
  *  @ingroup input
  */
-typedef void (*GLFWkeyfun)(GLFWwindow *, int, int, int, int);
+typedef void (* GLFWkeyfun)(GLFWwindow*,int,int,int,int);
 
 /*! @brief The function pointer type for Unicode character callbacks.
  *
@@ -1654,7 +1654,7 @@ typedef void (*GLFWkeyfun)(GLFWwindow *, int, int, int, int);
  *
  *  @ingroup input
  */
-typedef void (*GLFWcharfun)(GLFWwindow *, unsigned int);
+typedef void (* GLFWcharfun)(GLFWwindow*,unsigned int);
 
 /*! @brief The function pointer type for Unicode character with modifiers
  *  callbacks.
@@ -1681,7 +1681,7 @@ typedef void (*GLFWcharfun)(GLFWwindow *, unsigned int);
  *
  *  @ingroup input
  */
-typedef void (*GLFWcharmodsfun)(GLFWwindow *, unsigned int, int);
+typedef void (* GLFWcharmodsfun)(GLFWwindow*,unsigned int,int);
 
 /*! @brief The function pointer type for path drop callbacks.
  *
@@ -1705,7 +1705,7 @@ typedef void (*GLFWcharmodsfun)(GLFWwindow *, unsigned int, int);
  *
  *  @ingroup input
  */
-typedef void (*GLFWdropfun)(GLFWwindow *, int, const char *[]);
+typedef void (* GLFWdropfun)(GLFWwindow*,int,const char*[]);
 
 /*! @brief The function pointer type for monitor configuration callbacks.
  *
@@ -1726,7 +1726,7 @@ typedef void (*GLFWdropfun)(GLFWwindow *, int, const char *[]);
  *
  *  @ingroup monitor
  */
-typedef void (*GLFWmonitorfun)(GLFWmonitor *, int);
+typedef void (* GLFWmonitorfun)(GLFWmonitor*,int);
 
 /*! @brief The function pointer type for joystick configuration callbacks.
  *
@@ -1747,7 +1747,7 @@ typedef void (*GLFWmonitorfun)(GLFWmonitor *, int);
  *
  *  @ingroup input
  */
-typedef void (*GLFWjoystickfun)(int, int);
+typedef void (* GLFWjoystickfun)(int,int);
 
 /*! @brief Video mode type.
  *
@@ -1762,7 +1762,8 @@ typedef void (*GLFWjoystickfun)(int, int);
  *
  *  @ingroup monitor
  */
-typedef struct GLFWvidmode {
+typedef struct GLFWvidmode
+{
     /*! The width, in screen coordinates, of the video mode.
      */
     int width;
@@ -1795,16 +1796,17 @@ typedef struct GLFWvidmode {
  *
  *  @ingroup monitor
  */
-typedef struct GLFWgammaramp {
+typedef struct GLFWgammaramp
+{
     /*! An array of value describing the response of the red channel.
      */
-    unsigned short *red;
+    unsigned short* red;
     /*! An array of value describing the response of the green channel.
      */
-    unsigned short *green;
+    unsigned short* green;
     /*! An array of value describing the response of the blue channel.
      */
-    unsigned short *blue;
+    unsigned short* blue;
     /*! The number of elements in each array.
      */
     unsigned int size;
@@ -1823,7 +1825,8 @@ typedef struct GLFWgammaramp {
  *
  *  @ingroup window
  */
-typedef struct GLFWimage {
+typedef struct GLFWimage
+{
     /*! The width, in pixels, of this image.
      */
     int width;
@@ -1832,7 +1835,7 @@ typedef struct GLFWimage {
     int height;
     /*! The pixel data of this image, arranged left-to-right, top-to-bottom.
      */
-    unsigned char *pixels;
+    unsigned char* pixels;
 } GLFWimage;
 
 /*! @brief Gamepad input state
@@ -1846,7 +1849,8 @@ typedef struct GLFWimage {
  *
  *  @ingroup input
  */
-typedef struct GLFWgamepadstate {
+typedef struct GLFWgamepadstate
+{
     /*! The states of each [gamepad button](@ref gamepad_buttons), `GLFW_PRESS`
      *  or `GLFW_RELEASE`.
      */
@@ -1866,11 +1870,12 @@ typedef struct GLFWgamepadstate {
  *
  *  @ingroup init
  */
-typedef struct GLFWallocator {
+typedef struct GLFWallocator
+{
     GLFWallocatefun allocate;
     GLFWreallocatefun reallocate;
     GLFWdeallocatefun deallocate;
-    void *user;
+    void* user;
 } GLFWallocator;
 
 
@@ -2007,7 +2012,7 @@ GLFWAPI void glfwInitHint(int hint, int value);
  *
  *  @ingroup init
  */
-GLFWAPI void glfwInitAllocator(const GLFWallocator *allocator);
+GLFWAPI void glfwInitAllocator(const GLFWallocator* allocator);
 
 /*! @brief Retrieves the version of the GLFW library.
  *
@@ -2034,7 +2039,7 @@ GLFWAPI void glfwInitAllocator(const GLFWallocator *allocator);
  *
  *  @ingroup init
  */
-GLFWAPI void glfwGetVersion(int *major, int *minor, int *rev);
+GLFWAPI void glfwGetVersion(int* major, int* minor, int* rev);
 
 /*! @brief Returns a string describing the compile-time configuration.
  *
@@ -2065,7 +2070,7 @@ GLFWAPI void glfwGetVersion(int *major, int *minor, int *rev);
  *
  *  @ingroup init
  */
-GLFWAPI const char *glfwGetVersionString(void);
+GLFWAPI const char* glfwGetVersionString(void);
 
 /*! @brief Returns and clears the last error for the calling thread.
  *
@@ -2096,7 +2101,7 @@ GLFWAPI const char *glfwGetVersionString(void);
  *
  *  @ingroup init
  */
-GLFWAPI int glfwGetError(const char **description);
+GLFWAPI int glfwGetError(const char** description);
 
 /*! @brief Sets the error callback.
  *
@@ -2216,7 +2221,7 @@ GLFWAPI int glfwPlatformSupported(int platform);
  *
  *  @ingroup monitor
  */
-GLFWAPI GLFWmonitor **glfwGetMonitors(int *count);
+GLFWAPI GLFWmonitor** glfwGetMonitors(int* count);
 
 /*! @brief Returns the primary monitor.
  *
@@ -2240,7 +2245,7 @@ GLFWAPI GLFWmonitor **glfwGetMonitors(int *count);
  *
  *  @ingroup monitor
  */
-GLFWAPI GLFWmonitor *glfwGetPrimaryMonitor(void);
+GLFWAPI GLFWmonitor* glfwGetPrimaryMonitor(void);
 
 /*! @brief Returns the position of the monitor's viewport on the virtual screen.
  *
@@ -2265,7 +2270,7 @@ GLFWAPI GLFWmonitor *glfwGetPrimaryMonitor(void);
  *
  *  @ingroup monitor
  */
-GLFWAPI void glfwGetMonitorPos(GLFWmonitor *monitor, int *xpos, int *ypos);
+GLFWAPI void glfwGetMonitorPos(GLFWmonitor* monitor, int* xpos, int* ypos);
 
 /*! @brief Retrieves the work area of the monitor.
  *
@@ -2296,8 +2301,7 @@ GLFWAPI void glfwGetMonitorPos(GLFWmonitor *monitor, int *xpos, int *ypos);
  *
  *  @ingroup monitor
  */
-GLFWAPI void
-glfwGetMonitorWorkarea(GLFWmonitor *monitor, int *xpos, int *ypos, int *width, int *height);
+GLFWAPI void glfwGetMonitorWorkarea(GLFWmonitor* monitor, int* xpos, int* ypos, int* width, int* height);
 
 /*! @brief Returns the physical size of the monitor.
  *
@@ -2331,7 +2335,7 @@ glfwGetMonitorWorkarea(GLFWmonitor *monitor, int *xpos, int *ypos, int *width, i
  *
  *  @ingroup monitor
  */
-GLFWAPI void glfwGetMonitorPhysicalSize(GLFWmonitor *monitor, int *widthMM, int *heightMM);
+GLFWAPI void glfwGetMonitorPhysicalSize(GLFWmonitor* monitor, int* widthMM, int* heightMM);
 
 /*! @brief Retrieves the content scale for the specified monitor.
  *
@@ -2363,7 +2367,7 @@ GLFWAPI void glfwGetMonitorPhysicalSize(GLFWmonitor *monitor, int *widthMM, int 
  *
  *  @ingroup monitor
  */
-GLFWAPI void glfwGetMonitorContentScale(GLFWmonitor *monitor, float *xscale, float *yscale);
+GLFWAPI void glfwGetMonitorContentScale(GLFWmonitor* monitor, float* xscale, float* yscale);
 
 /*! @brief Returns the name of the specified monitor.
  *
@@ -2389,7 +2393,7 @@ GLFWAPI void glfwGetMonitorContentScale(GLFWmonitor *monitor, float *xscale, flo
  *
  *  @ingroup monitor
  */
-GLFWAPI const char *glfwGetMonitorName(GLFWmonitor *monitor);
+GLFWAPI const char* glfwGetMonitorName(GLFWmonitor* monitor);
 
 /*! @brief Sets the user pointer of the specified monitor.
  *
@@ -2415,7 +2419,7 @@ GLFWAPI const char *glfwGetMonitorName(GLFWmonitor *monitor);
  *
  *  @ingroup monitor
  */
-GLFWAPI void glfwSetMonitorUserPointer(GLFWmonitor *monitor, void *pointer);
+GLFWAPI void glfwSetMonitorUserPointer(GLFWmonitor* monitor, void* pointer);
 
 /*! @brief Returns the user pointer of the specified monitor.
  *
@@ -2439,7 +2443,7 @@ GLFWAPI void glfwSetMonitorUserPointer(GLFWmonitor *monitor, void *pointer);
  *
  *  @ingroup monitor
  */
-GLFWAPI void *glfwGetMonitorUserPointer(GLFWmonitor *monitor);
+GLFWAPI void* glfwGetMonitorUserPointer(GLFWmonitor* monitor);
 
 /*! @brief Sets the monitor configuration callback.
  *
@@ -2503,7 +2507,7 @@ GLFWAPI GLFWmonitorfun glfwSetMonitorCallback(GLFWmonitorfun callback);
  *
  *  @ingroup monitor
  */
-GLFWAPI const GLFWvidmode *glfwGetVideoModes(GLFWmonitor *monitor, int *count);
+GLFWAPI const GLFWvidmode* glfwGetVideoModes(GLFWmonitor* monitor, int* count);
 
 /*! @brief Returns the current mode of the specified monitor.
  *
@@ -2531,7 +2535,7 @@ GLFWAPI const GLFWvidmode *glfwGetVideoModes(GLFWmonitor *monitor, int *count);
  *
  *  @ingroup monitor
  */
-GLFWAPI const GLFWvidmode *glfwGetVideoMode(GLFWmonitor *monitor);
+GLFWAPI const GLFWvidmode* glfwGetVideoMode(GLFWmonitor* monitor);
 
 /*! @brief Generates a gamma ramp and sets it for the specified monitor.
  *
@@ -2564,7 +2568,7 @@ GLFWAPI const GLFWvidmode *glfwGetVideoMode(GLFWmonitor *monitor);
  *
  *  @ingroup monitor
  */
-GLFWAPI void glfwSetGamma(GLFWmonitor *monitor, float gamma);
+GLFWAPI void glfwSetGamma(GLFWmonitor* monitor, float gamma);
 
 /*! @brief Returns the current gamma ramp for the specified monitor.
  *
@@ -2594,7 +2598,7 @@ GLFWAPI void glfwSetGamma(GLFWmonitor *monitor, float gamma);
  *
  *  @ingroup monitor
  */
-GLFWAPI const GLFWgammaramp *glfwGetGammaRamp(GLFWmonitor *monitor);
+GLFWAPI const GLFWgammaramp* glfwGetGammaRamp(GLFWmonitor* monitor);
 
 /*! @brief Sets the current gamma ramp for the specified monitor.
  *
@@ -2635,7 +2639,7 @@ GLFWAPI const GLFWgammaramp *glfwGetGammaRamp(GLFWmonitor *monitor);
  *
  *  @ingroup monitor
  */
-GLFWAPI void glfwSetGammaRamp(GLFWmonitor *monitor, const GLFWgammaramp *ramp);
+GLFWAPI void glfwSetGammaRamp(GLFWmonitor* monitor, const GLFWgammaramp* ramp);
 
 /*! @brief Resets all window hints to their default values.
  *
@@ -2727,7 +2731,7 @@ GLFWAPI void glfwWindowHint(int hint, int value);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwWindowHintString(int hint, const char *value);
+GLFWAPI void glfwWindowHintString(int hint, const char* value);
 
 /*! @brief Creates a window and its associated context.
  *
@@ -2881,8 +2885,7 @@ GLFWAPI void glfwWindowHintString(int hint, const char *value);
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindow *
-glfwCreateWindow(int width, int height, const char *title, GLFWmonitor *monitor, GLFWwindow *share);
+GLFWAPI GLFWwindow* glfwCreateWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share);
 
 /*! @brief Destroys the specified window and its context.
  *
@@ -2911,7 +2914,7 @@ glfwCreateWindow(int width, int height, const char *title, GLFWmonitor *monitor,
  *
  *  @ingroup window
  */
-GLFWAPI void glfwDestroyWindow(GLFWwindow *window);
+GLFWAPI void glfwDestroyWindow(GLFWwindow* window);
 
 /*! @brief Checks the close flag of the specified window.
  *
@@ -2931,7 +2934,7 @@ GLFWAPI void glfwDestroyWindow(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI int glfwWindowShouldClose(GLFWwindow *window);
+GLFWAPI int glfwWindowShouldClose(GLFWwindow* window);
 
 /*! @brief Sets the close flag of the specified window.
  *
@@ -2953,7 +2956,7 @@ GLFWAPI int glfwWindowShouldClose(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSetWindowShouldClose(GLFWwindow *window, int value);
+GLFWAPI void glfwSetWindowShouldClose(GLFWwindow* window, int value);
 
 /*! @brief Sets the title of the specified window.
  *
@@ -2978,7 +2981,7 @@ GLFWAPI void glfwSetWindowShouldClose(GLFWwindow *window, int value);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSetWindowTitle(GLFWwindow *window, const char *title);
+GLFWAPI void glfwSetWindowTitle(GLFWwindow* window, const char* title);
 
 /*! @brief Sets the icon for the specified window.
  *
@@ -3025,7 +3028,7 @@ GLFWAPI void glfwSetWindowTitle(GLFWwindow *window, const char *title);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSetWindowIcon(GLFWwindow *window, int count, const GLFWimage *images);
+GLFWAPI void glfwSetWindowIcon(GLFWwindow* window, int count, const GLFWimage* images);
 
 /*! @brief Retrieves the position of the content area of the specified window.
  *
@@ -3057,7 +3060,7 @@ GLFWAPI void glfwSetWindowIcon(GLFWwindow *window, int count, const GLFWimage *i
  *
  *  @ingroup window
  */
-GLFWAPI void glfwGetWindowPos(GLFWwindow *window, int *xpos, int *ypos);
+GLFWAPI void glfwGetWindowPos(GLFWwindow* window, int* xpos, int* ypos);
 
 /*! @brief Sets the position of the content area of the specified window.
  *
@@ -3092,7 +3095,7 @@ GLFWAPI void glfwGetWindowPos(GLFWwindow *window, int *xpos, int *ypos);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSetWindowPos(GLFWwindow *window, int xpos, int ypos);
+GLFWAPI void glfwSetWindowPos(GLFWwindow* window, int xpos, int ypos);
 
 /*! @brief Retrieves the size of the content area of the specified window.
  *
@@ -3122,7 +3125,7 @@ GLFWAPI void glfwSetWindowPos(GLFWwindow *window, int xpos, int ypos);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwGetWindowSize(GLFWwindow *window, int *width, int *height);
+GLFWAPI void glfwGetWindowSize(GLFWwindow* window, int* width, int* height);
 
 /*! @brief Sets the size limits of the specified window.
  *
@@ -3165,8 +3168,7 @@ GLFWAPI void glfwGetWindowSize(GLFWwindow *window, int *width, int *height);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSetWindowSizeLimits(GLFWwindow *window, int minwidth, int minheight, int maxwidth,
-                                     int maxheight);
+GLFWAPI void glfwSetWindowSizeLimits(GLFWwindow* window, int minwidth, int minheight, int maxwidth, int maxheight);
 
 /*! @brief Sets the aspect ratio of the specified window.
  *
@@ -3209,7 +3211,7 @@ GLFWAPI void glfwSetWindowSizeLimits(GLFWwindow *window, int minwidth, int minhe
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSetWindowAspectRatio(GLFWwindow *window, int numer, int denom);
+GLFWAPI void glfwSetWindowAspectRatio(GLFWwindow* window, int numer, int denom);
 
 /*! @brief Sets the size of the content area of the specified window.
  *
@@ -3250,7 +3252,7 @@ GLFWAPI void glfwSetWindowAspectRatio(GLFWwindow *window, int numer, int denom);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSetWindowSize(GLFWwindow *window, int width, int height);
+GLFWAPI void glfwSetWindowSize(GLFWwindow* window, int width, int height);
 
 /*! @brief Retrieves the size of the framebuffer of the specified window.
  *
@@ -3279,7 +3281,7 @@ GLFWAPI void glfwSetWindowSize(GLFWwindow *window, int width, int height);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwGetFramebufferSize(GLFWwindow *window, int *width, int *height);
+GLFWAPI void glfwGetFramebufferSize(GLFWwindow* window, int* width, int* height);
 
 /*! @brief Retrieves the size of the frame of the window.
  *
@@ -3316,8 +3318,7 @@ GLFWAPI void glfwGetFramebufferSize(GLFWwindow *window, int *width, int *height)
  *
  *  @ingroup window
  */
-GLFWAPI void
-glfwGetWindowFrameSize(GLFWwindow *window, int *left, int *top, int *right, int *bottom);
+GLFWAPI void glfwGetWindowFrameSize(GLFWwindow* window, int* left, int* top, int* right, int* bottom);
 
 /*! @brief Retrieves the content scale for the specified window.
  *
@@ -3350,7 +3351,7 @@ glfwGetWindowFrameSize(GLFWwindow *window, int *left, int *top, int *right, int 
  *
  *  @ingroup window
  */
-GLFWAPI void glfwGetWindowContentScale(GLFWwindow *window, float *xscale, float *yscale);
+GLFWAPI void glfwGetWindowContentScale(GLFWwindow* window, float* xscale, float* yscale);
 
 /*! @brief Returns the opacity of the whole window.
  *
@@ -3377,7 +3378,7 @@ GLFWAPI void glfwGetWindowContentScale(GLFWwindow *window, float *xscale, float 
  *
  *  @ingroup window
  */
-GLFWAPI float glfwGetWindowOpacity(GLFWwindow *window);
+GLFWAPI float glfwGetWindowOpacity(GLFWwindow* window);
 
 /*! @brief Sets the opacity of the whole window.
  *
@@ -3406,7 +3407,7 @@ GLFWAPI float glfwGetWindowOpacity(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSetWindowOpacity(GLFWwindow *window, float opacity);
+GLFWAPI void glfwSetWindowOpacity(GLFWwindow* window, float opacity);
 
 /*! @brief Iconifies the specified window.
  *
@@ -3437,7 +3438,7 @@ GLFWAPI void glfwSetWindowOpacity(GLFWwindow *window, float opacity);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwIconifyWindow(GLFWwindow *window);
+GLFWAPI void glfwIconifyWindow(GLFWwindow* window);
 
 /*! @brief Restores the specified window.
  *
@@ -3464,7 +3465,7 @@ GLFWAPI void glfwIconifyWindow(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwRestoreWindow(GLFWwindow *window);
+GLFWAPI void glfwRestoreWindow(GLFWwindow* window);
 
 /*! @brief Maximizes the specified window.
  *
@@ -3489,7 +3490,7 @@ GLFWAPI void glfwRestoreWindow(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwMaximizeWindow(GLFWwindow *window);
+GLFWAPI void glfwMaximizeWindow(GLFWwindow* window);
 
 /*! @brief Makes the specified window visible.
  *
@@ -3516,7 +3517,7 @@ GLFWAPI void glfwMaximizeWindow(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwShowWindow(GLFWwindow *window);
+GLFWAPI void glfwShowWindow(GLFWwindow* window);
 
 /*! @brief Hides the specified window.
  *
@@ -3538,7 +3539,7 @@ GLFWAPI void glfwShowWindow(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwHideWindow(GLFWwindow *window);
+GLFWAPI void glfwHideWindow(GLFWwindow* window);
 
 /*! @brief Brings the specified window to front and sets input focus.
  *
@@ -3577,7 +3578,7 @@ GLFWAPI void glfwHideWindow(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwFocusWindow(GLFWwindow *window);
+GLFWAPI void glfwFocusWindow(GLFWwindow* window);
 
 /*! @brief Requests user attention to the specified window.
  *
@@ -3604,7 +3605,7 @@ GLFWAPI void glfwFocusWindow(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwRequestWindowAttention(GLFWwindow *window);
+GLFWAPI void glfwRequestWindowAttention(GLFWwindow* window);
 
 /*! @brief Returns the monitor that the window uses for full screen mode.
  *
@@ -3626,7 +3627,7 @@ GLFWAPI void glfwRequestWindowAttention(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI GLFWmonitor *glfwGetWindowMonitor(GLFWwindow *window);
+GLFWAPI GLFWmonitor* glfwGetWindowMonitor(GLFWwindow* window);
 
 /*! @brief Sets the mode, monitor, video mode and placement of a window.
  *
@@ -3685,9 +3686,7 @@ GLFWAPI GLFWmonitor *glfwGetWindowMonitor(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI void
-glfwSetWindowMonitor(GLFWwindow *window, GLFWmonitor *monitor, int xpos, int ypos, int width,
-                     int height, int refreshRate);
+GLFWAPI void glfwSetWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, int xpos, int ypos, int width, int height, int refreshRate);
 
 /*! @brief Returns an attribute of the specified window.
  *
@@ -3721,7 +3720,7 @@ glfwSetWindowMonitor(GLFWwindow *window, GLFWmonitor *monitor, int xpos, int ypo
  *
  *  @ingroup window
  */
-GLFWAPI int glfwGetWindowAttrib(GLFWwindow *window, int attrib);
+GLFWAPI int glfwGetWindowAttrib(GLFWwindow* window, int attrib);
 
 /*! @brief Sets an attribute of the specified window.
  *
@@ -3758,7 +3757,7 @@ GLFWAPI int glfwGetWindowAttrib(GLFWwindow *window, int attrib);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSetWindowAttrib(GLFWwindow *window, int attrib, int value);
+GLFWAPI void glfwSetWindowAttrib(GLFWwindow* window, int attrib, int value);
 
 /*! @brief Sets the user pointer of the specified window.
  *
@@ -3781,7 +3780,7 @@ GLFWAPI void glfwSetWindowAttrib(GLFWwindow *window, int attrib, int value);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSetWindowUserPointer(GLFWwindow *window, void *pointer);
+GLFWAPI void glfwSetWindowUserPointer(GLFWwindow* window, void* pointer);
 
 /*! @brief Returns the user pointer of the specified window.
  *
@@ -3802,7 +3801,7 @@ GLFWAPI void glfwSetWindowUserPointer(GLFWwindow *window, void *pointer);
  *
  *  @ingroup window
  */
-GLFWAPI void *glfwGetWindowUserPointer(GLFWwindow *window);
+GLFWAPI void* glfwGetWindowUserPointer(GLFWwindow* window);
 
 /*! @brief Sets the position callback for the specified window.
  *
@@ -3837,7 +3836,7 @@ GLFWAPI void *glfwGetWindowUserPointer(GLFWwindow *window);
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowposfun glfwSetWindowPosCallback(GLFWwindow *window, GLFWwindowposfun callback);
+GLFWAPI GLFWwindowposfun glfwSetWindowPosCallback(GLFWwindow* window, GLFWwindowposfun callback);
 
 /*! @brief Sets the size callback for the specified window.
  *
@@ -3869,7 +3868,7 @@ GLFWAPI GLFWwindowposfun glfwSetWindowPosCallback(GLFWwindow *window, GLFWwindow
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowsizefun glfwSetWindowSizeCallback(GLFWwindow *window, GLFWwindowsizefun callback);
+GLFWAPI GLFWwindowsizefun glfwSetWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback);
 
 /*! @brief Sets the close callback for the specified window.
  *
@@ -3909,8 +3908,7 @@ GLFWAPI GLFWwindowsizefun glfwSetWindowSizeCallback(GLFWwindow *window, GLFWwind
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowclosefun
-glfwSetWindowCloseCallback(GLFWwindow *window, GLFWwindowclosefun callback);
+GLFWAPI GLFWwindowclosefun glfwSetWindowCloseCallback(GLFWwindow* window, GLFWwindowclosefun callback);
 
 /*! @brief Sets the refresh callback for the specified window.
  *
@@ -3946,8 +3944,7 @@ glfwSetWindowCloseCallback(GLFWwindow *window, GLFWwindowclosefun callback);
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowrefreshfun
-glfwSetWindowRefreshCallback(GLFWwindow *window, GLFWwindowrefreshfun callback);
+GLFWAPI GLFWwindowrefreshfun glfwSetWindowRefreshCallback(GLFWwindow* window, GLFWwindowrefreshfun callback);
 
 /*! @brief Sets the focus callback for the specified window.
  *
@@ -3982,8 +3979,7 @@ glfwSetWindowRefreshCallback(GLFWwindow *window, GLFWwindowrefreshfun callback);
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowfocusfun
-glfwSetWindowFocusCallback(GLFWwindow *window, GLFWwindowfocusfun callback);
+GLFWAPI GLFWwindowfocusfun glfwSetWindowFocusCallback(GLFWwindow* window, GLFWwindowfocusfun callback);
 
 /*! @brief Sets the iconify callback for the specified window.
  *
@@ -4016,8 +4012,7 @@ glfwSetWindowFocusCallback(GLFWwindow *window, GLFWwindowfocusfun callback);
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowiconifyfun
-glfwSetWindowIconifyCallback(GLFWwindow *window, GLFWwindowiconifyfun callback);
+GLFWAPI GLFWwindowiconifyfun glfwSetWindowIconifyCallback(GLFWwindow* window, GLFWwindowiconifyfun callback);
 
 /*! @brief Sets the maximize callback for the specified window.
  *
@@ -4047,8 +4042,7 @@ glfwSetWindowIconifyCallback(GLFWwindow *window, GLFWwindowiconifyfun callback);
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowmaximizefun
-glfwSetWindowMaximizeCallback(GLFWwindow *window, GLFWwindowmaximizefun callback);
+GLFWAPI GLFWwindowmaximizefun glfwSetWindowMaximizeCallback(GLFWwindow* window, GLFWwindowmaximizefun callback);
 
 /*! @brief Sets the framebuffer resize callback for the specified window.
  *
@@ -4078,8 +4072,7 @@ glfwSetWindowMaximizeCallback(GLFWwindow *window, GLFWwindowmaximizefun callback
  *
  *  @ingroup window
  */
-GLFWAPI GLFWframebuffersizefun
-glfwSetFramebufferSizeCallback(GLFWwindow *window, GLFWframebuffersizefun callback);
+GLFWAPI GLFWframebuffersizefun glfwSetFramebufferSizeCallback(GLFWwindow* window, GLFWframebuffersizefun callback);
 
 /*! @brief Sets the window content scale callback for the specified window.
  *
@@ -4110,8 +4103,7 @@ glfwSetFramebufferSizeCallback(GLFWwindow *window, GLFWframebuffersizefun callba
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowcontentscalefun
-glfwSetWindowContentScaleCallback(GLFWwindow *window, GLFWwindowcontentscalefun callback);
+GLFWAPI GLFWwindowcontentscalefun glfwSetWindowContentScaleCallback(GLFWwindow* window, GLFWwindowcontentscalefun callback);
 
 /*! @brief Processes all pending events.
  *
@@ -4288,7 +4280,7 @@ GLFWAPI void glfwPostEmptyEvent(void);
  *
  *  @ingroup input
  */
-GLFWAPI int glfwGetInputMode(GLFWwindow *window, int mode);
+GLFWAPI int glfwGetInputMode(GLFWwindow* window, int mode);
 
 /*! @brief Sets an input option for the specified window.
  *
@@ -4350,16 +4342,15 @@ GLFWAPI int glfwGetInputMode(GLFWwindow *window, int mode);
  *
  *  @ingroup input
  */
-GLFWAPI void glfwSetInputMode(GLFWwindow *window, int mode, int value);
+GLFWAPI void glfwSetInputMode(GLFWwindow* window, int mode, int value);
 
 /**
- * For H2CO3LAUNCHER, set injector callback
- * @param mode 0 is disable, 1 is enable, when enabled, lwjgl will try to get hit result type
+ * For H2CO3Launcher, set injector callback.
  */
-GLFWAPI H2CO3injectorfun glfwSetInjectorCallback(H2CO3injectorfun callback);
+GLFWAPI H2CO3LauncherInjectorfun glfwSetInjectorCallback(H2CO3LauncherInjectorfun callback);
 
 /**
- * For H2CO3LAUNCHER, set type of what player's cursor point to
+ * For H2CO3Launcher, set type of what player's cursor point to
  * @param type Hit result type
  */
 GLFWAPI void glfwSetHitResultType(int type);
@@ -4459,7 +4450,7 @@ GLFWAPI int glfwRawMouseMotionSupported(void);
  *
  *  @ingroup input
  */
-GLFWAPI const char *glfwGetKeyName(int key, int scancode);
+GLFWAPI const char* glfwGetKeyName(int key, int scancode);
 
 /*! @brief Returns the platform-specific scancode of the specified key.
  *
@@ -4523,7 +4514,7 @@ GLFWAPI int glfwGetKeyScancode(int key);
  *
  *  @ingroup input
  */
-GLFWAPI int glfwGetKey(GLFWwindow *window, int key);
+GLFWAPI int glfwGetKey(GLFWwindow* window, int key);
 
 /*! @brief Returns the last reported state of a mouse button for the specified
  *  window.
@@ -4552,7 +4543,7 @@ GLFWAPI int glfwGetKey(GLFWwindow *window, int key);
  *
  *  @ingroup input
  */
-GLFWAPI int glfwGetMouseButton(GLFWwindow *window, int button);
+GLFWAPI int glfwGetMouseButton(GLFWwindow* window, int button);
 
 /*! @brief Retrieves the position of the cursor relative to the content area of
  *  the window.
@@ -4590,7 +4581,7 @@ GLFWAPI int glfwGetMouseButton(GLFWwindow *window, int button);
  *
  *  @ingroup input
  */
-GLFWAPI void glfwGetCursorPos(GLFWwindow *window, double *xpos, double *ypos);
+GLFWAPI void glfwGetCursorPos(GLFWwindow* window, double* xpos, double* ypos);
 
 /*! @brief Sets the position of the cursor, relative to the content area of the
  *  window.
@@ -4630,7 +4621,7 @@ GLFWAPI void glfwGetCursorPos(GLFWwindow *window, double *xpos, double *ypos);
  *
  *  @ingroup input
  */
-GLFWAPI void glfwSetCursorPos(GLFWwindow *window, double xpos, double ypos);
+GLFWAPI void glfwSetCursorPos(GLFWwindow* window, double xpos, double ypos);
 
 /*! @brief Creates a custom cursor.
  *
@@ -4668,7 +4659,7 @@ GLFWAPI void glfwSetCursorPos(GLFWwindow *window, double xpos, double ypos);
  *
  *  @ingroup input
  */
-GLFWAPI GLFWcursor *glfwCreateCursor(const GLFWimage *image, int xhot, int yhot);
+GLFWAPI GLFWcursor* glfwCreateCursor(const GLFWimage* image, int xhot, int yhot);
 
 /*! @brief Creates a cursor with a standard shape.
  *
@@ -4691,7 +4682,7 @@ GLFWAPI GLFWcursor *glfwCreateCursor(const GLFWimage *image, int xhot, int yhot)
  *
  *  @ingroup input
  */
-GLFWAPI GLFWcursor *glfwCreateStandardCursor(int shape);
+GLFWAPI GLFWcursor* glfwCreateStandardCursor(int shape);
 
 /*! @brief Destroys a cursor.
  *
@@ -4718,7 +4709,7 @@ GLFWAPI GLFWcursor *glfwCreateStandardCursor(int shape);
  *
  *  @ingroup input
  */
-GLFWAPI void glfwDestroyCursor(GLFWcursor *cursor);
+GLFWAPI void glfwDestroyCursor(GLFWcursor* cursor);
 
 /*! @brief Sets the cursor for the window.
  *
@@ -4745,7 +4736,7 @@ GLFWAPI void glfwDestroyCursor(GLFWcursor *cursor);
  *
  *  @ingroup input
  */
-GLFWAPI void glfwSetCursor(GLFWwindow *window, GLFWcursor *cursor);
+GLFWAPI void glfwSetCursor(GLFWwindow* window, GLFWcursor* cursor);
 
 /*! @brief Sets the key callback.
  *
@@ -4795,7 +4786,7 @@ GLFWAPI void glfwSetCursor(GLFWwindow *window, GLFWcursor *cursor);
  *
  *  @ingroup input
  */
-GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow *window, GLFWkeyfun callback);
+GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow* window, GLFWkeyfun callback);
 
 /*! @brief Sets the Unicode character callback.
  *
@@ -4838,7 +4829,7 @@ GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow *window, GLFWkeyfun callback);
  *
  *  @ingroup input
  */
-GLFWAPI GLFWcharfun glfwSetCharCallback(GLFWwindow *window, GLFWcharfun callback);
+GLFWAPI GLFWcharfun glfwSetCharCallback(GLFWwindow* window, GLFWcharfun callback);
 
 /*! @brief Sets the Unicode character with modifiers callback.
  *
@@ -4880,7 +4871,7 @@ GLFWAPI GLFWcharfun glfwSetCharCallback(GLFWwindow *window, GLFWcharfun callback
  *
  *  @ingroup input
  */
-GLFWAPI GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow *window, GLFWcharmodsfun callback);
+GLFWAPI GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow* window, GLFWcharmodsfun callback);
 
 /*! @brief Sets the mouse button callback.
  *
@@ -4917,8 +4908,7 @@ GLFWAPI GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow *window, GLFWcharmods
  *
  *  @ingroup input
  */
-GLFWAPI GLFWmousebuttonfun
-glfwSetMouseButtonCallback(GLFWwindow *window, GLFWmousebuttonfun callback);
+GLFWAPI GLFWmousebuttonfun glfwSetMouseButtonCallback(GLFWwindow* window, GLFWmousebuttonfun callback);
 
 /*! @brief Sets the cursor position callback.
  *
@@ -4950,7 +4940,7 @@ glfwSetMouseButtonCallback(GLFWwindow *window, GLFWmousebuttonfun callback);
  *
  *  @ingroup input
  */
-GLFWAPI GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow *window, GLFWcursorposfun callback);
+GLFWAPI GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback);
 
 /*! @brief Sets the cursor enter/leave callback.
  *
@@ -4981,8 +4971,7 @@ GLFWAPI GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow *window, GLFWcursor
  *
  *  @ingroup input
  */
-GLFWAPI GLFWcursorenterfun
-glfwSetCursorEnterCallback(GLFWwindow *window, GLFWcursorenterfun callback);
+GLFWAPI GLFWcursorenterfun glfwSetCursorEnterCallback(GLFWwindow* window, GLFWcursorenterfun callback);
 
 /*! @brief Sets the scroll callback.
  *
@@ -5016,7 +5005,7 @@ glfwSetCursorEnterCallback(GLFWwindow *window, GLFWcursorenterfun callback);
  *
  *  @ingroup input
  */
-GLFWAPI GLFWscrollfun glfwSetScrollCallback(GLFWwindow *window, GLFWscrollfun callback);
+GLFWAPI GLFWscrollfun glfwSetScrollCallback(GLFWwindow* window, GLFWscrollfun callback);
 
 /*! @brief Sets the path drop callback.
  *
@@ -5053,7 +5042,7 @@ GLFWAPI GLFWscrollfun glfwSetScrollCallback(GLFWwindow *window, GLFWscrollfun ca
  *
  *  @ingroup input
  */
-GLFWAPI GLFWdropfun glfwSetDropCallback(GLFWwindow *window, GLFWdropfun callback);
+GLFWAPI GLFWdropfun glfwSetDropCallback(GLFWwindow* window, GLFWdropfun callback);
 
 /*! @brief Returns whether the specified joystick is present.
  *
@@ -5110,7 +5099,7 @@ GLFWAPI int glfwJoystickPresent(int jid);
  *
  *  @ingroup input
  */
-GLFWAPI const float *glfwGetJoystickAxes(int jid, int *count);
+GLFWAPI const float* glfwGetJoystickAxes(int jid, int* count);
 
 /*! @brief Returns the state of all buttons of the specified joystick.
  *
@@ -5151,7 +5140,7 @@ GLFWAPI const float *glfwGetJoystickAxes(int jid, int *count);
  *
  *  @ingroup input
  */
-GLFWAPI const unsigned char *glfwGetJoystickButtons(int jid, int *count);
+GLFWAPI const unsigned char* glfwGetJoystickButtons(int jid, int* count);
 
 /*! @brief Returns the state of all hats of the specified joystick.
  *
@@ -5208,7 +5197,7 @@ GLFWAPI const unsigned char *glfwGetJoystickButtons(int jid, int *count);
  *
  *  @ingroup input
  */
-GLFWAPI const unsigned char *glfwGetJoystickHats(int jid, int *count);
+GLFWAPI const unsigned char* glfwGetJoystickHats(int jid, int* count);
 
 /*! @brief Returns the name of the specified joystick.
  *
@@ -5239,7 +5228,7 @@ GLFWAPI const unsigned char *glfwGetJoystickHats(int jid, int *count);
  *
  *  @ingroup input
  */
-GLFWAPI const char *glfwGetJoystickName(int jid);
+GLFWAPI const char* glfwGetJoystickName(int jid);
 
 /*! @brief Returns the SDL compatible GUID of the specified joystick.
  *
@@ -5280,7 +5269,7 @@ GLFWAPI const char *glfwGetJoystickName(int jid);
  *
  *  @ingroup input
  */
-GLFWAPI const char *glfwGetJoystickGUID(int jid);
+GLFWAPI const char* glfwGetJoystickGUID(int jid);
 
 /*! @brief Sets the user pointer of the specified joystick.
  *
@@ -5306,7 +5295,7 @@ GLFWAPI const char *glfwGetJoystickGUID(int jid);
  *
  *  @ingroup input
  */
-GLFWAPI void glfwSetJoystickUserPointer(int jid, void *pointer);
+GLFWAPI void glfwSetJoystickUserPointer(int jid, void* pointer);
 
 /*! @brief Returns the user pointer of the specified joystick.
  *
@@ -5330,7 +5319,7 @@ GLFWAPI void glfwSetJoystickUserPointer(int jid, void *pointer);
  *
  *  @ingroup input
  */
-GLFWAPI void *glfwGetJoystickUserPointer(int jid);
+GLFWAPI void* glfwGetJoystickUserPointer(int jid);
 
 /*! @brief Returns whether the specified joystick has a gamepad mapping.
  *
@@ -5428,7 +5417,7 @@ GLFWAPI GLFWjoystickfun glfwSetJoystickCallback(GLFWjoystickfun callback);
  *
  *  @ingroup input
  */
-GLFWAPI int glfwUpdateGamepadMappings(const char *string);
+GLFWAPI int glfwUpdateGamepadMappings(const char* string);
 
 /*! @brief Returns the human-readable gamepad name for the specified joystick.
  *
@@ -5458,7 +5447,7 @@ GLFWAPI int glfwUpdateGamepadMappings(const char *string);
  *
  *  @ingroup input
  */
-GLFWAPI const char *glfwGetGamepadName(int jid);
+GLFWAPI const char* glfwGetGamepadName(int jid);
 
 /*! @brief Retrieves the state of the specified joystick remapped as a gamepad.
  *
@@ -5496,7 +5485,7 @@ GLFWAPI const char *glfwGetGamepadName(int jid);
  *
  *  @ingroup input
  */
-GLFWAPI int glfwGetGamepadState(int jid, GLFWgamepadstate *state);
+GLFWAPI int glfwGetGamepadState(int jid, GLFWgamepadstate* state);
 
 /*! @brief Sets the clipboard to the specified string.
  *
@@ -5521,7 +5510,7 @@ GLFWAPI int glfwGetGamepadState(int jid, GLFWgamepadstate *state);
  *
  *  @ingroup input
  */
-GLFWAPI void glfwSetClipboardString(GLFWwindow *window, const char *string);
+GLFWAPI void glfwSetClipboardString(GLFWwindow* window, const char* string);
 
 /*! @brief Returns the contents of the clipboard as a string.
  *
@@ -5551,7 +5540,7 @@ GLFWAPI void glfwSetClipboardString(GLFWwindow *window, const char *string);
  *
  *  @ingroup input
  */
-GLFWAPI const char *glfwGetClipboardString(GLFWwindow *window);
+GLFWAPI const char* glfwGetClipboardString(GLFWwindow* window);
 
 /*! @brief Returns the GLFW time.
  *
@@ -5668,12 +5657,12 @@ GLFWAPI int glfwGetOSMesaHeight();
 /*!
  *  This function is to get OSMesa Current Context
  */
-GLFWAPI void *glfwGetOSMesaCurrentContext();
+GLFWAPI void* glfwGetOSMesaCurrentContext();
 
 /*!
  *  This function is to get Graphic Buffers Addr
  */
-GLFWAPI long glfwGetGraphicBuffersAddr(GLFWwindow *window);
+GLFWAPI long glfwGetGraphicBuffersAddr(GLFWwindow* window);
 
 /*! @brief Makes the context of the specified window current for the calling
  *  thread.
@@ -5711,7 +5700,7 @@ GLFWAPI long glfwGetGraphicBuffersAddr(GLFWwindow *window);
  *
  *  @ingroup context
  */
-GLFWAPI void glfwMakeContextCurrent(GLFWwindow *window);
+GLFWAPI void glfwMakeContextCurrent(GLFWwindow* window);
 
 /*! @brief Returns the window whose context is current on the calling thread.
  *
@@ -5732,7 +5721,7 @@ GLFWAPI void glfwMakeContextCurrent(GLFWwindow *window);
  *
  *  @ingroup context
  */
-GLFWAPI GLFWwindow *glfwGetCurrentContext(void);
+GLFWAPI GLFWwindow* glfwGetCurrentContext(void);
 
 /*! @brief Swaps the front and back buffers of the specified window.
  *
@@ -5766,7 +5755,7 @@ GLFWAPI GLFWwindow *glfwGetCurrentContext(void);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwSwapBuffers(GLFWwindow *window);
+GLFWAPI void glfwSwapBuffers(GLFWwindow* window);
 
 /*! @brief Sets the swap interval for the current context.
  *
@@ -5850,7 +5839,7 @@ GLFWAPI void glfwSwapInterval(int interval);
  *
  *  @ingroup context
  */
-GLFWAPI int glfwExtensionSupported(const char *extension);
+GLFWAPI int glfwExtensionSupported(const char* extension);
 
 /*! @brief Returns the address of the specified function for the current
  *  context.
@@ -5892,7 +5881,7 @@ GLFWAPI int glfwExtensionSupported(const char *extension);
  *
  *  @ingroup context
  */
-GLFWAPI GLFWglproc glfwGetProcAddress(const char *procname);
+GLFWAPI GLFWglproc glfwGetProcAddress(const char* procname);
 
 /*! @brief Returns whether the Vulkan loader and an ICD have been found.
  *
@@ -5967,7 +5956,7 @@ GLFWAPI int glfwVulkanSupported(void);
  *
  *  @ingroup vulkan
  */
-GLFWAPI const char **glfwGetRequiredInstanceExtensions(uint32_t *count);
+GLFWAPI const char** glfwGetRequiredInstanceExtensions(uint32_t* count);
 
 #if defined(VK_VERSION_1_0)
 
@@ -6120,19 +6109,20 @@ GLFWAPI VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window
 /* ------------------- BEGIN SYSTEM/COMPILER SPECIFIC -------------------- */
 
 #ifdef GLFW_WINGDIAPI_DEFINED
-#undef WINGDIAPI
-#undef GLFW_WINGDIAPI_DEFINED
+ #undef WINGDIAPI
+ #undef GLFW_WINGDIAPI_DEFINED
 #endif
 
 #ifdef GLFW_CALLBACK_DEFINED
-#undef CALLBACK
-#undef GLFW_CALLBACK_DEFINED
+ #undef CALLBACK
+ #undef GLFW_CALLBACK_DEFINED
 #endif
 
 /* Some OpenGL related headers need GLAPIENTRY, but it is unconditionally
  * defined by some gl.h variants (OpenBSD) so define it after if needed.
  */
 #ifndef GLAPIENTRY
+ #define GLAPIENTRY APIENTRY
 #endif
 
 /* -------------------- END SYSTEM/COMPILER SPECIFIC --------------------- */

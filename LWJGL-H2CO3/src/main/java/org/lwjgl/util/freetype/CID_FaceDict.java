@@ -5,23 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure used to represent data in a CID top-level dictionary.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct CID_FaceDictRec {
  *     {@link PS_Private PS_PrivateRec} private_dict;
@@ -41,47 +37,41 @@ import javax.annotation.Nullable;
 @NativeType("struct CID_FaceDictRec")
 public class CID_FaceDict extends Struct<CID_FaceDict> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            PRIVATE_DICT,
-            LEN_BUILDCHAR,
-            FORCEBOLD_THRESHOLD,
-            STROKE_WIDTH,
-            EXPANSION_FACTOR,
-            PAINT_TYPE,
-            FONT_TYPE,
-            FONT_MATRIX,
-            FONT_OFFSET,
-            NUM_SUBRS,
-            SUBRMAP_OFFSET,
-            SD_BYTES;
+        PRIVATE_DICT,
+        LEN_BUILDCHAR,
+        FORCEBOLD_THRESHOLD,
+        STROKE_WIDTH,
+        EXPANSION_FACTOR,
+        PAINT_TYPE,
+        FONT_TYPE,
+        FONT_MATRIX,
+        FONT_OFFSET,
+        NUM_SUBRS,
+        SUBRMAP_OFFSET,
+        SD_BYTES;
 
     static {
         Layout layout = __struct(
-                __member(PS_Private.SIZEOF, PS_Private.ALIGNOF),
-                __member(4),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(1),
-                __member(1),
-                __member(FT_Matrix.SIZEOF, FT_Matrix.ALIGNOF),
-                __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF),
-                __member(4),
-                __member(CLONG_SIZE),
-                __member(4)
+            __member(PS_Private.SIZEOF, PS_Private.ALIGNOF),
+            __member(4),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(1),
+            __member(1),
+            __member(FT_Matrix.SIZEOF, FT_Matrix.ALIGNOF),
+            __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF),
+            __member(4),
+            __member(CLONG_SIZE),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -105,6 +95,11 @@ public class CID_FaceDict extends Struct<CID_FaceDict> {
         super(address, container);
     }
 
+    @Override
+    protected CID_FaceDict create(long address, @Nullable ByteBuffer container) {
+        return new CID_FaceDict(address, container);
+    }
+
     /**
      * Creates a {@code CID_FaceDict} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -115,16 +110,52 @@ public class CID_FaceDict extends Struct<CID_FaceDict> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code CID_FaceDict} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link PS_Private} view of the {@code private_dict} field. */
+    @NativeType("PS_PrivateRec")
+    public PS_Private private_dict() { return nprivate_dict(address()); }
+    /** @return the value of the {@code len_buildchar} field. */
+    @NativeType("FT_UInt")
+    public int len_buildchar() { return nlen_buildchar(address()); }
+    /** @return the value of the {@code forcebold_threshold} field. */
+    @NativeType("FT_Fixed")
+    public long forcebold_threshold() { return nforcebold_threshold(address()); }
+    /** @return the value of the {@code stroke_width} field. */
+    @NativeType("FT_Pos")
+    public long stroke_width() { return nstroke_width(address()); }
+    /** @return the value of the {@code expansion_factor} field. */
+    @NativeType("FT_Fixed")
+    public long expansion_factor() { return nexpansion_factor(address()); }
+    /** @return the value of the {@code paint_type} field. */
+    @NativeType("FT_Byte")
+    public byte paint_type() { return npaint_type(address()); }
+    /** @return the value of the {@code font_type} field. */
+    @NativeType("FT_Byte")
+    public byte font_type() { return nfont_type(address()); }
+    /** @return a {@link FT_Matrix} view of the {@code font_matrix} field. */
+    public FT_Matrix font_matrix() { return nfont_matrix(address()); }
+    /** @return a {@link FT_Vector} view of the {@code font_offset} field. */
+    public FT_Vector font_offset() { return nfont_offset(address()); }
+    /** @return the value of the {@code num_subrs} field. */
+    @NativeType("FT_UInt")
+    public int num_subrs() { return nnum_subrs(address()); }
+    /** @return the value of the {@code subrmap_offset} field. */
+    @NativeType("FT_ULong")
+    public long subrmap_offset() { return nsubrmap_offset(address()); }
+    /** @return the value of the {@code sd_bytes} field. */
+    @NativeType("FT_UInt")
+    public int sd_bytes() { return nsd_bytes(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code CID_FaceDict} instance for the specified memory address. */
     public static CID_FaceDict create(long address) {
         return new CID_FaceDict(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static CID_FaceDict createSafe(long address) {
         return address == NULL ? null : new CID_FaceDict(address, null);
@@ -140,211 +171,42 @@ public class CID_FaceDict extends Struct<CID_FaceDict> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #private_dict}.
-     */
-    public static PS_Private nprivate_dict(long struct) {
-        return PS_Private.create(struct + CID_FaceDict.PRIVATE_DICT);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #len_buildchar}.
-     */
-    public static int nlen_buildchar(long struct) {
-        return UNSAFE.getInt(null, struct + CID_FaceDict.LEN_BUILDCHAR);
-    }
-
-    /**
-     * Unsafe version of {@link #forcebold_threshold}.
-     */
-    public static long nforcebold_threshold(long struct) {
-        return memGetCLong(struct + CID_FaceDict.FORCEBOLD_THRESHOLD);
-    }
-
-    /**
-     * Unsafe version of {@link #stroke_width}.
-     */
-    public static long nstroke_width(long struct) {
-        return memGetCLong(struct + CID_FaceDict.STROKE_WIDTH);
-    }
-
-    /**
-     * Unsafe version of {@link #expansion_factor}.
-     */
-    public static long nexpansion_factor(long struct) {
-        return memGetCLong(struct + CID_FaceDict.EXPANSION_FACTOR);
-    }
-
-    /**
-     * Unsafe version of {@link #paint_type}.
-     */
-    public static byte npaint_type(long struct) {
-        return UNSAFE.getByte(null, struct + CID_FaceDict.PAINT_TYPE);
-    }
-
-    /**
-     * Unsafe version of {@link #font_type}.
-     */
-    public static byte nfont_type(long struct) {
-        return UNSAFE.getByte(null, struct + CID_FaceDict.FONT_TYPE);
-    }
-
-    /**
-     * Unsafe version of {@link #font_matrix}.
-     */
-    public static FT_Matrix nfont_matrix(long struct) {
-        return FT_Matrix.create(struct + CID_FaceDict.FONT_MATRIX);
-    }
-
-    /**
-     * Unsafe version of {@link #font_offset}.
-     */
-    public static FT_Vector nfont_offset(long struct) {
-        return FT_Vector.create(struct + CID_FaceDict.FONT_OFFSET);
-    }
-
-    /**
-     * Unsafe version of {@link #num_subrs}.
-     */
-    public static int nnum_subrs(long struct) {
-        return UNSAFE.getInt(null, struct + CID_FaceDict.NUM_SUBRS);
-    }
+    /** Unsafe version of {@link #private_dict}. */
+    public static PS_Private nprivate_dict(long struct) { return PS_Private.create(struct + CID_FaceDict.PRIVATE_DICT); }
+    /** Unsafe version of {@link #len_buildchar}. */
+    public static int nlen_buildchar(long struct) { return UNSAFE.getInt(null, struct + CID_FaceDict.LEN_BUILDCHAR); }
+    /** Unsafe version of {@link #forcebold_threshold}. */
+    public static long nforcebold_threshold(long struct) { return memGetCLong(struct + CID_FaceDict.FORCEBOLD_THRESHOLD); }
+    /** Unsafe version of {@link #stroke_width}. */
+    public static long nstroke_width(long struct) { return memGetCLong(struct + CID_FaceDict.STROKE_WIDTH); }
+    /** Unsafe version of {@link #expansion_factor}. */
+    public static long nexpansion_factor(long struct) { return memGetCLong(struct + CID_FaceDict.EXPANSION_FACTOR); }
+    /** Unsafe version of {@link #paint_type}. */
+    public static byte npaint_type(long struct) { return UNSAFE.getByte(null, struct + CID_FaceDict.PAINT_TYPE); }
+    /** Unsafe version of {@link #font_type}. */
+    public static byte nfont_type(long struct) { return UNSAFE.getByte(null, struct + CID_FaceDict.FONT_TYPE); }
+    /** Unsafe version of {@link #font_matrix}. */
+    public static FT_Matrix nfont_matrix(long struct) { return FT_Matrix.create(struct + CID_FaceDict.FONT_MATRIX); }
+    /** Unsafe version of {@link #font_offset}. */
+    public static FT_Vector nfont_offset(long struct) { return FT_Vector.create(struct + CID_FaceDict.FONT_OFFSET); }
+    /** Unsafe version of {@link #num_subrs}. */
+    public static int nnum_subrs(long struct) { return UNSAFE.getInt(null, struct + CID_FaceDict.NUM_SUBRS); }
+    /** Unsafe version of {@link #subrmap_offset}. */
+    public static long nsubrmap_offset(long struct) { return memGetCLong(struct + CID_FaceDict.SUBRMAP_OFFSET); }
+    /** Unsafe version of {@link #sd_bytes}. */
+    public static int nsd_bytes(long struct) { return UNSAFE.getInt(null, struct + CID_FaceDict.SD_BYTES); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #subrmap_offset}.
-     */
-    public static long nsubrmap_offset(long struct) {
-        return memGetCLong(struct + CID_FaceDict.SUBRMAP_OFFSET);
-    }
-
-    /**
-     * Unsafe version of {@link #sd_bytes}.
-     */
-    public static int nsd_bytes(long struct) {
-        return UNSAFE.getInt(null, struct + CID_FaceDict.SD_BYTES);
-    }
-
-    @Override
-    protected CID_FaceDict create(long address, @Nullable ByteBuffer container) {
-        return new CID_FaceDict(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return a {@link PS_Private} view of the {@code private_dict} field.
-     */
-    @NativeType("PS_PrivateRec")
-    public PS_Private private_dict() {
-        return nprivate_dict(address());
-    }
-
-    /**
-     * @return the value of the {@code len_buildchar} field.
-     */
-    @NativeType("FT_UInt")
-    public int len_buildchar() {
-        return nlen_buildchar(address());
-    }
-
-    /**
-     * @return the value of the {@code forcebold_threshold} field.
-     */
-    @NativeType("FT_Fixed")
-    public long forcebold_threshold() {
-        return nforcebold_threshold(address());
-    }
-
-    /**
-     * @return the value of the {@code stroke_width} field.
-     */
-    @NativeType("FT_Pos")
-    public long stroke_width() {
-        return nstroke_width(address());
-    }
-
-    /**
-     * @return the value of the {@code expansion_factor} field.
-     */
-    @NativeType("FT_Fixed")
-    public long expansion_factor() {
-        return nexpansion_factor(address());
-    }
-
-    /**
-     * @return the value of the {@code paint_type} field.
-     */
-    @NativeType("FT_Byte")
-    public byte paint_type() {
-        return npaint_type(address());
-    }
-
-    /**
-     * @return the value of the {@code font_type} field.
-     */
-    @NativeType("FT_Byte")
-    public byte font_type() {
-        return nfont_type(address());
-    }
-
-    /**
-     * @return a {@link FT_Matrix} view of the {@code font_matrix} field.
-     */
-    public FT_Matrix font_matrix() {
-        return nfont_matrix(address());
-    }
-
-    /**
-     * @return a {@link FT_Vector} view of the {@code font_offset} field.
-     */
-    public FT_Vector font_offset() {
-        return nfont_offset(address());
-    }
-
-    /**
-     * @return the value of the {@code num_subrs} field.
-     */
-    @NativeType("FT_UInt")
-    public int num_subrs() {
-        return nnum_subrs(address());
-    }
-
-    /**
-     * @return the value of the {@code subrmap_offset} field.
-     */
-    @NativeType("FT_ULong")
-    public long subrmap_offset() {
-        return nsubrmap_offset(address());
-    }
-
-    /**
-     * @return the value of the {@code sd_bytes} field.
-     */
-    @NativeType("FT_UInt")
-    public int sd_bytes() {
-        return nsd_bytes(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link CID_FaceDict} structs.
-     */
+    /** An array of {@link CID_FaceDict} structs. */
     public static class Buffer extends StructBuffer<CID_FaceDict, Buffer> {
 
         private static final CID_FaceDict ELEMENT_FACTORY = CID_FaceDict.create(-1L);
@@ -380,99 +242,40 @@ public class CID_FaceDict extends Struct<CID_FaceDict> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link PS_Private} view of the {@code private_dict} field.
-         */
+        /** @return a {@link PS_Private} view of the {@code private_dict} field. */
         @NativeType("PS_PrivateRec")
-        public PS_Private private_dict() {
-            return CID_FaceDict.nprivate_dict(address());
-        }
-
-        /**
-         * @return the value of the {@code len_buildchar} field.
-         */
+        public PS_Private private_dict() { return CID_FaceDict.nprivate_dict(address()); }
+        /** @return the value of the {@code len_buildchar} field. */
         @NativeType("FT_UInt")
-        public int len_buildchar() {
-            return CID_FaceDict.nlen_buildchar(address());
-        }
-
-        /**
-         * @return the value of the {@code forcebold_threshold} field.
-         */
+        public int len_buildchar() { return CID_FaceDict.nlen_buildchar(address()); }
+        /** @return the value of the {@code forcebold_threshold} field. */
         @NativeType("FT_Fixed")
-        public long forcebold_threshold() {
-            return CID_FaceDict.nforcebold_threshold(address());
-        }
-
-        /**
-         * @return the value of the {@code stroke_width} field.
-         */
+        public long forcebold_threshold() { return CID_FaceDict.nforcebold_threshold(address()); }
+        /** @return the value of the {@code stroke_width} field. */
         @NativeType("FT_Pos")
-        public long stroke_width() {
-            return CID_FaceDict.nstroke_width(address());
-        }
-
-        /**
-         * @return the value of the {@code expansion_factor} field.
-         */
+        public long stroke_width() { return CID_FaceDict.nstroke_width(address()); }
+        /** @return the value of the {@code expansion_factor} field. */
         @NativeType("FT_Fixed")
-        public long expansion_factor() {
-            return CID_FaceDict.nexpansion_factor(address());
-        }
-
-        /**
-         * @return the value of the {@code paint_type} field.
-         */
+        public long expansion_factor() { return CID_FaceDict.nexpansion_factor(address()); }
+        /** @return the value of the {@code paint_type} field. */
         @NativeType("FT_Byte")
-        public byte paint_type() {
-            return CID_FaceDict.npaint_type(address());
-        }
-
-        /**
-         * @return the value of the {@code font_type} field.
-         */
+        public byte paint_type() { return CID_FaceDict.npaint_type(address()); }
+        /** @return the value of the {@code font_type} field. */
         @NativeType("FT_Byte")
-        public byte font_type() {
-            return CID_FaceDict.nfont_type(address());
-        }
-
-        /**
-         * @return a {@link FT_Matrix} view of the {@code font_matrix} field.
-         */
-        public FT_Matrix font_matrix() {
-            return CID_FaceDict.nfont_matrix(address());
-        }
-
-        /**
-         * @return a {@link FT_Vector} view of the {@code font_offset} field.
-         */
-        public FT_Vector font_offset() {
-            return CID_FaceDict.nfont_offset(address());
-        }
-
-        /**
-         * @return the value of the {@code num_subrs} field.
-         */
+        public byte font_type() { return CID_FaceDict.nfont_type(address()); }
+        /** @return a {@link FT_Matrix} view of the {@code font_matrix} field. */
+        public FT_Matrix font_matrix() { return CID_FaceDict.nfont_matrix(address()); }
+        /** @return a {@link FT_Vector} view of the {@code font_offset} field. */
+        public FT_Vector font_offset() { return CID_FaceDict.nfont_offset(address()); }
+        /** @return the value of the {@code num_subrs} field. */
         @NativeType("FT_UInt")
-        public int num_subrs() {
-            return CID_FaceDict.nnum_subrs(address());
-        }
-
-        /**
-         * @return the value of the {@code subrmap_offset} field.
-         */
+        public int num_subrs() { return CID_FaceDict.nnum_subrs(address()); }
+        /** @return the value of the {@code subrmap_offset} field. */
         @NativeType("FT_ULong")
-        public long subrmap_offset() {
-            return CID_FaceDict.nsubrmap_offset(address());
-        }
-
-        /**
-         * @return the value of the {@code sd_bytes} field.
-         */
+        public long subrmap_offset() { return CID_FaceDict.nsubrmap_offset(address()); }
+        /** @return the value of the {@code sd_bytes} field. */
         @NativeType("FT_UInt")
-        public int sd_bytes() {
-            return CID_FaceDict.nsd_bytes(address());
-        }
+        public int sd_bytes() { return CID_FaceDict.nsd_bytes(address()); }
 
     }
 

@@ -260,39 +260,31 @@ public class Keyboard {
 	/** Are repeat events enabled? */
 	private static boolean repeat_enabled;
 
-    /**
-     * The keys status from the last poll
-     */
-    private static final ByteBuffer keyDownBuffer = BufferUtils.createByteBuffer(KEYBOARD_SIZE);
+	/** The keys status from the last poll */
+	private static final ByteBuffer keyDownBuffer = BufferUtils.createByteBuffer(KEYBOARD_SIZE);
 
-    /**
-     * The key events from the last read: a sequence of pairs of key number,
-     * followed by state. The state is followed by
-     * a 4 byte code point representing the translated character.
-     */
-    private static ByteBuffer readBuffer;
+	/**
+	 * The key events from the last read: a sequence of pairs of key number,
+	 * followed by state. The state is followed by
+	 * a 4 byte code point representing the translated character.
+	 */
+	private static ByteBuffer readBuffer;
 
-    /**
-     * current event
-     */
-    private static final KeyEvent current_event = new KeyEvent();
+	/** current event */
+	private static KeyEvent current_event = new KeyEvent();
 
-    /**
-     * scratch event
-     */
-    private static final KeyEvent tmp_event = new KeyEvent();
+	/** scratch event */
+	private static KeyEvent tmp_event = new KeyEvent();
 
-    /**
-     * One time initialization
-     */
-    private static boolean initialized;
+	/** One time initialization */
+	private static boolean initialized;
 
-    private static InputImplementation implementation;
+	private static InputImplementation implementation;
 
-    /**
-     * Keyboard cannot be constructed.
-     */
-    private Keyboard() {
+	/**
+	 * Keyboard cannot be constructed.
+	 */
+	private Keyboard() {
 	}
 
 	/**
@@ -332,7 +324,7 @@ public class Keyboard {
 	public static void create() throws LWJGLException {
 		if (!Display.isCreated()) throw new IllegalStateException("Display must be created.");
 
-        create(GLFWInputImplementation.singleton);
+		create((InputImplementation) GLFWInputImplementation.singleton);
 	}
 
 	private static void reset() {

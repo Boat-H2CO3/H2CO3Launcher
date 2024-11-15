@@ -4,22 +4,12 @@
  */
 package org.lwjgl;
 
-import static org.lwjgl.system.APIUtil.apiCheckAllocation;
-import static org.lwjgl.system.APIUtil.apiGetBytes;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memSet;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.CustomBuffer;
+import java.nio.*;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.CharBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * <p>This class makes it easy and safe to work with direct buffers. It is the recommended way to allocate memory to use with LWJGL.</p>

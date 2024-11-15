@@ -5,22 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure representing a {@code ColorLine} value of the {@code COLR} v1 extensions.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_ColorLine {
  *     FT_PaintExtend extend;
@@ -29,27 +26,21 @@ import javax.annotation.Nullable;
  */
 public class FT_ColorLine extends Struct<FT_ColorLine> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            EXTEND,
-            COLOR_STOP_ITERATOR;
+        EXTEND,
+        COLOR_STOP_ITERATOR;
 
     static {
         Layout layout = __struct(
-                __member(4),
-                __member(FT_ColorStopIterator.SIZEOF, FT_ColorStopIterator.ALIGNOF)
+            __member(4),
+            __member(FT_ColorStopIterator.SIZEOF, FT_ColorStopIterator.ALIGNOF)
         );
 
         SIZEOF = layout.getSize();
@@ -63,6 +54,11 @@ public class FT_ColorLine extends Struct<FT_ColorLine> {
         super(address, container);
     }
 
+    @Override
+    protected FT_ColorLine create(long address, @Nullable ByteBuffer container) {
+        return new FT_ColorLine(address, container);
+    }
+
     /**
      * Creates a {@code FT_ColorLine} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -73,16 +69,23 @@ public class FT_ColorLine extends Struct<FT_ColorLine> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_ColorLine} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code extend} field. */
+    @NativeType("FT_PaintExtend")
+    public int extend() { return nextend(address()); }
+    /** @return a {@link FT_ColorStopIterator} view of the {@code color_stop_iterator} field. */
+    public FT_ColorStopIterator color_stop_iterator() { return ncolor_stop_iterator(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_ColorLine} instance for the specified memory address. */
     public static FT_ColorLine create(long address) {
         return new FT_ColorLine(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_ColorLine createSafe(long address) {
         return address == NULL ? null : new FT_ColorLine(address, null);
@@ -98,9 +101,7 @@ public class FT_ColorLine extends Struct<FT_ColorLine> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -108,52 +109,14 @@ public class FT_ColorLine extends Struct<FT_ColorLine> {
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #extend}.
-     */
-    public static int nextend(long struct) {
-        return UNSAFE.getInt(null, struct + FT_ColorLine.EXTEND);
-    }
-
-    /**
-     * Unsafe version of {@link #color_stop_iterator}.
-     */
-    public static FT_ColorStopIterator ncolor_stop_iterator(long struct) {
-        return FT_ColorStopIterator.create(struct + FT_ColorLine.COLOR_STOP_ITERATOR);
-    }
-
-    @Override
-    protected FT_ColorLine create(long address, @Nullable ByteBuffer container) {
-        return new FT_ColorLine(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #extend}. */
+    public static int nextend(long struct) { return UNSAFE.getInt(null, struct + FT_ColorLine.EXTEND); }
+    /** Unsafe version of {@link #color_stop_iterator}. */
+    public static FT_ColorStopIterator ncolor_stop_iterator(long struct) { return FT_ColorStopIterator.create(struct + FT_ColorLine.COLOR_STOP_ITERATOR); }
 
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code extend} field.
-     */
-    @NativeType("FT_PaintExtend")
-    public int extend() {
-        return nextend(address());
-    }
-
-    /**
-     * @return a {@link FT_ColorStopIterator} view of the {@code color_stop_iterator} field.
-     */
-    public FT_ColorStopIterator color_stop_iterator() {
-        return ncolor_stop_iterator(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_ColorLine} structs.
-     */
+    /** An array of {@link FT_ColorLine} structs. */
     public static class Buffer extends StructBuffer<FT_ColorLine, Buffer> {
 
         private static final FT_ColorLine ELEMENT_FACTORY = FT_ColorLine.create(-1L);
@@ -189,20 +152,11 @@ public class FT_ColorLine extends Struct<FT_ColorLine> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code extend} field.
-         */
+        /** @return the value of the {@code extend} field. */
         @NativeType("FT_PaintExtend")
-        public int extend() {
-            return FT_ColorLine.nextend(address());
-        }
-
-        /**
-         * @return a {@link FT_ColorStopIterator} view of the {@code color_stop_iterator} field.
-         */
-        public FT_ColorStopIterator color_stop_iterator() {
-            return FT_ColorLine.ncolor_stop_iterator(address());
-        }
+        public int extend() { return FT_ColorLine.nextend(address()); }
+        /** @return a {@link FT_ColorStopIterator} view of the {@code color_stop_iterator} field. */
+        public FT_ColorStopIterator color_stop_iterator() { return FT_ColorLine.ncolor_stop_iterator(address()); }
 
     }
 

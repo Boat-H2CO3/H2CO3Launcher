@@ -47,74 +47,40 @@ import java.util.ArrayList;
  * @author Kevin Glass
  */
 class JInputController implements Controller {
-    /**
-     * The JInput controller this class is wrapping
-     */
-    private final net.java.games.input.Controller target;
-    /**
-     * The index that has been assigned to this controller
-     */
-    private final int index;
-    /**
-     * The Buttons that have been detected on the JInput controller
-     */
-    private final ArrayList<Component> buttons = new ArrayList<Component>();
-    /**
-     * The Axes that have been detected on the JInput controller
-     */
-    private final ArrayList<Component> axes = new ArrayList<Component>();
-    /**
-     * The POVs that have been detected on the JInput controller
-     */
-    private final ArrayList<Component> pov = new ArrayList<Component>();
-    /**
-     * The rumblers exposed by the controller
-     */
-    private final Rumbler[] rumblers;
-    /**
-     * The state of the buttons last check
-     */
-    private final boolean[] buttonState;
-    /**
-     * The values that were read from the pov last check
-     */
-    private final float[] povValues;
-    /**
-     * The values that were read from the axes last check
-     */
-    private final float[] axesValue;
-    /**
-     * The maximum values read for each axis
-     */
-    private final float[] axesMax;
-    /**
-     * The dead zones for each axis
-     */
-    private final float[] deadZones;
-    /**
-     * The index of the X axis or -1 if no X axis is defined
-     */
-    private int xaxis = -1;
-    /**
-     * The index of the Y axis or -1 if no Y axis is defined
-     */
-    private int yaxis = -1;
-    /**
-     * The index of the X axis or -1 if no Z axis is defined
-     */
-    private int zaxis = -1;
-    /**
-     * The index of the RX axis or -1 if no RX axis is defined
-     */
-    private int rxaxis = -1;
-    /**
-     * The index of the RY axis or -1 if no RY axis is defined
-     */
-    private int ryaxis = -1;
-    /**
-     * The index of the RZ axis or -1 if no RZ axis is defined
-     */
-    private int rzaxis = -1;
+	/** The JInput controller this class is wrapping */
+	private net.java.games.input.Controller target;
+	/** The index that has been assigned to this controller */
+	private int index;
+	/** The Buttons that have been detected on the JInput controller */
+	private ArrayList<Component> buttons = new ArrayList<Component>();
+	/** The Axes that have been detected on the JInput controller */
+	private ArrayList<Component> axes = new ArrayList<Component>();
+	/** The POVs that have been detected on the JInput controller */
+	private ArrayList<Component> pov = new ArrayList<Component>();
+	/** The rumblers exposed by the controller */
+	private Rumbler[] rumblers;
+	/** The state of the buttons last check */
+	private boolean[] buttonState;
+	/** The values that were read from the pov last check */
+	private float[] povValues;
+	/** The values that were read from the axes last check */
+	private float[] axesValue;
+	/** The maximum values read for each axis */
+	private float[] axesMax;
+	/** The dead zones for each axis */
+	private float[] deadZones;
+	/** The index of the X axis or -1 if no X axis is defined */
+	private int xaxis = -1;
+	/** The index of the Y axis or -1 if no Y axis is defined */
+	private int yaxis = -1;
+	/** The index of the X axis or -1 if no Z axis is defined */
+	private int zaxis = -1;
+	/** The index of the RX axis or -1 if no RX axis is defined */
+	private int rxaxis = -1;
+	/** The index of the RY axis or -1 if no RY axis is defined */
+	private int ryaxis = -1;
+	/** The index of the RZ axis or -1 if no RZ axis is defined */
+	private int rzaxis = -1;
 
 	/**
 	 * Create a new controller that wraps round a JInput controller and hopefully

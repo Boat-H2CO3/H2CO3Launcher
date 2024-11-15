@@ -253,7 +253,7 @@ public class DefaultGameRepository implements GameRepository {
         try {
             versions.remove(id);
 
-            // remove json files first to ensure FCL will not recognize this folder as a valid version.
+            // remove json files first to ensure H2CO3Launcher will not recognize this folder as a valid version.
             List<File> jsons = FileTools.listFilesByExtension(removedFile, "json");
             jsons.forEach(f -> {
                 if (!f.delete())

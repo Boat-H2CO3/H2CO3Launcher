@@ -5,10 +5,9 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.NativeType;
+import static org.lwjgl.system.Checks.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_cl_event.txt">ARB_cl_event</a> extension.

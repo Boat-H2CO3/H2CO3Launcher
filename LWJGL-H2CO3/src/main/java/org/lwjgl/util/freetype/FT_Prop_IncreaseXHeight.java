@@ -5,23 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * The data exchange structure for the {@code increase-x-height} property.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Prop_IncreaseXHeight {
  *     {@link FT_Face FT_Face} face;
@@ -30,27 +26,21 @@ import javax.annotation.Nullable;
  */
 public class FT_Prop_IncreaseXHeight extends Struct<FT_Prop_IncreaseXHeight> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            FACE,
-            LIMIT;
+        FACE,
+        LIMIT;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(4)
+            __member(POINTER_SIZE),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -64,6 +54,11 @@ public class FT_Prop_IncreaseXHeight extends Struct<FT_Prop_IncreaseXHeight> {
         super(address, container);
     }
 
+    @Override
+    protected FT_Prop_IncreaseXHeight create(long address, @Nullable ByteBuffer container) {
+        return new FT_Prop_IncreaseXHeight(address, container);
+    }
+
     /**
      * Creates a {@code FT_Prop_IncreaseXHeight} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -74,16 +69,23 @@ public class FT_Prop_IncreaseXHeight extends Struct<FT_Prop_IncreaseXHeight> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_Prop_IncreaseXHeight} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link FT_Face} view of the struct pointed to by the {@code face} field. */
+    public FT_Face face() { return nface(address()); }
+    /** @return the value of the {@code limit} field. */
+    @NativeType("FT_UInt")
+    public int limit$() { return nlimit$(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Prop_IncreaseXHeight} instance for the specified memory address. */
     public static FT_Prop_IncreaseXHeight create(long address) {
         return new FT_Prop_IncreaseXHeight(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Prop_IncreaseXHeight createSafe(long address) {
         return address == NULL ? null : new FT_Prop_IncreaseXHeight(address, null);
@@ -99,9 +101,7 @@ public class FT_Prop_IncreaseXHeight extends Struct<FT_Prop_IncreaseXHeight> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -109,52 +109,14 @@ public class FT_Prop_IncreaseXHeight extends Struct<FT_Prop_IncreaseXHeight> {
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #face}.
-     */
-    public static FT_Face nface(long struct) {
-        return FT_Face.create(memGetAddress(struct + FT_Prop_IncreaseXHeight.FACE));
-    }
-
-    /**
-     * Unsafe version of {@link #limit$}.
-     */
-    public static int nlimit$(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Prop_IncreaseXHeight.LIMIT);
-    }
-
-    @Override
-    protected FT_Prop_IncreaseXHeight create(long address, @Nullable ByteBuffer container) {
-        return new FT_Prop_IncreaseXHeight(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #face}. */
+    public static FT_Face nface(long struct) { return FT_Face.create(memGetAddress(struct + FT_Prop_IncreaseXHeight.FACE)); }
+    /** Unsafe version of {@link #limit$}. */
+    public static int nlimit$(long struct) { return UNSAFE.getInt(null, struct + FT_Prop_IncreaseXHeight.LIMIT); }
 
     // -----------------------------------
 
-    /**
-     * @return a {@link FT_Face} view of the struct pointed to by the {@code face} field.
-     */
-    public FT_Face face() {
-        return nface(address());
-    }
-
-    /**
-     * @return the value of the {@code limit} field.
-     */
-    @NativeType("FT_UInt")
-    public int limit$() {
-        return nlimit$(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Prop_IncreaseXHeight} structs.
-     */
+    /** An array of {@link FT_Prop_IncreaseXHeight} structs. */
     public static class Buffer extends StructBuffer<FT_Prop_IncreaseXHeight, Buffer> {
 
         private static final FT_Prop_IncreaseXHeight ELEMENT_FACTORY = FT_Prop_IncreaseXHeight.create(-1L);
@@ -190,20 +152,11 @@ public class FT_Prop_IncreaseXHeight extends Struct<FT_Prop_IncreaseXHeight> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link FT_Face} view of the struct pointed to by the {@code face} field.
-         */
-        public FT_Face face() {
-            return FT_Prop_IncreaseXHeight.nface(address());
-        }
-
-        /**
-         * @return the value of the {@code limit} field.
-         */
+        /** @return a {@link FT_Face} view of the struct pointed to by the {@code face} field. */
+        public FT_Face face() { return FT_Prop_IncreaseXHeight.nface(address()); }
+        /** @return the value of the {@code limit} field. */
         @NativeType("FT_UInt")
-        public int limit$() {
-            return FT_Prop_IncreaseXHeight.nlimit$(address());
-        }
+        public int limit$() { return FT_Prop_IncreaseXHeight.nlimit$(address()); }
 
     }
 

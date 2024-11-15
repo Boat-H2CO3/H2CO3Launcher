@@ -4,23 +4,14 @@
  */
 package org.lwjgl.system;
 
-import static org.lwjgl.system.APIUtil.apiCheckAllocation;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.DEBUG;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memSet;
-import static org.lwjgl.system.MemoryUtil.nmemFree;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import javax.annotation.*;
+import java.nio.*;
+import java.util.*;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
+import static java.lang.Math.*;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Base class of all struct implementations. */
 public abstract class Struct<SELF extends Struct<SELF>> extends Pointer.Default {

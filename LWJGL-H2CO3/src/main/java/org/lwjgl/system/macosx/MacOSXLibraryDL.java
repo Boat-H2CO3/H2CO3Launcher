@@ -4,22 +4,14 @@
  */
 package org.lwjgl.system.macosx;
 
-import static org.lwjgl.system.MemoryStack.stackPush;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.macosx.DynamicLinkLoader.RTLD_LAZY;
-import static org.lwjgl.system.macosx.DynamicLinkLoader.RTLD_LOCAL;
-import static org.lwjgl.system.macosx.DynamicLinkLoader.dlclose;
-import static org.lwjgl.system.macosx.DynamicLinkLoader.dlerror;
-import static org.lwjgl.system.macosx.DynamicLinkLoader.dlopen;
-import static org.lwjgl.system.macosx.DynamicLinkLoader.dlsym;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.SharedLibrary;
-import org.lwjgl.system.SharedLibraryUtil;
+import javax.annotation.*;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.macosx.DynamicLinkLoader.*;
 
 /** Implements a {@link SharedLibrary} on the macOS using {@link DynamicLinkLoader#dlopen dlopen}. */
 public class MacOSXLibraryDL extends MacOSXLibrary {

@@ -5,31 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A structure used to describe a given raster class to the library.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Raster_Funcs {
  *     FT_Glyph_Format glyph_format;
@@ -42,35 +32,29 @@ import javax.annotation.Nullable;
  */
 public class FT_Raster_Funcs extends Struct<FT_Raster_Funcs> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            GLYPH_FORMAT,
-            RASTER_NEW,
-            RASTER_RESET,
-            RASTER_SET_MODE,
-            RASTER_RENDER,
-            RASTER_DONE;
+        GLYPH_FORMAT,
+        RASTER_NEW,
+        RASTER_RESET,
+        RASTER_SET_MODE,
+        RASTER_RENDER,
+        RASTER_DONE;
 
     static {
         Layout layout = __struct(
-                __member(4),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE)
+            __member(4),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -88,6 +72,11 @@ public class FT_Raster_Funcs extends Struct<FT_Raster_Funcs> implements NativeRe
         super(address, container);
     }
 
+    @Override
+    protected FT_Raster_Funcs create(long address, @Nullable ByteBuffer container) {
+        return new FT_Raster_Funcs(address, container);
+    }
+
     /**
      * Creates a {@code FT_Raster_Funcs} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -98,38 +87,96 @@ public class FT_Raster_Funcs extends Struct<FT_Raster_Funcs> implements NativeRe
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code glyph_format} field. */
+    @NativeType("FT_Glyph_Format")
+    public int glyph_format() { return nglyph_format(address()); }
+    /** @return the value of the {@code raster_new} field. */
+    @Nullable
+    public FT_Raster_NewFunc raster_new() { return nraster_new(address()); }
+    /** @return the value of the {@code raster_reset} field. */
+    @Nullable
+    public FT_Raster_ResetFunc raster_reset() { return nraster_reset(address()); }
+    /** @return the value of the {@code raster_set_mode} field. */
+    @Nullable
+    public FT_Raster_SetModeFunc raster_set_mode() { return nraster_set_mode(address()); }
+    /** @return the value of the {@code raster_render} field. */
+    @Nullable
+    public FT_Raster_RenderFunc raster_render() { return nraster_render(address()); }
+    /** @return the value of the {@code raster_done} field. */
+    @Nullable
+    public FT_Raster_DoneFunc raster_done() { return nraster_done(address()); }
+
+    /** Sets the specified value to the {@code glyph_format} field. */
+    public FT_Raster_Funcs glyph_format(@NativeType("FT_Glyph_Format") int value) { nglyph_format(address(), value); return this; }
+    /** Sets the specified value to the {@code raster_new} field. */
+    public FT_Raster_Funcs raster_new(@Nullable @NativeType("FT_Raster_NewFunc") FT_Raster_NewFuncI value) { nraster_new(address(), value); return this; }
+    /** Sets the specified value to the {@code raster_reset} field. */
+    public FT_Raster_Funcs raster_reset(@Nullable @NativeType("FT_Raster_ResetFunc") FT_Raster_ResetFuncI value) { nraster_reset(address(), value); return this; }
+    /** Sets the specified value to the {@code raster_set_mode} field. */
+    public FT_Raster_Funcs raster_set_mode(@Nullable @NativeType("FT_Raster_SetModeFunc") FT_Raster_SetModeFuncI value) { nraster_set_mode(address(), value); return this; }
+    /** Sets the specified value to the {@code raster_render} field. */
+    public FT_Raster_Funcs raster_render(@Nullable @NativeType("FT_Raster_RenderFunc") FT_Raster_RenderFuncI value) { nraster_render(address(), value); return this; }
+    /** Sets the specified value to the {@code raster_done} field. */
+    public FT_Raster_Funcs raster_done(@Nullable @NativeType("FT_Raster_DoneFunc") FT_Raster_DoneFuncI value) { nraster_done(address(), value); return this; }
+
+    /** Initializes this struct with the specified values. */
+    public FT_Raster_Funcs set(
+        int glyph_format,
+        FT_Raster_NewFuncI raster_new,
+        FT_Raster_ResetFuncI raster_reset,
+        FT_Raster_SetModeFuncI raster_set_mode,
+        FT_Raster_RenderFuncI raster_render,
+        FT_Raster_DoneFuncI raster_done
+    ) {
+        glyph_format(glyph_format);
+        raster_new(raster_new);
+        raster_reset(raster_reset);
+        raster_set_mode(raster_set_mode);
+        raster_render(raster_render);
+        raster_done(raster_done);
+
+        return this;
+    }
+
     /**
-     * Returns a new {@code FT_Raster_Funcs} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
+     * Copies the specified struct data to this struct.
+     *
+     * @param src the source struct
+     *
+     * @return this struct
      */
+    public FT_Raster_Funcs set(FT_Raster_Funcs src) {
+        memCopy(src.address(), address(), SIZEOF);
+        return this;
+    }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Raster_Funcs} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_Raster_Funcs malloc() {
         return new FT_Raster_Funcs(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Raster_Funcs} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_Raster_Funcs} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_Raster_Funcs calloc() {
         return new FT_Raster_Funcs(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Raster_Funcs} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_Raster_Funcs} instance allocated with {@link BufferUtils}. */
     public static FT_Raster_Funcs create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_Raster_Funcs(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_Raster_Funcs} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_Raster_Funcs} instance for the specified memory address. */
     public static FT_Raster_Funcs create(long address) {
         return new FT_Raster_Funcs(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Raster_Funcs createSafe(long address) {
         return address == NULL ? null : new FT_Raster_Funcs(address, null);
@@ -173,9 +220,7 @@ public class FT_Raster_Funcs extends Struct<FT_Raster_Funcs> implements NativeRe
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -219,242 +264,37 @@ public class FT_Raster_Funcs extends Struct<FT_Raster_Funcs> implements NativeRe
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #glyph_format}.
-     */
-    public static int nglyph_format(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Raster_Funcs.GLYPH_FORMAT);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #raster_new}.
-     */
-    @Nullable
-    public static FT_Raster_NewFunc nraster_new(long struct) {
-        return FT_Raster_NewFunc.createSafe(memGetAddress(struct + FT_Raster_Funcs.RASTER_NEW));
-    }
+    /** Unsafe version of {@link #glyph_format}. */
+    public static int nglyph_format(long struct) { return UNSAFE.getInt(null, struct + FT_Raster_Funcs.GLYPH_FORMAT); }
+    /** Unsafe version of {@link #raster_new}. */
+    @Nullable public static FT_Raster_NewFunc nraster_new(long struct) { return FT_Raster_NewFunc.createSafe(memGetAddress(struct + FT_Raster_Funcs.RASTER_NEW)); }
+    /** Unsafe version of {@link #raster_reset}. */
+    @Nullable public static FT_Raster_ResetFunc nraster_reset(long struct) { return FT_Raster_ResetFunc.createSafe(memGetAddress(struct + FT_Raster_Funcs.RASTER_RESET)); }
+    /** Unsafe version of {@link #raster_set_mode}. */
+    @Nullable public static FT_Raster_SetModeFunc nraster_set_mode(long struct) { return FT_Raster_SetModeFunc.createSafe(memGetAddress(struct + FT_Raster_Funcs.RASTER_SET_MODE)); }
+    /** Unsafe version of {@link #raster_render}. */
+    @Nullable public static FT_Raster_RenderFunc nraster_render(long struct) { return FT_Raster_RenderFunc.createSafe(memGetAddress(struct + FT_Raster_Funcs.RASTER_RENDER)); }
+    /** Unsafe version of {@link #raster_done}. */
+    @Nullable public static FT_Raster_DoneFunc nraster_done(long struct) { return FT_Raster_DoneFunc.createSafe(memGetAddress(struct + FT_Raster_Funcs.RASTER_DONE)); }
+
+    /** Unsafe version of {@link #glyph_format(int) glyph_format}. */
+    public static void nglyph_format(long struct, int value) { UNSAFE.putInt(null, struct + FT_Raster_Funcs.GLYPH_FORMAT, value); }
+    /** Unsafe version of {@link #raster_new(FT_Raster_NewFuncI) raster_new}. */
+    public static void nraster_new(long struct, @Nullable FT_Raster_NewFuncI value) { memPutAddress(struct + FT_Raster_Funcs.RASTER_NEW, memAddressSafe(value)); }
+    /** Unsafe version of {@link #raster_reset(FT_Raster_ResetFuncI) raster_reset}. */
+    public static void nraster_reset(long struct, @Nullable FT_Raster_ResetFuncI value) { memPutAddress(struct + FT_Raster_Funcs.RASTER_RESET, memAddressSafe(value)); }
+    /** Unsafe version of {@link #raster_set_mode(FT_Raster_SetModeFuncI) raster_set_mode}. */
+    public static void nraster_set_mode(long struct, @Nullable FT_Raster_SetModeFuncI value) { memPutAddress(struct + FT_Raster_Funcs.RASTER_SET_MODE, memAddressSafe(value)); }
+    /** Unsafe version of {@link #raster_render(FT_Raster_RenderFuncI) raster_render}. */
+    public static void nraster_render(long struct, @Nullable FT_Raster_RenderFuncI value) { memPutAddress(struct + FT_Raster_Funcs.RASTER_RENDER, memAddressSafe(value)); }
+    /** Unsafe version of {@link #raster_done(FT_Raster_DoneFuncI) raster_done}. */
+    public static void nraster_done(long struct, @Nullable FT_Raster_DoneFuncI value) { memPutAddress(struct + FT_Raster_Funcs.RASTER_DONE, memAddressSafe(value)); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #raster_reset}.
-     */
-    @Nullable
-    public static FT_Raster_ResetFunc nraster_reset(long struct) {
-        return FT_Raster_ResetFunc.createSafe(memGetAddress(struct + FT_Raster_Funcs.RASTER_RESET));
-    }
-
-    /**
-     * Unsafe version of {@link #raster_set_mode}.
-     */
-    @Nullable
-    public static FT_Raster_SetModeFunc nraster_set_mode(long struct) {
-        return FT_Raster_SetModeFunc.createSafe(memGetAddress(struct + FT_Raster_Funcs.RASTER_SET_MODE));
-    }
-
-    /**
-     * Unsafe version of {@link #raster_render}.
-     */
-    @Nullable
-    public static FT_Raster_RenderFunc nraster_render(long struct) {
-        return FT_Raster_RenderFunc.createSafe(memGetAddress(struct + FT_Raster_Funcs.RASTER_RENDER));
-    }
-
-    /**
-     * Unsafe version of {@link #raster_done}.
-     */
-    @Nullable
-    public static FT_Raster_DoneFunc nraster_done(long struct) {
-        return FT_Raster_DoneFunc.createSafe(memGetAddress(struct + FT_Raster_Funcs.RASTER_DONE));
-    }
-
-    /**
-     * Unsafe version of {@link #glyph_format(int) glyph_format}.
-     */
-    public static void nglyph_format(long struct, int value) {
-        UNSAFE.putInt(null, struct + FT_Raster_Funcs.GLYPH_FORMAT, value);
-    }
-
-    /**
-     * Unsafe version of {@link #raster_new(FT_Raster_NewFuncI) raster_new}.
-     */
-    public static void nraster_new(long struct, @Nullable FT_Raster_NewFuncI value) {
-        memPutAddress(struct + FT_Raster_Funcs.RASTER_NEW, memAddressSafe(value));
-    }
-
-    /**
-     * Unsafe version of {@link #raster_reset(FT_Raster_ResetFuncI) raster_reset}.
-     */
-    public static void nraster_reset(long struct, @Nullable FT_Raster_ResetFuncI value) {
-        memPutAddress(struct + FT_Raster_Funcs.RASTER_RESET, memAddressSafe(value));
-    }
-
-    /**
-     * Unsafe version of {@link #raster_set_mode(FT_Raster_SetModeFuncI) raster_set_mode}.
-     */
-    public static void nraster_set_mode(long struct, @Nullable FT_Raster_SetModeFuncI value) {
-        memPutAddress(struct + FT_Raster_Funcs.RASTER_SET_MODE, memAddressSafe(value));
-    }
-
-    /**
-     * Unsafe version of {@link #raster_render(FT_Raster_RenderFuncI) raster_render}.
-     */
-    public static void nraster_render(long struct, @Nullable FT_Raster_RenderFuncI value) {
-        memPutAddress(struct + FT_Raster_Funcs.RASTER_RENDER, memAddressSafe(value));
-    }
-
-    /**
-     * Unsafe version of {@link #raster_done(FT_Raster_DoneFuncI) raster_done}.
-     */
-    public static void nraster_done(long struct, @Nullable FT_Raster_DoneFuncI value) {
-        memPutAddress(struct + FT_Raster_Funcs.RASTER_DONE, memAddressSafe(value));
-    }
-
-    @Override
-    protected FT_Raster_Funcs create(long address, @Nullable ByteBuffer container) {
-        return new FT_Raster_Funcs(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    /**
-     * @return the value of the {@code glyph_format} field.
-     */
-    @NativeType("FT_Glyph_Format")
-    public int glyph_format() {
-        return nglyph_format(address());
-    }
-
-    /**
-     * @return the value of the {@code raster_new} field.
-     */
-    @Nullable
-    public FT_Raster_NewFunc raster_new() {
-        return nraster_new(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return the value of the {@code raster_reset} field.
-     */
-    @Nullable
-    public FT_Raster_ResetFunc raster_reset() {
-        return nraster_reset(address());
-    }
-
-    /**
-     * @return the value of the {@code raster_set_mode} field.
-     */
-    @Nullable
-    public FT_Raster_SetModeFunc raster_set_mode() {
-        return nraster_set_mode(address());
-    }
-
-    /**
-     * @return the value of the {@code raster_render} field.
-     */
-    @Nullable
-    public FT_Raster_RenderFunc raster_render() {
-        return nraster_render(address());
-    }
-
-    /**
-     * @return the value of the {@code raster_done} field.
-     */
-    @Nullable
-    public FT_Raster_DoneFunc raster_done() {
-        return nraster_done(address());
-    }
-
-    /**
-     * Sets the specified value to the {@code glyph_format} field.
-     */
-    public FT_Raster_Funcs glyph_format(@NativeType("FT_Glyph_Format") int value) {
-        nglyph_format(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code raster_new} field.
-     */
-    public FT_Raster_Funcs raster_new(@Nullable @NativeType("FT_Raster_NewFunc") FT_Raster_NewFuncI value) {
-        nraster_new(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code raster_reset} field.
-     */
-    public FT_Raster_Funcs raster_reset(@Nullable @NativeType("FT_Raster_ResetFunc") FT_Raster_ResetFuncI value) {
-        nraster_reset(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code raster_set_mode} field.
-     */
-    public FT_Raster_Funcs raster_set_mode(@Nullable @NativeType("FT_Raster_SetModeFunc") FT_Raster_SetModeFuncI value) {
-        nraster_set_mode(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code raster_render} field.
-     */
-    public FT_Raster_Funcs raster_render(@Nullable @NativeType("FT_Raster_RenderFunc") FT_Raster_RenderFuncI value) {
-        nraster_render(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code raster_done} field.
-     */
-    public FT_Raster_Funcs raster_done(@Nullable @NativeType("FT_Raster_DoneFunc") FT_Raster_DoneFuncI value) {
-        nraster_done(address(), value);
-        return this;
-    }
-
-    /**
-     * Initializes this struct with the specified values.
-     */
-    public FT_Raster_Funcs set(
-            int glyph_format,
-            FT_Raster_NewFuncI raster_new,
-            FT_Raster_ResetFuncI raster_reset,
-            FT_Raster_SetModeFuncI raster_set_mode,
-            FT_Raster_RenderFuncI raster_render,
-            FT_Raster_DoneFuncI raster_done
-    ) {
-        glyph_format(glyph_format);
-        raster_new(raster_new);
-        raster_reset(raster_reset);
-        raster_set_mode(raster_set_mode);
-        raster_render(raster_render);
-        raster_done(raster_done);
-
-        return this;
-    }
-
-    /**
-     * Copies the specified struct data to this struct.
-     *
-     * @param src the source struct
-     * @return this struct
-     */
-    public FT_Raster_Funcs set(FT_Raster_Funcs src) {
-        memCopy(src.address(), address(), SIZEOF);
-        return this;
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Raster_Funcs} structs.
-     */
+    /** An array of {@link FT_Raster_Funcs} structs. */
     public static class Buffer extends StructBuffer<FT_Raster_Funcs, Buffer> implements NativeResource {
 
         private static final FT_Raster_Funcs ELEMENT_FACTORY = FT_Raster_Funcs.create(-1L);
@@ -490,101 +330,37 @@ public class FT_Raster_Funcs extends Struct<FT_Raster_Funcs> implements NativeRe
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code glyph_format} field.
-         */
+        /** @return the value of the {@code glyph_format} field. */
         @NativeType("FT_Glyph_Format")
-        public int glyph_format() {
-            return FT_Raster_Funcs.nglyph_format(address());
-        }
-
-        /**
-         * @return the value of the {@code raster_new} field.
-         */
+        public int glyph_format() { return FT_Raster_Funcs.nglyph_format(address()); }
+        /** @return the value of the {@code raster_new} field. */
         @Nullable
-        public FT_Raster_NewFunc raster_new() {
-            return FT_Raster_Funcs.nraster_new(address());
-        }
-
-        /**
-         * @return the value of the {@code raster_reset} field.
-         */
+        public FT_Raster_NewFunc raster_new() { return FT_Raster_Funcs.nraster_new(address()); }
+        /** @return the value of the {@code raster_reset} field. */
         @Nullable
-        public FT_Raster_ResetFunc raster_reset() {
-            return FT_Raster_Funcs.nraster_reset(address());
-        }
-
-        /**
-         * @return the value of the {@code raster_set_mode} field.
-         */
+        public FT_Raster_ResetFunc raster_reset() { return FT_Raster_Funcs.nraster_reset(address()); }
+        /** @return the value of the {@code raster_set_mode} field. */
         @Nullable
-        public FT_Raster_SetModeFunc raster_set_mode() {
-            return FT_Raster_Funcs.nraster_set_mode(address());
-        }
-
-        /**
-         * @return the value of the {@code raster_render} field.
-         */
+        public FT_Raster_SetModeFunc raster_set_mode() { return FT_Raster_Funcs.nraster_set_mode(address()); }
+        /** @return the value of the {@code raster_render} field. */
         @Nullable
-        public FT_Raster_RenderFunc raster_render() {
-            return FT_Raster_Funcs.nraster_render(address());
-        }
-
-        /**
-         * @return the value of the {@code raster_done} field.
-         */
+        public FT_Raster_RenderFunc raster_render() { return FT_Raster_Funcs.nraster_render(address()); }
+        /** @return the value of the {@code raster_done} field. */
         @Nullable
-        public FT_Raster_DoneFunc raster_done() {
-            return FT_Raster_Funcs.nraster_done(address());
-        }
+        public FT_Raster_DoneFunc raster_done() { return FT_Raster_Funcs.nraster_done(address()); }
 
-        /**
-         * Sets the specified value to the {@code glyph_format} field.
-         */
-        public Buffer glyph_format(@NativeType("FT_Glyph_Format") int value) {
-            FT_Raster_Funcs.nglyph_format(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code raster_new} field.
-         */
-        public Buffer raster_new(@Nullable @NativeType("FT_Raster_NewFunc") FT_Raster_NewFuncI value) {
-            FT_Raster_Funcs.nraster_new(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code raster_reset} field.
-         */
-        public Buffer raster_reset(@Nullable @NativeType("FT_Raster_ResetFunc") FT_Raster_ResetFuncI value) {
-            FT_Raster_Funcs.nraster_reset(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code raster_set_mode} field.
-         */
-        public Buffer raster_set_mode(@Nullable @NativeType("FT_Raster_SetModeFunc") FT_Raster_SetModeFuncI value) {
-            FT_Raster_Funcs.nraster_set_mode(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code raster_render} field.
-         */
-        public Buffer raster_render(@Nullable @NativeType("FT_Raster_RenderFunc") FT_Raster_RenderFuncI value) {
-            FT_Raster_Funcs.nraster_render(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code raster_done} field.
-         */
-        public Buffer raster_done(@Nullable @NativeType("FT_Raster_DoneFunc") FT_Raster_DoneFuncI value) {
-            FT_Raster_Funcs.nraster_done(address(), value);
-            return this;
-        }
+        /** Sets the specified value to the {@code glyph_format} field. */
+        public Buffer glyph_format(@NativeType("FT_Glyph_Format") int value) { FT_Raster_Funcs.nglyph_format(address(), value); return this; }
+        /** Sets the specified value to the {@code raster_new} field. */
+        public Buffer raster_new(@Nullable @NativeType("FT_Raster_NewFunc") FT_Raster_NewFuncI value) { FT_Raster_Funcs.nraster_new(address(), value); return this; }
+        /** Sets the specified value to the {@code raster_reset} field. */
+        public Buffer raster_reset(@Nullable @NativeType("FT_Raster_ResetFunc") FT_Raster_ResetFuncI value) { FT_Raster_Funcs.nraster_reset(address(), value); return this; }
+        /** Sets the specified value to the {@code raster_set_mode} field. */
+        public Buffer raster_set_mode(@Nullable @NativeType("FT_Raster_SetModeFunc") FT_Raster_SetModeFuncI value) { FT_Raster_Funcs.nraster_set_mode(address(), value); return this; }
+        /** Sets the specified value to the {@code raster_render} field. */
+        public Buffer raster_render(@Nullable @NativeType("FT_Raster_RenderFunc") FT_Raster_RenderFuncI value) { FT_Raster_Funcs.nraster_render(address(), value); return this; }
+        /** Sets the specified value to the {@code raster_done} field. */
+        public Buffer raster_done(@Nullable @NativeType("FT_Raster_DoneFunc") FT_Raster_DoneFuncI value) { FT_Raster_Funcs.nraster_done(address(), value); return this; }
 
     }
 

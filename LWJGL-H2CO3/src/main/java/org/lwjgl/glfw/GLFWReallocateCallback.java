@@ -5,11 +5,11 @@
  */
 package org.lwjgl.glfw;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
+import javax.annotation.*;
 
-import org.lwjgl.system.Callback;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * The function pointer type for memory reallocation callbacks.

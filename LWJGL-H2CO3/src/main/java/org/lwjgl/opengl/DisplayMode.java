@@ -130,14 +130,15 @@ public final class DisplayMode {
 	 * @see Object#toString()
 	 */
 	public String toString() {
-        String sb = width +
-                " x " +
-                height +
-                " x " +
-                bpp +
-                " @" +
-                freq +
-                "Hz";
-        return sb;
-    }
+		StringBuilder sb = new StringBuilder(32);
+		sb.append(width);
+		sb.append(" x ");
+		sb.append(height);
+		sb.append(" x ");
+		sb.append(bpp);
+		sb.append(" @");
+		sb.append(freq);
+		sb.append("Hz");
+		return sb.toString();
+	}
 }

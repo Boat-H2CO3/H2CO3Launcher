@@ -5,16 +5,14 @@
  */
 package org.lwjgl.openal;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.JNI.invokePPV;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import java.nio.*;
 
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeType;
+import org.lwjgl.system.*;
 
-import java.nio.LongBuffer;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Native bindings to the <a href="https://openal-soft.org/openal-extensions/SOFT_device_clock.txt">SOFT_device_clock</a> extension.

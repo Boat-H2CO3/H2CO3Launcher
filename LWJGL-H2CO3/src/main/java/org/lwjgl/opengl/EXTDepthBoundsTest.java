@@ -5,6 +5,8 @@
  */
 package org.lwjgl.opengl;
 
+import org.lwjgl.system.*;
+
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_depth_bounds_test.txt">EXT_depth_bounds_test</a> extension.
  * 

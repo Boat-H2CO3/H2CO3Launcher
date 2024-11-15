@@ -444,34 +444,33 @@ public final class Color implements ReadableColor, Serializable, WritableColor {
 	}
 
 	/**
-     * RGB to HSB conversion, pinched from java.awt.Color.
-     * The HSB value is returned in dest[] if dest[] is supplied.
-     * Values range from 0..1
-     *
-     * @param dest Destination floats, or null
-     * @return dest, or a new float array
-     */
-    public float[] toHSB(float[] dest) {
-        int r = getRed();
-        int g = getGreen();
-        int b = getBlue();
-        if (dest == null)
-            dest = new float[3];
-        int l = r <= g ? g : r;
-        if (b > l)
-            l = b;
-        int i1 = r >= g ? g : r;
-        if (b < i1)
-            i1 = b;
-        float brightness = l / 255F;
-        float saturation;
-        if (l != 0)
-            saturation = (float) (l - i1) / (float) l;
-        else
-            saturation = 0.0F;
-        float hue;
-        if (saturation == 0.0F) {
-            hue = 0.0F;
+	 * RGB to HSB conversion, pinched from java.awt.Color.
+	 * The HSB value is returned in dest[] if dest[] is supplied.
+	 * Values range from 0..1
+	 * @param dest Destination floats, or null
+	 * @return dest, or a new float array
+	 */
+	public float[] toHSB(float dest[]) {
+		int r = getRed();
+		int g = getGreen();
+		int b = getBlue();
+		if (dest == null)
+			dest = new float[3];
+		int l = r <= g ? g : r;
+		if (b > l)
+			l = b;
+		int i1 = r >= g ? g : r;
+		if (b < i1)
+			i1 = b;
+		float brightness = l / 255F;
+		float saturation;
+		if (l != 0)
+			saturation = (float) (l - i1) / (float) l;
+		else
+			saturation = 0.0F;
+		float hue;
+		if (saturation == 0.0F) {
+			hue = 0.0F;
 		} else {
 			float f3 = (float) (l - r) / (float) (l - i1);
 			float f4 = (float) (l - g) / (float) (l - i1);

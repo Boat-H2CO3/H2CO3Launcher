@@ -5,21 +5,16 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.APIUtil.apiClosureRetP;
-import static org.lwjgl.system.APIUtil.apiCreateCIF;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
-import static org.lwjgl.system.libffi.LibFFI.FFI_DEFAULT_ABI;
-import static org.lwjgl.system.libffi.LibFFI.ffi_type_pointer;
-import static org.lwjgl.system.libffi.LibFFI.ffi_type_slong;
+import org.lwjgl.system.*;
+import org.lwjgl.system.libffi.*;
 
-import org.lwjgl.system.CallbackI;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.libffi.FFICIF;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.libffi.LibFFI.*;
 
 /**
  * <h3>Type</h3>
- *
+ * 
  * <pre><code>
  * void * (*{@link #invoke}) (
  *     FT_Memory memory,
@@ -31,29 +26,24 @@ import org.lwjgl.system.libffi.FFICIF;
 public interface FT_Alloc_FuncI extends CallbackI {
 
     FFICIF CIF = apiCreateCIF(
-            FFI_DEFAULT_ABI,
-            ffi_type_pointer,
-            ffi_type_pointer, ffi_type_slong
+        FFI_DEFAULT_ABI,
+        ffi_type_pointer,
+        ffi_type_pointer, ffi_type_slong
     );
 
     @Override
-    default FFICIF getCallInterface() {
-        return CIF;
-    }
+    default FFICIF getCallInterface() { return CIF; }
 
     @Override
     default void callback(long ret, long args) {
         long __result = invoke(
-                memGetAddress(memGetAddress(args)),
-                memGetCLong(memGetAddress(args + POINTER_SIZE))
+            memGetAddress(memGetAddress(args)),
+            memGetCLong(memGetAddress(args + POINTER_SIZE))
         );
         apiClosureRetP(ret, __result);
     }
 
-    /**
-     * A function used to allocate {@code size} bytes from {@code memory}.
-     */
-    @NativeType("void *")
-    long invoke(@NativeType("FT_Memory") long memory, long size);
+    /** A function used to allocate {@code size} bytes from {@code memory}. */
+    @NativeType("void *") long invoke(@NativeType("FT_Memory") long memory, long size);
 
 }

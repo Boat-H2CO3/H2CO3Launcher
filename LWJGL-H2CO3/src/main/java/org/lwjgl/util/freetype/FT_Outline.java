@@ -5,31 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBuffer;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memShortBuffer;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * This structure is used to describe an outline to the scan-line converter.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Outline {
  *     short {@link #n_contours};
@@ -42,35 +32,29 @@ import javax.annotation.Nullable;
  */
 public class FT_Outline extends Struct<FT_Outline> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            N_CONTOURS,
-            N_POINTS,
-            POINTS,
-            TAGS,
-            CONTOURS,
-            FLAGS;
+        N_CONTOURS,
+        N_POINTS,
+        POINTS,
+        TAGS,
+        CONTOURS,
+        FLAGS;
 
     static {
         Layout layout = __struct(
-                __member(2),
-                __member(2),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(4)
+            __member(2),
+            __member(2),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -88,6 +72,11 @@ public class FT_Outline extends Struct<FT_Outline> implements NativeResource {
         super(address, container);
     }
 
+    @Override
+    protected FT_Outline create(long address, @Nullable ByteBuffer container) {
+        return new FT_Outline(address, container);
+    }
+
     /**
      * Creates a {@code FT_Outline} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -98,38 +87,49 @@ public class FT_Outline extends Struct<FT_Outline> implements NativeResource {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_Outline} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** number of contours in glyph */
+    public short n_contours() { return nn_contours(address()); }
+    /** number of points in the glyph */
+    public short n_points() { return nn_points(address()); }
+    /** the outline's points */
+    @NativeType("FT_Vector *")
+    public FT_Vector.Buffer points() { return npoints(address()); }
+    /** the points flags */
+    @NativeType("char *")
+    public ByteBuffer tags() { return ntags(address()); }
+    /** the contour end points */
+    @NativeType("short *")
+    public ShortBuffer contours() { return ncontours(address()); }
+    /** outline masks */
+    public int flags() { return nflags(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Outline} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_Outline malloc() {
         return new FT_Outline(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Outline} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_Outline} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_Outline calloc() {
         return new FT_Outline(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Outline} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_Outline} instance allocated with {@link BufferUtils}. */
     public static FT_Outline create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_Outline(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_Outline} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_Outline} instance for the specified memory address. */
     public static FT_Outline create(long address) {
         return new FT_Outline(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Outline createSafe(long address) {
         return address == NULL ? null : new FT_Outline(address, null);
@@ -163,8 +163,6 @@ public class FT_Outline extends Struct<FT_Outline> implements NativeResource {
         return new Buffer(memAddress(container), container, -1, 0, capacity, capacity);
     }
 
-    // -----------------------------------
-
     /**
      * Create a {@link Buffer} instance at the specified memory.
      *
@@ -175,9 +173,7 @@ public class FT_Outline extends Struct<FT_Outline> implements NativeResource {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -221,110 +217,24 @@ public class FT_Outline extends Struct<FT_Outline> implements NativeResource {
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #n_contours}.
-     */
-    public static short nn_contours(long struct) {
-        return UNSAFE.getShort(null, struct + FT_Outline.N_CONTOURS);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #n_points}.
-     */
-    public static short nn_points(long struct) {
-        return UNSAFE.getShort(null, struct + FT_Outline.N_POINTS);
-    }
-
-    /**
-     * Unsafe version of {@link #points}.
-     */
-    public static FT_Vector.Buffer npoints(long struct) {
-        return FT_Vector.create(memGetAddress(struct + FT_Outline.POINTS), nn_points(struct));
-    }
-
-    /**
-     * Unsafe version of {@link #tags() tags}.
-     */
-    public static ByteBuffer ntags(long struct) {
-        return memByteBuffer(memGetAddress(struct + FT_Outline.TAGS), nn_points(struct));
-    }
-
-    /**
-     * Unsafe version of {@link #contours() contours}.
-     */
-    public static ShortBuffer ncontours(long struct) {
-        return memShortBuffer(memGetAddress(struct + FT_Outline.CONTOURS), nn_contours(struct));
-    }
-
-    /**
-     * Unsafe version of {@link #flags}.
-     */
-    public static int nflags(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Outline.FLAGS);
-    }
-
-    @Override
-    protected FT_Outline create(long address, @Nullable ByteBuffer container) {
-        return new FT_Outline(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #n_contours}. */
+    public static short nn_contours(long struct) { return UNSAFE.getShort(null, struct + FT_Outline.N_CONTOURS); }
+    /** Unsafe version of {@link #n_points}. */
+    public static short nn_points(long struct) { return UNSAFE.getShort(null, struct + FT_Outline.N_POINTS); }
+    /** Unsafe version of {@link #points}. */
+    public static FT_Vector.Buffer npoints(long struct) { return FT_Vector.create(memGetAddress(struct + FT_Outline.POINTS), nn_points(struct)); }
+    /** Unsafe version of {@link #tags() tags}. */
+    public static ByteBuffer ntags(long struct) { return memByteBuffer(memGetAddress(struct + FT_Outline.TAGS), nn_points(struct)); }
+    /** Unsafe version of {@link #contours() contours}. */
+    public static ShortBuffer ncontours(long struct) { return memShortBuffer(memGetAddress(struct + FT_Outline.CONTOURS), nn_contours(struct)); }
+    /** Unsafe version of {@link #flags}. */
+    public static int nflags(long struct) { return UNSAFE.getInt(null, struct + FT_Outline.FLAGS); }
 
     // -----------------------------------
 
-    /**
-     * number of contours in glyph
-     */
-    public short n_contours() {
-        return nn_contours(address());
-    }
-
-    /**
-     * number of points in the glyph
-     */
-    public short n_points() {
-        return nn_points(address());
-    }
-
-    /**
-     * the outline's points
-     */
-    @NativeType("FT_Vector *")
-    public FT_Vector.Buffer points() {
-        return npoints(address());
-    }
-
-    /**
-     * the points flags
-     */
-    @NativeType("char *")
-    public ByteBuffer tags() {
-        return ntags(address());
-    }
-
-    /**
-     * the contour end points
-     */
-    @NativeType("short *")
-    public ShortBuffer contours() {
-        return ncontours(address());
-    }
-
-    /**
-     * outline masks
-     */
-    public int flags() {
-        return nflags(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Outline} structs.
-     */
+    /** An array of {@link FT_Outline} structs. */
     public static class Buffer extends StructBuffer<FT_Outline, Buffer> implements NativeResource {
 
         private static final FT_Outline ELEMENT_FACTORY = FT_Outline.create(-1L);
@@ -360,50 +270,21 @@ public class FT_Outline extends Struct<FT_Outline> implements NativeResource {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@link FT_Outline#n_contours} field.
-         */
-        public short n_contours() {
-            return FT_Outline.nn_contours(address());
-        }
-
-        /**
-         * @return the value of the {@link FT_Outline#n_points} field.
-         */
-        public short n_points() {
-            return FT_Outline.nn_points(address());
-        }
-
-        /**
-         * @return a {@link FT_Vector.Buffer} view of the struct array pointed to by the {@link FT_Outline#points} field.
-         */
+        /** @return the value of the {@link FT_Outline#n_contours} field. */
+        public short n_contours() { return FT_Outline.nn_contours(address()); }
+        /** @return the value of the {@link FT_Outline#n_points} field. */
+        public short n_points() { return FT_Outline.nn_points(address()); }
+        /** @return a {@link FT_Vector.Buffer} view of the struct array pointed to by the {@link FT_Outline#points} field. */
         @NativeType("FT_Vector *")
-        public FT_Vector.Buffer points() {
-            return FT_Outline.npoints(address());
-        }
-
-        /**
-         * @return a {@link ByteBuffer} view of the data pointed to by the {@link FT_Outline#tags} field.
-         */
+        public FT_Vector.Buffer points() { return FT_Outline.npoints(address()); }
+        /** @return a {@link ByteBuffer} view of the data pointed to by the {@link FT_Outline#tags} field. */
         @NativeType("char *")
-        public ByteBuffer tags() {
-            return FT_Outline.ntags(address());
-        }
-
-        /**
-         * @return a {@link ShortBuffer} view of the data pointed to by the {@link FT_Outline#contours} field.
-         */
+        public ByteBuffer tags() { return FT_Outline.ntags(address()); }
+        /** @return a {@link ShortBuffer} view of the data pointed to by the {@link FT_Outline#contours} field. */
         @NativeType("short *")
-        public ShortBuffer contours() {
-            return FT_Outline.ncontours(address());
-        }
-
-        /**
-         * @return the value of the {@link FT_Outline#flags} field.
-         */
-        public int flags() {
-            return FT_Outline.nflags(address());
-        }
+        public ShortBuffer contours() { return FT_Outline.ncontours(address()); }
+        /** @return the value of the {@link FT_Outline#flags} field. */
+        public int flags() { return FT_Outline.nflags(address()); }
 
     }
 

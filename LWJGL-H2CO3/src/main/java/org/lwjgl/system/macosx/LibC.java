@@ -5,10 +5,10 @@
  */
 package org.lwjgl.system.macosx;
 
-import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
-import static org.lwjgl.system.JNI.invokeP;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.NativeType;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.JNI.*;
 
 /** Native bindings to libc, the Standard C Library. */
 public class LibC {

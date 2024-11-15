@@ -5,10 +5,9 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.NativeType;
+import static org.lwjgl.system.Checks.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_external_objects_win32.txt">EXT_memory_object_win32</a> extension.

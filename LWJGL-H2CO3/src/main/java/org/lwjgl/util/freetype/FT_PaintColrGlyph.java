@@ -5,22 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure representing a {@code COLR} v1 {@code PaintColorGlyph} paint table.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_PaintColrGlyph {
  *     FT_UInt glyphID;
@@ -28,25 +25,19 @@ import javax.annotation.Nullable;
  */
 public class FT_PaintColrGlyph extends Struct<FT_PaintColrGlyph> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            GLYPHID;
+        GLYPHID;
 
     static {
         Layout layout = __struct(
-                __member(4)
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -59,6 +50,11 @@ public class FT_PaintColrGlyph extends Struct<FT_PaintColrGlyph> {
         super(address, container);
     }
 
+    @Override
+    protected FT_PaintColrGlyph create(long address, @Nullable ByteBuffer container) {
+        return new FT_PaintColrGlyph(address, container);
+    }
+
     /**
      * Creates a {@code FT_PaintColrGlyph} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -69,16 +65,21 @@ public class FT_PaintColrGlyph extends Struct<FT_PaintColrGlyph> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_PaintColrGlyph} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code glyphID} field. */
+    @NativeType("FT_UInt")
+    public int glyphID() { return nglyphID(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_PaintColrGlyph} instance for the specified memory address. */
     public static FT_PaintColrGlyph create(long address) {
         return new FT_PaintColrGlyph(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_PaintColrGlyph createSafe(long address) {
         return address == NULL ? null : new FT_PaintColrGlyph(address, null);
@@ -94,48 +95,20 @@ public class FT_PaintColrGlyph extends Struct<FT_PaintColrGlyph> {
         return new Buffer(address, capacity);
     }
 
-    // -----------------------------------
-
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #glyphID}.
-     */
-    public static int nglyphID(long struct) {
-        return UNSAFE.getInt(null, struct + FT_PaintColrGlyph.GLYPHID);
-    }
+    // -----------------------------------
 
-    @Override
-    protected FT_PaintColrGlyph create(long address, @Nullable ByteBuffer container) {
-        return new FT_PaintColrGlyph(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #glyphID}. */
+    public static int nglyphID(long struct) { return UNSAFE.getInt(null, struct + FT_PaintColrGlyph.GLYPHID); }
 
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code glyphID} field.
-     */
-    @NativeType("FT_UInt")
-    public int glyphID() {
-        return nglyphID(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_PaintColrGlyph} structs.
-     */
+    /** An array of {@link FT_PaintColrGlyph} structs. */
     public static class Buffer extends StructBuffer<FT_PaintColrGlyph, Buffer> {
 
         private static final FT_PaintColrGlyph ELEMENT_FACTORY = FT_PaintColrGlyph.create(-1L);
@@ -171,13 +144,9 @@ public class FT_PaintColrGlyph extends Struct<FT_PaintColrGlyph> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code glyphID} field.
-         */
+        /** @return the value of the {@code glyphID} field. */
         @NativeType("FT_UInt")
-        public int glyphID() {
-            return FT_PaintColrGlyph.nglyphID(address());
-        }
+        public int glyphID() { return FT_PaintColrGlyph.nglyphID(address()); }
 
     }
 

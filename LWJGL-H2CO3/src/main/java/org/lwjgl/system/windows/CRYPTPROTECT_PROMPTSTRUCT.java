@@ -5,28 +5,16 @@
  */
 package org.lwjgl.system.windows;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT2;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBufferNT2;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.memUTF16;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * Provides the text of a prompt and information about when and where that prompt is to be displayed when using the {@link Crypt32#CryptProtectData} and

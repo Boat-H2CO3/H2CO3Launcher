@@ -5,36 +5,19 @@
  */
 package org.lwjgl.system.linux;
 
-import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT1Safe;
-import static org.lwjgl.system.JNI.invokePI;
-import static org.lwjgl.system.JNI.invokePN;
-import static org.lwjgl.system.JNI.invokePNI;
-import static org.lwjgl.system.JNI.invokePNNNPP;
-import static org.lwjgl.system.JNI.invokePNNPI;
-import static org.lwjgl.system.JNI.invokePNNPPPI;
-import static org.lwjgl.system.JNI.invokePNPN;
-import static org.lwjgl.system.JNI.invokePNPNPN;
-import static org.lwjgl.system.JNI.invokePP;
-import static org.lwjgl.system.JNI.invokePV;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
+import javax.annotation.*;
 
-import org.lwjgl.CLongBuffer;
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.Library;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.SharedLibrary;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import org.lwjgl.*;
 
-import javax.annotation.Nullable;
+import org.lwjgl.system.*;
+
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Native bindings to libX11. */
 public class X11 {

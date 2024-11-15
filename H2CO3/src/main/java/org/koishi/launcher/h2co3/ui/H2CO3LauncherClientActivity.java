@@ -33,7 +33,8 @@ import org.koishi.launcher.h2co3.controller.client.H2CO3ControlClient;
 import org.koishi.launcher.h2co3.core.H2CO3Settings;
 import org.koishi.launcher.h2co3.core.H2CO3Tools;
 import org.koishi.launcher.h2co3.core.launch.H2CO3LauncherBridge;
-import org.koishi.launcher.h2co3.core.launch.H2CO3LauncherBridgeCallBack;
+import org.koishi.launcher.h2co3.core.launch.H2CO3LauncherBridgeCallback;
+import org.koishi.launcher.h2co3.core.launch.keycodes.LwjglGlfwKeycode;
 import org.koishi.launcher.h2co3.core.launch.utils.MCOptionUtils;
 import org.koishi.launcher.h2co3.core.message.H2CO3MessageManager;
 import org.koishi.launcher.h2co3.core.utils.DisplayUtils;
@@ -41,6 +42,7 @@ import org.koishi.launcher.h2co3.core.utils.Logging;
 import org.koishi.launcher.h2co3.launcher.H2CO3LauncherActivity;
 import org.koishi.launcher.h2co3.launcher.R;
 import org.koishi.launcher.h2co3.resources.component.activity.H2CO3Activity;
+import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -90,6 +92,7 @@ public class H2CO3LauncherClientActivity extends H2CO3LauncherActivity implement
             public void onActivityCreate(H2CO3LauncherActivity activity) {
                 virtualController = new H2CO3VirtualController((H2CO3ControlClient) activity, activity.launcherLib, KEYMAP_TO_X);
                 hardwareController = new HardwareController((H2CO3ControlClient) activity, activity.launcherLib, KEYMAP_TO_X);
+                CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_VISIBLE, 1);
             }
 
             @Override
@@ -102,18 +105,21 @@ public class H2CO3LauncherClientActivity extends H2CO3LauncherActivity implement
             public void onStop() {
                 virtualController.onStop();
                 hardwareController.onStop();
+                CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_VISIBLE, 0);
             }
 
             @Override
             public void onResume() {
                 virtualController.onResumed();
                 hardwareController.onResumed();
+                CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_HOVERED, 1);
             }
 
             @Override
             public void onPause() {
                 virtualController.onPaused();
                 hardwareController.onPaused();
+                CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_HOVERED, 0);
             }
 
             @Override
@@ -154,7 +160,7 @@ public class H2CO3LauncherClientActivity extends H2CO3LauncherActivity implement
 
     private void init() {
         h2co3LauncherInterface.onActivityCreate(this);
-        h2co3LauncherCallback = new H2CO3LauncherBridgeCallBack() {
+        h2co3LauncherCallback = new H2CO3LauncherBridgeCallback() {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
                 configureSurfaceTexture(surface, width, height);

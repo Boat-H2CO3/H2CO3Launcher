@@ -5,7 +5,7 @@
  */
 package org.lwjgl.opengl;
 
-import org.lwjgl.system.NativeType;
+import org.lwjgl.system.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_external_objects_fd.txt">EXT_memory_object_fd</a> extension.

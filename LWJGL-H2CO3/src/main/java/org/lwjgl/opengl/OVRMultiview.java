@@ -5,7 +5,7 @@
  */
 package org.lwjgl.opengl;
 
-import org.lwjgl.system.NativeType;
+import org.lwjgl.system.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/OVR/OVR_multiview.txt">OVR_multiview</a> extension.

@@ -5,34 +5,19 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT1;
-import static org.lwjgl.system.Checks.checkSafe;
-import static org.lwjgl.system.JNI.callPPPPV;
-import static org.lwjgl.system.JNI.callPPV;
-import static org.lwjgl.system.JNI.callPV;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.memASCII;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
-import static org.lwjgl.system.MemoryUtil.memAlloc;
-import static org.lwjgl.system.MemoryUtil.memFree;
-import static org.lwjgl.system.MemoryUtil.memUTF8;
+import javax.annotation.*;
 
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.APIUtil;
-import org.lwjgl.system.MemoryStack;
+import java.nio.*;
+
+import org.lwjgl.*;
+
+import org.lwjgl.system.*;
 import org.lwjgl.system.MemoryUtil;
-import org.lwjgl.system.NativeType;
 
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * The OpenGL functionality of a forward compatible context, up to version 2.0.
@@ -334,7 +319,7 @@ public class GL20C extends GL15C {
         MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
         try {
             long stringsAddress = APIUtil.apiArrayi(stack, MemoryUtil::memUTF8, strings);
-            nglShaderSource(shader, strings.length, stringsAddress, stringsAddress - ((long) strings.length << 2));
+            nglShaderSource(shader, strings.length, stringsAddress, stringsAddress - (strings.length << 2));
             APIUtil.apiArrayFree(stringsAddress, strings.length);
         } finally {
             stack.setPointer(stackPointer);

@@ -5,11 +5,10 @@
  */
 package org.lwjgl.openal;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.JNI.invokeV;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.NativeType;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
 
 /**
  * Native bindings to the <a href="https://openal-soft.org/openal-extensions/SOFT_deferred_updates.txt">SOFT_deferred_updates</a> extension.

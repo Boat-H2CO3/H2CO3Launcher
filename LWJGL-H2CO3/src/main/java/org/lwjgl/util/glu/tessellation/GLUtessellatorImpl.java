@@ -179,7 +179,7 @@ public class GLUtessellatorImpl implements GLUtessellator {
 
     private static final double GLU_TESS_DEFAULT_TOLERANCE = 0.0;
 //    private static final int GLU_TESS_MESH = 100112;	/* void (*)(GLUmesh *mesh)	    */
-private static final GLUtessellatorCallback NULL_CB = new GLUtessellatorCallbackAdapter();
+    private static GLUtessellatorCallback NULL_CB = new GLUtessellatorCallbackAdapter();
 
 //    #define MAX_FAST_ALLOC	(MAX(sizeof(EdgePair), \
 //                 MAX(sizeof(GLUvertex),sizeof(GLUface))))
@@ -320,7 +320,7 @@ private static final GLUtessellatorCallback NULL_CB = new GLUtessellatorCallback
                 value[value_offset] = windingRule;
                 break;
             case GLU_TESS_BOUNDARY_ONLY:
-                assert (boundaryOnly || !boundaryOnly);
+                assert (boundaryOnly == true || boundaryOnly == false);
                 value[value_offset] = boundaryOnly ? 1 : 0;
                 break;
             default:
@@ -387,6 +387,7 @@ private static final GLUtessellatorCallback NULL_CB = new GLUtessellatorCallback
 //                return;
             default:
                 callErrorOrErrorData(GLU_INVALID_ENUM);
+                return;
         }
     }
 
@@ -395,7 +396,7 @@ private static final GLUtessellatorCallback NULL_CB = new GLUtessellatorCallback
 
         e = lastEdge;
         if (e == null) {
-            /* Make a self-loop (one vertex, one edge). */
+/* Make a self-loop (one vertex, one edge). */
 
             e = Mesh.__gl_meshMakeEdge(mesh);
             if (e == null) return false;
@@ -548,11 +549,11 @@ private static final GLUtessellatorCallback NULL_CB = new GLUtessellatorCallback
             if (this.mesh == null) {
                 if (!flagBoundary /*&& callMesh == NULL_CB*/) {
 
-                    /* Try some special code to make the easy cases go quickly
-                     * (eg. convex polygons).  This code does NOT handle multiple contours,
-                     * intersections, edge flags, and of course it does not generate
-                     * an explicit mesh either.
-                     */
+/* Try some special code to make the easy cases go quickly
+ * (eg. convex polygons).  This code does NOT handle multiple contours,
+ * intersections, edge flags, and of course it does not generate
+ * an explicit mesh either.
+ */
                     if (Render.__gl_renderCache(this)) {
                         polygonData = null;
                         return;

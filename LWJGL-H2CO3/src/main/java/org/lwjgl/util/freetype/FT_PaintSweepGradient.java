@@ -5,23 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure representing a {@code PaintSweepGradient} value of the {@code COLR} v1 extensions.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_PaintSweepGradient {
  *     {@link FT_ColorLine FT_ColorLine} colorline;
@@ -32,31 +28,25 @@ import javax.annotation.Nullable;
  */
 public class FT_PaintSweepGradient extends Struct<FT_PaintSweepGradient> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            COLORLINE,
-            CENTER,
-            START_ANGLE,
-            END_ANGLE;
+        COLORLINE,
+        CENTER,
+        START_ANGLE,
+        END_ANGLE;
 
     static {
         Layout layout = __struct(
-                __member(FT_ColorLine.SIZEOF, FT_ColorLine.ALIGNOF),
-                __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE)
+            __member(FT_ColorLine.SIZEOF, FT_ColorLine.ALIGNOF),
+            __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -72,6 +62,11 @@ public class FT_PaintSweepGradient extends Struct<FT_PaintSweepGradient> {
         super(address, container);
     }
 
+    @Override
+    protected FT_PaintSweepGradient create(long address, @Nullable ByteBuffer container) {
+        return new FT_PaintSweepGradient(address, container);
+    }
+
     /**
      * Creates a {@code FT_PaintSweepGradient} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -82,16 +77,28 @@ public class FT_PaintSweepGradient extends Struct<FT_PaintSweepGradient> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_PaintSweepGradient} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link FT_ColorLine} view of the {@code colorline} field. */
+    public FT_ColorLine colorline() { return ncolorline(address()); }
+    /** @return a {@link FT_Vector} view of the {@code center} field. */
+    public FT_Vector center() { return ncenter(address()); }
+    /** @return the value of the {@code start_angle} field. */
+    @NativeType("FT_Fixed")
+    public long start_angle() { return nstart_angle(address()); }
+    /** @return the value of the {@code end_angle} field. */
+    @NativeType("FT_Fixed")
+    public long end_angle() { return nend_angle(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_PaintSweepGradient} instance for the specified memory address. */
     public static FT_PaintSweepGradient create(long address) {
         return new FT_PaintSweepGradient(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_PaintSweepGradient createSafe(long address) {
         return address == NULL ? null : new FT_PaintSweepGradient(address, null);
@@ -107,91 +114,26 @@ public class FT_PaintSweepGradient extends Struct<FT_PaintSweepGradient> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #colorline}.
-     */
-    public static FT_ColorLine ncolorline(long struct) {
-        return FT_ColorLine.create(struct + FT_PaintSweepGradient.COLORLINE);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #center}.
-     */
-    public static FT_Vector ncenter(long struct) {
-        return FT_Vector.create(struct + FT_PaintSweepGradient.CENTER);
-    }
+    /** Unsafe version of {@link #colorline}. */
+    public static FT_ColorLine ncolorline(long struct) { return FT_ColorLine.create(struct + FT_PaintSweepGradient.COLORLINE); }
+    /** Unsafe version of {@link #center}. */
+    public static FT_Vector ncenter(long struct) { return FT_Vector.create(struct + FT_PaintSweepGradient.CENTER); }
+    /** Unsafe version of {@link #start_angle}. */
+    public static long nstart_angle(long struct) { return memGetCLong(struct + FT_PaintSweepGradient.START_ANGLE); }
+    /** Unsafe version of {@link #end_angle}. */
+    public static long nend_angle(long struct) { return memGetCLong(struct + FT_PaintSweepGradient.END_ANGLE); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #start_angle}.
-     */
-    public static long nstart_angle(long struct) {
-        return memGetCLong(struct + FT_PaintSweepGradient.START_ANGLE);
-    }
-
-    /**
-     * Unsafe version of {@link #end_angle}.
-     */
-    public static long nend_angle(long struct) {
-        return memGetCLong(struct + FT_PaintSweepGradient.END_ANGLE);
-    }
-
-    @Override
-    protected FT_PaintSweepGradient create(long address, @Nullable ByteBuffer container) {
-        return new FT_PaintSweepGradient(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return a {@link FT_ColorLine} view of the {@code colorline} field.
-     */
-    public FT_ColorLine colorline() {
-        return ncolorline(address());
-    }
-
-    /**
-     * @return a {@link FT_Vector} view of the {@code center} field.
-     */
-    public FT_Vector center() {
-        return ncenter(address());
-    }
-
-    /**
-     * @return the value of the {@code start_angle} field.
-     */
-    @NativeType("FT_Fixed")
-    public long start_angle() {
-        return nstart_angle(address());
-    }
-
-    /**
-     * @return the value of the {@code end_angle} field.
-     */
-    @NativeType("FT_Fixed")
-    public long end_angle() {
-        return nend_angle(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_PaintSweepGradient} structs.
-     */
+    /** An array of {@link FT_PaintSweepGradient} structs. */
     public static class Buffer extends StructBuffer<FT_PaintSweepGradient, Buffer> {
 
         private static final FT_PaintSweepGradient ELEMENT_FACTORY = FT_PaintSweepGradient.create(-1L);
@@ -227,35 +169,16 @@ public class FT_PaintSweepGradient extends Struct<FT_PaintSweepGradient> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link FT_ColorLine} view of the {@code colorline} field.
-         */
-        public FT_ColorLine colorline() {
-            return FT_PaintSweepGradient.ncolorline(address());
-        }
-
-        /**
-         * @return a {@link FT_Vector} view of the {@code center} field.
-         */
-        public FT_Vector center() {
-            return FT_PaintSweepGradient.ncenter(address());
-        }
-
-        /**
-         * @return the value of the {@code start_angle} field.
-         */
+        /** @return a {@link FT_ColorLine} view of the {@code colorline} field. */
+        public FT_ColorLine colorline() { return FT_PaintSweepGradient.ncolorline(address()); }
+        /** @return a {@link FT_Vector} view of the {@code center} field. */
+        public FT_Vector center() { return FT_PaintSweepGradient.ncenter(address()); }
+        /** @return the value of the {@code start_angle} field. */
         @NativeType("FT_Fixed")
-        public long start_angle() {
-            return FT_PaintSweepGradient.nstart_angle(address());
-        }
-
-        /**
-         * @return the value of the {@code end_angle} field.
-         */
+        public long start_angle() { return FT_PaintSweepGradient.nstart_angle(address()); }
+        /** @return the value of the {@code end_angle} field. */
         @NativeType("FT_Fixed")
-        public long end_angle() {
-            return FT_PaintSweepGradient.nend_angle(address());
-        }
+        public long end_angle() { return FT_PaintSweepGradient.nend_angle(address()); }
 
     }
 

@@ -5,32 +5,20 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNTSafe;
-import static org.lwjgl.system.JNI.callP;
-import static org.lwjgl.system.JNI.callPPNPP;
-import static org.lwjgl.system.JNI.callPPNV;
-import static org.lwjgl.system.JNI.callPPP;
-import static org.lwjgl.system.JNI.callPPPI;
-import static org.lwjgl.system.JNI.callPPPP;
-import static org.lwjgl.system.JNI.callPPPPI;
-import static org.lwjgl.system.JNI.callPPPV;
-import static org.lwjgl.system.JNI.callPPV;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
-import static org.lwjgl.system.MemoryUtil.memPointerBufferSafe;
+import javax.annotation.*;
 
-import org.lwjgl.CLongBuffer;
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.linux.XVisualInfo;
+import java.nio.*;
 
-import java.nio.IntBuffer;
+import org.lwjgl.*;
 
-import javax.annotation.Nullable;
+import org.lwjgl.system.*;
+
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
+
+import org.lwjgl.system.linux.*;
 
 /** Native bindings to GLX 1.3. */
 public class GLX13 extends GLX12 {

@@ -5,13 +5,12 @@
  */
 package org.lwjgl.stb;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import java.nio.*;
 
-import org.lwjgl.system.NativeType;
+import org.lwjgl.system.*;
 
-import java.nio.ByteBuffer;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Native bindings to stb_dxt.h from the <a href="https://github.com/nothings/stb">stb library</a>.

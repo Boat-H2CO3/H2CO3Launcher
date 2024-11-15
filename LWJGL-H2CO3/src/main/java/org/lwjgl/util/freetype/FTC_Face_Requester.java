@@ -5,15 +5,15 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
+import javax.annotation.*;
 
-import org.lwjgl.system.Callback;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * <h3>Type</h3>
- *
+ * 
  * <pre><code>
  * FT_Error (*{@link #invoke}) (
  *     FTC_FaceID face_id,
@@ -24,14 +24,6 @@ import javax.annotation.Nullable;
  */
 public abstract class FTC_Face_Requester extends Callback implements FTC_Face_RequesterI {
 
-    protected FTC_Face_Requester() {
-        super(CIF);
-    }
-
-    FTC_Face_Requester(long functionPointer) {
-        super(functionPointer);
-    }
-
     /**
      * Creates a {@code FTC_Face_Requester} instance from the specified function pointer.
      *
@@ -40,25 +32,29 @@ public abstract class FTC_Face_Requester extends Callback implements FTC_Face_Re
     public static FTC_Face_Requester create(long functionPointer) {
         FTC_Face_RequesterI instance = Callback.get(functionPointer);
         return instance instanceof FTC_Face_Requester
-                ? (FTC_Face_Requester) instance
-                : new Container(functionPointer, instance);
+            ? (FTC_Face_Requester)instance
+            : new Container(functionPointer, instance);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}. */
     @Nullable
     public static FTC_Face_Requester createSafe(long functionPointer) {
         return functionPointer == NULL ? null : create(functionPointer);
     }
 
-    /**
-     * Creates a {@code FTC_Face_Requester} instance that delegates to the specified {@code FTC_Face_RequesterI} instance.
-     */
+    /** Creates a {@code FTC_Face_Requester} instance that delegates to the specified {@code FTC_Face_RequesterI} instance. */
     public static FTC_Face_Requester create(FTC_Face_RequesterI instance) {
         return instance instanceof FTC_Face_Requester
-                ? (FTC_Face_Requester) instance
-                : new Container(instance.address(), instance);
+            ? (FTC_Face_Requester)instance
+            : new Container(instance.address(), instance);
+    }
+
+    protected FTC_Face_Requester() {
+        super(CIF);
+    }
+
+    FTC_Face_Requester(long functionPointer) {
+        super(functionPointer);
     }
 
     private static final class Container extends FTC_Face_Requester {

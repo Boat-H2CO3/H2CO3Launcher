@@ -31,6 +31,8 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:hasFragileUserData="true"
         android:theme="@style/Theme.H2CO3.DynamicColors"
         tools:targetApi="34"
         android:keepScreenOn="true">
@@ -95,5 +97,12 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
+
+    <queries>
+        <package android:name="net.kdt.pojavlaunch.ffmpeg"/>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+        </intent>
+    </queries>
 
 </manifest>

@@ -2,6 +2,7 @@ package org.koishi.launcher.h2co3.core.launch.utils;
 
 import android.content.Context;
 import android.os.Build;
+import android.system.Os;
 
 import org.jetbrains.annotations.NotNull;
 import org.koishi.launcher.h2co3.core.H2CO3Settings;
@@ -10,6 +11,8 @@ import org.koishi.launcher.h2co3.core.game.download.H2CO3GameRepository;
 import org.koishi.launcher.h2co3.core.game.download.MaintainTask;
 import org.koishi.launcher.h2co3.core.game.download.Version;
 import org.koishi.launcher.h2co3.core.launch.H2CO3LauncherBridge;
+import org.koishi.launcher.h2co3.core.launch.plugins.FFmpegPlugin;
+import org.koishi.launcher.h2co3.core.launch.plugins.RendererPlugin;
 import org.koishi.launcher.h2co3.core.message.H2CO3MessageManager;
 import org.koishi.launcher.h2co3.core.utils.Architecture;
 import org.koishi.launcher.h2co3.core.utils.CommandBuilder;
@@ -69,28 +72,90 @@ public class H2CO3LaunchUtils {
         return new File(javaPath + jreLibDir + "/server/libjvm.so").exists() ? "/server" : "/client";
     }
 
-    public static String getLibraryPath(Context context, String javaPath) throws IOException {
+    private static String getLibraryPath(Context context, String javaPath, String pluginLibPath) throws IOException {
         String nativeDir = context.getApplicationInfo().nativeLibraryDir;
         String libDirName = Architecture.is64BitsDevice() ? "lib64" : "lib";
         String jreLibDir = getJreLibDir(javaPath);
         String jvmLibDir = getJvmLibDir(javaPath);
         String jliLibDir = "/jli";
+        String split = ":";
+        return javaPath +
+                jreLibDir +
+                split +
 
-        return String.join(":",
-                javaPath + jreLibDir,
-                javaPath + jreLibDir + jliLibDir,
-                javaPath + jreLibDir + jvmLibDir,
-                "/system/" + libDirName,
-                "/vendor/" + libDirName,
-                "/vendor/" + libDirName + "/hw:" + nativeDir);
+                javaPath +
+                jreLibDir +
+                jliLibDir +
+                split +
+
+                javaPath +
+                jreLibDir +
+                jvmLibDir +
+                split +
+
+                "/system/" +
+                libDirName +
+                split +
+
+                "/vendor/" +
+                libDirName +
+                split +
+
+                "/vendor/" +
+                libDirName +
+                "/hw" +
+                split +
+
+                H2CO3Tools.H2CO3LAUNCHER_LIBRARY_DIR + "/jna" +
+                split +
+
+                ((pluginLibPath != null) ? pluginLibPath + split : "") +
+
+                nativeDir;
     }
+
+    public static String getLibraryPath(Context context, String pluginLibPath) {
+        String nativeDir = context.getApplicationInfo().nativeLibraryDir;
+        String libDirName = Architecture.is64BitsDevice() ? "lib64" : "lib";
+        String split = ":";
+        return "/system/" +
+                libDirName +
+                split +
+
+                "/vendor/" +
+                libDirName +
+                split +
+
+                "/vendor/" +
+                libDirName +
+                "/hw" +
+                split +
+
+                ((pluginLibPath != null) ? pluginLibPath + split : "") +
+
+                nativeDir;
+    }
+
 
     public static void addCommonEnv(Context context, H2CO3Settings settings, Map<String, String> envMap) throws Exception {
         envMap.put("HOME", H2CO3Tools.LOG_DIR);
         String javaPath = getJavaPath(settings);
         envMap.put("JAVA_HOME", javaPath);
-        envMap.put("H2CO3LAUNCHER_NATIVEDIR", context.getApplicationInfo().nativeLibraryDir);
+        envMap.put("H2CO3Launcher_NATIVEDIR", context.getApplicationInfo().nativeLibraryDir);
+        envMap.put("POJAV_NATIVEDIR", context.getApplicationInfo().nativeLibraryDir);
         envMap.put("TMPDIR", context.getCacheDir().getAbsolutePath());
+        envMap.put("PATH", javaPath + "/bin:" + Os.getenv("PATH"));
+        envMap.put("LD_LIBRARY_PATH", getLibraryPath(context, null));
+        envMap.put("FORCE_VSYNC", "false");
+        if (!javaPath.contains("jre8")) {
+            String libName = javaPath.contains("jre17") ? "/libjsph17.so" : "/libjsph21.so";
+            envMap.put("JSP", context.getApplicationInfo().nativeLibraryDir + libName);
+        }
+        FFmpegPlugin.discover(context);
+        if (FFmpegPlugin.isAvailable) {
+            envMap.put("PATH", FFmpegPlugin.libraryPath + ":" + envMap.get("PATH"));
+            envMap.put("LD_LIBRARY_PATH", FFmpegPlugin.libraryPath + ":" + envMap.get("LD_LIBRARY_PATH"));
+        }
     }
 
     public static String getJavaPath(H2CO3Settings settings) throws Exception {
@@ -111,44 +176,81 @@ public class H2CO3LaunchUtils {
         }
     }
 
-    public static void addRendererEnv(Context context, Map<String, String> envMap, String render) {
-        envMap.put("LIBGL_STRING", render);
-        if (render.equals(H2CO3Tools.GL_GL114)) {
-            setGLValues(envMap, "libgl4es_114.so", "libEGL.so", "2", "3", "1", "1", "1", "1");
-        } else if (render.equals(H2CO3Tools.GL_VGPU)) {
-            setGLValues(envMap, "libvgpu.so", "libEGL.so", "2", "3", "1", "1", "1", "1");
-        } else if (render.equals(H2CO3Tools.GL_VIRGL) || render.equals(H2CO3Tools.GL_ZINK)) {
-            setGLValues(envMap, "libOSMesa_81.so", "libEGL.so", "2", "3", "1", "1", "1", "1");
-            setVirglEnv(context, envMap);
-        } else if (render.equals(H2CO3Tools.GL_ANGLE)) {
-            setGLValues(envMap, "libtinywrapper.so", "libEGL_angle.so", "3");
+    public static void addRendererEnv(Context context, H2CO3Settings config, HashMap<String, String> envMap) {
+        H2CO3Settings.Renderer renderer = config.getRenderer() == null ? H2CO3Settings.Renderer.RENDERER_GL4ES : config.getRenderer();
+        if (renderer == H2CO3Settings.Renderer.RENDERER_CUSTOM) {
+            if (config.isH2CO3Launch()) {
+                envMap.put("LIBGL_STRING", RendererPlugin.getSelected().getName());
+                envMap.put("LIBGL_NAME", RendererPlugin.getSelected().getGlName());
+                envMap.put("LIBEGL_NAME", RendererPlugin.getSelected().getEglName());
+                RendererPlugin.getSelected().getH2co3LauncherEnv().forEach(env -> {
+                    String[] split = env.split("=");
+                    envMap.put(split[0], split[1]);
+                });
+            } else {
+                envMap.put("POJAVEXEC_EGL", RendererPlugin.getSelected().getEglName());
+                RendererPlugin.getSelected().getPojavEnv().forEach(env -> {
+                    String[] split = env.split("=");
+                    envMap.put(split[0], split[1]);
+                });
+            }
+            return;
         }
-    }
-
-    private static void setGLValues(Map<String, String> envMap, String libglName, String libEglName, String... values) {
-        envMap.put("LIBGL_NAME", libglName);
-        envMap.put("LIBEGL_NAME", libEglName);
-        if (values.length >= 6) {
-            envMap.put("LIBGL_ES", values[0]);
-            envMap.put("LIBGL_MIPMAP", values[1]);
-            envMap.put("LIBGL_NORMALIZE", values[2]);
-            envMap.put("LIBGL_VSYNC", values[3]);
-            envMap.put("LIBGL_NOINTOVLHACK", values[4]);
-            envMap.put("LIBGL_NOERROR", values[5]);
+        if (config.isH2CO3Launch()) {
+            envMap.put("LIBGL_STRING", renderer.toString());
+            envMap.put("LIBGL_NAME", renderer.getGlLibName());
+            envMap.put("LIBEGL_NAME", renderer.getEglLibName());
         }
-    }
-
-    private static void setVirglEnv(Context context, Map<String, String> envMap) {
-        envMap.put("MESA_GLSL_CACHE_DIR", context.getCacheDir().getAbsolutePath());
-        envMap.put("MESA_GL_VERSION_OVERRIDE", "4.3");
-        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "430");
-        envMap.put("force_glsl_extensions_warn", "true");
-        envMap.put("allow_higher_compat_version", "true");
-        envMap.put("allow_glsl_extension_directive_midshader", "true");
-        envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
-        envMap.put("VTEST_SOCKET_NAME", new File(context.getCacheDir(), ".virgl_test").getAbsolutePath());
-        envMap.put("GALLIUM_DRIVER", "virpipe");
-        envMap.put("OSMESA_NO_FLUSH_FRONTBUFFER", "1");
+        if (renderer == H2CO3Settings.Renderer.RENDERER_GL4ES || renderer == H2CO3Settings.Renderer.RENDERER_VGPU) {
+            envMap.put("LIBGL_ES", "2");
+            envMap.put("LIBGL_MIPMAP", "3");
+            envMap.put("LIBGL_NORMALIZE", "1");
+            envMap.put("LIBGL_NOINTOVLHACK", "1");
+            envMap.put("LIBGL_NOERROR", "1");
+            if (!config.isH2CO3Launch()) {
+                if (renderer == H2CO3Settings.Renderer.RENDERER_GL4ES) {
+                    envMap.put("POJAV_RENDERER", "opengles2");
+                } else {
+                    envMap.put("POJAV_RENDERER", "opengles2_vgpu");
+                }
+            }
+        } else if (renderer == H2CO3Settings.Renderer.RENDERER_LTW) {
+            envMap.put("LIBGL_ES", "3");
+            if (!config.isH2CO3Launch()) {
+                envMap.put("POJAV_RENDERER", "opengles3_ltw");
+                envMap.put("POJAVEXEC_EGL", renderer.getEglLibName());
+            }
+        } else {
+            envMap.put("MESA_GLSL_CACHE_DIR", context.getCacheDir().getAbsolutePath());
+            envMap.put("MESA_GL_VERSION_OVERRIDE", renderer == H2CO3Settings.Renderer.RENDERER_VIRGL ? "4.3" : "4.6");
+            envMap.put("MESA_GLSL_VERSION_OVERRIDE", renderer == H2CO3Settings.Renderer.RENDERER_VIRGL ? "430" : "460");
+            envMap.put("force_glsl_extensions_warn", "true");
+            envMap.put("allow_higher_compat_version", "true");
+            envMap.put("allow_glsl_extension_directive_midshader", "true");
+            envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
+            envMap.put("VTEST_SOCKET_NAME", new File(context.getCacheDir().getAbsolutePath(), ".virgl_test").getAbsolutePath());
+            if (renderer == H2CO3Settings.Renderer.RENDERER_VIRGL) {
+                if (config.isH2CO3Launch()) {
+                    envMap.put("GALLIUM_DRIVER", "virpipe");
+                } else {
+                    envMap.put("POJAV_RENDERER", "gallium_virgl");
+                }
+                envMap.put("OSMESA_NO_FLUSH_FRONTBUFFER", "1");
+            } else if (renderer == H2CO3Settings.Renderer.RENDERER_ZINK) {
+                if (config.isH2CO3Launch()) {
+                    envMap.put("GALLIUM_DRIVER", "zink");
+                } else {
+                    envMap.put("POJAV_RENDERER", "vulkan_zink");
+                }
+            } else if (renderer == H2CO3Settings.Renderer.RENDERER_FREEDRENO) {
+                if (config.isH2CO3Launch()) {
+                    envMap.put("GALLIUM_DRIVER", "freedreno");
+                    envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
+                } else {
+                    envMap.put("POJAV_RENDERER", "gallium_freedreno");
+                }
+            }
+        }
     }
 
     public static void setUpJavaRuntime(Context context, H2CO3Settings settings, H2CO3LauncherBridge bridge) throws Exception {
@@ -172,9 +274,6 @@ public class H2CO3LaunchUtils {
         for (String lib : libs) {
             bridge.dlopen(jreLibDir + "/" + lib);
         }
-        bridge.dlopen(context.getApplicationInfo().nativeLibraryDir + "/libopenal.so");
-        bridge.dlopen(context.getApplicationInfo().nativeLibraryDir + "/libglfw.so");
-        bridge.dlopen(context.getApplicationInfo().nativeLibraryDir + "/liblwjgl.so");
     }
 
     public static ArrayList<File> locateLibs(File path) throws IOException {
@@ -195,7 +294,7 @@ public class H2CO3LaunchUtils {
     public static CommandBuilder getMcArgs(Context context, H2CO3Settings settings, int width, int height) throws Exception {
         H2CO3Tools.loadPaths(context);
         CommandBuilder args = new CommandBuilder();
-        settings.setRender(H2CO3Tools.GL_GL114);
+        settings.setRenderer(H2CO3Settings.Renderer.RENDERER_GL4ES);
 
         LaunchVersion version = LaunchVersion.fromDirectory(new File(settings.getGameCurrentVersion()));
         String javaPath = getJavaPath(settings);
@@ -204,6 +303,7 @@ public class H2CO3LaunchUtils {
         H2CO3GameRepository repository = new H2CO3GameRepository(new File(settings.getGameDirectory()));
         repository.refreshVersions();
         AtomicReference<Version> versions = new AtomicReference<>(MaintainTask.maintain(repository, repository.getResolvedVersion(version.id)));
+
         Set<String> classpath = repository.getClasspath(versions.get());
 
         classpath.add(H2CO3Tools.PLUGIN_DIR + "/H2CO3LaunchWrapper.jar");
@@ -213,7 +313,15 @@ public class H2CO3LaunchUtils {
         addCacioOptions(args, height, width, javaPath);
         args.add("-cp", String.join(File.pathSeparator, classpath));
         setDefaultArgs(args, context, javaPath, settings, width, height);
-
+        versions.get().getLibraries().forEach(library -> {
+            if (library.getName().startsWith("net.java.dev.jna:jna:")) {
+                File libJna = new File(H2CO3Tools.H2CO3LAUNCHER_LIBRARY_DIR, "jna");
+                if (library.getVersion() != null && !library.getVersion().isEmpty()) {
+                    libJna = new File(libJna, library.getVersion());
+                }
+                args.addDefault("-Djna.boot.library.path=", libJna.exists() ? libJna.getAbsolutePath() : context.getApplicationInfo().nativeLibraryDir);
+            }
+        });
         args.addDefault("-Xms", settings.getGameMemoryMin() + "M");
         args.addDefault("-Xmx", settings.getGameMemoryMax() + "M");
         args.add("h2co3.Wrapper");
@@ -226,7 +334,7 @@ public class H2CO3LaunchUtils {
     }
 
     private static void setDefaultArgs(CommandBuilder args, Context context, String javaPath, H2CO3Settings settings, int width, int height) throws IOException {
-        args.addDefault("-Djava.library.path=", getLibraryPath(context, javaPath));
+        args.addDefault("-Djava.library.path=", getLibraryPath(context, javaPath, null));
         args.addDefault("-Djna.boot.library.path=", H2CO3Tools.NATIVE_LIB_DIR);
         args.addDefault("-Dfml.earlyprogresswindow=", "false");
         args.addDefault("-Dorg.lwjgl.util.DebugLoader=", "true");
@@ -259,7 +367,7 @@ public class H2CO3LaunchUtils {
         args.addDefault("-Duser.timezone=", TimeZone.getDefault().getID());
         args.addDefault("-Duser.home=", settings.getGameDirectory());
         args.addDefault("-Dorg.lwjgl.vulkan.libname=", "libvulkan.so");
-        args.addDefault("-Dorg.lwjgl.opengl.libname=", settings.getRender().equals(H2CO3Tools.GL_VIRGL) ? "libGL.so.1" : "libgl4es_114.so");
+        args.addDefault("-Dorg.lwjgl.opengl.libname=", settings.getRenderer() == H2CO3Settings.Renderer.RENDERER_VIRGL ? "libGL.so.1" : "libgl4es_114.so");
         args.addDefault("-Djava.io.tmpdir=", H2CO3Tools.CACHE_DIR);
     }
 

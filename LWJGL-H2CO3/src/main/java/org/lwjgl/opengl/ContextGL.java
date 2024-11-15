@@ -41,6 +41,7 @@ import org.lwjgl.Sys;
 import org.lwjgl.glfw.GLFW;
 
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 /**
  * <p/>
@@ -251,14 +252,14 @@ final class ContextGL implements Context {
 	public synchronized void setCLSharingProperties(final PointerBuffer properties) throws LWJGLException {
 		final ByteBuffer peer_handle = peer_info.lockAndGetHandle();
 		try {
-            switch (LWJGLUtil.getPlatform()) {
+			switch ( LWJGLUtil.getPlatform() ) {
 
-                default:
-                    throw new UnsupportedOperationException("CL/GL context sharing is not supported on this platform.");
-            }
-        } finally {
-            peer_info.unlock();
-        }
+				default:
+					throw new UnsupportedOperationException("CL/GL context sharing is not supported on this platform.");
+			}
+		} finally {
+			peer_info.unlock();
+		}
 	}
 
 }

@@ -5,7 +5,7 @@
  */
 package org.lwjgl.system;
 
-import javax.annotation.Nullable;
+import javax.annotation.*;
 
 /**
  * This class contains native methods that can be used to call dynamically loaded functions. It is used internally by the LWJGL bindings, but can also

@@ -11,10 +11,10 @@ body:
         To improve communication efficiency, we suggest you join our community to report bugs.
         You can find our community in community page of the launcher.
   - type: input
-    id: Boat_H2CO3-version
+    id: H2CO3Launcher-version
     attributes:
       label: Launcher Version
-      description: Please enter the Boat_H2CO3 version you are using.
+      description: Please enter the H2CO3Launcher version you are using.
       placeholder: e.g. 1.0
     validations:
       required: true
@@ -63,12 +63,12 @@ body:
       label: Game Crash Report
       description: If there is a game crash report, please upload it below.
   - type: textarea
-    id: Boat_H2CO3-crash-report
+    id: H2CO3Launcher-crash-report
     attributes:
       label: Launcher Crash Report
       description: If there is a launcher crash report, please upload it below.
   - type: textarea
-    id: Boat_H2CO3-logs
+    id: H2CO3Launcher-logs
     attributes:
       label: Launcher Log File
       description: After encountering a problem, please click "Export Launcher Log" in the launcher setting page, and upload the exported log to the input field below.

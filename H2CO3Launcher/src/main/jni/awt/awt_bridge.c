@@ -5,9 +5,9 @@
 #include "h2co3Launcher/include/h2co3Launcher_internal.h"
 
 static JavaVM *dalvikJavaVMPtr;
-static JavaVM *runtimeJavaVMPtr;
-static JNIEnv *runtimeJNIEnvPtr_GRAPHICS;
-static JNIEnv *runtimeJNIEnvPtr_INPUT;
+static JavaVM* runtimeJavaVMPtr;
+static JNIEnv* runtimeJNIEnvPtr_GRAPHICS;
+static JNIEnv* runtimeJNIEnvPtr_INPUT;
 
 jclass class_H2CO3LauncherBridge;
 jclass class_CTCScreen;
@@ -79,16 +79,28 @@ Java_sun_awt_peer_cacio_H2CO3LauncherClipboard_clipboardCopy(JNIEnv *env, jclass
     (*env)->ReleaseStringUTFChars(env, str, stringChars);
 }
 
-JNIEXPORT jintArray JNICALL JNIEXPORT
-Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherBridge_renderAWTScreenFrame(
-        JNIEnv *env,
-                                                                                       jclass clazz) {
+JNIEXPORT void JNICALL Java_net_java_openjdk_cacio_ctc_CTCClipboard_nQuerySystemClipboard(JNIEnv *env, jclass clazz) {
+//TODO: implement
+}
+
+JNIEXPORT void JNICALL Java_net_java_openjdk_cacio_ctc_CTCClipboard_nPutClipboardData(JNIEnv* env, jclass clazz, jstring clipboardData, jstring clipboardDataMime) {
+//TODO: implement
+}
+
+JNIEXPORT void JNICALL Java_com_github_caciocavallosilano_cacio_ctc_CTCClipboard_nQuerySystemClipboard(JNIEnv *env, jclass clazz) {
+    Java_net_java_openjdk_cacio_ctc_CTCClipboard_nQuerySystemClipboard(env, clazz);
+}
+
+JNIEXPORT void JNICALL Java_com_github_caciocavallosilano_cacio_ctc_CTCClipboard_nPutClipboardData(JNIEnv* env, jclass clazz, jstring clipboardData, jstring clipboardDataMime) {
+    Java_net_java_openjdk_cacio_ctc_CTCClipboard_nPutClipboardData(env, clazz, clipboardData, clipboardDataMime);
+}
+
+JNIEXPORT jintArray JNICALL Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherBridge_renderAWTScreenFrame(JNIEnv* env, jclass clazz) {
     if (runtimeJNIEnvPtr_GRAPHICS == NULL) {
         if (runtimeJavaVMPtr == NULL) {
             return NULL;
         } else {
-            (*runtimeJavaVMPtr)->AttachCurrentThread(runtimeJavaVMPtr, &runtimeJNIEnvPtr_GRAPHICS,
-                                                     NULL);
+            (*runtimeJavaVMPtr)->AttachCurrentThread(runtimeJavaVMPtr, &runtimeJNIEnvPtr_GRAPHICS, NULL);
         }
     }
 
@@ -96,18 +108,13 @@ Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherBridge_renderAWTScreenFr
     jintArray jreRgbArray, androidRgbArray;
 
     if (method_GetRGB == NULL) {
-        class_CTCScreen = (*runtimeJNIEnvPtr_GRAPHICS)->FindClass(runtimeJNIEnvPtr_GRAPHICS,
-                                                                  "net/java/openjdk/cacio/ctc/CTCScreen");
+        class_CTCScreen = (*runtimeJNIEnvPtr_GRAPHICS)->FindClass(runtimeJNIEnvPtr_GRAPHICS, "net/java/openjdk/cacio/ctc/CTCScreen");
         if ((*runtimeJNIEnvPtr_GRAPHICS)->ExceptionCheck(runtimeJNIEnvPtr_GRAPHICS) == JNI_TRUE) {
             (*runtimeJNIEnvPtr_GRAPHICS)->ExceptionClear(runtimeJNIEnvPtr_GRAPHICS);
-            class_CTCScreen = (*runtimeJNIEnvPtr_GRAPHICS)->FindClass(runtimeJNIEnvPtr_GRAPHICS,
-                                                                      "com/github/caciocavallosilano/cacio/ctc/CTCScreen");
+            class_CTCScreen = (*runtimeJNIEnvPtr_GRAPHICS)->FindClass(runtimeJNIEnvPtr_GRAPHICS, "com/github/caciocavallosilano/cacio/ctc/CTCScreen");
         }
         assert(class_CTCScreen != NULL);
-        method_GetRGB = (*runtimeJNIEnvPtr_GRAPHICS)->GetStaticMethodID(runtimeJNIEnvPtr_GRAPHICS,
-                                                                        class_CTCScreen,
-                                                                        "getCurrentScreenRGB",
-                                                                        "()[I");
+        method_GetRGB = (*runtimeJNIEnvPtr_GRAPHICS)->GetStaticMethodID(runtimeJNIEnvPtr_GRAPHICS, class_CTCScreen, "getCurrentScreenRGB", "()[I");
         assert(method_GetRGB != NULL);
     }
     jreRgbArray = (jintArray) (*runtimeJNIEnvPtr_GRAPHICS)->CallStaticObjectMethod(
@@ -120,51 +127,35 @@ Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherBridge_renderAWTScreenFr
     }
 
     // Copy JRE RGB array memory to Android.
-    int arrayLength = (*runtimeJNIEnvPtr_GRAPHICS)->GetArrayLength(runtimeJNIEnvPtr_GRAPHICS,
-                                                                   jreRgbArray);
-    rgbArray = (*runtimeJNIEnvPtr_GRAPHICS)->GetIntArrayElements(runtimeJNIEnvPtr_GRAPHICS,
-                                                                 jreRgbArray, 0);
+    int arrayLength = (*runtimeJNIEnvPtr_GRAPHICS)->GetArrayLength(runtimeJNIEnvPtr_GRAPHICS, jreRgbArray);
+    rgbArray = (*runtimeJNIEnvPtr_GRAPHICS)->GetIntArrayElements(runtimeJNIEnvPtr_GRAPHICS, jreRgbArray, 0);
     androidRgbArray = (*env)->NewIntArray(env, arrayLength);
     (*env)->SetIntArrayRegion(env, androidRgbArray, 0, arrayLength, rgbArray);
 
-    (*runtimeJNIEnvPtr_GRAPHICS)->ReleaseIntArrayElements(runtimeJNIEnvPtr_GRAPHICS, jreRgbArray,
-                                                          rgbArray,
-                                                          (jint) NULL);
+    (*runtimeJNIEnvPtr_GRAPHICS)->ReleaseIntArrayElements(runtimeJNIEnvPtr_GRAPHICS, jreRgbArray, rgbArray, NULL);
     // (*env)->DeleteLocalRef(env, androidRgbArray);
     // free(rgbArray);
 
     return androidRgbArray;
 }
 
-JNIEXPORT void JNICALL
-Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherBridge_nativeSendData(
-        JNIEnv *env,
-                                                                                 jclass clazz,
-                                                                                 jint type,
-                                                                                 jint i1, jint i2,
-                                                                                 jint i3, jint i4) {
+JNIEXPORT void JNICALL Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherBridge_nativeSendData(JNIEnv* env, jclass clazz, jint type, jint i1, jint i2, jint i3, jint i4) {
     if (runtimeJNIEnvPtr_INPUT == NULL) {
         if (runtimeJavaVMPtr == NULL) {
             return;
         } else {
-            (*runtimeJavaVMPtr)->AttachCurrentThread(runtimeJavaVMPtr, &runtimeJNIEnvPtr_INPUT,
-                                                     NULL);
+            (*runtimeJavaVMPtr)->AttachCurrentThread(runtimeJavaVMPtr, &runtimeJNIEnvPtr_INPUT, NULL);
         }
     }
 
     if (method_ReceiveInput == NULL) {
-        class_CTCAndroidInput = (*runtimeJNIEnvPtr_INPUT)->FindClass(runtimeJNIEnvPtr_INPUT,
-                                                                     "net/java/openjdk/cacio/ctc/CTCAndroidInput");
+        class_CTCAndroidInput = (*runtimeJNIEnvPtr_INPUT)->FindClass(runtimeJNIEnvPtr_INPUT, "net/java/openjdk/cacio/ctc/CTCAndroidInput");
         if ((*runtimeJNIEnvPtr_INPUT)->ExceptionCheck(runtimeJNIEnvPtr_INPUT) == JNI_TRUE) {
             (*runtimeJNIEnvPtr_INPUT)->ExceptionClear(runtimeJNIEnvPtr_INPUT);
-            class_CTCAndroidInput = (*runtimeJNIEnvPtr_INPUT)->FindClass(runtimeJNIEnvPtr_INPUT,
-                                                                         "com/github/caciocavallosilano/cacio/ctc/CTCAndroidInput");
+            class_CTCAndroidInput = (*runtimeJNIEnvPtr_INPUT)->FindClass(runtimeJNIEnvPtr_INPUT, "com/github/caciocavallosilano/cacio/ctc/CTCAndroidInput");
         }
         assert(class_CTCAndroidInput != NULL);
-        method_ReceiveInput = (*runtimeJNIEnvPtr_INPUT)->GetStaticMethodID(runtimeJNIEnvPtr_INPUT,
-                                                                           class_CTCAndroidInput,
-                                                                           "receiveData",
-                                                                           "(IIIII)V");
+        method_ReceiveInput = (*runtimeJNIEnvPtr_INPUT)->GetStaticMethodID(runtimeJNIEnvPtr_INPUT, class_CTCAndroidInput, "receiveData", "(IIIII)V");
         assert(method_ReceiveInput != NULL);
     }
     (*runtimeJNIEnvPtr_INPUT)->CallStaticVoidMethod(
@@ -175,64 +166,32 @@ Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherBridge_nativeSendData(
     );
 }
 
-JNIEXPORT void JNICALL
-Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherBridge_nativeMoveWindow(
-        JNIEnv *env,
-                                                                                   jclass clazz,
-                                                                                   jint x,
-                                                                                   jint y) {
+JNIEXPORT void JNICALL Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherBridge_nativeMoveWindow(JNIEnv *env, jclass clazz, jint x, jint y) {
     if (runtimeJNIEnvPtr_INPUT == NULL) {
         if (runtimeJavaVMPtr == NULL) {
             return;
         } else {
-            (*runtimeJavaVMPtr)->AttachCurrentThread(runtimeJavaVMPtr, &runtimeJNIEnvPtr_INPUT,
-                                                     NULL);
+            (*runtimeJavaVMPtr)->AttachCurrentThread(runtimeJavaVMPtr, &runtimeJNIEnvPtr_INPUT, NULL);
         }
     }
     if (field_y == NULL) {
-        class_Frame = (*runtimeJNIEnvPtr_INPUT)->FindClass(runtimeJNIEnvPtr_INPUT,
-                                                           "java/awt/Frame");
-        method_GetFrames = (*runtimeJNIEnvPtr_INPUT)->GetStaticMethodID(runtimeJNIEnvPtr_INPUT,
-                                                                        class_Frame, "getFrames",
-                                                                        "()[Ljava/awt/Frame;");
-        method_GetBounds = (*runtimeJNIEnvPtr_INPUT)->GetMethodID(runtimeJNIEnvPtr_INPUT,
-                                                                  class_Frame, "getBounds",
-                                                                  "(Ljava/awt/Rectangle;)Ljava/awt/Rectangle;");
-        method_SetBounds = (*runtimeJNIEnvPtr_INPUT)->GetMethodID(runtimeJNIEnvPtr_INPUT,
-                                                                  class_Frame, "setBounds",
-                                                                  "(Ljava/awt/Rectangle;)V");
-        class_Rectangle = (*runtimeJNIEnvPtr_INPUT)->FindClass(runtimeJNIEnvPtr_INPUT,
-                                                               "java/awt/Rectangle");
-        constructor_Rectangle = (*runtimeJNIEnvPtr_INPUT)->GetMethodID(runtimeJNIEnvPtr_INPUT,
-                                                                       class_Rectangle, "<init>",
-                                                                       "()V");
-        field_x = (*runtimeJNIEnvPtr_INPUT)->GetFieldID(runtimeJNIEnvPtr_INPUT, class_Rectangle,
-                                                        "x", "I");
-        field_y = (*runtimeJNIEnvPtr_INPUT)->GetFieldID(runtimeJNIEnvPtr_INPUT, class_Rectangle,
-                                                        "y", "I");
+        class_Frame = (*runtimeJNIEnvPtr_INPUT)->FindClass(runtimeJNIEnvPtr_INPUT, "java/awt/Frame");
+        method_GetFrames = (*runtimeJNIEnvPtr_INPUT)->GetStaticMethodID(runtimeJNIEnvPtr_INPUT, class_Frame, "getFrames", "()[Ljava/awt/Frame;");
+        method_GetBounds = (*runtimeJNIEnvPtr_INPUT)->GetMethodID(runtimeJNIEnvPtr_INPUT, class_Frame, "getBounds", "(Ljava/awt/Rectangle;)Ljava/awt/Rectangle;");
+        method_SetBounds = (*runtimeJNIEnvPtr_INPUT)->GetMethodID(runtimeJNIEnvPtr_INPUT, class_Frame, "setBounds", "(Ljava/awt/Rectangle;)V");
+        class_Rectangle = (*runtimeJNIEnvPtr_INPUT)->FindClass(runtimeJNIEnvPtr_INPUT, "java/awt/Rectangle");
+        constructor_Rectangle = (*runtimeJNIEnvPtr_INPUT)->GetMethodID(runtimeJNIEnvPtr_INPUT, class_Rectangle, "<init>", "()V");
+        field_x = (*runtimeJNIEnvPtr_INPUT)->GetFieldID(runtimeJNIEnvPtr_INPUT, class_Rectangle, "x", "I");
+        field_y = (*runtimeJNIEnvPtr_INPUT)->GetFieldID(runtimeJNIEnvPtr_INPUT, class_Rectangle, "y", "I");
     }
-    jobject rectangle = (*runtimeJNIEnvPtr_INPUT)->NewObject(runtimeJNIEnvPtr_INPUT,
-                                                             class_Rectangle,
-                                                             constructor_Rectangle);
-    jobjectArray frames = (*runtimeJNIEnvPtr_INPUT)->CallStaticObjectMethod(runtimeJNIEnvPtr_INPUT,
-                                                                            class_Frame,
-                                                                            method_GetFrames);
-    for (jsize i = 0;
-         i < (*runtimeJNIEnvPtr_INPUT)->GetArrayLength(runtimeJNIEnvPtr_INPUT, frames); i++) {
-        jobject frame = (*runtimeJNIEnvPtr_INPUT)->GetObjectArrayElement(runtimeJNIEnvPtr_INPUT,
-                                                                         frames, i);
-        (*runtimeJNIEnvPtr_INPUT)->CallObjectMethod(runtimeJNIEnvPtr_INPUT, frame, method_GetBounds,
-                                                    rectangle);
-        (*runtimeJNIEnvPtr_INPUT)->SetIntField(runtimeJNIEnvPtr_INPUT, rectangle, field_x,
-                                               (*runtimeJNIEnvPtr_INPUT)->GetIntField(
-                                                       runtimeJNIEnvPtr_INPUT, rectangle, field_x) +
-                                               x);
-        (*runtimeJNIEnvPtr_INPUT)->SetIntField(runtimeJNIEnvPtr_INPUT, rectangle, field_y,
-                                               (*runtimeJNIEnvPtr_INPUT)->GetIntField(
-                                                       runtimeJNIEnvPtr_INPUT, rectangle, field_y) +
-                                               y);
-        (*runtimeJNIEnvPtr_INPUT)->CallVoidMethod(runtimeJNIEnvPtr_INPUT, frame, method_SetBounds,
-                                                  rectangle);
+    jobject rectangle = (*runtimeJNIEnvPtr_INPUT)->NewObject(runtimeJNIEnvPtr_INPUT, class_Rectangle, constructor_Rectangle);
+    jobjectArray frames = (*runtimeJNIEnvPtr_INPUT)->CallStaticObjectMethod(runtimeJNIEnvPtr_INPUT, class_Frame, method_GetFrames);
+    for (jsize i = 0; i < (*runtimeJNIEnvPtr_INPUT)->GetArrayLength(runtimeJNIEnvPtr_INPUT, frames); i++) {
+        jobject frame = (*runtimeJNIEnvPtr_INPUT)->GetObjectArrayElement(runtimeJNIEnvPtr_INPUT, frames, i);
+        (*runtimeJNIEnvPtr_INPUT)->CallObjectMethod(runtimeJNIEnvPtr_INPUT, frame, method_GetBounds, rectangle);
+        (*runtimeJNIEnvPtr_INPUT)->SetIntField(runtimeJNIEnvPtr_INPUT, rectangle,  field_x, (*runtimeJNIEnvPtr_INPUT)->GetIntField(runtimeJNIEnvPtr_INPUT, rectangle, field_x) + x);
+        (*runtimeJNIEnvPtr_INPUT)->SetIntField(runtimeJNIEnvPtr_INPUT, rectangle,  field_y, (*runtimeJNIEnvPtr_INPUT)->GetIntField(runtimeJNIEnvPtr_INPUT, rectangle, field_y) + y);
+        (*runtimeJNIEnvPtr_INPUT)->CallVoidMethod(runtimeJNIEnvPtr_INPUT, frame, method_SetBounds, rectangle);
         (*runtimeJNIEnvPtr_INPUT)->DeleteLocalRef(runtimeJNIEnvPtr_INPUT, frame);
     }
     (*runtimeJNIEnvPtr_INPUT)->DeleteLocalRef(runtimeJNIEnvPtr_INPUT, rectangle);

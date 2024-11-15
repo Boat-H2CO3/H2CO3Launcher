@@ -5,10 +5,9 @@
  */
 package org.lwjgl.opengl;
 
-import org.lwjgl.system.NativeType;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import org.lwjgl.system.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_multi_draw_indirect.txt">ARB_multi_draw_indirect</a> extension.

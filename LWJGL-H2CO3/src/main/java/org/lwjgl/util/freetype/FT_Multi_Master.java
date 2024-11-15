@@ -5,29 +5,24 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
-import static org.lwjgl.util.freetype.FreeType.T1_MAX_MM_AXIS;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
+
+import static org.lwjgl.util.freetype.FreeType.*;
 
 /**
  * A structure to model the axes and space of a Multiple Masters font.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Multi_Master {
  *     FT_UInt num_axis;
@@ -37,29 +32,23 @@ import javax.annotation.Nullable;
  */
 public class FT_Multi_Master extends Struct<FT_Multi_Master> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            NUM_AXIS,
-            NUM_DESIGNS,
-            AXIS;
+        NUM_AXIS,
+        NUM_DESIGNS,
+        AXIS;
 
     static {
         Layout layout = __struct(
-                __member(4),
-                __member(4),
-                __array(FT_MM_Axis.SIZEOF, FT_MM_Axis.ALIGNOF, T1_MAX_MM_AXIS)
+            __member(4),
+            __member(4),
+            __array(FT_MM_Axis.SIZEOF, FT_MM_Axis.ALIGNOF, T1_MAX_MM_AXIS)
         );
 
         SIZEOF = layout.getSize();
@@ -74,6 +63,11 @@ public class FT_Multi_Master extends Struct<FT_Multi_Master> implements NativeRe
         super(address, container);
     }
 
+    @Override
+    protected FT_Multi_Master create(long address, @Nullable ByteBuffer container) {
+        return new FT_Multi_Master(address, container);
+    }
+
     /**
      * Creates a {@code FT_Multi_Master} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -84,38 +78,45 @@ public class FT_Multi_Master extends Struct<FT_Multi_Master> implements NativeRe
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_Multi_Master} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code num_axis} field. */
+    @NativeType("FT_UInt")
+    public int num_axis() { return nnum_axis(address()); }
+    /** @return the value of the {@code num_designs} field. */
+    @NativeType("FT_UInt")
+    public int num_designs() { return nnum_designs(address()); }
+    /** @return a {@link FT_MM_Axis}.Buffer view of the {@code axis} field. */
+    @NativeType("FT_MM_Axis[T1_MAX_MM_AXIS]")
+    public FT_MM_Axis.Buffer axis() { return naxis(address()); }
+    /** @return a {@link FT_MM_Axis} view of the struct at the specified index of the {@code axis} field. */
+    public FT_MM_Axis axis(int index) { return naxis(address(), index); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Multi_Master} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_Multi_Master malloc() {
         return new FT_Multi_Master(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Multi_Master} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_Multi_Master} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_Multi_Master calloc() {
         return new FT_Multi_Master(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Multi_Master} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_Multi_Master} instance allocated with {@link BufferUtils}. */
     public static FT_Multi_Master create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_Multi_Master(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_Multi_Master} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_Multi_Master} instance for the specified memory address. */
     public static FT_Multi_Master create(long address) {
         return new FT_Multi_Master(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Multi_Master createSafe(long address) {
         return address == NULL ? null : new FT_Multi_Master(address, null);
@@ -129,8 +130,6 @@ public class FT_Multi_Master extends Struct<FT_Multi_Master> implements NativeRe
     public static Buffer malloc(int capacity) {
         return new Buffer(nmemAllocChecked(__checkMalloc(capacity, SIZEOF)), capacity);
     }
-
-    // -----------------------------------
 
     /**
      * Returns a new {@link Buffer} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
@@ -161,9 +160,7 @@ public class FT_Multi_Master extends Struct<FT_Multi_Master> implements NativeRe
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -207,82 +204,22 @@ public class FT_Multi_Master extends Struct<FT_Multi_Master> implements NativeRe
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #num_axis}.
-     */
-    public static int nnum_axis(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Multi_Master.NUM_AXIS);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #num_designs}.
-     */
-    public static int nnum_designs(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Multi_Master.NUM_DESIGNS);
-    }
-
-    /**
-     * Unsafe version of {@link #axis}.
-     */
-    public static FT_MM_Axis.Buffer naxis(long struct) {
-        return FT_MM_Axis.create(struct + FT_Multi_Master.AXIS, T1_MAX_MM_AXIS);
-    }
-
-    /**
-     * Unsafe version of {@link #axis(int) axis}.
-     */
+    /** Unsafe version of {@link #num_axis}. */
+    public static int nnum_axis(long struct) { return UNSAFE.getInt(null, struct + FT_Multi_Master.NUM_AXIS); }
+    /** Unsafe version of {@link #num_designs}. */
+    public static int nnum_designs(long struct) { return UNSAFE.getInt(null, struct + FT_Multi_Master.NUM_DESIGNS); }
+    /** Unsafe version of {@link #axis}. */
+    public static FT_MM_Axis.Buffer naxis(long struct) { return FT_MM_Axis.create(struct + FT_Multi_Master.AXIS, T1_MAX_MM_AXIS); }
+    /** Unsafe version of {@link #axis(int) axis}. */
     public static FT_MM_Axis naxis(long struct, int index) {
         return FT_MM_Axis.create(struct + FT_Multi_Master.AXIS + check(index, T1_MAX_MM_AXIS) * FT_MM_Axis.SIZEOF);
     }
 
-    @Override
-    protected FT_Multi_Master create(long address, @Nullable ByteBuffer container) {
-        return new FT_Multi_Master(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code num_axis} field.
-     */
-    @NativeType("FT_UInt")
-    public int num_axis() {
-        return nnum_axis(address());
-    }
-
-    /**
-     * @return the value of the {@code num_designs} field.
-     */
-    @NativeType("FT_UInt")
-    public int num_designs() {
-        return nnum_designs(address());
-    }
-
-    /**
-     * @return a {@link FT_MM_Axis}.Buffer view of the {@code axis} field.
-     */
-    @NativeType("FT_MM_Axis[T1_MAX_MM_AXIS]")
-    public FT_MM_Axis.Buffer axis() {
-        return naxis(address());
-    }
-
-    /**
-     * @return a {@link FT_MM_Axis} view of the struct at the specified index of the {@code axis} field.
-     */
-    public FT_MM_Axis axis(int index) {
-        return naxis(address(), index);
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Multi_Master} structs.
-     */
+    /** An array of {@link FT_Multi_Master} structs. */
     public static class Buffer extends StructBuffer<FT_Multi_Master, Buffer> implements NativeResource {
 
         private static final FT_Multi_Master ELEMENT_FACTORY = FT_Multi_Master.create(-1L);
@@ -318,36 +255,17 @@ public class FT_Multi_Master extends Struct<FT_Multi_Master> implements NativeRe
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code num_axis} field.
-         */
+        /** @return the value of the {@code num_axis} field. */
         @NativeType("FT_UInt")
-        public int num_axis() {
-            return FT_Multi_Master.nnum_axis(address());
-        }
-
-        /**
-         * @return the value of the {@code num_designs} field.
-         */
+        public int num_axis() { return FT_Multi_Master.nnum_axis(address()); }
+        /** @return the value of the {@code num_designs} field. */
         @NativeType("FT_UInt")
-        public int num_designs() {
-            return FT_Multi_Master.nnum_designs(address());
-        }
-
-        /**
-         * @return a {@link FT_MM_Axis}.Buffer view of the {@code axis} field.
-         */
+        public int num_designs() { return FT_Multi_Master.nnum_designs(address()); }
+        /** @return a {@link FT_MM_Axis}.Buffer view of the {@code axis} field. */
         @NativeType("FT_MM_Axis[T1_MAX_MM_AXIS]")
-        public FT_MM_Axis.Buffer axis() {
-            return FT_Multi_Master.naxis(address());
-        }
-
-        /**
-         * @return a {@link FT_MM_Axis} view of the struct at the specified index of the {@code axis} field.
-         */
-        public FT_MM_Axis axis(int index) {
-            return FT_Multi_Master.naxis(address(), index);
-        }
+        public FT_MM_Axis.Buffer axis() { return FT_Multi_Master.naxis(address()); }
+        /** @return a {@link FT_MM_Axis} view of the struct at the specified index of the {@code axis} field. */
+        public FT_MM_Axis axis(int index) { return FT_Multi_Master.naxis(address(), index); }
 
     }
 

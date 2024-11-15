@@ -1,5 +1,9 @@
-#ifndef h2co3Launcher_EVENT_H
-#define h2co3Launcher_EVENT_H
+//
+// Created by Tungsten on 2022/10/11.
+//
+
+#ifndef H2CO3_LAUNCHER_H2CO3Launcher_EVENT_H
+#define H2CO3_LAUNCHER_H2CO3Launcher_EVENT_H
 
 #define KeyPress              2
 #define KeyRelease            3
@@ -8,12 +12,11 @@
 #define MotionNotify          6
 #define KeyChar               7
 #define ConfigureNotify       22
-#define H2CO3LauncherMessage  37
+#define H2CO3LauncherMessage            37
 
 #define Button1               1
 #define Button2               2
 #define Button3               3
-
 #define Button4               4
 #define Button5               5
 #define Button6               6
@@ -47,4 +50,4 @@ typedef struct {
     int height;
 } H2CO3LauncherEvent;
 
-#endif // h2co3Launcher_EVENT_H
+#endif //H2CO3_LAUNCHER_H2CO3Launcher_EVENT_H

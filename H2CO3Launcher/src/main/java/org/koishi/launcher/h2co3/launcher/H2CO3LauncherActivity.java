@@ -14,9 +14,11 @@ import androidx.annotation.NonNull;
 
 import org.koishi.launcher.h2co3.core.H2CO3Settings;
 import org.koishi.launcher.h2co3.core.launch.H2CO3LauncherBridge;
-import org.koishi.launcher.h2co3.core.launch.H2CO3LauncherBridgeCallBack;
+import org.koishi.launcher.h2co3.core.launch.H2CO3LauncherBridgeCallback;
+import org.koishi.launcher.h2co3.core.launch.keycodes.LwjglGlfwKeycode;
 import org.koishi.launcher.h2co3.resources.component.H2CO3TextureView;
 import org.koishi.launcher.h2co3.resources.component.activity.H2CO3Activity;
+import org.lwjgl.glfw.CallbackBridge;
 
 import java.util.TimerTask;
 
@@ -25,7 +27,7 @@ public abstract class H2CO3LauncherActivity extends H2CO3Activity implements Tex
     protected static final String TAG = "H2CO3LauncherActivity";
     public H2CO3TextureView mainTextureView;
     public RelativeLayout baseLayout;
-    public H2CO3LauncherBridgeCallBack h2co3LauncherCallback;
+    public H2CO3LauncherBridgeCallback h2co3LauncherCallback;
     private int output = 0;
     public H2CO3LauncherBridge launcherLib;
     private TimerTask systemUiTimerTask;
@@ -69,6 +71,7 @@ public abstract class H2CO3LauncherActivity extends H2CO3Activity implements Tex
     @Override
     public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
         // Properly release resources if needed
+        launcherLib.setSurfaceDestroyed(true);
         return true;
     }
 
@@ -115,19 +118,19 @@ public abstract class H2CO3LauncherActivity extends H2CO3Activity implements Tex
     }
 
     public int[] getPointer() {
-        return H2CO3LauncherBridge.getPointer();
+        return launcherLib.getPointer();
     }
 
     public void setKey(int keyCode, int keyChar, boolean isPressed) {
-        H2CO3LauncherBridge.setKey(keyCode, keyChar, isPressed);
+        launcherLib.pushEventKey(keyCode, keyChar, isPressed);
     }
 
     public void setMouseButton(int button, boolean isPressed) {
-        H2CO3LauncherBridge.setMouseButton(button, isPressed);
+        launcherLib.pushEventMouseButton(button, isPressed);
     }
 
     public void setPointer(int x, int y) {
-        H2CO3LauncherBridge.setPointer(x, y);
+        launcherLib.pushEventPointer(x, y);
     }
 
     @Override
@@ -159,6 +162,29 @@ public abstract class H2CO3LauncherActivity extends H2CO3Activity implements Tex
 
     public void exit(Context context, int code) {
         // Implement exit logic here
+    }
+
+    @Override
+    protected void onPause() {
+        CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_HOVERED, 0);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_HOVERED, 1);
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_VISIBLE, 0);
+        super.onStop();
     }
 
     public interface IH2CO3Launcher {

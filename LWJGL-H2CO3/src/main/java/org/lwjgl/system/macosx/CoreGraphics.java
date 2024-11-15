@@ -5,41 +5,18 @@
  */
 package org.lwjgl.system.macosx;
 
-import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
-import static org.lwjgl.system.APIUtil.apiGetFunctionAddressOptional;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkSafe;
-import static org.lwjgl.system.Checks.lengthSafe;
-import static org.lwjgl.system.Checks.remainingSafe;
-import static org.lwjgl.system.JNI.invokeJ;
-import static org.lwjgl.system.JNI.invokeJPPP;
-import static org.lwjgl.system.JNI.invokePCP;
-import static org.lwjgl.system.JNI.invokePD;
-import static org.lwjgl.system.JNI.invokePI;
-import static org.lwjgl.system.JNI.invokePJ;
-import static org.lwjgl.system.JNI.invokePJPPP;
-import static org.lwjgl.system.JNI.invokePJV;
-import static org.lwjgl.system.JNI.invokePNPPV;
-import static org.lwjgl.system.JNI.invokePNPV;
-import static org.lwjgl.system.JNI.invokePP;
-import static org.lwjgl.system.JNI.invokePPI;
-import static org.lwjgl.system.JNI.invokePPP;
-import static org.lwjgl.system.JNI.invokePPV;
-import static org.lwjgl.system.JNI.invokePV;
-import static org.lwjgl.system.JNI.invokePZ;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
+import javax.annotation.*;
 
-import org.lwjgl.CLongBuffer;
-import org.lwjgl.system.Library;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.SharedLibrary;
+import java.nio.*;
 
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
+import org.lwjgl.*;
 
-import javax.annotation.Nullable;
+import org.lwjgl.system.*;
+
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Native bindings to &lt;CoreGraphics.h&gt;. */
 public class CoreGraphics {
@@ -1002,13 +979,13 @@ public class CoreGraphics {
         if (CHECKS) {
             checkSafe(actualStringLength, 1);
         }
-        invokePNPPV(event, lengthSafe(unicodeString), memAddressSafe(actualStringLength), unicodeString, __functionAddress);
+        invokePNPPV(event, (long)lengthSafe(unicodeString), memAddressSafe(actualStringLength), unicodeString, __functionAddress);
     }
 
     /** Array version of: {@link #CGEventKeyboardSetUnicodeString EventKeyboardSetUnicodeString} */
     public static void CGEventKeyboardSetUnicodeString(@NativeType("CGEventRef") long event, @NativeType("UniChar const *") short[] unicodeString) {
         long __functionAddress = Functions.EventKeyboardSetUnicodeString;
-        invokePNPV(event, unicodeString.length, unicodeString, __functionAddress);
+        invokePNPV(event, (long)unicodeString.length, unicodeString, __functionAddress);
     }
 
     /** Array version of: {@link #CGGetEventTapList GetEventTapList} */

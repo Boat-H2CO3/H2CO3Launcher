@@ -5,24 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBuffer;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A very compact structure used to describe a small glyph bitmap.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FTC_SBitRec {
  *     FT_Byte width;
@@ -40,43 +35,37 @@ import javax.annotation.Nullable;
 @NativeType("struct FTC_SBitRec")
 public class FTC_SBit extends Struct<FTC_SBit> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            WIDTH,
-            HEIGHT,
-            LEFT,
-            TOP,
-            FORMAT,
-            MAX_GRAYS,
-            PITCH,
-            XADVANCE,
-            YADVANCE,
-            BUFFER;
+        WIDTH,
+        HEIGHT,
+        LEFT,
+        TOP,
+        FORMAT,
+        MAX_GRAYS,
+        PITCH,
+        XADVANCE,
+        YADVANCE,
+        BUFFER;
 
     static {
         Layout layout = __struct(
-                __member(1),
-                __member(1),
-                __member(1),
-                __member(1),
-                __member(1),
-                __member(1),
-                __member(2),
-                __member(1),
-                __member(1),
-                __member(POINTER_SIZE)
+            __member(1),
+            __member(1),
+            __member(1),
+            __member(1),
+            __member(1),
+            __member(1),
+            __member(2),
+            __member(1),
+            __member(1),
+            __member(POINTER_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -98,6 +87,11 @@ public class FTC_SBit extends Struct<FTC_SBit> {
         super(address, container);
     }
 
+    @Override
+    protected FTC_SBit create(long address, @Nullable ByteBuffer container) {
+        return new FTC_SBit(address, container);
+    }
+
     /**
      * Creates a {@code FTC_SBit} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -108,16 +102,52 @@ public class FTC_SBit extends Struct<FTC_SBit> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code width} field. */
+    @NativeType("FT_Byte")
+    public byte width() { return nwidth(address()); }
+    /** @return the value of the {@code height} field. */
+    @NativeType("FT_Byte")
+    public byte height() { return nheight(address()); }
+    /** @return the value of the {@code left} field. */
+    @NativeType("FT_Char")
+    public byte left() { return nleft(address()); }
+    /** @return the value of the {@code top} field. */
+    @NativeType("FT_Char")
+    public byte top() { return ntop(address()); }
+    /** @return the value of the {@code format} field. */
+    @NativeType("FT_Byte")
+    public byte format() { return nformat(address()); }
+    /** @return the value of the {@code max_grays} field. */
+    @NativeType("FT_Byte")
+    public byte max_grays() { return nmax_grays(address()); }
+    /** @return the value of the {@code pitch} field. */
+    @NativeType("FT_Short")
+    public short pitch() { return npitch(address()); }
+    /** @return the value of the {@code xadvance} field. */
+    @NativeType("FT_Char")
+    public byte xadvance() { return nxadvance(address()); }
+    /** @return the value of the {@code yadvance} field. */
+    @NativeType("FT_Char")
+    public byte yadvance() { return nyadvance(address()); }
     /**
-     * Returns a new {@code FTC_SBit} instance for the specified memory address.
+     * @return a {@link ByteBuffer} view of the data pointed to by the {@code buffer} field.
+     *
+     * @param capacity the number of elements in the returned buffer
      */
+    @NativeType("FT_Byte *")
+    public ByteBuffer buffer(int capacity) { return nbuffer(address(), capacity); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FTC_SBit} instance for the specified memory address. */
     public static FTC_SBit create(long address) {
         return new FTC_SBit(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FTC_SBit createSafe(long address) {
         return address == NULL ? null : new FTC_SBit(address, null);
@@ -133,184 +163,38 @@ public class FTC_SBit extends Struct<FTC_SBit> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #width}.
-     */
-    public static byte nwidth(long struct) {
-        return UNSAFE.getByte(null, struct + FTC_SBit.WIDTH);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #height}.
-     */
-    public static byte nheight(long struct) {
-        return UNSAFE.getByte(null, struct + FTC_SBit.HEIGHT);
-    }
-
-    /**
-     * Unsafe version of {@link #left}.
-     */
-    public static byte nleft(long struct) {
-        return UNSAFE.getByte(null, struct + FTC_SBit.LEFT);
-    }
-
-    /**
-     * Unsafe version of {@link #top}.
-     */
-    public static byte ntop(long struct) {
-        return UNSAFE.getByte(null, struct + FTC_SBit.TOP);
-    }
-
-    /**
-     * Unsafe version of {@link #format}.
-     */
-    public static byte nformat(long struct) {
-        return UNSAFE.getByte(null, struct + FTC_SBit.FORMAT);
-    }
-
-    /**
-     * Unsafe version of {@link #max_grays}.
-     */
-    public static byte nmax_grays(long struct) {
-        return UNSAFE.getByte(null, struct + FTC_SBit.MAX_GRAYS);
-    }
-
-    /**
-     * Unsafe version of {@link #pitch}.
-     */
-    public static short npitch(long struct) {
-        return UNSAFE.getShort(null, struct + FTC_SBit.PITCH);
-    }
-
-    /**
-     * Unsafe version of {@link #xadvance}.
-     */
-    public static byte nxadvance(long struct) {
-        return UNSAFE.getByte(null, struct + FTC_SBit.XADVANCE);
-    }
+    /** Unsafe version of {@link #width}. */
+    public static byte nwidth(long struct) { return UNSAFE.getByte(null, struct + FTC_SBit.WIDTH); }
+    /** Unsafe version of {@link #height}. */
+    public static byte nheight(long struct) { return UNSAFE.getByte(null, struct + FTC_SBit.HEIGHT); }
+    /** Unsafe version of {@link #left}. */
+    public static byte nleft(long struct) { return UNSAFE.getByte(null, struct + FTC_SBit.LEFT); }
+    /** Unsafe version of {@link #top}. */
+    public static byte ntop(long struct) { return UNSAFE.getByte(null, struct + FTC_SBit.TOP); }
+    /** Unsafe version of {@link #format}. */
+    public static byte nformat(long struct) { return UNSAFE.getByte(null, struct + FTC_SBit.FORMAT); }
+    /** Unsafe version of {@link #max_grays}. */
+    public static byte nmax_grays(long struct) { return UNSAFE.getByte(null, struct + FTC_SBit.MAX_GRAYS); }
+    /** Unsafe version of {@link #pitch}. */
+    public static short npitch(long struct) { return UNSAFE.getShort(null, struct + FTC_SBit.PITCH); }
+    /** Unsafe version of {@link #xadvance}. */
+    public static byte nxadvance(long struct) { return UNSAFE.getByte(null, struct + FTC_SBit.XADVANCE); }
+    /** Unsafe version of {@link #yadvance}. */
+    public static byte nyadvance(long struct) { return UNSAFE.getByte(null, struct + FTC_SBit.YADVANCE); }
+    /** Unsafe version of {@link #buffer(int) buffer}. */
+    public static ByteBuffer nbuffer(long struct, int capacity) { return memByteBuffer(memGetAddress(struct + FTC_SBit.BUFFER), capacity); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #yadvance}.
-     */
-    public static byte nyadvance(long struct) {
-        return UNSAFE.getByte(null, struct + FTC_SBit.YADVANCE);
-    }
-
-    /**
-     * Unsafe version of {@link #buffer(int) buffer}.
-     */
-    public static ByteBuffer nbuffer(long struct, int capacity) {
-        return memByteBuffer(memGetAddress(struct + FTC_SBit.BUFFER), capacity);
-    }
-
-    @Override
-    protected FTC_SBit create(long address, @Nullable ByteBuffer container) {
-        return new FTC_SBit(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return the value of the {@code width} field.
-     */
-    @NativeType("FT_Byte")
-    public byte width() {
-        return nwidth(address());
-    }
-
-    /**
-     * @return the value of the {@code height} field.
-     */
-    @NativeType("FT_Byte")
-    public byte height() {
-        return nheight(address());
-    }
-
-    /**
-     * @return the value of the {@code left} field.
-     */
-    @NativeType("FT_Char")
-    public byte left() {
-        return nleft(address());
-    }
-
-    /**
-     * @return the value of the {@code top} field.
-     */
-    @NativeType("FT_Char")
-    public byte top() {
-        return ntop(address());
-    }
-
-    /**
-     * @return the value of the {@code format} field.
-     */
-    @NativeType("FT_Byte")
-    public byte format() {
-        return nformat(address());
-    }
-
-    /**
-     * @return the value of the {@code max_grays} field.
-     */
-    @NativeType("FT_Byte")
-    public byte max_grays() {
-        return nmax_grays(address());
-    }
-
-    /**
-     * @return the value of the {@code pitch} field.
-     */
-    @NativeType("FT_Short")
-    public short pitch() {
-        return npitch(address());
-    }
-
-    /**
-     * @return the value of the {@code xadvance} field.
-     */
-    @NativeType("FT_Char")
-    public byte xadvance() {
-        return nxadvance(address());
-    }
-
-    /**
-     * @return the value of the {@code yadvance} field.
-     */
-    @NativeType("FT_Char")
-    public byte yadvance() {
-        return nyadvance(address());
-    }
-
-    /**
-     * @param capacity the number of elements in the returned buffer
-     * @return a {@link ByteBuffer} view of the data pointed to by the {@code buffer} field.
-     */
-    @NativeType("FT_Byte *")
-    public ByteBuffer buffer(int capacity) {
-        return nbuffer(address(), capacity);
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FTC_SBit} structs.
-     */
+    /** An array of {@link FTC_SBit} structs. */
     public static class Buffer extends StructBuffer<FTC_SBit, Buffer> {
 
         private static final FTC_SBit ELEMENT_FACTORY = FTC_SBit.create(-1L);
@@ -346,86 +230,40 @@ public class FTC_SBit extends Struct<FTC_SBit> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code width} field.
-         */
+        /** @return the value of the {@code width} field. */
         @NativeType("FT_Byte")
-        public byte width() {
-            return FTC_SBit.nwidth(address());
-        }
-
-        /**
-         * @return the value of the {@code height} field.
-         */
+        public byte width() { return FTC_SBit.nwidth(address()); }
+        /** @return the value of the {@code height} field. */
         @NativeType("FT_Byte")
-        public byte height() {
-            return FTC_SBit.nheight(address());
-        }
-
-        /**
-         * @return the value of the {@code left} field.
-         */
+        public byte height() { return FTC_SBit.nheight(address()); }
+        /** @return the value of the {@code left} field. */
         @NativeType("FT_Char")
-        public byte left() {
-            return FTC_SBit.nleft(address());
-        }
-
-        /**
-         * @return the value of the {@code top} field.
-         */
+        public byte left() { return FTC_SBit.nleft(address()); }
+        /** @return the value of the {@code top} field. */
         @NativeType("FT_Char")
-        public byte top() {
-            return FTC_SBit.ntop(address());
-        }
-
-        /**
-         * @return the value of the {@code format} field.
-         */
+        public byte top() { return FTC_SBit.ntop(address()); }
+        /** @return the value of the {@code format} field. */
         @NativeType("FT_Byte")
-        public byte format() {
-            return FTC_SBit.nformat(address());
-        }
-
-        /**
-         * @return the value of the {@code max_grays} field.
-         */
+        public byte format() { return FTC_SBit.nformat(address()); }
+        /** @return the value of the {@code max_grays} field. */
         @NativeType("FT_Byte")
-        public byte max_grays() {
-            return FTC_SBit.nmax_grays(address());
-        }
-
-        /**
-         * @return the value of the {@code pitch} field.
-         */
+        public byte max_grays() { return FTC_SBit.nmax_grays(address()); }
+        /** @return the value of the {@code pitch} field. */
         @NativeType("FT_Short")
-        public short pitch() {
-            return FTC_SBit.npitch(address());
-        }
-
-        /**
-         * @return the value of the {@code xadvance} field.
-         */
+        public short pitch() { return FTC_SBit.npitch(address()); }
+        /** @return the value of the {@code xadvance} field. */
         @NativeType("FT_Char")
-        public byte xadvance() {
-            return FTC_SBit.nxadvance(address());
-        }
-
-        /**
-         * @return the value of the {@code yadvance} field.
-         */
+        public byte xadvance() { return FTC_SBit.nxadvance(address()); }
+        /** @return the value of the {@code yadvance} field. */
         @NativeType("FT_Char")
-        public byte yadvance() {
-            return FTC_SBit.nyadvance(address());
-        }
-
+        public byte yadvance() { return FTC_SBit.nyadvance(address()); }
         /**
-         * @param capacity the number of elements in the returned buffer
          * @return a {@link ByteBuffer} view of the data pointed to by the {@code buffer} field.
+         *
+         * @param capacity the number of elements in the returned buffer
          */
         @NativeType("FT_Byte *")
-        public ByteBuffer buffer(int capacity) {
-            return FTC_SBit.nbuffer(address(), capacity);
-        }
+        public ByteBuffer buffer(int capacity) { return FTC_SBit.nbuffer(address(), capacity); }
 
     }
 

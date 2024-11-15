@@ -5,13 +5,11 @@
  */
 package org.lwjgl.glfw;
 
-import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.JNI.invokeP;
-import static org.lwjgl.system.JNI.invokePP;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.NativeType;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
 
 /** Native bindings to the GLFW library's Wayland native access functions. */
 public class GLFWNativeWayland {

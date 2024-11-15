@@ -5,29 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A structure representing an offset to a {@code Paint} value stored in any of the paint tables of a {@code COLR} v1 font.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_OpaquePaintRec {
  *     FT_Byte * p;
@@ -37,27 +29,21 @@ import javax.annotation.Nullable;
 @NativeType("struct FT_OpaquePaintRec")
 public class FT_OpaquePaint extends Struct<FT_OpaquePaint> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            P,
-            INSERT_ROOT_TRANSFORM;
+        P,
+        INSERT_ROOT_TRANSFORM;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(1)
+            __member(POINTER_SIZE),
+            __member(1)
         );
 
         SIZEOF = layout.getSize();
@@ -71,6 +57,11 @@ public class FT_OpaquePaint extends Struct<FT_OpaquePaint> implements NativeReso
         super(address, container);
     }
 
+    @Override
+    protected FT_OpaquePaint create(long address, @Nullable ByteBuffer container) {
+        return new FT_OpaquePaint(address, container);
+    }
+
     /**
      * Creates a {@code FT_OpaquePaint} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -81,40 +72,45 @@ public class FT_OpaquePaint extends Struct<FT_OpaquePaint> implements NativeReso
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
     /**
-     * Returns a new {@code FT_OpaquePaint} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
+     * @return a {@link ByteBuffer} view of the data pointed to by the {@code p} field.
+     *
+     * @param capacity the number of elements in the returned buffer
      */
+    @Nullable
+    @NativeType("FT_Byte *")
+    public ByteBuffer p(int capacity) { return np(address(), capacity); }
+    /** @return the value of the {@code insert_root_transform} field. */
+    @NativeType("FT_Bool")
+    public boolean insert_root_transform() { return ninsert_root_transform(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_OpaquePaint} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_OpaquePaint malloc() {
         return new FT_OpaquePaint(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_OpaquePaint} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_OpaquePaint} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_OpaquePaint calloc() {
         return new FT_OpaquePaint(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_OpaquePaint} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_OpaquePaint} instance allocated with {@link BufferUtils}. */
     public static FT_OpaquePaint create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_OpaquePaint(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_OpaquePaint} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_OpaquePaint} instance for the specified memory address. */
     public static FT_OpaquePaint create(long address) {
         return new FT_OpaquePaint(address, null);
     }
 
-    // -----------------------------------
-
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_OpaquePaint createSafe(long address) {
         return address == NULL ? null : new FT_OpaquePaint(address, null);
@@ -158,9 +154,7 @@ public class FT_OpaquePaint extends Struct<FT_OpaquePaint> implements NativeReso
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -204,56 +198,16 @@ public class FT_OpaquePaint extends Struct<FT_OpaquePaint> implements NativeReso
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #p(int) p}.
-     */
-    @Nullable
-    public static ByteBuffer np(long struct, int capacity) {
-        return memByteBufferSafe(memGetAddress(struct + FT_OpaquePaint.P), capacity);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #insert_root_transform}.
-     */
-    public static boolean ninsert_root_transform(long struct) {
-        return UNSAFE.getByte(null, struct + FT_OpaquePaint.INSERT_ROOT_TRANSFORM) != 0;
-    }
-
-    @Override
-    protected FT_OpaquePaint create(long address, @Nullable ByteBuffer container) {
-        return new FT_OpaquePaint(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #p(int) p}. */
+    @Nullable public static ByteBuffer np(long struct, int capacity) { return memByteBufferSafe(memGetAddress(struct + FT_OpaquePaint.P), capacity); }
+    /** Unsafe version of {@link #insert_root_transform}. */
+    public static boolean ninsert_root_transform(long struct) { return UNSAFE.getByte(null, struct + FT_OpaquePaint.INSERT_ROOT_TRANSFORM) != 0; }
 
     // -----------------------------------
 
-    /**
-     * @param capacity the number of elements in the returned buffer
-     * @return a {@link ByteBuffer} view of the data pointed to by the {@code p} field.
-     */
-    @Nullable
-    @NativeType("FT_Byte *")
-    public ByteBuffer p(int capacity) {
-        return np(address(), capacity);
-    }
-
-    /**
-     * @return the value of the {@code insert_root_transform} field.
-     */
-    @NativeType("FT_Bool")
-    public boolean insert_root_transform() {
-        return ninsert_root_transform(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_OpaquePaint} structs.
-     */
+    /** An array of {@link FT_OpaquePaint} structs. */
     public static class Buffer extends StructBuffer<FT_OpaquePaint, Buffer> implements NativeResource {
 
         private static final FT_OpaquePaint ELEMENT_FACTORY = FT_OpaquePaint.create(-1L);
@@ -290,22 +244,16 @@ public class FT_OpaquePaint extends Struct<FT_OpaquePaint> implements NativeReso
         }
 
         /**
-         * @param capacity the number of elements in the returned buffer
          * @return a {@link ByteBuffer} view of the data pointed to by the {@code p} field.
+         *
+         * @param capacity the number of elements in the returned buffer
          */
         @Nullable
         @NativeType("FT_Byte *")
-        public ByteBuffer p(int capacity) {
-            return FT_OpaquePaint.np(address(), capacity);
-        }
-
-        /**
-         * @return the value of the {@code insert_root_transform} field.
-         */
+        public ByteBuffer p(int capacity) { return FT_OpaquePaint.np(address(), capacity); }
+        /** @return the value of the {@code insert_root_transform} field. */
         @NativeType("FT_Bool")
-        public boolean insert_root_transform() {
-            return FT_OpaquePaint.ninsert_root_transform(address());
-        }
+        public boolean insert_root_transform() { return FT_OpaquePaint.ninsert_root_transform(address()); }
 
     }
 

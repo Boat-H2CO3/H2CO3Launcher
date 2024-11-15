@@ -5,12 +5,10 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.JNI.callP;
-import static org.lwjgl.system.JNI.callPPPPI;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.NativeType;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/SGI/GLX_SGI_make_current_read.txt">GLX_SGI_make_current_read</a> extension.

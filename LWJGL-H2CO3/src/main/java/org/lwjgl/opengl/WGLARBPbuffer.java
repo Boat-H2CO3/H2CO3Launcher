@@ -5,21 +5,15 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNTSafe;
-import static org.lwjgl.system.JNI.callPI;
-import static org.lwjgl.system.JNI.callPP;
-import static org.lwjgl.system.JNI.callPPI;
-import static org.lwjgl.system.JNI.callPPP;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
+import java.nio.*;
 
-import java.nio.IntBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/WGL_ARB_pbuffer.txt">WGL_ARB_pbuffer</a> extension.

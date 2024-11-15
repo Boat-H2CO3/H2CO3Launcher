@@ -104,15 +104,38 @@ class Render {
     private static final RenderStrip renderStrip = new RenderStrip();
     private static final RenderTriangle renderTriangle = new RenderTriangle();
 
+/* This structure remembers the information we need about a primitive
+ * to be able to render it later, once we have determined which
+ * primitive is able to use the most triangles.
+ */
+    private static class FaceCount {
+        private FaceCount() {
+        }
+
+        private FaceCount(long size, GLUhalfEdge eStart, renderCallBack render) {
+            this.size = size;
+            this.eStart = eStart;
+            this.render = render;
+        }
+
+        long size;		/* number of triangles used */
+        GLUhalfEdge eStart;	/* edge where this primitive starts */
+        renderCallBack render;
+    };
+
+    private interface renderCallBack {
+        void render(GLUtessellatorImpl tess, GLUhalfEdge e, long size);
+    }
+
     /************************ Strips and Fans decomposition ******************/
 
-    /* __gl_renderMesh( tess, mesh ) takes a mesh and breaks it into triangle
-     * fans, strips, and separate triangles.  A substantial effort is made
-     * to use as few rendering primitives as possible (ie. to make the fans
-     * and strips as large as possible).
-     *
-     * The rendering output is provided as callbacks (see the api).
-     */
+/* __gl_renderMesh( tess, mesh ) takes a mesh and breaks it into triangle
+ * fans, strips, and separate triangles.  A substantial effort is made
+ * to use as few rendering primitives as possible (ie. to make the fans
+ * and strips as large as possible).
+ *
+ * The rendering output is provided as callbacks (see the api).
+ */
     public static void __gl_renderMesh(GLUtessellatorImpl tess, GLUmesh mesh) {
         GLUface f;
 
@@ -138,29 +161,6 @@ class Render {
             tess.lonelyTriList = null;
         }
     }
-
-    private interface renderCallBack {
-        void render(GLUtessellatorImpl tess, GLUhalfEdge e, long size);
-    }
-
-/* This structure remembers the information we need about a primitive
- * to be able to render it later, once we have determined which
- * primitive is able to use the most triangles.
- */
-private static class FaceCount {
-    private FaceCount() {
-    }
-
-    private FaceCount(long size, GLUhalfEdge eStart, renderCallBack render) {
-        this.size = size;
-        this.eStart = eStart;
-        this.render = render;
-    }
-
-    long size;        /* number of triangles used */
-    GLUhalfEdge eStart;    /* edge where this primitive starts */
-    renderCallBack render;
-}
 
 
     static void RenderMaximumFaceGroup(GLUtessellatorImpl tess, GLUface fOrig) {

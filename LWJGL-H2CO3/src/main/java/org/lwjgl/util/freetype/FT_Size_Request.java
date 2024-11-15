@@ -5,30 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
-import static org.lwjgl.system.MemoryUtil.memPutCLong;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A structure to model a size request.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Size_RequestRec {
  *     FT_Size_Request_Type type;
@@ -41,33 +32,27 @@ import javax.annotation.Nullable;
 @NativeType("struct FT_Size_RequestRec")
 public class FT_Size_Request extends Struct<FT_Size_Request> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            TYPE,
-            WIDTH,
-            HEIGHT,
-            HORIRESOLUTION,
-            VERTRESOLUTION;
+        TYPE,
+        WIDTH,
+        HEIGHT,
+        HORIRESOLUTION,
+        VERTRESOLUTION;
 
     static {
         Layout layout = __struct(
-                __member(4),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(4),
-                __member(4)
+            __member(4),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(4),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -84,6 +69,11 @@ public class FT_Size_Request extends Struct<FT_Size_Request> implements NativeRe
         super(address, container);
     }
 
+    @Override
+    protected FT_Size_Request create(long address, @Nullable ByteBuffer container) {
+        return new FT_Size_Request(address, container);
+    }
+
     /**
      * Creates a {@code FT_Size_Request} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -94,38 +84,89 @@ public class FT_Size_Request extends Struct<FT_Size_Request> implements NativeRe
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code type} field. */
+    @NativeType("FT_Size_Request_Type")
+    public int type() { return ntype(address()); }
+    /** @return the value of the {@code width} field. */
+    @NativeType("FT_Long")
+    public long width() { return nwidth(address()); }
+    /** @return the value of the {@code height} field. */
+    @NativeType("FT_Long")
+    public long height() { return nheight(address()); }
+    /** @return the value of the {@code horiResolution} field. */
+    @NativeType("FT_UInt")
+    public int horiResolution() { return nhoriResolution(address()); }
+    /** @return the value of the {@code vertResolution} field. */
+    @NativeType("FT_UInt")
+    public int vertResolution() { return nvertResolution(address()); }
+
+    /** Sets the specified value to the {@code type} field. */
+    public FT_Size_Request type(@NativeType("FT_Size_Request_Type") int value) { ntype(address(), value); return this; }
+    /** Sets the specified value to the {@code width} field. */
+    public FT_Size_Request width(@NativeType("FT_Long") long value) { nwidth(address(), value); return this; }
+    /** Sets the specified value to the {@code height} field. */
+    public FT_Size_Request height(@NativeType("FT_Long") long value) { nheight(address(), value); return this; }
+    /** Sets the specified value to the {@code horiResolution} field. */
+    public FT_Size_Request horiResolution(@NativeType("FT_UInt") int value) { nhoriResolution(address(), value); return this; }
+    /** Sets the specified value to the {@code vertResolution} field. */
+    public FT_Size_Request vertResolution(@NativeType("FT_UInt") int value) { nvertResolution(address(), value); return this; }
+
+    /** Initializes this struct with the specified values. */
+    public FT_Size_Request set(
+        int type,
+        long width,
+        long height,
+        int horiResolution,
+        int vertResolution
+    ) {
+        type(type);
+        width(width);
+        height(height);
+        horiResolution(horiResolution);
+        vertResolution(vertResolution);
+
+        return this;
+    }
+
     /**
-     * Returns a new {@code FT_Size_Request} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
+     * Copies the specified struct data to this struct.
+     *
+     * @param src the source struct
+     *
+     * @return this struct
      */
+    public FT_Size_Request set(FT_Size_Request src) {
+        memCopy(src.address(), address(), SIZEOF);
+        return this;
+    }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Size_Request} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_Size_Request malloc() {
         return new FT_Size_Request(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Size_Request} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_Size_Request} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_Size_Request calloc() {
         return new FT_Size_Request(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Size_Request} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_Size_Request} instance allocated with {@link BufferUtils}. */
     public static FT_Size_Request create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_Size_Request(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_Size_Request} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_Size_Request} instance for the specified memory address. */
     public static FT_Size_Request create(long address) {
         return new FT_Size_Request(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Size_Request createSafe(long address) {
         return address == NULL ? null : new FT_Size_Request(address, null);
@@ -169,9 +210,7 @@ public class FT_Size_Request extends Struct<FT_Size_Request> implements NativeRe
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -217,203 +256,31 @@ public class FT_Size_Request extends Struct<FT_Size_Request> implements NativeRe
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #type}.
-     */
-    public static int ntype(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Size_Request.TYPE);
-    }
+    /** Unsafe version of {@link #type}. */
+    public static int ntype(long struct) { return UNSAFE.getInt(null, struct + FT_Size_Request.TYPE); }
+    /** Unsafe version of {@link #width}. */
+    public static long nwidth(long struct) { return memGetCLong(struct + FT_Size_Request.WIDTH); }
+    /** Unsafe version of {@link #height}. */
+    public static long nheight(long struct) { return memGetCLong(struct + FT_Size_Request.HEIGHT); }
+    /** Unsafe version of {@link #horiResolution}. */
+    public static int nhoriResolution(long struct) { return UNSAFE.getInt(null, struct + FT_Size_Request.HORIRESOLUTION); }
+    /** Unsafe version of {@link #vertResolution}. */
+    public static int nvertResolution(long struct) { return UNSAFE.getInt(null, struct + FT_Size_Request.VERTRESOLUTION); }
 
-    /**
-     * Unsafe version of {@link #width}.
-     */
-    public static long nwidth(long struct) {
-        return memGetCLong(struct + FT_Size_Request.WIDTH);
-    }
-
-    /**
-     * Unsafe version of {@link #height}.
-     */
-    public static long nheight(long struct) {
-        return memGetCLong(struct + FT_Size_Request.HEIGHT);
-    }
-
-    /**
-     * Unsafe version of {@link #horiResolution}.
-     */
-    public static int nhoriResolution(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Size_Request.HORIRESOLUTION);
-    }
-
-    /**
-     * Unsafe version of {@link #vertResolution}.
-     */
-    public static int nvertResolution(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Size_Request.VERTRESOLUTION);
-    }
-
-    /**
-     * Unsafe version of {@link #type(int) type}.
-     */
-    public static void ntype(long struct, int value) {
-        UNSAFE.putInt(null, struct + FT_Size_Request.TYPE, value);
-    }
-
-    /**
-     * Unsafe version of {@link #width(long) width}.
-     */
-    public static void nwidth(long struct, long value) {
-        memPutCLong(struct + FT_Size_Request.WIDTH, value);
-    }
-
-    /**
-     * Unsafe version of {@link #height(long) height}.
-     */
-    public static void nheight(long struct, long value) {
-        memPutCLong(struct + FT_Size_Request.HEIGHT, value);
-    }
-
-    /**
-     * Unsafe version of {@link #horiResolution(int) horiResolution}.
-     */
-    public static void nhoriResolution(long struct, int value) {
-        UNSAFE.putInt(null, struct + FT_Size_Request.HORIRESOLUTION, value);
-    }
-
-    /**
-     * Unsafe version of {@link #vertResolution(int) vertResolution}.
-     */
-    public static void nvertResolution(long struct, int value) {
-        UNSAFE.putInt(null, struct + FT_Size_Request.VERTRESOLUTION, value);
-    }
-
-    @Override
-    protected FT_Size_Request create(long address, @Nullable ByteBuffer container) {
-        return new FT_Size_Request(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    /**
-     * @return the value of the {@code type} field.
-     */
-    @NativeType("FT_Size_Request_Type")
-    public int type() {
-        return ntype(address());
-    }
-
-    /**
-     * @return the value of the {@code width} field.
-     */
-    @NativeType("FT_Long")
-    public long width() {
-        return nwidth(address());
-    }
+    /** Unsafe version of {@link #type(int) type}. */
+    public static void ntype(long struct, int value) { UNSAFE.putInt(null, struct + FT_Size_Request.TYPE, value); }
+    /** Unsafe version of {@link #width(long) width}. */
+    public static void nwidth(long struct, long value) { memPutCLong(struct + FT_Size_Request.WIDTH, value); }
+    /** Unsafe version of {@link #height(long) height}. */
+    public static void nheight(long struct, long value) { memPutCLong(struct + FT_Size_Request.HEIGHT, value); }
+    /** Unsafe version of {@link #horiResolution(int) horiResolution}. */
+    public static void nhoriResolution(long struct, int value) { UNSAFE.putInt(null, struct + FT_Size_Request.HORIRESOLUTION, value); }
+    /** Unsafe version of {@link #vertResolution(int) vertResolution}. */
+    public static void nvertResolution(long struct, int value) { UNSAFE.putInt(null, struct + FT_Size_Request.VERTRESOLUTION, value); }
 
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code height} field.
-     */
-    @NativeType("FT_Long")
-    public long height() {
-        return nheight(address());
-    }
-
-    /**
-     * @return the value of the {@code horiResolution} field.
-     */
-    @NativeType("FT_UInt")
-    public int horiResolution() {
-        return nhoriResolution(address());
-    }
-
-    /**
-     * @return the value of the {@code vertResolution} field.
-     */
-    @NativeType("FT_UInt")
-    public int vertResolution() {
-        return nvertResolution(address());
-    }
-
-    /**
-     * Sets the specified value to the {@code type} field.
-     */
-    public FT_Size_Request type(@NativeType("FT_Size_Request_Type") int value) {
-        ntype(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code width} field.
-     */
-    public FT_Size_Request width(@NativeType("FT_Long") long value) {
-        nwidth(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code height} field.
-     */
-    public FT_Size_Request height(@NativeType("FT_Long") long value) {
-        nheight(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code horiResolution} field.
-     */
-    public FT_Size_Request horiResolution(@NativeType("FT_UInt") int value) {
-        nhoriResolution(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code vertResolution} field.
-     */
-    public FT_Size_Request vertResolution(@NativeType("FT_UInt") int value) {
-        nvertResolution(address(), value);
-        return this;
-    }
-
-    /**
-     * Initializes this struct with the specified values.
-     */
-    public FT_Size_Request set(
-            int type,
-            long width,
-            long height,
-            int horiResolution,
-            int vertResolution
-    ) {
-        type(type);
-        width(width);
-        height(height);
-        horiResolution(horiResolution);
-        vertResolution(vertResolution);
-
-        return this;
-    }
-
-    /**
-     * Copies the specified struct data to this struct.
-     *
-     * @param src the source struct
-     * @return this struct
-     */
-    public FT_Size_Request set(FT_Size_Request src) {
-        memCopy(src.address(), address(), SIZEOF);
-        return this;
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Size_Request} structs.
-     */
+    /** An array of {@link FT_Size_Request} structs. */
     public static class Buffer extends StructBuffer<FT_Size_Request, Buffer> implements NativeResource {
 
         private static final FT_Size_Request ELEMENT_FACTORY = FT_Size_Request.create(-1L);
@@ -449,85 +316,32 @@ public class FT_Size_Request extends Struct<FT_Size_Request> implements NativeRe
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code type} field.
-         */
+        /** @return the value of the {@code type} field. */
         @NativeType("FT_Size_Request_Type")
-        public int type() {
-            return FT_Size_Request.ntype(address());
-        }
-
-        /**
-         * @return the value of the {@code width} field.
-         */
+        public int type() { return FT_Size_Request.ntype(address()); }
+        /** @return the value of the {@code width} field. */
         @NativeType("FT_Long")
-        public long width() {
-            return FT_Size_Request.nwidth(address());
-        }
-
-        /**
-         * @return the value of the {@code height} field.
-         */
+        public long width() { return FT_Size_Request.nwidth(address()); }
+        /** @return the value of the {@code height} field. */
         @NativeType("FT_Long")
-        public long height() {
-            return FT_Size_Request.nheight(address());
-        }
-
-        /**
-         * @return the value of the {@code horiResolution} field.
-         */
+        public long height() { return FT_Size_Request.nheight(address()); }
+        /** @return the value of the {@code horiResolution} field. */
         @NativeType("FT_UInt")
-        public int horiResolution() {
-            return FT_Size_Request.nhoriResolution(address());
-        }
-
-        /**
-         * @return the value of the {@code vertResolution} field.
-         */
+        public int horiResolution() { return FT_Size_Request.nhoriResolution(address()); }
+        /** @return the value of the {@code vertResolution} field. */
         @NativeType("FT_UInt")
-        public int vertResolution() {
-            return FT_Size_Request.nvertResolution(address());
-        }
+        public int vertResolution() { return FT_Size_Request.nvertResolution(address()); }
 
-        /**
-         * Sets the specified value to the {@code type} field.
-         */
-        public Buffer type(@NativeType("FT_Size_Request_Type") int value) {
-            FT_Size_Request.ntype(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code width} field.
-         */
-        public Buffer width(@NativeType("FT_Long") long value) {
-            FT_Size_Request.nwidth(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code height} field.
-         */
-        public Buffer height(@NativeType("FT_Long") long value) {
-            FT_Size_Request.nheight(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code horiResolution} field.
-         */
-        public Buffer horiResolution(@NativeType("FT_UInt") int value) {
-            FT_Size_Request.nhoriResolution(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code vertResolution} field.
-         */
-        public Buffer vertResolution(@NativeType("FT_UInt") int value) {
-            FT_Size_Request.nvertResolution(address(), value);
-            return this;
-        }
+        /** Sets the specified value to the {@code type} field. */
+        public Buffer type(@NativeType("FT_Size_Request_Type") int value) { FT_Size_Request.ntype(address(), value); return this; }
+        /** Sets the specified value to the {@code width} field. */
+        public Buffer width(@NativeType("FT_Long") long value) { FT_Size_Request.nwidth(address(), value); return this; }
+        /** Sets the specified value to the {@code height} field. */
+        public Buffer height(@NativeType("FT_Long") long value) { FT_Size_Request.nheight(address(), value); return this; }
+        /** Sets the specified value to the {@code horiResolution} field. */
+        public Buffer horiResolution(@NativeType("FT_UInt") int value) { FT_Size_Request.nhoriResolution(address(), value); return this; }
+        /** Sets the specified value to the {@code vertResolution} field. */
+        public Buffer vertResolution(@NativeType("FT_UInt") int value) { FT_Size_Request.nvertResolution(address(), value); return this; }
 
     }
 

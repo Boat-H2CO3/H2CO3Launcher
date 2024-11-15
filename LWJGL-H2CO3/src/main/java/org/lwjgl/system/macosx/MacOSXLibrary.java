@@ -4,10 +4,9 @@
  */
 package org.lwjgl.system.macosx;
 
-import static org.lwjgl.system.APIUtil.apiLog;
-import static org.lwjgl.system.APIUtil.apiLogMore;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.SharedLibrary;
+import static org.lwjgl.system.APIUtil.*;
 
 /** Implements a {@link SharedLibrary} on the macOS. */
 public abstract class MacOSXLibrary extends SharedLibrary.Default {

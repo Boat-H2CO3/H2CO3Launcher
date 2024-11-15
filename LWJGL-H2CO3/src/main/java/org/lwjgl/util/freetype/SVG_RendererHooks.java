@@ -5,31 +5,22 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A structure that stores the four hooks needed to render OT-SVG glyphs properly.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct SVG_RendererHooks {
  *     {@link SVG_Lib_Init_FuncI SVG_Lib_Init_Func} init_svg;
@@ -40,31 +31,25 @@ import javax.annotation.Nullable;
  */
 public class SVG_RendererHooks extends Struct<SVG_RendererHooks> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            INIT_SVG,
-            FREE_SVG,
-            RENDER_SVG,
-            PRESET_SLOT;
+        INIT_SVG,
+        FREE_SVG,
+        RENDER_SVG,
+        PRESET_SLOT;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE)
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -80,6 +65,11 @@ public class SVG_RendererHooks extends Struct<SVG_RendererHooks> implements Nati
         super(address, container);
     }
 
+    @Override
+    protected SVG_RendererHooks create(long address, @Nullable ByteBuffer container) {
+        return new SVG_RendererHooks(address, container);
+    }
+
     /**
      * Creates a {@code SVG_RendererHooks} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -90,38 +80,78 @@ public class SVG_RendererHooks extends Struct<SVG_RendererHooks> implements Nati
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code init_svg} field. */
+    public SVG_Lib_Init_Func init_svg() { return ninit_svg(address()); }
+    /** @return the value of the {@code free_svg} field. */
+    public SVG_Lib_Free_Func free_svg() { return nfree_svg(address()); }
+    /** @return the value of the {@code render_svg} field. */
+    public SVG_Lib_Render_Func render_svg() { return nrender_svg(address()); }
+    /** @return the value of the {@code preset_slot} field. */
+    public SVG_Lib_Preset_Slot_Func preset_slot() { return npreset_slot(address()); }
+
+    /** Sets the specified value to the {@code init_svg} field. */
+    public SVG_RendererHooks init_svg(@NativeType("SVG_Lib_Init_Func") SVG_Lib_Init_FuncI value) { ninit_svg(address(), value); return this; }
+    /** Sets the specified value to the {@code free_svg} field. */
+    public SVG_RendererHooks free_svg(@NativeType("SVG_Lib_Free_Func") SVG_Lib_Free_FuncI value) { nfree_svg(address(), value); return this; }
+    /** Sets the specified value to the {@code render_svg} field. */
+    public SVG_RendererHooks render_svg(@NativeType("SVG_Lib_Render_Func") SVG_Lib_Render_FuncI value) { nrender_svg(address(), value); return this; }
+    /** Sets the specified value to the {@code preset_slot} field. */
+    public SVG_RendererHooks preset_slot(@NativeType("SVG_Lib_Preset_Slot_Func") SVG_Lib_Preset_Slot_FuncI value) { npreset_slot(address(), value); return this; }
+
+    /** Initializes this struct with the specified values. */
+    public SVG_RendererHooks set(
+        SVG_Lib_Init_FuncI init_svg,
+        SVG_Lib_Free_FuncI free_svg,
+        SVG_Lib_Render_FuncI render_svg,
+        SVG_Lib_Preset_Slot_FuncI preset_slot
+    ) {
+        init_svg(init_svg);
+        free_svg(free_svg);
+        render_svg(render_svg);
+        preset_slot(preset_slot);
+
+        return this;
+    }
+
     /**
-     * Returns a new {@code SVG_RendererHooks} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
+     * Copies the specified struct data to this struct.
+     *
+     * @param src the source struct
+     *
+     * @return this struct
      */
+    public SVG_RendererHooks set(SVG_RendererHooks src) {
+        memCopy(src.address(), address(), SIZEOF);
+        return this;
+    }
+
+    // -----------------------------------
+
+    /** Returns a new {@code SVG_RendererHooks} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static SVG_RendererHooks malloc() {
         return new SVG_RendererHooks(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code SVG_RendererHooks} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code SVG_RendererHooks} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static SVG_RendererHooks calloc() {
         return new SVG_RendererHooks(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code SVG_RendererHooks} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code SVG_RendererHooks} instance allocated with {@link BufferUtils}. */
     public static SVG_RendererHooks create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new SVG_RendererHooks(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code SVG_RendererHooks} instance for the specified memory address.
-     */
+    /** Returns a new {@code SVG_RendererHooks} instance for the specified memory address. */
     public static SVG_RendererHooks create(long address) {
         return new SVG_RendererHooks(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static SVG_RendererHooks createSafe(long address) {
         return address == NULL ? null : new SVG_RendererHooks(address, null);
@@ -165,9 +195,7 @@ public class SVG_RendererHooks extends Struct<SVG_RendererHooks> implements Nati
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -191,8 +219,6 @@ public class SVG_RendererHooks extends Struct<SVG_RendererHooks> implements Nati
         return new SVG_RendererHooks(stack.ncalloc(ALIGNOF, 1, SIZEOF), null);
     }
 
-    // -----------------------------------
-
     /**
      * Returns a new {@link Buffer} instance allocated on the specified {@link MemoryStack}.
      *
@@ -213,61 +239,25 @@ public class SVG_RendererHooks extends Struct<SVG_RendererHooks> implements Nati
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #init_svg}.
-     */
-    public static SVG_Lib_Init_Func ninit_svg(long struct) {
-        return SVG_Lib_Init_Func.create(memGetAddress(struct + SVG_RendererHooks.INIT_SVG));
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #free_svg}.
-     */
-    public static SVG_Lib_Free_Func nfree_svg(long struct) {
-        return SVG_Lib_Free_Func.create(memGetAddress(struct + SVG_RendererHooks.FREE_SVG));
-    }
+    /** Unsafe version of {@link #init_svg}. */
+    public static SVG_Lib_Init_Func ninit_svg(long struct) { return SVG_Lib_Init_Func.create(memGetAddress(struct + SVG_RendererHooks.INIT_SVG)); }
+    /** Unsafe version of {@link #free_svg}. */
+    public static SVG_Lib_Free_Func nfree_svg(long struct) { return SVG_Lib_Free_Func.create(memGetAddress(struct + SVG_RendererHooks.FREE_SVG)); }
+    /** Unsafe version of {@link #render_svg}. */
+    public static SVG_Lib_Render_Func nrender_svg(long struct) { return SVG_Lib_Render_Func.create(memGetAddress(struct + SVG_RendererHooks.RENDER_SVG)); }
+    /** Unsafe version of {@link #preset_slot}. */
+    public static SVG_Lib_Preset_Slot_Func npreset_slot(long struct) { return SVG_Lib_Preset_Slot_Func.create(memGetAddress(struct + SVG_RendererHooks.PRESET_SLOT)); }
 
-    /**
-     * Unsafe version of {@link #render_svg}.
-     */
-    public static SVG_Lib_Render_Func nrender_svg(long struct) {
-        return SVG_Lib_Render_Func.create(memGetAddress(struct + SVG_RendererHooks.RENDER_SVG));
-    }
-
-    /**
-     * Unsafe version of {@link #preset_slot}.
-     */
-    public static SVG_Lib_Preset_Slot_Func npreset_slot(long struct) {
-        return SVG_Lib_Preset_Slot_Func.create(memGetAddress(struct + SVG_RendererHooks.PRESET_SLOT));
-    }
-
-    /**
-     * Unsafe version of {@link #init_svg(SVG_Lib_Init_FuncI) init_svg}.
-     */
-    public static void ninit_svg(long struct, SVG_Lib_Init_FuncI value) {
-        memPutAddress(struct + SVG_RendererHooks.INIT_SVG, value.address());
-    }
-
-    /**
-     * Unsafe version of {@link #free_svg(SVG_Lib_Free_FuncI) free_svg}.
-     */
-    public static void nfree_svg(long struct, SVG_Lib_Free_FuncI value) {
-        memPutAddress(struct + SVG_RendererHooks.FREE_SVG, value.address());
-    }
-
-    /**
-     * Unsafe version of {@link #render_svg(SVG_Lib_Render_FuncI) render_svg}.
-     */
-    public static void nrender_svg(long struct, SVG_Lib_Render_FuncI value) {
-        memPutAddress(struct + SVG_RendererHooks.RENDER_SVG, value.address());
-    }
-
-    /**
-     * Unsafe version of {@link #preset_slot(SVG_Lib_Preset_Slot_FuncI) preset_slot}.
-     */
-    public static void npreset_slot(long struct, SVG_Lib_Preset_Slot_FuncI value) {
-        memPutAddress(struct + SVG_RendererHooks.PRESET_SLOT, value.address());
-    }
+    /** Unsafe version of {@link #init_svg(SVG_Lib_Init_FuncI) init_svg}. */
+    public static void ninit_svg(long struct, SVG_Lib_Init_FuncI value) { memPutAddress(struct + SVG_RendererHooks.INIT_SVG, value.address()); }
+    /** Unsafe version of {@link #free_svg(SVG_Lib_Free_FuncI) free_svg}. */
+    public static void nfree_svg(long struct, SVG_Lib_Free_FuncI value) { memPutAddress(struct + SVG_RendererHooks.FREE_SVG, value.address()); }
+    /** Unsafe version of {@link #render_svg(SVG_Lib_Render_FuncI) render_svg}. */
+    public static void nrender_svg(long struct, SVG_Lib_Render_FuncI value) { memPutAddress(struct + SVG_RendererHooks.RENDER_SVG, value.address()); }
+    /** Unsafe version of {@link #preset_slot(SVG_Lib_Preset_Slot_FuncI) preset_slot}. */
+    public static void npreset_slot(long struct, SVG_Lib_Preset_Slot_FuncI value) { memPutAddress(struct + SVG_RendererHooks.PRESET_SLOT, value.address()); }
 
     /**
      * Validates pointer members that should not be {@code NULL}.
@@ -281,111 +271,9 @@ public class SVG_RendererHooks extends Struct<SVG_RendererHooks> implements Nati
         check(memGetAddress(struct + SVG_RendererHooks.PRESET_SLOT));
     }
 
-    @Override
-    protected SVG_RendererHooks create(long address, @Nullable ByteBuffer container) {
-        return new SVG_RendererHooks(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    /**
-     * @return the value of the {@code init_svg} field.
-     */
-    public SVG_Lib_Init_Func init_svg() {
-        return ninit_svg(address());
-    }
-
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code free_svg} field.
-     */
-    public SVG_Lib_Free_Func free_svg() {
-        return nfree_svg(address());
-    }
-
-    /**
-     * @return the value of the {@code render_svg} field.
-     */
-    public SVG_Lib_Render_Func render_svg() {
-        return nrender_svg(address());
-    }
-
-    /**
-     * @return the value of the {@code preset_slot} field.
-     */
-    public SVG_Lib_Preset_Slot_Func preset_slot() {
-        return npreset_slot(address());
-    }
-
-    /**
-     * Sets the specified value to the {@code init_svg} field.
-     */
-    public SVG_RendererHooks init_svg(@NativeType("SVG_Lib_Init_Func") SVG_Lib_Init_FuncI value) {
-        ninit_svg(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code free_svg} field.
-     */
-    public SVG_RendererHooks free_svg(@NativeType("SVG_Lib_Free_Func") SVG_Lib_Free_FuncI value) {
-        nfree_svg(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code render_svg} field.
-     */
-    public SVG_RendererHooks render_svg(@NativeType("SVG_Lib_Render_Func") SVG_Lib_Render_FuncI value) {
-        nrender_svg(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code preset_slot} field.
-     */
-    public SVG_RendererHooks preset_slot(@NativeType("SVG_Lib_Preset_Slot_Func") SVG_Lib_Preset_Slot_FuncI value) {
-        npreset_slot(address(), value);
-        return this;
-    }
-
-    /**
-     * Initializes this struct with the specified values.
-     */
-    public SVG_RendererHooks set(
-            SVG_Lib_Init_FuncI init_svg,
-            SVG_Lib_Free_FuncI free_svg,
-            SVG_Lib_Render_FuncI render_svg,
-            SVG_Lib_Preset_Slot_FuncI preset_slot
-    ) {
-        init_svg(init_svg);
-        free_svg(free_svg);
-        render_svg(render_svg);
-        preset_slot(preset_slot);
-
-        return this;
-    }
-
-    /**
-     * Copies the specified struct data to this struct.
-     *
-     * @param src the source struct
-     * @return this struct
-     */
-    public SVG_RendererHooks set(SVG_RendererHooks src) {
-        memCopy(src.address(), address(), SIZEOF);
-        return this;
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link SVG_RendererHooks} structs.
-     */
+    /** An array of {@link SVG_RendererHooks} structs. */
     public static class Buffer extends StructBuffer<SVG_RendererHooks, Buffer> implements NativeResource {
 
         private static final SVG_RendererHooks ELEMENT_FACTORY = SVG_RendererHooks.create(-1L);
@@ -421,65 +309,23 @@ public class SVG_RendererHooks extends Struct<SVG_RendererHooks> implements Nati
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code init_svg} field.
-         */
-        public SVG_Lib_Init_Func init_svg() {
-            return SVG_RendererHooks.ninit_svg(address());
-        }
+        /** @return the value of the {@code init_svg} field. */
+        public SVG_Lib_Init_Func init_svg() { return SVG_RendererHooks.ninit_svg(address()); }
+        /** @return the value of the {@code free_svg} field. */
+        public SVG_Lib_Free_Func free_svg() { return SVG_RendererHooks.nfree_svg(address()); }
+        /** @return the value of the {@code render_svg} field. */
+        public SVG_Lib_Render_Func render_svg() { return SVG_RendererHooks.nrender_svg(address()); }
+        /** @return the value of the {@code preset_slot} field. */
+        public SVG_Lib_Preset_Slot_Func preset_slot() { return SVG_RendererHooks.npreset_slot(address()); }
 
-        /**
-         * @return the value of the {@code free_svg} field.
-         */
-        public SVG_Lib_Free_Func free_svg() {
-            return SVG_RendererHooks.nfree_svg(address());
-        }
-
-        /**
-         * @return the value of the {@code render_svg} field.
-         */
-        public SVG_Lib_Render_Func render_svg() {
-            return SVG_RendererHooks.nrender_svg(address());
-        }
-
-        /**
-         * @return the value of the {@code preset_slot} field.
-         */
-        public SVG_Lib_Preset_Slot_Func preset_slot() {
-            return SVG_RendererHooks.npreset_slot(address());
-        }
-
-        /**
-         * Sets the specified value to the {@code init_svg} field.
-         */
-        public Buffer init_svg(@NativeType("SVG_Lib_Init_Func") SVG_Lib_Init_FuncI value) {
-            SVG_RendererHooks.ninit_svg(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code free_svg} field.
-         */
-        public Buffer free_svg(@NativeType("SVG_Lib_Free_Func") SVG_Lib_Free_FuncI value) {
-            SVG_RendererHooks.nfree_svg(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code render_svg} field.
-         */
-        public Buffer render_svg(@NativeType("SVG_Lib_Render_Func") SVG_Lib_Render_FuncI value) {
-            SVG_RendererHooks.nrender_svg(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code preset_slot} field.
-         */
-        public Buffer preset_slot(@NativeType("SVG_Lib_Preset_Slot_Func") SVG_Lib_Preset_Slot_FuncI value) {
-            SVG_RendererHooks.npreset_slot(address(), value);
-            return this;
-        }
+        /** Sets the specified value to the {@code init_svg} field. */
+        public Buffer init_svg(@NativeType("SVG_Lib_Init_Func") SVG_Lib_Init_FuncI value) { SVG_RendererHooks.ninit_svg(address(), value); return this; }
+        /** Sets the specified value to the {@code free_svg} field. */
+        public Buffer free_svg(@NativeType("SVG_Lib_Free_Func") SVG_Lib_Free_FuncI value) { SVG_RendererHooks.nfree_svg(address(), value); return this; }
+        /** Sets the specified value to the {@code render_svg} field. */
+        public Buffer render_svg(@NativeType("SVG_Lib_Render_Func") SVG_Lib_Render_FuncI value) { SVG_RendererHooks.nrender_svg(address(), value); return this; }
+        /** Sets the specified value to the {@code preset_slot} field. */
+        public Buffer preset_slot(@NativeType("SVG_Lib_Preset_Slot_Func") SVG_Lib_Preset_Slot_FuncI value) { SVG_RendererHooks.npreset_slot(address(), value); return this; }
 
     }
 

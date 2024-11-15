@@ -1,5 +1,6 @@
 package org.koishi.launcher.h2co3.core.game;
 
+import org.koishi.launcher.h2co3.core.H2CO3Settings;
 import org.koishi.launcher.h2co3.core.H2CO3Tools;
 import org.koishi.launcher.h2co3.core.game.download.Library;
 import org.koishi.launcher.h2co3.core.game.download.LoggingInfo;
@@ -219,7 +220,12 @@ public interface GameRepository extends VersionProvider {
 
     default Set<String> getClasspath(Version version) {
         Set<String> classpath = new LinkedHashSet<>();
-        classpath.add(H2CO3Tools.H2CO3LAUNCHER_LIBRARY_DIR + "/lwjgl/lwjgl.jar");
+        H2CO3Settings settings = new H2CO3Settings();
+        if (settings.isH2CO3Launch()){
+            classpath.add(H2CO3Tools.H2CO3LAUNCHER_LIBRARY_DIR + "/lwjgl/lwjgl.jar");
+        }else {
+            classpath.add(H2CO3Tools.H2CO3LAUNCHER_LIBRARY_DIR + "/lwjgl_pojav/lwjgl.jar");
+        }
         for (Library library : version.getLibraries())
             if (library.appliesToCurrentEnvironment() && !library.isNative()) {
                 File f = getLibraryFile(version, library);

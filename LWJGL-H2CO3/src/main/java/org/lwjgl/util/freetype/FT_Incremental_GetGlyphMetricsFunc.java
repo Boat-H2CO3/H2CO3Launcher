@@ -5,15 +5,15 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
+import javax.annotation.*;
 
-import org.lwjgl.system.Callback;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * <h3>Type</h3>
- *
+ * 
  * <pre><code>
  * FT_Error (*{@link #invoke}) (
  *     FT_Incremental incremental,
@@ -24,14 +24,6 @@ import javax.annotation.Nullable;
  */
 public abstract class FT_Incremental_GetGlyphMetricsFunc extends Callback implements FT_Incremental_GetGlyphMetricsFuncI {
 
-    protected FT_Incremental_GetGlyphMetricsFunc() {
-        super(CIF);
-    }
-
-    FT_Incremental_GetGlyphMetricsFunc(long functionPointer) {
-        super(functionPointer);
-    }
-
     /**
      * Creates a {@code FT_Incremental_GetGlyphMetricsFunc} instance from the specified function pointer.
      *
@@ -40,25 +32,29 @@ public abstract class FT_Incremental_GetGlyphMetricsFunc extends Callback implem
     public static FT_Incremental_GetGlyphMetricsFunc create(long functionPointer) {
         FT_Incremental_GetGlyphMetricsFuncI instance = Callback.get(functionPointer);
         return instance instanceof FT_Incremental_GetGlyphMetricsFunc
-                ? (FT_Incremental_GetGlyphMetricsFunc) instance
-                : new Container(functionPointer, instance);
+            ? (FT_Incremental_GetGlyphMetricsFunc)instance
+            : new Container(functionPointer, instance);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}. */
     @Nullable
     public static FT_Incremental_GetGlyphMetricsFunc createSafe(long functionPointer) {
         return functionPointer == NULL ? null : create(functionPointer);
     }
 
-    /**
-     * Creates a {@code FT_Incremental_GetGlyphMetricsFunc} instance that delegates to the specified {@code FT_Incremental_GetGlyphMetricsFuncI} instance.
-     */
+    /** Creates a {@code FT_Incremental_GetGlyphMetricsFunc} instance that delegates to the specified {@code FT_Incremental_GetGlyphMetricsFuncI} instance. */
     public static FT_Incremental_GetGlyphMetricsFunc create(FT_Incremental_GetGlyphMetricsFuncI instance) {
         return instance instanceof FT_Incremental_GetGlyphMetricsFunc
-                ? (FT_Incremental_GetGlyphMetricsFunc) instance
-                : new Container(instance.address(), instance);
+            ? (FT_Incremental_GetGlyphMetricsFunc)instance
+            : new Container(instance.address(), instance);
+    }
+
+    protected FT_Incremental_GetGlyphMetricsFunc() {
+        super(CIF);
+    }
+
+    FT_Incremental_GetGlyphMetricsFunc(long functionPointer) {
+        super(functionPointer);
     }
 
     private static final class Container extends FT_Incremental_GetGlyphMetricsFunc {

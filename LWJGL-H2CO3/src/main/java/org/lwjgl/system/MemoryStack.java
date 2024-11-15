@@ -4,50 +4,16 @@
  */
 package org.lwjgl.system;
 
-import static org.lwjgl.system.APIUtil.DEBUG_STREAM;
-import static org.lwjgl.system.APIUtil.apiLog;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.DEBUG;
-import static org.lwjgl.system.MemoryUtil.BUFFER_BYTE;
-import static org.lwjgl.system.MemoryUtil.BUFFER_DOUBLE;
-import static org.lwjgl.system.MemoryUtil.BUFFER_FLOAT;
-import static org.lwjgl.system.MemoryUtil.BUFFER_INT;
-import static org.lwjgl.system.MemoryUtil.BUFFER_LONG;
-import static org.lwjgl.system.MemoryUtil.BUFFER_SHORT;
-import static org.lwjgl.system.MemoryUtil.NATIVE_ORDER;
-import static org.lwjgl.system.MemoryUtil.encodeASCIIUnsafe;
-import static org.lwjgl.system.MemoryUtil.encodeUTF16Unsafe;
-import static org.lwjgl.system.MemoryUtil.encodeUTF8Unsafe;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memLengthASCII;
-import static org.lwjgl.system.MemoryUtil.memLengthUTF16;
-import static org.lwjgl.system.MemoryUtil.memLengthUTF8;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.memPutByte;
-import static org.lwjgl.system.MemoryUtil.memPutCLong;
-import static org.lwjgl.system.MemoryUtil.memPutDouble;
-import static org.lwjgl.system.MemoryUtil.memPutFloat;
-import static org.lwjgl.system.MemoryUtil.memPutInt;
-import static org.lwjgl.system.MemoryUtil.memPutLong;
-import static org.lwjgl.system.MemoryUtil.memPutShort;
-import static org.lwjgl.system.MemoryUtil.memSet;
-import static org.lwjgl.system.StackWalkUtil.stackWalkCheckPop;
-import static org.lwjgl.system.StackWalkUtil.stackWalkGetMethod;
+import org.lwjgl.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.CLongBuffer;
-import org.lwjgl.PointerBuffer;
+import javax.annotation.*;
+import java.nio.*;
+import java.util.*;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
-import java.util.Arrays;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.StackWalkUtil.*;
 
 /**
  * An off-heap memory stack.

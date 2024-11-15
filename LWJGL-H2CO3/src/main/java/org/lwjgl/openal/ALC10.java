@@ -1,37 +1,20 @@
 /*
- * //
- * // Created by cainiaohh on 2024-03-31.
- * //
+ * Copyright LWJGL. All rights reserved.
+ * License terms: https://www.lwjgl.org/license
+ * MACHINE GENERATED FILE, DO NOT EDIT
  */
 package org.lwjgl.openal;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT1;
-import static org.lwjgl.system.Checks.checkNT1Safe;
-import static org.lwjgl.system.Checks.checkNTSafe;
-import static org.lwjgl.system.JNI.invokeP;
-import static org.lwjgl.system.JNI.invokePI;
-import static org.lwjgl.system.JNI.invokePP;
-import static org.lwjgl.system.JNI.invokePPI;
-import static org.lwjgl.system.JNI.invokePPP;
-import static org.lwjgl.system.JNI.invokePPV;
-import static org.lwjgl.system.JNI.invokePPZ;
-import static org.lwjgl.system.JNI.invokePV;
-import static org.lwjgl.system.JNI.invokePZ;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
-import static org.lwjgl.system.MemoryUtil.memUTF8Safe;
+import javax.annotation.*;
 
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeType;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Native bindings to ALC 1.0 functionality. */
 public class ALC10 {
@@ -296,6 +279,19 @@ public class ALC10 {
     }
 
     /**
+     * Verify that a given extension is available for the current context and the device it
+     * is associated with.
+     * A <code>null</code> name argument returns <code>ALC_FALSE</code>, as do invalid and unsupported string
+     * tokens.
+     *
+     * @param extName name of extension to find
+     * @return true if extension is available, false if not
+     */
+    public static boolean alcIsExtensionPresent(ALCdevice device, String extName) {
+        return alcIsExtensionPresent(device.device, extName);
+    }
+
+    /**
      * Verifies that a given extension is available for the current context and the device it is associated with.
      * 
      * <p>Invalid and unsupported string tokens return ALC_FALSE. A {@code NULL} deviceHandle is acceptable. {@code extName} is not case sensitive – the implementation
@@ -429,19 +425,6 @@ public class ALC10 {
         } finally {
             stack.setPointer(stackPointer);
         }
-    }
-
-    /**
-     * Verify that a given extension is available for the current context and the device it
-     * is associated with.
-     * A <code>null</code> name argument returns <code>ALC_FALSE</code>, as do invalid and unsupported string
-     * tokens.
-     *
-     * @param extName name of extension to find
-     * @return true if extension is available, false if not
-     */
-    public static boolean alcIsExtensionPresent(ALCdevice device, String extName) {
-        return alcIsExtensionPresent(device.device, extName);
     }
 
     // --- [ alcGetError ] ---

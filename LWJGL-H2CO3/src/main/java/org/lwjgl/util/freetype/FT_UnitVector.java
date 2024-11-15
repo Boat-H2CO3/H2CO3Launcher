@@ -5,28 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A simple structure used to store a 2D vector unit vector. Uses {@code FT_F2Dot14} types.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_UnitVector {
  *     FT_F2Dot14 x;
@@ -35,27 +28,21 @@ import javax.annotation.Nullable;
  */
 public class FT_UnitVector extends Struct<FT_UnitVector> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            X,
-            Y;
+        X,
+        Y;
 
     static {
         Layout layout = __struct(
-                __member(2),
-                __member(2)
+            __member(2),
+            __member(2)
         );
 
         SIZEOF = layout.getSize();
@@ -69,6 +56,11 @@ public class FT_UnitVector extends Struct<FT_UnitVector> implements NativeResour
         super(address, container);
     }
 
+    @Override
+    protected FT_UnitVector create(long address, @Nullable ByteBuffer container) {
+        return new FT_UnitVector(address, container);
+    }
+
     /**
      * Creates a {@code FT_UnitVector} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -79,38 +71,68 @@ public class FT_UnitVector extends Struct<FT_UnitVector> implements NativeResour
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code x} field. */
+    @NativeType("FT_F2Dot14")
+    public short x() { return nx(address()); }
+    /** @return the value of the {@code y} field. */
+    @NativeType("FT_F2Dot14")
+    public short y() { return ny(address()); }
+
+    /** Sets the specified value to the {@code x} field. */
+    public FT_UnitVector x(@NativeType("FT_F2Dot14") short value) { nx(address(), value); return this; }
+    /** Sets the specified value to the {@code y} field. */
+    public FT_UnitVector y(@NativeType("FT_F2Dot14") short value) { ny(address(), value); return this; }
+
+    /** Initializes this struct with the specified values. */
+    public FT_UnitVector set(
+        short x,
+        short y
+    ) {
+        x(x);
+        y(y);
+
+        return this;
+    }
+
     /**
-     * Returns a new {@code FT_UnitVector} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
+     * Copies the specified struct data to this struct.
+     *
+     * @param src the source struct
+     *
+     * @return this struct
      */
+    public FT_UnitVector set(FT_UnitVector src) {
+        memCopy(src.address(), address(), SIZEOF);
+        return this;
+    }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_UnitVector} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_UnitVector malloc() {
         return new FT_UnitVector(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_UnitVector} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_UnitVector} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_UnitVector calloc() {
         return new FT_UnitVector(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_UnitVector} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_UnitVector} instance allocated with {@link BufferUtils}. */
     public static FT_UnitVector create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_UnitVector(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_UnitVector} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_UnitVector} instance for the specified memory address. */
     public static FT_UnitVector create(long address) {
         return new FT_UnitVector(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_UnitVector createSafe(long address) {
         return address == NULL ? null : new FT_UnitVector(address, null);
@@ -144,8 +166,6 @@ public class FT_UnitVector extends Struct<FT_UnitVector> implements NativeResour
         return new Buffer(memAddress(container), container, -1, 0, capacity, capacity);
     }
 
-    // -----------------------------------
-
     /**
      * Create a {@link Buffer} instance at the specified memory.
      *
@@ -156,9 +176,7 @@ public class FT_UnitVector extends Struct<FT_UnitVector> implements NativeResour
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -202,107 +220,21 @@ public class FT_UnitVector extends Struct<FT_UnitVector> implements NativeResour
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #x}.
-     */
-    public static short nx(long struct) {
-        return UNSAFE.getShort(null, struct + FT_UnitVector.X);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #y}.
-     */
-    public static short ny(long struct) {
-        return UNSAFE.getShort(null, struct + FT_UnitVector.Y);
-    }
+    /** Unsafe version of {@link #x}. */
+    public static short nx(long struct) { return UNSAFE.getShort(null, struct + FT_UnitVector.X); }
+    /** Unsafe version of {@link #y}. */
+    public static short ny(long struct) { return UNSAFE.getShort(null, struct + FT_UnitVector.Y); }
 
-    /**
-     * Unsafe version of {@link #x(short) x}.
-     */
-    public static void nx(long struct, short value) {
-        UNSAFE.putShort(null, struct + FT_UnitVector.X, value);
-    }
-
-    /**
-     * Unsafe version of {@link #y(short) y}.
-     */
-    public static void ny(long struct, short value) {
-        UNSAFE.putShort(null, struct + FT_UnitVector.Y, value);
-    }
-
-    @Override
-    protected FT_UnitVector create(long address, @Nullable ByteBuffer container) {
-        return new FT_UnitVector(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    /**
-     * @return the value of the {@code x} field.
-     */
-    @NativeType("FT_F2Dot14")
-    public short x() {
-        return nx(address());
-    }
-
-    /**
-     * @return the value of the {@code y} field.
-     */
-    @NativeType("FT_F2Dot14")
-    public short y() {
-        return ny(address());
-    }
+    /** Unsafe version of {@link #x(short) x}. */
+    public static void nx(long struct, short value) { UNSAFE.putShort(null, struct + FT_UnitVector.X, value); }
+    /** Unsafe version of {@link #y(short) y}. */
+    public static void ny(long struct, short value) { UNSAFE.putShort(null, struct + FT_UnitVector.Y, value); }
 
     // -----------------------------------
 
-    /**
-     * Sets the specified value to the {@code x} field.
-     */
-    public FT_UnitVector x(@NativeType("FT_F2Dot14") short value) {
-        nx(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code y} field.
-     */
-    public FT_UnitVector y(@NativeType("FT_F2Dot14") short value) {
-        ny(address(), value);
-        return this;
-    }
-
-    /**
-     * Initializes this struct with the specified values.
-     */
-    public FT_UnitVector set(
-            short x,
-            short y
-    ) {
-        x(x);
-        y(y);
-
-        return this;
-    }
-
-    /**
-     * Copies the specified struct data to this struct.
-     *
-     * @param src the source struct
-     * @return this struct
-     */
-    public FT_UnitVector set(FT_UnitVector src) {
-        memCopy(src.address(), address(), SIZEOF);
-        return this;
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_UnitVector} structs.
-     */
+    /** An array of {@link FT_UnitVector} structs. */
     public static class Buffer extends StructBuffer<FT_UnitVector, Buffer> implements NativeResource {
 
         private static final FT_UnitVector ELEMENT_FACTORY = FT_UnitVector.create(-1L);
@@ -338,37 +270,17 @@ public class FT_UnitVector extends Struct<FT_UnitVector> implements NativeResour
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code x} field.
-         */
+        /** @return the value of the {@code x} field. */
         @NativeType("FT_F2Dot14")
-        public short x() {
-            return FT_UnitVector.nx(address());
-        }
-
-        /**
-         * @return the value of the {@code y} field.
-         */
+        public short x() { return FT_UnitVector.nx(address()); }
+        /** @return the value of the {@code y} field. */
         @NativeType("FT_F2Dot14")
-        public short y() {
-            return FT_UnitVector.ny(address());
-        }
+        public short y() { return FT_UnitVector.ny(address()); }
 
-        /**
-         * Sets the specified value to the {@code x} field.
-         */
-        public Buffer x(@NativeType("FT_F2Dot14") short value) {
-            FT_UnitVector.nx(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code y} field.
-         */
-        public Buffer y(@NativeType("FT_F2Dot14") short value) {
-            FT_UnitVector.ny(address(), value);
-            return this;
-        }
+        /** Sets the specified value to the {@code x} field. */
+        public Buffer x(@NativeType("FT_F2Dot14") short value) { FT_UnitVector.nx(address(), value); return this; }
+        /** Sets the specified value to the {@code y} field. */
+        public Buffer y(@NativeType("FT_F2Dot14") short value) { FT_UnitVector.ny(address(), value); return this; }
 
     }
 

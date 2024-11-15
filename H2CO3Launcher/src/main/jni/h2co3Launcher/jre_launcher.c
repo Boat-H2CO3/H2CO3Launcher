@@ -1,3 +1,27 @@
+/*
+ * Copyright (c) 2013, Oracle and/or its affiliates. All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This code is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 only, as
+ * published by the Free Software Foundation.  Oracle designates this
+ * particular file as subject to the "Classpath" exception as provided
+ * by Oracle in the LICENSE file that accompanied this code.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * version 2 for more details (a copy is included in the LICENSE file that
+ * accompanied this code).
+ *
+ * You should have received a copy of the GNU General Public License version
+ * 2 along with this work; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
+ * or visit www.oracle.com if you need additional information or have any
+ * questions.
+ */
 #include <android/log.h>
 #include <dlfcn.h>
 #include <errno.h>
@@ -6,148 +30,201 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
+// Boardwalk: missing include
 #include <string.h>
 
-#include "h2co3Launcher_internal.h"
+#include "include/h2co3Launcher_internal.h"
 
+
+// Uncomment to try redirect signal handling to JVM
+// #define TRY_SIG2JVM
+
+// PojavLancher: fixme: are these wrong?
 #define FULL_VERSION "1.8.0-internal"
 #define DOT_VERSION "1.8"
 
-__attribute__((unused)) static const char* const_progname = "java";
-__attribute__((unused)) static const char* const_launcher = "openjdk";
-static const char** const_jargs = NULL;
-__attribute__((unused)) static const char** const_appclasspath = NULL;
+static const char *const_progname = "java";
+static const char *const_launcher = "openjdk";
+static const char **const_jargs = NULL;
+static const char **const_appclasspath = NULL;
 static const jboolean const_javaw = JNI_FALSE;
 static const jboolean const_cpwildcard = JNI_TRUE;
-static const jint const_ergo_class = 0;
-static struct sigaction old_sa[NSIG];
+static const jint const_ergo_class = 0; // DEFAULT_POLICY
 
-void (*__old_sa)(int signal, siginfo_t *info, void *reserved);
-int (*JVM_handle_linux_signal)(int signo, siginfo_t* siginfo, void* ucontext, int abort_if_unrecognized);
+typedef jint JLI_Launch_func(int argc, char **argv, /* main argc, argc */
+                             int jargc, const char **jargv,          /* java args */
+                             int appclassc, const char **appclassv,  /* app classpath */
+                             const char *fullversion,                /* full version defined */
+                             const char *dotversion,                 /* dot version defined */
+                             const char *pname,                      /* program name */
+                             const char *lname,                      /* launcher name */
+                             jboolean javaargs,                      /* JAVA_ARGS */
+                             jboolean cpwildcard,                    /* classpath wildcard*/
+                             jboolean javaw,                         /* windows-only javaw */
+                             jint ergo                               /* ergonomics class policy */
+);
 
-void android_sigaction(int signal, siginfo_t *info, void *reserved) {
-    printf("process killed with signal %d code %p addr %p\n", signal, info->si_code, info->si_addr);
-    if (JVM_handle_linux_signal == NULL) {
-        __old_sa = old_sa[signal].sa_sigaction;
-        __old_sa(signal, info, reserved);
-        exit(1);
-    } else {
-        int orig_errno = errno;
-        JVM_handle_linux_signal(signal, info, reserved, true);
-        errno = orig_errno;
+struct {
+    sigset_t tracked_sigset;
+    int pipe[2];
+} abort_waiter_data;
+
+_Noreturn static void *abort_waiter_thread(void *extraArg) {
+    // Don't allow this thread to receive signals this thread is tracking.
+    // We should only receive them externally.
+    pthread_sigmask(SIG_BLOCK, &abort_waiter_data.tracked_sigset, NULL);
+    int signal;
+    // Block for reading the signal ID until it arrives
+    read(abort_waiter_data.pipe[0], &signal, sizeof(int));
+    // Die
+    nominal_exit(signal);
+}
+
+_Noreturn static void abort_waiter_handler(int signal) {
+    // Write the final signal into the pipe and block forever.
+    write(abort_waiter_data.pipe[1], &signal, sizeof(int));
+    while (1) {}
+}
+
+static void abort_waiter_setup() {
+    // Only abort on SIGABRT as the JVM either emits SIGABRT or SIGKILL (which we can't catch)
+    // when a fatal crash occurs. Still, keep expandability if we would want to add more
+    // user-friendly fatal signals in the future.
+    const static int tracked_signals[] = {SIGABRT};
+    const static int ntracked = (sizeof(tracked_signals) / sizeof(tracked_signals[0]));
+    struct sigaction sigactions[ntracked];
+    sigemptyset(&abort_waiter_data.tracked_sigset);
+    for (size_t i = 0; i < ntracked; i++) {
+        sigaddset(&abort_waiter_data.tracked_sigset, tracked_signals[i]);
+        sigactions[i].sa_handler = abort_waiter_handler;
+    }
+    if (pipe(abort_waiter_data.pipe) != 0) {
+        printf("Failed to set up aborter pipe: %s\n", strerror(errno));
+        return;
+    }
+    pthread_t waiter_thread;
+    int result;
+    if ((result = pthread_create(&waiter_thread, NULL, abort_waiter_thread, NULL)) != 0) {
+        printf("Failed to start up waiter thread: %s", strerror(result));
+        for (int i = 0; i < 2; i++) close(abort_waiter_data.pipe[i]);
+        return;
+    }
+    // Only set the sigactions *after* we have already set up the pipe and the thread.
+    for (size_t i = 0; i < ntracked; i++) {
+        if (sigaction(tracked_signals[i], &sigactions[i], NULL) != 0) {
+            // Not returning here because we may have set some handlers successfully.
+            // Some handling is better than no handling.
+            printf("Failed to set signal hander for signal %i: %s", i, strerror(errno));
+        }
     }
 }
 
-__attribute__((unused)) typedef jint JNI_CreateJavaVM_func(JavaVM **pvm, void **penv, void *args);
-typedef jint JLI_Launch_func(int argc, char ** argv, int jargc, const char** jargv, int appclassc, const char** appclassv, const char* fullversion, const char* dotversion, const char* pname, const char* lname, jboolean javaargs, jboolean cpwildcard, jboolean javaw, jint ergo);
+static jint launchJVM(int margc, char **margv) {
+    void *libjli = dlopen("libjli.so", RTLD_LAZY | RTLD_GLOBAL);
 
-static jint launchJVM(int margc, char** margv) {
-    void* libjli = dlopen("libjli.so", RTLD_LAZY | RTLD_GLOBAL);
-    if (libjli == NULL) {
-        H2CO3_INTERNAL_LOG("JLI lib = NULL: %s", dlerror());
+    // Unset all signal handlers to create a good slate for JVM signal detection.
+    struct sigaction clean_sa;
+    memset(&clean_sa, 0, sizeof(struct sigaction));
+    for (int sigid = SIGHUP; sigid < NSIG; sigid++) {
+        // For some reason Android specifically checks if you set SIGSEGV to SIG_DFL.
+        // There's probably a good reason for that but the signal handler here is
+        // temporary and will be replaced by the Java VM's signal/crash handler.
+        // Work around the warning by using SIG_IGN for SIGSEGV
+        if (sigid == SIGSEGV) clean_sa.sa_handler = SIG_IGN;
+        else clean_sa.sa_handler = SIG_DFL;
+        sigaction(sigid, &clean_sa, NULL);
+    }
+    // Set up the thread that will abort the launcher with an user-facing dialog on a signal.
+    abort_waiter_setup();
+
+    // Boardwalk: silence
+    // LOGD("JLI lib = %x", (int)libjli);
+    if (NULL == libjli) {
+        H2CO3Launcher_INTERNAL_LOG("JLI lib = NULL: %s", dlerror());
         return -1;
     }
-    H2CO3_INTERNAL_LOG("Found JLI lib");
+    H2CO3Launcher_INTERNAL_LOG("Found JLI lib");
 
-    JLI_Launch_func *pJLI_Launch = (JLI_Launch_func *)dlsym(libjli, "JLI_Launch");
-    if (pJLI_Launch == NULL) {
-        H2CO3_INTERNAL_LOG("JLI_Launch = NULL");
-        dlclose(libjli);
+    JLI_Launch_func *pJLI_Launch =
+            (JLI_Launch_func *) dlsym(libjli, "JLI_Launch");
+    // Boardwalk: silence
+    // LOGD("JLI_Launch = 0x%x", *(int*)&pJLI_Launch);
+
+    if (NULL == pJLI_Launch) {
+        H2CO3Launcher_INTERNAL_LOG("JLI_Launch = NULL");
         return -1;
     }
 
-    H2CO3_INTERNAL_LOG("Calling JLI_Launch");
-    return pJLI_Launch(margc, margv, 0, NULL, 0, NULL, FULL_VERSION, DOT_VERSION, margv[0], margv[0], (const_jargs != NULL) ? JNI_TRUE : JNI_FALSE, const_cpwildcard, const_javaw, const_ergo_class);
+    H2CO3Launcher_INTERNAL_LOG("Calling JLI_Launch");
+
+    return pJLI_Launch(margc, margv,
+                       0, NULL, // sizeof(const_jargs) / sizeof(char *), const_jargs,
+                       0, NULL, // sizeof(const_appclasspath) / sizeof(char *), const_appclasspath,
+                       FULL_VERSION,
+                       DOT_VERSION,
+                       *margv, // (const_progname != NULL) ? const_progname : *margv,
+                       *margv, // (const_launcher != NULL) ? const_launcher : *margv,
+                       (const_jargs != NULL) ? JNI_TRUE : JNI_FALSE,
+                       const_cpwildcard, const_javaw, const_ergo_class);
+/*
+   return pJLI_Launch(argc, argv,
+       0, NULL, 0, NULL, FULL_VERSION,
+       DOT_VERSION, *margv, *margv, // "java", "openjdk",
+       JNI_FALSE, JNI_TRUE, JNI_FALSE, 0);
+*/
 }
 
-char** convert_to_char_array(JNIEnv *env, jobjectArray jstringArray) {
+char **convert_to_char_array(JNIEnv *env, jobjectArray jstringArray) {
     int num_rows = (*env)->GetArrayLength(env, jstringArray);
-    char **cArray = (char **) malloc(num_rows * sizeof(char*));
-    if (cArray == NULL) return NULL; // Check malloc result
+    char **cArray = (char **) malloc(num_rows * sizeof(char *));
+    jstring row;
 
     for (int i = 0; i < num_rows; i++) {
-        jstring row = (jstring)(*env)->GetObjectArrayElement(env, jstringArray, i);
-        if (row == NULL) {
-            free(cArray); // Free allocated memory on error
-            return NULL;
-        }
-        cArray[i] = (char*)(*env)->GetStringUTFChars(env, row, 0);
-        (*env)->DeleteLocalRef(env, row); // Clean up local reference
-        if (cArray[i] == NULL) {
-            free(cArray); // Free allocated memory on error
-            return NULL;
-        }
+        row = (jstring) (*env)->GetObjectArrayElement(env, jstringArray, i);
+        cArray[i] = (char *) (*env)->GetStringUTFChars(env, row, 0);
     }
 
     return cArray;
 }
 
-void free_char_array(JNIEnv *env, jobjectArray jstringArray, char **charArray) {
-    if (charArray == NULL) return; // Check for NULL
+
+void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charArray) {
     int num_rows = (*env)->GetArrayLength(env, jstringArray);
+    jstring row;
 
     for (int i = 0; i < num_rows; i++) {
-        jstring row = (jstring)(*env)->GetObjectArrayElement(env, jstringArray, i);
-        if (row != NULL) {
-            (*env)->ReleaseStringUTFChars(env, row, charArray[i]);
-            (*env)->DeleteLocalRef(env, row); // Clean up local reference
-        }
-    }
-    free(charArray); // Free the allocated char array
-}
-
-void setup_signal_handler(int signal, struct sigaction *catcher) {
-    if (sigaction(signal, catcher, &old_sa[signal]) != 0) {
-        perror("sigaction failed");
+        row = (jstring) (*env)->GetObjectArrayElement(env, jstringArray, i);
+        (*env)->ReleaseStringUTFChars(env, row, charArray[i]);
     }
 }
 
-jint JNICALL Java_org_koishi_launcher_h2co3_core_launch_H2CO3JVMLauncher_launchJVM(JNIEnv *env, jclass clazz, jobjectArray argsArray) {
-#ifdef TRY_SIG2JVM
-    void* libjvm = dlopen("libjvm.so", RTLD_LAZY | RTLD_GLOBAL);
-    if (libjvm == NULL) {
-        LOGE("JVM lib = NULL: %s", dlerror());
-        return -1;
-    }
-    JVM_handle_linux_signal = dlsym(libjvm, "JVM_handle_linux_signal");
-#endif
+/*
+ * Class:     com_oracle_dalvik_VMLauncher
+ * Method:    launchJVM
+ * Signature: ([Ljava/lang/String;)I
+ */
 
+jint JNICALL
+Java_org_koishi_launcher_h2co3_core_launch_H2CO3JVMLauncher_launchJVM(JNIEnv *env, jclass clazz, jobjectArray argsArray) {
     jint res = 0;
-    struct sigaction catcher;
-    memset(&catcher, 0, sizeof(sigaction));
-    catcher.sa_sigaction = android_sigaction;
-    catcher.sa_flags = SA_SIGINFO | SA_RESTART;
-
-    setup_signal_handler(SIGILL, &catcher);
-    setup_signal_handler(SIGBUS, &catcher);
-    setup_signal_handler(SIGFPE, &catcher);
-#ifdef TRY_SIG2JVM
-    setup_signal_handler(SIGSEGV, &catcher);
-#endif
-    setup_signal_handler(SIGSTKFLT, &catcher);
-    setup_signal_handler(SIGPIPE, &catcher);
-    setup_signal_handler(SIGXFSZ, &catcher);
 
     if (argsArray == NULL) {
-        H2CO3_INTERNAL_LOG("Args array null, returning");
+        H2CO3Launcher_INTERNAL_LOG("Args array null, returning");
+        //handle error
         return 0;
     }
 
     int argc = (*env)->GetArrayLength(env, argsArray);
     char **argv = convert_to_char_array(env, argsArray);
-    if (argv == NULL) {
-        H2CO3_INTERNAL_LOG("Failed to convert args");
-        return -1; // Handle conversion error
-    }
 
-    H2CO3_INTERNAL_LOG("Done processing args");
+    H2CO3Launcher_INTERNAL_LOG("Done processing args");
 
     res = launchJVM(argc, argv);
 
-    H2CO3_INTERNAL_LOG("Going to free args");
+    H2CO3Launcher_INTERNAL_LOG("Going to free args");
     free_char_array(env, argsArray, argv);
 
-    H2CO3_INTERNAL_LOG("Free done");
+    H2CO3Launcher_INTERNAL_LOG("Free done");
 
     return res;
 }

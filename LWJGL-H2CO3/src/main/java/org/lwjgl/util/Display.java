@@ -80,7 +80,7 @@ public final class Display {
 		ArrayList<DisplayMode> matches = new ArrayList<DisplayMode>(modes.length);
 
 		for (int i = 0; i < modes.length; i ++) {
-            assert modes[i] != null : i + " " + modes.length;
+			assert modes[i] != null : ""+i+" "+modes.length;
 			if (minWidth != -1 && modes[i].getWidth() < minWidth)
 				continue;
 			if (maxWidth != -1 && modes[i].getWidth() > maxWidth)
@@ -168,7 +168,7 @@ public final class Display {
 				for (int i = 0; i < accessors.length; i ++) {
 					int idx = param[i].indexOf('=');
 					if (idx > 0) {
-                        accessors[i] = new FieldAccessor(param[i].substring(0, idx), 0, Integer.parseInt(param[i].substring(idx + 1)), true);
+						accessors[i] = new FieldAccessor(param[i].substring(0, idx), 0, Integer.parseInt(param[i].substring(idx + 1, param[i].length())), true);
 					} else if (param[i].charAt(0) == '-') {
 						accessors[i] = new FieldAccessor(param[i].substring(1), -1, 0, false);
 					} else {
@@ -185,28 +185,28 @@ public final class Display {
 					int f1 = accessor.getInt(dm1);
 					int f2 = accessor.getInt(dm2);
 
-                    if (accessor.usePreferred && f1 != f2) {
-                        if (f1 == accessor.preferred)
-                            return -1;
-                        else if (f2 == accessor.preferred)
-                            return 1;
-                        else {
-                            // Score according to the difference between the values
-                            int absf1 = Math.abs(f1 - accessor.preferred);
-                            int absf2 = Math.abs(f2 - accessor.preferred);
-                            if (absf1 < absf2)
-                                return -1;
-                            else if (absf1 > absf2)
-                                return 1;
-                            else
-                                continue;
-                        }
-                    } else if (f1 < f2)
-                        return accessor.order;
-                    else if (f1 == f2)
-                        continue;
-                    else
-                        return -accessor.order;
+					if ( accessor.usePreferred && f1 != f2 ) {
+						if ( f1 == accessor.preferred )
+							return -1;
+						else if ( f2 == accessor.preferred )
+							return 1;
+						else {
+							// Score according to the difference between the values
+							int absf1 = Math.abs(f1 - accessor.preferred);
+							int absf2 = Math.abs(f2 - accessor.preferred);
+							if ( absf1 < absf2 )
+								return -1;
+							else if ( absf1 > absf2 )
+								return 1;
+							else
+								continue;
+						}
+					} else if ( f1 < f2 )
+						return accessor.order;
+					else if ( f1 == f2 )
+						continue;
+					else
+						return -accessor.order;
 				}
 
 				return 0;

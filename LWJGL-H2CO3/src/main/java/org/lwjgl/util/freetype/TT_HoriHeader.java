@@ -5,28 +5,20 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
-import static org.lwjgl.system.MemoryUtil.memShortBuffer;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure to model a TrueType horizontal header, the {@code hhea} table, as well as the corresponding horizontal metrics table, {@code hmtx}.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct TT_HoriHeader {
  *     FT_Fixed Version;
@@ -49,55 +41,49 @@ import javax.annotation.Nullable;
  */
 public class TT_HoriHeader extends Struct<TT_HoriHeader> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            VERSION,
-            ASCENDER,
-            DESCENDER,
-            LINE_GAP,
-            ADVANCE_WIDTH_MAX,
-            MIN_LEFT_SIDE_BEARING,
-            MIN_RIGHT_SIDE_BEARING,
-            XMAX_EXTENT,
-            CARET_SLOPE_RISE,
-            CARET_SLOPE_RUN,
-            CARET_OFFSET,
-            RESERVED,
-            METRIC_DATA_FORMAT,
-            NUMBER_OF_HMETRICS,
-            LONG_METRICS,
-            SHORT_METRICS;
+        VERSION,
+        ASCENDER,
+        DESCENDER,
+        LINE_GAP,
+        ADVANCE_WIDTH_MAX,
+        MIN_LEFT_SIDE_BEARING,
+        MIN_RIGHT_SIDE_BEARING,
+        XMAX_EXTENT,
+        CARET_SLOPE_RISE,
+        CARET_SLOPE_RUN,
+        CARET_OFFSET,
+        RESERVED,
+        METRIC_DATA_FORMAT,
+        NUMBER_OF_HMETRICS,
+        LONG_METRICS,
+        SHORT_METRICS;
 
     static {
         Layout layout = __struct(
-                __member(CLONG_SIZE),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __array(2, 4),
-                __member(2),
-                __member(2),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE)
+            __member(CLONG_SIZE),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __array(2, 4),
+            __member(2),
+            __member(2),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -125,6 +111,11 @@ public class TT_HoriHeader extends Struct<TT_HoriHeader> {
         super(address, container);
     }
 
+    @Override
+    protected TT_HoriHeader create(long address, @Nullable ByteBuffer container) {
+        return new TT_HoriHeader(address, container);
+    }
+
     /**
      * Creates a {@code TT_HoriHeader} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -135,16 +126,79 @@ public class TT_HoriHeader extends Struct<TT_HoriHeader> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code Version} field. */
+    @NativeType("FT_Fixed")
+    public long Version() { return nVersion(address()); }
+    /** @return the value of the {@code Ascender} field. */
+    @NativeType("FT_Short")
+    public short Ascender() { return nAscender(address()); }
+    /** @return the value of the {@code Descender} field. */
+    @NativeType("FT_Short")
+    public short Descender() { return nDescender(address()); }
+    /** @return the value of the {@code Line_Gap} field. */
+    @NativeType("FT_Short")
+    public short Line_Gap() { return nLine_Gap(address()); }
+    /** advance width maximum */
+    @NativeType("FT_UShort")
+    public short advance_Width_Max() { return nadvance_Width_Max(address()); }
+    /** minimum left-sb */
+    @NativeType("FT_Short")
+    public short min_Left_Side_Bearing() { return nmin_Left_Side_Bearing(address()); }
+    /** minimum right-sb */
+    @NativeType("FT_Short")
+    public short min_Right_Side_Bearing() { return nmin_Right_Side_Bearing(address()); }
+    /** xmax extents */
+    @NativeType("FT_Short")
+    public short xMax_Extent() { return nxMax_Extent(address()); }
+    /** @return the value of the {@code caret_Slope_Rise} field. */
+    @NativeType("FT_Short")
+    public short caret_Slope_Rise() { return ncaret_Slope_Rise(address()); }
+    /** @return the value of the {@code caret_Slope_Run} field. */
+    @NativeType("FT_Short")
+    public short caret_Slope_Run() { return ncaret_Slope_Run(address()); }
+    /** @return the value of the {@code caret_Offset} field. */
+    @NativeType("FT_Short")
+    public short caret_Offset() { return ncaret_Offset(address()); }
+    /** @return a {@link ShortBuffer} view of the {@code Reserved} field. */
+    @NativeType("FT_Short[4]")
+    public ShortBuffer Reserved() { return nReserved(address()); }
+    /** @return the value at the specified index of the {@code Reserved} field. */
+    @NativeType("FT_Short")
+    public short Reserved(int index) { return nReserved(address(), index); }
+    /** @return the value of the {@code metric_Data_Format} field. */
+    @NativeType("FT_Short")
+    public short metric_Data_Format() { return nmetric_Data_Format(address()); }
+    /** @return the value of the {@code number_Of_HMetrics} field. */
+    @NativeType("FT_UShort")
+    public short number_Of_HMetrics() { return nnumber_Of_HMetrics(address()); }
     /**
-     * Returns a new {@code TT_HoriHeader} instance for the specified memory address.
+     * @return a {@link ByteBuffer} view of the data pointed to by the {@code long_metrics} field.
+     *
+     * @param capacity the number of elements in the returned buffer
      */
+    @Nullable
+    @NativeType("void *")
+    public ByteBuffer long_metrics(int capacity) { return nlong_metrics(address(), capacity); }
+    /**
+     * @return a {@link ByteBuffer} view of the data pointed to by the {@code short_metrics} field.
+     *
+     * @param capacity the number of elements in the returned buffer
+     */
+    @Nullable
+    @NativeType("void *")
+    public ByteBuffer short_metrics(int capacity) { return nshort_metrics(address(), capacity); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code TT_HoriHeader} instance for the specified memory address. */
     public static TT_HoriHeader create(long address) {
         return new TT_HoriHeader(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static TT_HoriHeader createSafe(long address) {
         return address == NULL ? null : new TT_HoriHeader(address, null);
@@ -160,294 +214,54 @@ public class TT_HoriHeader extends Struct<TT_HoriHeader> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #Version}.
-     */
-    public static long nVersion(long struct) {
-        return memGetCLong(struct + TT_HoriHeader.VERSION);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #Ascender}.
-     */
-    public static short nAscender(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.ASCENDER);
-    }
-
-    /**
-     * Unsafe version of {@link #Descender}.
-     */
-    public static short nDescender(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.DESCENDER);
-    }
-
-    /**
-     * Unsafe version of {@link #Line_Gap}.
-     */
-    public static short nLine_Gap(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.LINE_GAP);
-    }
-
-    /**
-     * Unsafe version of {@link #advance_Width_Max}.
-     */
-    public static short nadvance_Width_Max(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.ADVANCE_WIDTH_MAX);
-    }
-
-    /**
-     * Unsafe version of {@link #min_Left_Side_Bearing}.
-     */
-    public static short nmin_Left_Side_Bearing(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.MIN_LEFT_SIDE_BEARING);
-    }
-
-    /**
-     * Unsafe version of {@link #min_Right_Side_Bearing}.
-     */
-    public static short nmin_Right_Side_Bearing(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.MIN_RIGHT_SIDE_BEARING);
-    }
-
-    /**
-     * Unsafe version of {@link #xMax_Extent}.
-     */
-    public static short nxMax_Extent(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.XMAX_EXTENT);
-    }
-
-    /**
-     * Unsafe version of {@link #caret_Slope_Rise}.
-     */
-    public static short ncaret_Slope_Rise(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.CARET_SLOPE_RISE);
-    }
-
-    /**
-     * Unsafe version of {@link #caret_Slope_Run}.
-     */
-    public static short ncaret_Slope_Run(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.CARET_SLOPE_RUN);
-    }
-
-    /**
-     * Unsafe version of {@link #caret_Offset}.
-     */
-    public static short ncaret_Offset(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.CARET_OFFSET);
-    }
-
-    /**
-     * Unsafe version of {@link #Reserved}.
-     */
-    public static ShortBuffer nReserved(long struct) {
-        return memShortBuffer(struct + TT_HoriHeader.RESERVED, 4);
-    }
-
-    /**
-     * Unsafe version of {@link #Reserved(int) Reserved}.
-     */
+    /** Unsafe version of {@link #Version}. */
+    public static long nVersion(long struct) { return memGetCLong(struct + TT_HoriHeader.VERSION); }
+    /** Unsafe version of {@link #Ascender}. */
+    public static short nAscender(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.ASCENDER); }
+    /** Unsafe version of {@link #Descender}. */
+    public static short nDescender(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.DESCENDER); }
+    /** Unsafe version of {@link #Line_Gap}. */
+    public static short nLine_Gap(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.LINE_GAP); }
+    /** Unsafe version of {@link #advance_Width_Max}. */
+    public static short nadvance_Width_Max(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.ADVANCE_WIDTH_MAX); }
+    /** Unsafe version of {@link #min_Left_Side_Bearing}. */
+    public static short nmin_Left_Side_Bearing(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.MIN_LEFT_SIDE_BEARING); }
+    /** Unsafe version of {@link #min_Right_Side_Bearing}. */
+    public static short nmin_Right_Side_Bearing(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.MIN_RIGHT_SIDE_BEARING); }
+    /** Unsafe version of {@link #xMax_Extent}. */
+    public static short nxMax_Extent(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.XMAX_EXTENT); }
+    /** Unsafe version of {@link #caret_Slope_Rise}. */
+    public static short ncaret_Slope_Rise(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.CARET_SLOPE_RISE); }
+    /** Unsafe version of {@link #caret_Slope_Run}. */
+    public static short ncaret_Slope_Run(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.CARET_SLOPE_RUN); }
+    /** Unsafe version of {@link #caret_Offset}. */
+    public static short ncaret_Offset(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.CARET_OFFSET); }
+    /** Unsafe version of {@link #Reserved}. */
+    public static ShortBuffer nReserved(long struct) { return memShortBuffer(struct + TT_HoriHeader.RESERVED, 4); }
+    /** Unsafe version of {@link #Reserved(int) Reserved}. */
     public static short nReserved(long struct, int index) {
         return UNSAFE.getShort(null, struct + TT_HoriHeader.RESERVED + check(index, 4) * 2);
     }
-
-    /**
-     * Unsafe version of {@link #metric_Data_Format}.
-     */
-    public static short nmetric_Data_Format(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.METRIC_DATA_FORMAT);
-    }
-
-    /**
-     * Unsafe version of {@link #number_Of_HMetrics}.
-     */
-    public static short nnumber_Of_HMetrics(long struct) {
-        return UNSAFE.getShort(null, struct + TT_HoriHeader.NUMBER_OF_HMETRICS);
-    }
+    /** Unsafe version of {@link #metric_Data_Format}. */
+    public static short nmetric_Data_Format(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.METRIC_DATA_FORMAT); }
+    /** Unsafe version of {@link #number_Of_HMetrics}. */
+    public static short nnumber_Of_HMetrics(long struct) { return UNSAFE.getShort(null, struct + TT_HoriHeader.NUMBER_OF_HMETRICS); }
+    /** Unsafe version of {@link #long_metrics(int) long_metrics}. */
+    @Nullable public static ByteBuffer nlong_metrics(long struct, int capacity) { return memByteBufferSafe(memGetAddress(struct + TT_HoriHeader.LONG_METRICS), capacity); }
+    /** Unsafe version of {@link #short_metrics(int) short_metrics}. */
+    @Nullable public static ByteBuffer nshort_metrics(long struct, int capacity) { return memByteBufferSafe(memGetAddress(struct + TT_HoriHeader.SHORT_METRICS), capacity); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #long_metrics(int) long_metrics}.
-     */
-    @Nullable
-    public static ByteBuffer nlong_metrics(long struct, int capacity) {
-        return memByteBufferSafe(memGetAddress(struct + TT_HoriHeader.LONG_METRICS), capacity);
-    }
-
-    /**
-     * Unsafe version of {@link #short_metrics(int) short_metrics}.
-     */
-    @Nullable
-    public static ByteBuffer nshort_metrics(long struct, int capacity) {
-        return memByteBufferSafe(memGetAddress(struct + TT_HoriHeader.SHORT_METRICS), capacity);
-    }
-
-    @Override
-    protected TT_HoriHeader create(long address, @Nullable ByteBuffer container) {
-        return new TT_HoriHeader(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return the value of the {@code Version} field.
-     */
-    @NativeType("FT_Fixed")
-    public long Version() {
-        return nVersion(address());
-    }
-
-    /**
-     * @return the value of the {@code Ascender} field.
-     */
-    @NativeType("FT_Short")
-    public short Ascender() {
-        return nAscender(address());
-    }
-
-    /**
-     * @return the value of the {@code Descender} field.
-     */
-    @NativeType("FT_Short")
-    public short Descender() {
-        return nDescender(address());
-    }
-
-    /**
-     * @return the value of the {@code Line_Gap} field.
-     */
-    @NativeType("FT_Short")
-    public short Line_Gap() {
-        return nLine_Gap(address());
-    }
-
-    /**
-     * advance width maximum
-     */
-    @NativeType("FT_UShort")
-    public short advance_Width_Max() {
-        return nadvance_Width_Max(address());
-    }
-
-    /**
-     * minimum left-sb
-     */
-    @NativeType("FT_Short")
-    public short min_Left_Side_Bearing() {
-        return nmin_Left_Side_Bearing(address());
-    }
-
-    /**
-     * minimum right-sb
-     */
-    @NativeType("FT_Short")
-    public short min_Right_Side_Bearing() {
-        return nmin_Right_Side_Bearing(address());
-    }
-
-    /**
-     * xmax extents
-     */
-    @NativeType("FT_Short")
-    public short xMax_Extent() {
-        return nxMax_Extent(address());
-    }
-
-    /**
-     * @return the value of the {@code caret_Slope_Rise} field.
-     */
-    @NativeType("FT_Short")
-    public short caret_Slope_Rise() {
-        return ncaret_Slope_Rise(address());
-    }
-
-    /**
-     * @return the value of the {@code caret_Slope_Run} field.
-     */
-    @NativeType("FT_Short")
-    public short caret_Slope_Run() {
-        return ncaret_Slope_Run(address());
-    }
-
-    /**
-     * @return the value of the {@code caret_Offset} field.
-     */
-    @NativeType("FT_Short")
-    public short caret_Offset() {
-        return ncaret_Offset(address());
-    }
-
-    /**
-     * @return a {@link ShortBuffer} view of the {@code Reserved} field.
-     */
-    @NativeType("FT_Short[4]")
-    public ShortBuffer Reserved() {
-        return nReserved(address());
-    }
-
-    /**
-     * @return the value at the specified index of the {@code Reserved} field.
-     */
-    @NativeType("FT_Short")
-    public short Reserved(int index) {
-        return nReserved(address(), index);
-    }
-
-    /**
-     * @return the value of the {@code metric_Data_Format} field.
-     */
-    @NativeType("FT_Short")
-    public short metric_Data_Format() {
-        return nmetric_Data_Format(address());
-    }
-
-    /**
-     * @return the value of the {@code number_Of_HMetrics} field.
-     */
-    @NativeType("FT_UShort")
-    public short number_Of_HMetrics() {
-        return nnumber_Of_HMetrics(address());
-    }
-
-    /**
-     * @param capacity the number of elements in the returned buffer
-     * @return a {@link ByteBuffer} view of the data pointed to by the {@code long_metrics} field.
-     */
-    @Nullable
-    @NativeType("void *")
-    public ByteBuffer long_metrics(int capacity) {
-        return nlong_metrics(address(), capacity);
-    }
-
-    /**
-     * @param capacity the number of elements in the returned buffer
-     * @return a {@link ByteBuffer} view of the data pointed to by the {@code short_metrics} field.
-     */
-    @Nullable
-    @NativeType("void *")
-    public ByteBuffer short_metrics(int capacity) {
-        return nshort_metrics(address(), capacity);
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link TT_HoriHeader} structs.
-     */
+    /** An array of {@link TT_HoriHeader} structs. */
     public static class Buffer extends StructBuffer<TT_HoriHeader, Buffer> {
 
         private static final TT_HoriHeader ELEMENT_FACTORY = TT_HoriHeader.create(-1L);
@@ -483,145 +297,67 @@ public class TT_HoriHeader extends Struct<TT_HoriHeader> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code Version} field.
-         */
+        /** @return the value of the {@code Version} field. */
         @NativeType("FT_Fixed")
-        public long Version() {
-            return TT_HoriHeader.nVersion(address());
-        }
-
-        /**
-         * @return the value of the {@code Ascender} field.
-         */
+        public long Version() { return TT_HoriHeader.nVersion(address()); }
+        /** @return the value of the {@code Ascender} field. */
         @NativeType("FT_Short")
-        public short Ascender() {
-            return TT_HoriHeader.nAscender(address());
-        }
-
-        /**
-         * @return the value of the {@code Descender} field.
-         */
+        public short Ascender() { return TT_HoriHeader.nAscender(address()); }
+        /** @return the value of the {@code Descender} field. */
         @NativeType("FT_Short")
-        public short Descender() {
-            return TT_HoriHeader.nDescender(address());
-        }
-
-        /**
-         * @return the value of the {@code Line_Gap} field.
-         */
+        public short Descender() { return TT_HoriHeader.nDescender(address()); }
+        /** @return the value of the {@code Line_Gap} field. */
         @NativeType("FT_Short")
-        public short Line_Gap() {
-            return TT_HoriHeader.nLine_Gap(address());
-        }
-
-        /**
-         * @return the value of the {@link TT_HoriHeader#advance_Width_Max} field.
-         */
+        public short Line_Gap() { return TT_HoriHeader.nLine_Gap(address()); }
+        /** @return the value of the {@link TT_HoriHeader#advance_Width_Max} field. */
         @NativeType("FT_UShort")
-        public short advance_Width_Max() {
-            return TT_HoriHeader.nadvance_Width_Max(address());
-        }
-
-        /**
-         * @return the value of the {@link TT_HoriHeader#min_Left_Side_Bearing} field.
-         */
+        public short advance_Width_Max() { return TT_HoriHeader.nadvance_Width_Max(address()); }
+        /** @return the value of the {@link TT_HoriHeader#min_Left_Side_Bearing} field. */
         @NativeType("FT_Short")
-        public short min_Left_Side_Bearing() {
-            return TT_HoriHeader.nmin_Left_Side_Bearing(address());
-        }
-
-        /**
-         * @return the value of the {@link TT_HoriHeader#min_Right_Side_Bearing} field.
-         */
+        public short min_Left_Side_Bearing() { return TT_HoriHeader.nmin_Left_Side_Bearing(address()); }
+        /** @return the value of the {@link TT_HoriHeader#min_Right_Side_Bearing} field. */
         @NativeType("FT_Short")
-        public short min_Right_Side_Bearing() {
-            return TT_HoriHeader.nmin_Right_Side_Bearing(address());
-        }
-
-        /**
-         * @return the value of the {@link TT_HoriHeader#xMax_Extent} field.
-         */
+        public short min_Right_Side_Bearing() { return TT_HoriHeader.nmin_Right_Side_Bearing(address()); }
+        /** @return the value of the {@link TT_HoriHeader#xMax_Extent} field. */
         @NativeType("FT_Short")
-        public short xMax_Extent() {
-            return TT_HoriHeader.nxMax_Extent(address());
-        }
-
-        /**
-         * @return the value of the {@code caret_Slope_Rise} field.
-         */
+        public short xMax_Extent() { return TT_HoriHeader.nxMax_Extent(address()); }
+        /** @return the value of the {@code caret_Slope_Rise} field. */
         @NativeType("FT_Short")
-        public short caret_Slope_Rise() {
-            return TT_HoriHeader.ncaret_Slope_Rise(address());
-        }
-
-        /**
-         * @return the value of the {@code caret_Slope_Run} field.
-         */
+        public short caret_Slope_Rise() { return TT_HoriHeader.ncaret_Slope_Rise(address()); }
+        /** @return the value of the {@code caret_Slope_Run} field. */
         @NativeType("FT_Short")
-        public short caret_Slope_Run() {
-            return TT_HoriHeader.ncaret_Slope_Run(address());
-        }
-
-        /**
-         * @return the value of the {@code caret_Offset} field.
-         */
+        public short caret_Slope_Run() { return TT_HoriHeader.ncaret_Slope_Run(address()); }
+        /** @return the value of the {@code caret_Offset} field. */
         @NativeType("FT_Short")
-        public short caret_Offset() {
-            return TT_HoriHeader.ncaret_Offset(address());
-        }
-
-        /**
-         * @return a {@link ShortBuffer} view of the {@code Reserved} field.
-         */
+        public short caret_Offset() { return TT_HoriHeader.ncaret_Offset(address()); }
+        /** @return a {@link ShortBuffer} view of the {@code Reserved} field. */
         @NativeType("FT_Short[4]")
-        public ShortBuffer Reserved() {
-            return TT_HoriHeader.nReserved(address());
-        }
-
-        /**
-         * @return the value at the specified index of the {@code Reserved} field.
-         */
+        public ShortBuffer Reserved() { return TT_HoriHeader.nReserved(address()); }
+        /** @return the value at the specified index of the {@code Reserved} field. */
         @NativeType("FT_Short")
-        public short Reserved(int index) {
-            return TT_HoriHeader.nReserved(address(), index);
-        }
-
-        /**
-         * @return the value of the {@code metric_Data_Format} field.
-         */
+        public short Reserved(int index) { return TT_HoriHeader.nReserved(address(), index); }
+        /** @return the value of the {@code metric_Data_Format} field. */
         @NativeType("FT_Short")
-        public short metric_Data_Format() {
-            return TT_HoriHeader.nmetric_Data_Format(address());
-        }
-
-        /**
-         * @return the value of the {@code number_Of_HMetrics} field.
-         */
+        public short metric_Data_Format() { return TT_HoriHeader.nmetric_Data_Format(address()); }
+        /** @return the value of the {@code number_Of_HMetrics} field. */
         @NativeType("FT_UShort")
-        public short number_Of_HMetrics() {
-            return TT_HoriHeader.nnumber_Of_HMetrics(address());
-        }
-
+        public short number_Of_HMetrics() { return TT_HoriHeader.nnumber_Of_HMetrics(address()); }
         /**
-         * @param capacity the number of elements in the returned buffer
          * @return a {@link ByteBuffer} view of the data pointed to by the {@code long_metrics} field.
-         */
-        @Nullable
-        @NativeType("void *")
-        public ByteBuffer long_metrics(int capacity) {
-            return TT_HoriHeader.nlong_metrics(address(), capacity);
-        }
-
-        /**
+         *
          * @param capacity the number of elements in the returned buffer
-         * @return a {@link ByteBuffer} view of the data pointed to by the {@code short_metrics} field.
          */
         @Nullable
         @NativeType("void *")
-        public ByteBuffer short_metrics(int capacity) {
-            return TT_HoriHeader.nshort_metrics(address(), capacity);
-        }
+        public ByteBuffer long_metrics(int capacity) { return TT_HoriHeader.nlong_metrics(address(), capacity); }
+        /**
+         * @return a {@link ByteBuffer} view of the data pointed to by the {@code short_metrics} field.
+         *
+         * @param capacity the number of elements in the returned buffer
+         */
+        @Nullable
+        @NativeType("void *")
+        public ByteBuffer short_metrics(int capacity) { return TT_HoriHeader.nshort_metrics(address(), capacity); }
 
     }
 

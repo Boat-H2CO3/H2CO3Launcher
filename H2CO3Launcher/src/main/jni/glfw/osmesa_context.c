@@ -1,5 +1,5 @@
 //
-// Created by cainiaohh on 2022/10/11.
+// Created by Tungsten on 2022/10/11.
 //
 
 #include <stdlib.h>
@@ -17,8 +17,8 @@ void (*vtest_swap_buffers) (void);
 ANativeWindow_Buffer buf;
 int32_t stride;
 
-#ifndef H2CO3LAUNCHER_NSBYPASS_H
-#define H2CO3LAUNCHER_NSBYPASS_H
+#ifndef H2CO3Launcher_NSBYPASS_H
+#define H2CO3Launcher_NSBYPASS_H
 
 void* load_turnip_vulkan();
 
@@ -82,7 +82,7 @@ static void makeContextCurrentOSMesa(_GLFWwindow* window)
         window->context.ClearColor = (PFNGLCLEARCOLOR) window->context.getProcAddress("glClearColor");
         window->context.ReadPixels = (PFNGLREADPIXELS) window->context.getProcAddress("glReadPixels");
         window->context.Finish = (PFNGLFINISH) window->context.getProcAddress("glFinish");
-        if (!window->context.Clear || !window->context.ClearColor || !window->context.ReadPixels) {
+        if (!window->context.Clear || !window->context.ClearColor || !window->context.ReadPixels || !window->context.Finish) {
             _glfwInputError(GLFW_PLATFORM_ERROR, "Entry point retrieval is broken");
             return;
         }
@@ -122,11 +122,6 @@ static void destroyContextOSMesa(_GLFWwindow* window)
 
 static void swapBuffersOSMesa(_GLFWwindow* window)
 {
-    window->context.Finish = (PFNGLFINISH) window->context.getProcAddress("glFinish");
-    if (!window->context.Finish) {
-        _glfwInputError(GLFW_PLATFORM_ERROR, "Entry point retrieval is broken");
-        return;
-    }
     if (strcmp(getenv("LIBGL_STRING"), "VirGLRenderer") == 0) {
         window->context.Finish();
         vtest_swap_buffers();
@@ -136,7 +131,9 @@ static void swapBuffersOSMesa(_GLFWwindow* window)
             printf("OSMesa: attempted to swap buffers without context!");
             return;
         }
-        OSMesaMakeCurrent(context, buf.bits, GL_UNSIGNED_BYTE, window->context.osmesa.width, window->context.osmesa.height);
+        OSMesaMakeCurrent(context, buf.bits, GL_UNSIGNED_BYTE, buf.width, buf.height);
+        if (stride != buf.stride) OSMesaPixelStore(OSMESA_ROW_LENGTH, buf.stride);
+        stride = buf.stride;
         window->context.Finish();
         ANativeWindow_unlockAndPost(window->h2co3Launcher.handle);
         ANativeWindow_lock(window->h2co3Launcher.handle, &buf, NULL);
@@ -168,8 +165,7 @@ static void set_vulkan_ptr(void* ptr) {
 }
 
 void load_vulkan() {
-    if(getenv("H2CO3LAUNCHER_ZINK_PREFER_SYSTEM_DRIVER") == NULL && android_get_device_api_level() >= 28) {
-    // the loader does not support below that
+    if(getenv("VULKAN_DRIVER_SYSTEM") == NULL && android_get_device_api_level() >= 28) {
 #ifdef ADRENO_POSSIBLE
         void* result = load_turnip_vulkan();
         if(result != NULL) {
@@ -189,17 +185,13 @@ GLFWbool _glfwInitOSMesa(void)
 {
     if (_glfw.osmesa.handle)
         return GLFW_TRUE;
-    
+
+    _glfw.osmesa.handle = _glfw_dlopen(getenv("LIBGL_NAME"));
+
     const char *renderer = getenv("LIBGL_STRING");
     
-    if (strcmp(renderer, "VirGLRenderer") == 0) {
-        _glfw.osmesa.handle = _glfw_dlopen("libOSMesa_81.so");
-    } else if (strcmp(renderer, "Zink") == 0) {
+    if (strcmp(renderer, "Zink") == 0)
         load_vulkan();
-        _glfw.osmesa.handle = _glfw_dlopen("libOSMesa_8.so");
-    } else if (strcmp(renderer, "Freedreno") == 0) {
-        _glfw.osmesa.handle = _glfw_dlopen("libOSMesa_8.so");
-    }
 
     if (!_glfw.osmesa.handle)
     {
@@ -226,7 +218,7 @@ GLFWbool _glfwInitOSMesa(void)
 
     if (strcmp(renderer, "VirGLRenderer") == 0) {
         char* fileName = calloc(1, 1024);
-        sprintf(fileName, "%s/libvirgl_test_server.so", getenv("H2CO3LAUNCHER_NATIVEDIR"));
+        sprintf(fileName, "%s/libvirgl_test_server.so", getenv("H2CO3Launcher_NATIVEDIR"));
         void *handle = _glfw_dlopen(fileName);
         if (!handle) {
             printf("VirGL: %s\n", dlerror());

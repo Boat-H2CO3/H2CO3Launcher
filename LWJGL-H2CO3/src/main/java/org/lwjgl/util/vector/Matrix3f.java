@@ -354,11 +354,12 @@ public class Matrix3f extends Matrix implements Serializable {
 	 * Returns a string representation of this matrix
 	 */
 	public String toString() {
-        String buf = String.valueOf(m00) + ' ' + m10 + ' ' + m20 + ' ' + '\n' +
-                m01 + ' ' + m11 + ' ' + m21 + ' ' + '\n' +
-                m02 + ' ' + m12 + ' ' + m22 + ' ' + '\n';
-        return buf;
-    }
+		StringBuilder buf = new StringBuilder();
+		buf.append(m00).append(' ').append(m10).append(' ').append(m20).append(' ').append('\n');
+		buf.append(m01).append(' ').append(m11).append(' ').append(m21).append(' ').append('\n');
+		buf.append(m02).append(' ').append(m12).append(' ').append(m22).append(' ').append('\n');
+		return buf.toString();
+	}
 
 	/**
 	 * Invert this matrix

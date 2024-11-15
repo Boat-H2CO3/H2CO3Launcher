@@ -5,16 +5,14 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.Checks.checkFunctions;
-import static org.lwjgl.system.Checks.reportMissing;
-import static org.lwjgl.system.MemoryUtil.NULL;
-
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.FunctionProvider;
-import org.lwjgl.system.ThreadLocalUtil;
-
+import org.lwjgl.system.*;
 import java.util.Set;
+import org.lwjgl.*;
 import java.util.function.IntFunction;
+
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Defines the capabilities of an OpenGL context. */
 public final class GLCapabilities {

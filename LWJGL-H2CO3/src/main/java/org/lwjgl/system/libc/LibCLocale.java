@@ -5,19 +5,15 @@
  */
 package org.lwjgl.system.libc;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.checkNT1;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.memASCIISafe;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.Library;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeType;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Native bindings to locale.h. */
 public class LibCLocale {

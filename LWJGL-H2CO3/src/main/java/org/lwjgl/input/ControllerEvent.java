@@ -37,69 +37,43 @@ package org.lwjgl.input;
  * @author Kevin Glass
  */
 class ControllerEvent {
-    /**
-     * Indicates the event was caused by a button
-     */
-    public static final int BUTTON = 1;
-    /**
-     * Indicates the event was caused by a axis
-     */
-    public static final int AXIS = 2;
-    /**
-     * Indicates the event was caused by a pov X
-     */
-    public static final int POVX = 3;
-    /**
-     * Indicates the event was caused by a pov Y
-     */
-    public static final int POVY = 4;
+	/** Indicates the event was caused by a button */
+	public static final int BUTTON = 1;
+	/** Indicates the event was caused by a axis */
+	public static final int AXIS = 2;
+	/** Indicates the event was caused by a pov X */
+	public static final int POVX = 3;
+	/** Indicates the event was caused by a pov Y */
+	public static final int POVY = 4;
 
-    /**
-     * The controller generating the event
-     */
-    private final Controller source;
-    /**
-     * The index of the input (axis or button) that generated the event
-     */
-    private final int index;
-    /**
-     * Type of control that generated the event
-     */
-    private final int type;
-    /**
-     * True when a button is pressed, if this event was caused by the button
-     */
-    private final boolean buttonState;
-    /**
-     * True if this event was caused by the x axis
-     */
-    private final boolean xaxis;
-    /**
-     * True if this event was caused by the y axis
-     */
-    private final boolean yaxis;
-    /**
-     * The time stamp of this event
-     */
-    private final long timeStamp;
-    /**
-     * The value on a specified axis, if this event was caused by the x-axis
-     */
-    private final float xaxisValue;
-    /**
-     * The value on a specified axis, if this event was caused by the y-axis
-     */
-    private final float yaxisValue;
+	/** The controller generating the event */
+	private Controller source;
+	/** The index of the input (axis or button) that generated the event */
+	private int index;
+	/** Type of control that generated the event */
+	private int type;
+	/** True when a button is pressed, if this event was caused by the button */
+	private boolean buttonState;
+	/** True if this event was caused by the x axis */
+	private boolean xaxis;
+	/** True if this event was caused by the y axis */
+	private boolean yaxis;
+	/** The time stamp of this event */
+	private long timeStamp;
+	/** The value on a specified axis, if this event was caused by the x-axis */
+	private float xaxisValue;
+	/** The value on a specified axis, if this event was caused by the y-axis */
+	private float yaxisValue;
 
-    /**
-     * Create a new event
-     *
-     * @param source The source of the event
-     * @param timeStamp The time stamp given for this event
-     * @param type The type of control generating this event
-     * @param index The index of the input that generated the event
-     * @param xaxis True if this event was caused by the x-axis
-     * @param yaxis True if this event was caused by the y-axis
+	/**
+	 * Create a new event
+	 *
+	 * @param source The source of the event
+	 * @param timeStamp The time stamp given for this event
+	 * @param type The type of control generating this event
+	 * @param index The index of the input that generated the event
+	 * @param xaxis True if this event was caused by the x-axis
+	 * @param yaxis True if this event was caused by the y-axis
 	 */
 	ControllerEvent(Controller source,long timeStamp, int type,int index,boolean xaxis,boolean yaxis) {
 		this(source, timeStamp, type, index, false, xaxis, yaxis, 0, 0);

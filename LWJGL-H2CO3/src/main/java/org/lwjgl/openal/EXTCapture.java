@@ -5,14 +5,13 @@
  */
 package org.lwjgl.openal;
 
-import org.lwjgl.system.NativeType;
+import javax.annotation.*;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
+import java.nio.*;
 
-import javax.annotation.Nullable;
+import org.lwjgl.system.*;
+
+import static org.lwjgl.system.Checks.*;
 
 /**
  * Native bindings to the {@code ALC_EXT_CAPTURE} extension.

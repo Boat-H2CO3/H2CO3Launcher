@@ -5,14 +5,13 @@
  */
 package org.lwjgl.openal;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.JNI.invokeP;
-import static org.lwjgl.system.MemoryUtil.memUTF8Safe;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Native bindings to the <a href="https://openal-soft.org/openal-extensions/SOFT_source_resampler.txt">SOFT_source_resampler</a> extension.

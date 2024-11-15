@@ -5,7 +5,7 @@
  */
 package org.lwjgl.stb;
 
-import org.lwjgl.system.NativeType;
+import org.lwjgl.system.*;
 
 /**
  * Native bindings to stb_rect_pack.h from the <a href="https://github.com/nothings/stb">stb library</a>.

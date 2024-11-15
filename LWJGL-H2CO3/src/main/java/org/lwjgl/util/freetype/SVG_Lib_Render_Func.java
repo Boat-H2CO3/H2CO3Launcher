@@ -5,15 +5,15 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
+import javax.annotation.*;
 
-import org.lwjgl.system.Callback;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * <h3>Type</h3>
- *
+ * 
  * <pre><code>
  * FT_Error (*{@link #invoke}) (
  *     FT_GlyphSlot slot,
@@ -21,14 +21,6 @@ import javax.annotation.Nullable;
  * )</code></pre>
  */
 public abstract class SVG_Lib_Render_Func extends Callback implements SVG_Lib_Render_FuncI {
-
-    protected SVG_Lib_Render_Func() {
-        super(CIF);
-    }
-
-    SVG_Lib_Render_Func(long functionPointer) {
-        super(functionPointer);
-    }
 
     /**
      * Creates a {@code SVG_Lib_Render_Func} instance from the specified function pointer.
@@ -38,25 +30,29 @@ public abstract class SVG_Lib_Render_Func extends Callback implements SVG_Lib_Re
     public static SVG_Lib_Render_Func create(long functionPointer) {
         SVG_Lib_Render_FuncI instance = Callback.get(functionPointer);
         return instance instanceof SVG_Lib_Render_Func
-                ? (SVG_Lib_Render_Func) instance
-                : new Container(functionPointer, instance);
+            ? (SVG_Lib_Render_Func)instance
+            : new Container(functionPointer, instance);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}. */
     @Nullable
     public static SVG_Lib_Render_Func createSafe(long functionPointer) {
         return functionPointer == NULL ? null : create(functionPointer);
     }
 
-    /**
-     * Creates a {@code SVG_Lib_Render_Func} instance that delegates to the specified {@code SVG_Lib_Render_FuncI} instance.
-     */
+    /** Creates a {@code SVG_Lib_Render_Func} instance that delegates to the specified {@code SVG_Lib_Render_FuncI} instance. */
     public static SVG_Lib_Render_Func create(SVG_Lib_Render_FuncI instance) {
         return instance instanceof SVG_Lib_Render_Func
-                ? (SVG_Lib_Render_Func) instance
-                : new Container(instance.address(), instance);
+            ? (SVG_Lib_Render_Func)instance
+            : new Container(instance.address(), instance);
+    }
+
+    protected SVG_Lib_Render_Func() {
+        super(CIF);
+    }
+
+    SVG_Lib_Render_Func(long functionPointer) {
+        super(functionPointer);
     }
 
     private static final class Container extends SVG_Lib_Render_Func {

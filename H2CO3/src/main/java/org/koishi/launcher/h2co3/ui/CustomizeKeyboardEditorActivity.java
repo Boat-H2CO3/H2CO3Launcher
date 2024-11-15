@@ -25,6 +25,7 @@ import org.koishi.launcher.h2co3.controller.client.H2CO3ControlClient;
 import org.koishi.launcher.h2co3.controller.Controller;
 import org.koishi.launcher.h2co3.controller.H2CO3VirtualController;
 import org.koishi.launcher.h2co3.controller.definitions.id.key.KeyEvent;
+import org.koishi.launcher.h2co3.core.H2CO3Settings;
 import org.koishi.launcher.h2co3.core.launch.H2CO3LauncherBridge;
 import org.koishi.launcher.h2co3.core.utils.PicUtils;
 import org.koishi.launcher.h2co3.resources.component.activity.H2CO3Activity;
@@ -112,7 +113,7 @@ public class CustomizeKeyboardEditorActivity extends H2CO3Activity implements Vi
         mLayoutMain.setBackground(new BitmapDrawable(getResources(), PicUtils.blur(this, BLUR_RADIUS, ((BitmapDrawable) Objects.requireNonNull(ContextCompat.getDrawable(this, org.koishi.launcher.h2co3.library.R.drawable.background))).getBitmap())));
 
         //初始化控制器
-        mController = new H2CO3VirtualController(this, new H2CO3LauncherBridge(), KeyEvent.KEYMAP_TO_X) {
+        mController = new H2CO3VirtualController(this, new H2CO3LauncherBridge(new H2CO3Settings()), KeyEvent.KEYMAP_TO_X) {
             @Override
             public void init() {
                 super.init();

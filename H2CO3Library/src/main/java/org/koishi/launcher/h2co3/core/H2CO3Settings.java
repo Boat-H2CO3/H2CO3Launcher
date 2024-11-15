@@ -2,14 +2,60 @@ package org.koishi.launcher.h2co3.core;
 
 import static org.koishi.launcher.h2co3.core.H2CO3Tools.DOWNLOAD_SOURCE;
 
+import androidx.annotation.NonNull;
+
 import org.koishi.launcher.h2co3.core.login.bean.UserBean;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class H2CO3Settings {
+public class H2CO3Settings implements Serializable {
+
+    public enum Renderer implements Serializable {
+        RENDERER_GL4ES("Holy-GL4ES:libgl4es_114.so:libEGL.so"),
+        RENDERER_VIRGL("VirGLRenderer:libOSMesa_81.so:libEGL.so"),
+        RENDERER_LTW("LTW:libltw.so:libltw.so"),
+        RENDERER_VGPU("VGPU:libvgpu.so:libEGL.so"),
+        RENDERER_ZINK("Zink:libOSMesa_8.so:libEGL.so"),
+        RENDERER_FREEDRENO("Freedreno:libOSMesa_8.so:libEGL.so"),
+        RENDERER_CUSTOM("Custom:libCustom.so:libEGL.so");
+
+        private final String glInfo;
+        private String glVersion;
+
+        Renderer(String glInfo) {
+            this.glInfo = glInfo;
+        }
+
+        public String getGlLibName() {
+            return glInfo.split(":")[1];
+        }
+
+        public String getEglLibName() {
+            return glInfo.split(":")[2];
+        }
+
+        public String getGlInfo() {
+            return glInfo;
+        }
+
+        public void setGlVersion(String glVersion) {
+            this.glVersion = glVersion;
+        }
+
+        public String getGlVersion() {
+            return glVersion;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return glInfo.split(":")[0];
+        }
+    }
 
     private final List<String> extraJavaFlags;
     private final List<String> extraMinecraftFlags;
@@ -22,7 +68,7 @@ public class H2CO3Settings {
     private static final String DEFAULT_USER_TYPE = "mojang";
     private static final String DEFAULT_UUID = UUID.randomUUID().toString();
     private static final String DEFAULT_TOKEN = "0";
-    private static final String DEFAULT_RENDER = H2CO3Tools.GL_GL114;
+    private static final Renderer DEFAULT_RENDERER = Renderer.RENDERER_GL4ES;
     private static final String DEFAULT_GAME_DIRECTORY = H2CO3Tools.MINECRAFT_DIR;
     private static final String DEFAULT_ASSETS_ROOT = DEFAULT_GAME_DIRECTORY + "/assets/";
     private static final String DEFAULT_RUNTIME_PATH = H2CO3Tools.RUNTIME_DIR;
@@ -102,12 +148,12 @@ public class H2CO3Settings {
         H2CO3Tools.setH2CO3Value("DOWNLOAD_TYPE", defaultRawProviderId);
     }
 
-    public String getRender() {
-        return H2CO3Tools.getH2CO3LauncherValue("h2co3_launcher_render", DEFAULT_RENDER, String.class);
+    public Renderer getRenderer() {
+        return Renderer.RENDERER_GL4ES;
     }
 
-    public void setRender(String path) {
-        H2CO3Tools.setH2CO3LauncherValue("h2co3_launcher_render", path);
+    public void setRenderer(Renderer path) {
+        H2CO3Tools.setH2CO3LauncherValue("h2co3_launcher_renderer", path);
     }
 
     public int getJavaVer() {
@@ -236,4 +282,13 @@ public class H2CO3Settings {
     public void setJoinServer(String server) {
         H2CO3Tools.setH2CO3LauncherValue("join_server", server);
     }
+
+    public Boolean isH2CO3Launch() {
+        return H2CO3Tools.getH2CO3LauncherValue("is_h2co3launch", true, Boolean.class);
+    }
+
+    public void setH2CO3Launch(Boolean b) {
+        H2CO3Tools.setH2CO3LauncherValue("is_h2co3launch", b);
+    }
+
 }

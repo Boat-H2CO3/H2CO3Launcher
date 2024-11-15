@@ -4,61 +4,27 @@
  */
 package org.lwjgl.system;
 
-import static org.lwjgl.system.Checks.DEBUG;
-import static org.lwjgl.system.Checks.DEBUG_FUNCTIONS;
-import static org.lwjgl.system.MemoryStack.POINTER_SHIFT;
-import static org.lwjgl.system.MemoryStack.POINTER_SIZE;
-import static org.lwjgl.system.MemoryStack.stackPush;
-import static org.lwjgl.system.MemoryUtil.BUFFER_BYTE;
-import static org.lwjgl.system.MemoryUtil.MemoryAllocator;
-import static org.lwjgl.system.MemoryUtil.NATIVE_ORDER;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memASCII;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memPointerBuffer;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.memPutDouble;
-import static org.lwjgl.system.MemoryUtil.memPutFloat;
-import static org.lwjgl.system.MemoryUtil.memPutLong;
-import static org.lwjgl.system.MemoryUtil.nmemFree;
+import org.lwjgl.*;
+import org.lwjgl.system.libffi.*;
+import org.lwjgl.system.linux.*;
+import org.lwjgl.system.macosx.*;
+import org.lwjgl.system.windows.*;
+
+import javax.annotation.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.wrap;
-import static org.lwjgl.system.libffi.LibFFI.FFI_DEFAULT_ABI;
-import static org.lwjgl.system.libffi.LibFFI.FFI_OK;
-import static org.lwjgl.system.libffi.LibFFI.FFI_STDCALL;
-import static org.lwjgl.system.libffi.LibFFI.FFI_TYPE_STRUCT;
-import static org.lwjgl.system.libffi.LibFFI.ffi_prep_cif;
-import static org.lwjgl.system.libffi.LibFFI.ffi_prep_cif_var;
-
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.libffi.FFICIF;
-import org.lwjgl.system.libffi.FFIType;
-import org.lwjgl.system.linux.LinuxLibrary;
-import org.lwjgl.system.macosx.MacOSXLibrary;
-import org.lwjgl.system.windows.WindowsLibrary;
-
-import java.io.IOException;
-import java.io.PrintStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.libffi.LibFFI.*;
 
 /**
  * Utility class useful to API bindings. [INTERNAL USE ONLY]
@@ -585,8 +551,8 @@ public final class APIUtil {
         MemoryAllocator allocator = MemoryUtil.getAllocator();
 
         PointerBuffer elementBuffer = PointerBuffer.create(
-                allocator.malloc((long) (members.length + 1) * POINTER_SIZE),
-                members.length + 1
+            allocator.malloc((members.length + 1) * POINTER_SIZE),
+            members.length + 1
         );
         for (int i = 0; i < members.length; i++) {
             elementBuffer.put(i, members[i]);
@@ -625,20 +591,20 @@ public final class APIUtil {
         }
 
         return FFIType.create(allocator.malloc(FFIType.SIZEOF))
-                .size(maxType.size())
-                .alignment(maxAlignment)
-                .type(FFI_TYPE_STRUCT)
-                .elements(PointerBuffer.create(allocator.malloc(2L * POINTER_SIZE), 2)
-                        .put(0, maxType)
-                        .put(1, NULL));
+            .size(maxType.size())
+            .alignment(maxAlignment)
+            .type(FFI_TYPE_STRUCT)
+            .elements(PointerBuffer.create(allocator.malloc(2 * POINTER_SIZE), 2)
+                .put(0, maxType)
+                .put(1, NULL));
     }
 
     public static FFIType apiCreateArray(FFIType type, int length) {
         MemoryAllocator allocator = MemoryUtil.getAllocator();
 
         PointerBuffer elementBuffer = PointerBuffer.create(
-                allocator.malloc((long) (length + 1) * POINTER_SIZE),
-                length + 1
+            allocator.malloc((length + 1) * POINTER_SIZE),
+            length + 1
         );
         for (int i = 0; i < length; i++) {
             elementBuffer.put(i, type);
@@ -655,7 +621,7 @@ public final class APIUtil {
         // These CIFs will never be deallocated, use the allocator directly to ignore them when detecting memory leaks.
         MemoryAllocator allocator = MemoryUtil.getAllocator();
 
-        PointerBuffer pArgTypes = PointerBuffer.create(allocator.malloc((long) atypes.length * POINTER_SIZE), atypes.length);
+        PointerBuffer pArgTypes = PointerBuffer.create(allocator.malloc(atypes.length * POINTER_SIZE), atypes.length);
         for (int i = 0; i < atypes.length; i++) {
             pArgTypes.put(i, atypes[i]);
         }
@@ -675,7 +641,7 @@ public final class APIUtil {
         // These CIFs will never be deallocated, use the allocator directly to ignore them when detecting memory leaks.
         MemoryAllocator allocator = MemoryUtil.getAllocator();
 
-        PointerBuffer pArgTypes = PointerBuffer.create(allocator.malloc((long) atypes.length * POINTER_SIZE), atypes.length);
+        PointerBuffer pArgTypes = PointerBuffer.create(allocator.malloc(atypes.length * POINTER_SIZE), atypes.length);
         for (int i = 0; i < atypes.length; i++) {
             pArgTypes.put(i, atypes[i]);
         }

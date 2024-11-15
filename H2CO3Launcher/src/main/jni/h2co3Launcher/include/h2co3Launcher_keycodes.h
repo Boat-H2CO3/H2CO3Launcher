@@ -1,5 +1,9 @@
-#ifndef h2co3Launcher_KEYCODES_H
-#define h2co3Launcher_KEYCODES_H
+//
+// Created by Tungsten on 2022/10/11.
+//
+
+#ifndef H2CO3_LAUNCHER_H2CO3Launcher_KEYCODE_H
+#define H2CO3_LAUNCHER_H2CO3Launcher_KEYCODE_H
 
 /*
  * from linux/input-event-codes.h
@@ -142,4 +146,4 @@
 
 #define KEY_UNKNOWN      240
 
-#endif // h2co3Launcher_KEYCODES_H
+#endif //H2CO3_LAUNCHER_H2CO3Launcher_KEYCODE_H

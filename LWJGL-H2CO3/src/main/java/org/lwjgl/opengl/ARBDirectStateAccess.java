@@ -5,17 +5,13 @@
  */
 package org.lwjgl.opengl;
 
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.NativeType;
+import javax.annotation.*;
 
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
+import java.nio.*;
 
-import javax.annotation.Nullable;
+import org.lwjgl.*;
+
+import org.lwjgl.system.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_direct_state_access.txt">ARB_direct_state_access</a> extension.

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import org.koishi.launcher.h2co3.core.H2CO3Settings;
 import org.koishi.launcher.h2co3.core.H2CO3Tools;
+import org.koishi.launcher.h2co3.core.launch.plugins.RendererPlugin;
 import org.koishi.launcher.h2co3.core.launch.utils.H2CO3LaunchUtils;
 import org.koishi.launcher.h2co3.core.utils.Architecture;
 import org.koishi.launcher.h2co3.core.utils.CommandBuilder;
@@ -22,8 +23,10 @@ public class H2CO3BaseLaunch {
     private static final String TAG = H2CO3BaseLaunch.class.getSimpleName();
 
     public static H2CO3LauncherBridge launchGame(Context context, H2CO3Settings gameHelper, int width, int height, String task, String logFilePath) {
-        H2CO3LauncherBridge bridge = new H2CO3LauncherBridge();
+        H2CO3LauncherBridge bridge = new H2CO3LauncherBridge(gameHelper);
         bridge.setLogPath(logFilePath);
+        bridge.setGameDir(gameHelper.getGameDirectory());
+        bridge.setRenderer(H2CO3Settings.Renderer.RENDERER_GL4ES.toString());
         Thread gameThread = new Thread(() -> {
             try {
                 logStartInfo(bridge, task);
@@ -54,7 +57,7 @@ public class H2CO3BaseLaunch {
     }
 
     public static H2CO3LauncherBridge launchAPIInstaller(Context context, H2CO3Settings gameHelper, String[] command, String jre) {
-        H2CO3LauncherBridge bridge = new H2CO3LauncherBridge();
+        H2CO3LauncherBridge bridge = new H2CO3LauncherBridge(gameHelper);
         bridge.setLogPath(H2CO3Tools.LOG_DIR + "/latest_api_installer.log");
         Thread apiInstallerThread = new Thread(() -> {
             try {
@@ -77,7 +80,7 @@ public class H2CO3BaseLaunch {
         printTaskTitle(bridge, task + " Arguments");
         String[] args = rebaseArgs(command, jre);
         logArguments(bridge, task, args);
-        bridge.setLdLibraryPath(H2CO3LaunchUtils.getLibraryPath(context, H2CO3Tools.JAVA_PATH + "/" + jre));
+        bridge.setLdLibraryPath(H2CO3LaunchUtils.getLibraryPath(context, RendererPlugin.getSelected().getPath()));
         printTaskTitle(bridge, task + " Logs");
         bridge.setupExitTrap(bridge);
         bridge.getCallback().onLog("Hook success");
@@ -90,7 +93,7 @@ public class H2CO3BaseLaunch {
         HashMap<String, String> envMap = new HashMap<>(8);
         H2CO3LaunchUtils.addCommonEnv(context, gameHelper, envMap);
         if (isRender) {
-            H2CO3LaunchUtils.addRendererEnv(context, envMap, gameHelper.getRender());
+            H2CO3LaunchUtils.addRendererEnv(context, gameHelper, envMap);
         }
         printTaskTitle(bridge, "Env Map");
         envMap.forEach((key, value) -> {

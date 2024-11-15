@@ -5,34 +5,16 @@
  */
 package org.lwjgl.openal;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT1;
-import static org.lwjgl.system.JNI.invokeD;
-import static org.lwjgl.system.JNI.invokeF;
-import static org.lwjgl.system.JNI.invokeI;
-import static org.lwjgl.system.JNI.invokeP;
-import static org.lwjgl.system.JNI.invokePI;
-import static org.lwjgl.system.JNI.invokePP;
-import static org.lwjgl.system.JNI.invokePPPV;
-import static org.lwjgl.system.JNI.invokePV;
-import static org.lwjgl.system.JNI.invokePZ;
-import static org.lwjgl.system.JNI.invokeV;
-import static org.lwjgl.system.JNI.invokeZ;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memUTF8Safe;
+import javax.annotation.*;
 
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeType;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Native bindings to AL 1.0 functionality. */
 public class AL10 {

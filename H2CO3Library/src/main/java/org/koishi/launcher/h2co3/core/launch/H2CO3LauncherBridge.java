@@ -1,21 +1,3 @@
-/*
- * //
- * // Created by cainiaohh on 2024-04-04.
- * //
- */
-
-/*
- * //
- * // Created by cainiaohh on 2024-03-31.
- * //
- */
-
-/*
- * //
- * // Created by cainiaohh on 2024-03-31.
- * //
- */
-
 package org.koishi.launcher.h2co3.core.launch;
 
 import android.app.Activity;
@@ -33,97 +15,125 @@ import android.util.Log;
 import android.view.Surface;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
 import org.koishi.launcher.h2co3.core.H2CO3Settings;
 import org.koishi.launcher.h2co3.core.H2CO3Tools;
+import org.koishi.launcher.h2co3.core.launch.keycodes.H2CO3LauncherKeycodes;
+import org.koishi.launcher.h2co3.core.launch.keycodes.LwjglGlfwKeycode;
+import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class H2CO3LauncherBridge implements Serializable {
 
-    static {
-        System.loadLibrary("h2co3Launcher");
-    }
-
-    // Constants
     public static final int DEFAULT_WIDTH = 1280;
     public static final int DEFAULT_HEIGHT = 720;
+
+    public static final int HIT_RESULT_TYPE_UNKNOWN = 0;
+    public static final int HIT_RESULT_TYPE_MISS = 1;
+    public static final int HIT_RESULT_TYPE_BLOCK = 2;
+    public static final int HIT_RESULT_TYPE_ENTITY = 3;
+
+    public static final int INJECTOR_MODE_ENABLE = 1;
+    public static final int INJECTOR_MODE_DISABLE = 0;
+
     public static final int KeyPress = 2;
     public static final int KeyRelease = 3;
     public static final int ButtonPress = 4;
     public static final int ButtonRelease = 5;
     public static final int MotionNotify = 6;
+    public static final int KeyChar = 7;
     public static final int ConfigureNotify = 22;
-    public static final int Button1 = 1;
-    public static final int Button2 = 2;
-    public static final int Button3 = 3;
-    public static final int Button4 = 4;
-    public static final int Button5 = 5;
-    public static final int Button6 = 6;
-    public static final int Button7 = 7;
-    public static final int CursorEnabled = 0;
-    public static final int CursorDisabled = 1;
+    public static final int H2CO3LauncherMessage = 37;
 
-    // Fields
-    private boolean surfaceDestroyed;
+    public static final int Button1 = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_1;
+    public static final int Button2 = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_2;
+    public static final int Button3 = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_3;
+    public static final int Button4 = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_4;
+    public static final int Button5 = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_5;
+    public static final int Button6 = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_6;
+    public static final int Button7 = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_7;
+
+    public static final int CursorEnabled = 1;
+    public static final int CursorDisabled = 0;
+
+    public static final int ShiftMask = 1 << 0;
+    public static final int LockMask = 1 << 1;
+    public static final int ControlMask = 1 << 2;
+    public static final int Mod1Mask = 1 << 3;
+    public static final int Mod2Mask = 1 << 4;
+    public static final int Mod3Mask = 1 << 5;
+    public static final int Mod4Mask = 1 << 6;
+    public static final int Mod5Mask = 1 << 7;
+
+    public static final int CloseRequest = 0;
+
+    private H2CO3LauncherBridgeCallback callback;
+
+    private double scaleFactor = 1f;
+    private String controller = "Default";
+    private String gameDir;
     private String logPath;
-    private H2CO3LauncherBridgeCallBack callback;
+    private String renderer;
+    private String java;
     private Surface surface;
+    private boolean surfaceDestroyed;
+    private Handler handler;
     private Thread thread;
-    private ExecutorService mExecutor;
     private SurfaceTexture surfaceTexture;
-    private H2CO3Settings gameHelper;
+    private static H2CO3Settings config;
 
-    // Constructor
-    public H2CO3LauncherBridge() {
+    static {
+        System.loadLibrary("h2co3Launcher");
+        System.loadLibrary("pojavexec_awt");
     }
 
-    // Native methods
-    public native int chdir(String path);
-    public native int redirectStdio(String path);
-    public native void setenv(String name, String value);
-    public native int dlopen(String name);
-    public native void setEventPipe();
-    public native void nativeMoveWindow(int x, int y);
+    public H2CO3LauncherBridge(H2CO3Settings config) {
+        H2CO3LauncherBridge.config = config;
+    }
+
     public native int[] renderAWTScreenFrame();
-    public static native void pushEvent(long time, int type, int p1, int p2);
-    public static native int[] getPointer();
-    public native void setLdLibraryPath(String path);
-    public native void setH2CO3LauncherNativeWindow(Surface surface);
-    public native void setupExitTrap(H2CO3LauncherBridge bridge);
-    public native void setH2CO3LauncherBridge(H2CO3LauncherBridge h2co3LauncherBridgeBridge);
+
     public native void nativeSendData(int type, int i1, int i2, int i3, int i4);
 
-    // Getters and Setters
+    public native void nativeMoveWindow(int x, int y);
+
+    public native int redirectStdio(String path);
+
+    public native int chdir(String path);
+
+    public native void setenv(String key, String value);
+
+    public native int dlopen(String path);
+
+    public native void setLdLibraryPath(String path);
+
+    public native void setupExitTrap(H2CO3LauncherBridge bridge);
+
+    public native void refreshHitResultType();
+
+    public native void setH2CO3LauncherBridge(H2CO3LauncherBridge h2co3LauncherBridge);
+
+    //boat backend
+    public native void setH2CO3LauncherNativeWindow(Surface surface);
+
+    public native void setEventPipe();
+
+    public native void pushEvent(long time, int type, int keycode, int keyChar);
+
+    public static native int nativeGetFps();
+
+
     public void setThread(Thread thread) {
         this.thread = thread;
     }
 
-    public boolean isSurfaceDestroyed() {
-        return surfaceDestroyed;
-    }
-
-    public void setSurfaceDestroyed(boolean surfaceDestroyed) {
-        this.surfaceDestroyed = surfaceDestroyed;
-    }
-
-    public H2CO3LauncherBridgeCallBack getCallback() {
-        return callback;
-    }
-
-    @NonNull
-    public String getLogPath() {
-        return logPath;
-    }
-
-    public void setLogPath(String logPath) {
-        this.logPath = logPath;
+    public Thread getThread() {
+        return thread;
     }
 
     public SurfaceTexture getSurfaceTexture() {
@@ -134,26 +144,30 @@ public class H2CO3LauncherBridge implements Serializable {
         this.surfaceTexture = surfaceTexture;
     }
 
-    // Main methods
-    public void execute(Surface surface, H2CO3LauncherBridgeCallBack callback) throws IOException {
-        Handler handler = new Handler();
+    public H2CO3LauncherBridgeCallback getCallback() {
+        return callback;
+    }
+
+    public void execute(Surface surface, H2CO3LauncherBridgeCallback callback) throws IOException {
+        this.handler = new Handler();
         this.callback = callback;
         this.surface = surface;
-        this.gameHelper = new H2CO3Settings();
         setH2CO3LauncherBridge(this);
-        receiveLog("invoke redirectStdio");
-        int errorCode = redirectStdio(H2CO3Tools.LOG_DIR);
+        CallbackBridge.setH2CO3LauncherBridge(this);
+        receiveLog("invoke redirectStdio" + "\n");
+        int errorCode = redirectStdio(getLogPath());
         if (errorCode != 0) {
-            receiveLog("Can't exec redirectStdio! Error code: " + errorCode);
+            receiveLog("Can't exec redirectStdio! Error code: " + errorCode + "\n");
         }
-        receiveLog("invoke setLogPipeReady");
+        receiveLog("invoke setLogPipeReady" + "\n");
         // set graphic output and event pipe
         if (surface != null) {
             handleWindow();
-            destroyWindowHandler();
         }
-        receiveLog("invoke setEventPipe");
-        setEventPipe();
+        receiveLog("invoke setEventPipe" + "\n");
+        if (config.isH2CO3Launch()) {
+            setEventPipe();
+        }
 
         // start
         if (thread != null) {
@@ -161,9 +175,82 @@ public class H2CO3LauncherBridge implements Serializable {
         }
     }
 
+    public void pushEventMouseButton(int button, boolean press) {
+        if (config.isH2CO3Launch()) {
+            if (button == Button2) {
+                button = Button3;
+            } else if (button == Button3) {
+                button = Button2;
+            }
+            pushEvent(System.nanoTime(), press ? ButtonPress : ButtonRelease, button + 1, 0);
+        } else {
+            switch (button) {
+                case Button4:
+                    if (press) {
+                        CallbackBridge.sendScroll(0, 1d);
+                    }
+                    break;
+                case Button5:
+                    if (press) {
+                        CallbackBridge.sendScroll(0, -1d);
+                    }
+                    break;
+                default:
+                    CallbackBridge.sendMouseButton(button, press);
+            }
+        }
+    }
+
+    public void pushEventPointer(int x, int y) {
+        if (config.isH2CO3Launch()) {
+            pushEvent(System.nanoTime(), MotionNotify, x, y);
+        } else {
+            CallbackBridge.sendCursorPos(x, y);
+        }
+    }
+
+    public native int[] getPointer();
+
+    public void pushEventPointer(float x, float y) {
+        if (config.isH2CO3Launch()) {
+            pushEventPointer((int) x, (int) y);
+        } else {
+            CallbackBridge.sendCursorPos(x, y);
+        }
+    }
+
+    public void pushEventKey(int keyCode, int keyChar, boolean press) {
+        if (config.isH2CO3Launch()) {
+            pushEvent(System.nanoTime(), press ? KeyPress : KeyRelease, keyCode, keyChar);
+        } else {
+            CallbackBridge.sendKeycode(keyCode, (char) keyChar, 0, 0, press);
+        }
+    }
+
+    public void pushEventChar(char keyChar) {
+        if (config.isH2CO3Launch()) {
+            pushEvent(System.nanoTime(), KeyChar, H2CO3LauncherKeycodes.KEY_RESERVED, keyChar);
+        } else {
+            CallbackBridge.sendChar(keyChar, 0);
+        }
+    }
+
+    public void pushEventWindow(int width, int height) {
+        if (config.isH2CO3Launch()) {
+            pushEvent(System.nanoTime(), ConfigureNotify, width, height);
+        } else {
+            CallbackBridge.sendUpdateWindowSize(width, height);
+        }
+    }
+
+    public void pushEventMessage(int msg) {
+        pushEvent(System.nanoTime(), H2CO3LauncherMessage, msg, 0);
+    }
+
+    // H2CO3LauncherBridge callbacks
     public void onExit(int code) throws IOException {
         if (callback != null) {
-            callback.onLog("OpenJDK exited with code : " + code);
+            callback.onLog("OpenJDK exited with code : " + code + "\n");
             callback.onExit(code);
         }
     }
@@ -180,71 +267,128 @@ public class H2CO3LauncherBridge implements Serializable {
         }
     }
 
-    public static void setMouseButton(int button, boolean press) {
-        pushEventMouseButton(button, press);
-    }
-
-    public static void setPointer(int x, int y) {
-        pushEventPointer(x, y);
-    }
-
-    public static void setKey(int keyCode, int keyChar, boolean press) {
-        pushEventKey(keyCode, keyChar, press);
-    }
-
-    public static void pushEventMouseButton(int button, boolean press) {
-        pushEvent(System.nanoTime(), press ? ButtonPress : ButtonRelease, button, 0);
-    }
-
-    public static void pushEventPointer(int x, int y) {
-        pushEvent(System.nanoTime(), MotionNotify, x, y);
-    }
-
-    public static void pushEventKey(int keyCode, int keyChar, boolean press) {
-        pushEvent(System.nanoTime(), press ? KeyPress : KeyRelease, keyCode, keyChar);
-    }
-
-    public void pushEventWindow(int width, int height) {
-        pushEvent(System.nanoTime(), ConfigureNotify, width, height);
+    public void setPrimaryClipString(String string) {
+        ClipboardManager clipboard = (ClipboardManager) H2CO3Tools.CONTEXT.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("H2CO3Launcher Clipboard", string);
+        clipboard.setPrimaryClip(clip);
     }
 
     public String getPrimaryClipString() {
-        ClipboardManager clipboard = getClipboardManager();
+        ClipboardManager clipboard = (ClipboardManager) H2CO3Tools.CONTEXT.getSystemService(Context.CLIPBOARD_SERVICE);
         if (!clipboard.hasPrimaryClip()) {
             return null;
         }
-        ClipData.Item item = Objects.requireNonNull(clipboard.getPrimaryClip()).getItemAt(0);
-        return item.getText() != null ? item.getText().toString() : null;
+        ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+        return item.getText().toString();
     }
 
-    private ClipboardManager getClipboardManager() {
-        return (ClipboardManager) H2CO3Tools.CONTEXT.getSystemService(Context.CLIPBOARD_SERVICE);
-    }
-
-    public void receiveLog(String log) {
-        if (callback != null) {
+    public static void openLink(final String link) {
+        Context context = H2CO3Tools.CONTEXT;
+        ((Activity) context).runOnUiThread(() -> {
             try {
-                callback.onLog(log + "\n");
-            } catch (IOException e) {
-                Log.e("H2CO3LauncherBridge", "Error receiving log", e);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                String targetLink = link;
+                if (targetLink.startsWith("file://")) {
+                    targetLink = targetLink.replace("file://", "");
+                } else if (targetLink.startsWith("file:")) {
+                    targetLink = targetLink.replace("file:", "");
+                }
+                Uri uri;
+                if (targetLink.startsWith("http")) {
+                    uri = Uri.parse(targetLink);
+                } else {
+                    //can`t get authority by R.string.file_browser_provider
+                    uri = FileProvider.getUriForFile(context, "org.koishi.launcher.h2co3.provider", new File(targetLink));
+                }
+                intent.setDataAndType(uri, "*/*");
+                context.startActivity(intent);
+            } catch (Exception e) {
+                Log.e("openLink error", "link:" + link + " err:" + e.toString());
             }
+        });
+    }
+
+    public void setScaleFactor(double scaleFactor) {
+        this.scaleFactor = scaleFactor;
+    }
+
+    public double getScaleFactor() {
+        return scaleFactor;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
+    }
+
+    public String getController() {
+        return controller;
+    }
+
+    public void setGameDir(String gameDir) {
+        this.gameDir = gameDir;
+    }
+
+    @Nullable
+    public String getGameDir() {
+        return gameDir;
+    }
+
+    public void setRenderer(String renderer) {
+        this.renderer = renderer;
+    }
+
+    public String getRenderer() {
+        return renderer;
+    }
+
+    public void setJava(String java) {
+        this.java = java;
+    }
+
+    public String getJava() {
+        return java;
+    }
+
+    public void setSurfaceDestroyed(boolean surfaceDestroyed) {
+        this.surfaceDestroyed = surfaceDestroyed;
+    }
+
+    public boolean isSurfaceDestroyed() {
+        return surfaceDestroyed;
+    }
+
+    @NonNull
+    public String getLogPath() {
+        return logPath;
+    }
+
+    public void setLogPath(String logPath) {
+        this.logPath = logPath;
+    }
+
+    public void receiveLog(String log) throws IOException {
+        if (callback != null) {
+            callback.onLog(log);
         }
     }
 
-    public void handleWindow() throws IOException {
-        if (gameHelper.getGameDirectory() != null) {
-            receiveLog("invoke setH2CO3LauncherNativeWindow\n");
-            setH2CO3LauncherNativeWindow(this.surface);
+    private void handleWindow() throws IOException {
+        if (gameDir != null) {
+            receiveLog("invoke setH2CO3LauncherNativeWindow" + "\n");
+            if (config.isH2CO3Launch()) {
+                setH2CO3LauncherNativeWindow(surface);
+            } else {
+                CallbackBridge.setupBridgeWindow(surface);
+            }
         } else {
-            receiveLog("start Android AWT Renderer thread\n");
-            mExecutor = Executors.newSingleThreadExecutor();
-            mExecutor.execute(() -> {
+            receiveLog("start Android AWT Renderer thread" + "\n");
+            Thread canvasThread = new Thread(() -> {
                 Canvas canvas;
                 Bitmap rgbArrayBitmap = Bitmap.createBitmap(DEFAULT_WIDTH, DEFAULT_HEIGHT, Bitmap.Config.ARGB_8888);
                 Paint paint = new Paint();
                 try {
-                    while (!surfaceDestroyed && this.surface != null && this.surface.isValid()) {
-                        canvas = this.surface.lockCanvas(null);
+                    while (!surfaceDestroyed && surface.isValid()) {
+                        canvas = surface.lockCanvas(null);
                         canvas.drawRGB(0, 0, 0);
                         int[] rgbArray = renderAWTScreenFrame();
                         if (rgbArray != null) {
@@ -253,44 +397,30 @@ public class H2CO3LauncherBridge implements Serializable {
                             canvas.drawBitmap(rgbArrayBitmap, 0, 0, paint);
                             canvas.restore();
                         }
-                        this.surface.unlockCanvasAndPost(canvas);
+                        surface.unlockCanvasAndPost(canvas);
                     }
                 } catch (Throwable throwable) {
-                    Handler handler = new Handler();
                     handler.post(() -> {
-                        receiveLog(throwable.toString());
+                        try {
+                            receiveLog(throwable + "\n");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
-                } finally {
-                    rgbArrayBitmap.recycle();
-                    if (this.surface != null) {
-                        this.surface.release();
-                    }
                 }
-            });
+                rgbArrayBitmap.recycle();
+                surface.release();
+            }, "AndroidAWTRenderer");
+            canvasThread.start();
         }
     }
 
-    private void destroyWindowHandler() {
-        if (mExecutor != null) {
-            mExecutor.shutdownNow();
-            mExecutor = null;
+    public static int getFps() {
+        if (config.isH2CO3Launch()) {
+            return nativeGetFps();
+        } else {
+            return CallbackBridge.getFps();
         }
-    }
-
-    public static void openLink(final String link) {
-        Context context = H2CO3Tools.CONTEXT;
-        ((Activity) context).runOnUiThread(() -> {
-            try {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                String targetLink = link.replaceFirst("^(file://|file:)", "");
-                Uri uri = targetLink.startsWith("http") ? Uri.parse(targetLink) :
-                        FileProvider.getUriForFile(context, "org.koishi.launcher.h  `2co3.provider", new File(targetLink));
-                intent.setDataAndType(uri, "*/*");
-                context.startActivity(intent);
-            } catch (Exception e) {
-                Log.e("openLink error", e.toString());
-            }
-        });
     }
 
     public interface LogReceiver {
@@ -298,6 +428,4 @@ public class H2CO3LauncherBridge implements Serializable {
 
         String getLogs();
     }
-
-
 }

@@ -5,49 +5,19 @@
  */
 package org.lwjgl.system.macosx;
 
-import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.DEBUG;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT1;
-import static org.lwjgl.system.Checks.checkSafe;
-import static org.lwjgl.system.Checks.remainingSafe;
-import static org.lwjgl.system.JNI.invokePI;
-import static org.lwjgl.system.JNI.invokePP;
-import static org.lwjgl.system.JNI.invokePPP;
-import static org.lwjgl.system.JNI.invokePPPP;
-import static org.lwjgl.system.JNI.invokePPPPP;
-import static org.lwjgl.system.JNI.invokePPPPV;
-import static org.lwjgl.system.JNI.invokePPPPZ;
-import static org.lwjgl.system.JNI.invokePPPUPZ;
-import static org.lwjgl.system.JNI.invokePPPV;
-import static org.lwjgl.system.JNI.invokePPPZ;
-import static org.lwjgl.system.JNI.invokePPV;
-import static org.lwjgl.system.JNI.invokePPZ;
-import static org.lwjgl.system.JNI.invokePV;
-import static org.lwjgl.system.JNI.invokePZ;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memASCIISafe;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
-import static org.lwjgl.system.MemoryUtil.memByteBufferNT1;
-import static org.lwjgl.system.MemoryUtil.memPointerBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memUTF8;
-import static org.lwjgl.system.MemoryUtil.memUTF8Safe;
+import javax.annotation.*;
 
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.JNI;
-import org.lwjgl.system.Library;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.SharedLibrary;
-import org.lwjgl.system.Struct;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import org.lwjgl.*;
 
-import javax.annotation.Nullable;
+import org.lwjgl.system.*;
+
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Native bindings to the Objective-C Runtime.

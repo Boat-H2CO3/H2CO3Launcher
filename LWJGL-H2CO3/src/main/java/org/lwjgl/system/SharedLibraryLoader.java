@@ -4,29 +4,21 @@
  */
 package org.lwjgl.system;
 
-import static org.lwjgl.system.APIUtil.apiLogMore;
+import org.lwjgl.*;
 
-import org.lwjgl.Version;
+import javax.annotation.*;
+import javax.annotation.concurrent.*;
+import java.io.*;
+import java.net.*;
+import java.nio.channels.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.concurrent.locks.*;
+import java.util.function.*;
+import java.util.stream.*;
+import java.util.zip.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.HashSet;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
-import java.util.zip.CRC32;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.GuardedBy;
+import static org.lwjgl.system.APIUtil.*;
 
 /**
  * Loads shared libraries and native resources from the classpath.
@@ -48,7 +40,7 @@ final class SharedLibraryLoader {
     @Nullable
     private static Path extractPath;
 
-    private static final HashSet<Path> extractPaths = new HashSet<>(4);
+    private static HashSet<Path> extractPaths = new HashSet<>(4);
 
     private static boolean checkedJDK8195129;
 
@@ -350,7 +342,6 @@ final class SharedLibraryLoader {
             for (int i = 0; i < filepath.length(); i++) {
                 if (0x80 <= filepath.charAt(i)) {
                     mustCheck = true;
-                    break;
                 }
             }
             if (mustCheck) {

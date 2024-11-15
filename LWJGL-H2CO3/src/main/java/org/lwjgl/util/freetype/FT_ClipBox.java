@@ -5,26 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A structure representing a {@code COLR} v1 {@code ClipBox} table.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_ClipBox {
  *     {@link FT_Vector FT_Vector} bottom_left;
@@ -35,31 +30,25 @@ import javax.annotation.Nullable;
  */
 public class FT_ClipBox extends Struct<FT_ClipBox> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            BOTTOM_LEFT,
-            TOP_LEFT,
-            TOP_RIGHT,
-            BOTTOM_RIGHT;
+        BOTTOM_LEFT,
+        TOP_LEFT,
+        TOP_RIGHT,
+        BOTTOM_RIGHT;
 
     static {
         Layout layout = __struct(
-                __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF),
-                __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF),
-                __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF),
-                __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF)
+            __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF),
+            __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF),
+            __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF),
+            __member(FT_Vector.SIZEOF, FT_Vector.ALIGNOF)
         );
 
         SIZEOF = layout.getSize();
@@ -75,6 +64,11 @@ public class FT_ClipBox extends Struct<FT_ClipBox> implements NativeResource {
         super(address, container);
     }
 
+    @Override
+    protected FT_ClipBox create(long address, @Nullable ByteBuffer container) {
+        return new FT_ClipBox(address, container);
+    }
+
     /**
      * Creates a {@code FT_ClipBox} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -85,38 +79,42 @@ public class FT_ClipBox extends Struct<FT_ClipBox> implements NativeResource {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_ClipBox} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link FT_Vector} view of the {@code bottom_left} field. */
+    public FT_Vector bottom_left() { return nbottom_left(address()); }
+    /** @return a {@link FT_Vector} view of the {@code top_left} field. */
+    public FT_Vector top_left() { return ntop_left(address()); }
+    /** @return a {@link FT_Vector} view of the {@code top_right} field. */
+    public FT_Vector top_right() { return ntop_right(address()); }
+    /** @return a {@link FT_Vector} view of the {@code bottom_right} field. */
+    public FT_Vector bottom_right() { return nbottom_right(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_ClipBox} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_ClipBox malloc() {
         return new FT_ClipBox(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_ClipBox} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_ClipBox} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_ClipBox calloc() {
         return new FT_ClipBox(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_ClipBox} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_ClipBox} instance allocated with {@link BufferUtils}. */
     public static FT_ClipBox create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_ClipBox(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_ClipBox} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_ClipBox} instance for the specified memory address. */
     public static FT_ClipBox create(long address) {
         return new FT_ClipBox(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_ClipBox createSafe(long address) {
         return address == NULL ? null : new FT_ClipBox(address, null);
@@ -130,8 +128,6 @@ public class FT_ClipBox extends Struct<FT_ClipBox> implements NativeResource {
     public static Buffer malloc(int capacity) {
         return new Buffer(nmemAllocChecked(__checkMalloc(capacity, SIZEOF)), capacity);
     }
-
-    // -----------------------------------
 
     /**
      * Returns a new {@link Buffer} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
@@ -162,9 +158,7 @@ public class FT_ClipBox extends Struct<FT_ClipBox> implements NativeResource {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -208,79 +202,20 @@ public class FT_ClipBox extends Struct<FT_ClipBox> implements NativeResource {
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #bottom_left}.
-     */
-    public static FT_Vector nbottom_left(long struct) {
-        return FT_Vector.create(struct + FT_ClipBox.BOTTOM_LEFT);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #top_left}.
-     */
-    public static FT_Vector ntop_left(long struct) {
-        return FT_Vector.create(struct + FT_ClipBox.TOP_LEFT);
-    }
-
-    /**
-     * Unsafe version of {@link #top_right}.
-     */
-    public static FT_Vector ntop_right(long struct) {
-        return FT_Vector.create(struct + FT_ClipBox.TOP_RIGHT);
-    }
-
-    /**
-     * Unsafe version of {@link #bottom_right}.
-     */
-    public static FT_Vector nbottom_right(long struct) {
-        return FT_Vector.create(struct + FT_ClipBox.BOTTOM_RIGHT);
-    }
-
-    @Override
-    protected FT_ClipBox create(long address, @Nullable ByteBuffer container) {
-        return new FT_ClipBox(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #bottom_left}. */
+    public static FT_Vector nbottom_left(long struct) { return FT_Vector.create(struct + FT_ClipBox.BOTTOM_LEFT); }
+    /** Unsafe version of {@link #top_left}. */
+    public static FT_Vector ntop_left(long struct) { return FT_Vector.create(struct + FT_ClipBox.TOP_LEFT); }
+    /** Unsafe version of {@link #top_right}. */
+    public static FT_Vector ntop_right(long struct) { return FT_Vector.create(struct + FT_ClipBox.TOP_RIGHT); }
+    /** Unsafe version of {@link #bottom_right}. */
+    public static FT_Vector nbottom_right(long struct) { return FT_Vector.create(struct + FT_ClipBox.BOTTOM_RIGHT); }
 
     // -----------------------------------
 
-    /**
-     * @return a {@link FT_Vector} view of the {@code bottom_left} field.
-     */
-    public FT_Vector bottom_left() {
-        return nbottom_left(address());
-    }
-
-    /**
-     * @return a {@link FT_Vector} view of the {@code top_left} field.
-     */
-    public FT_Vector top_left() {
-        return ntop_left(address());
-    }
-
-    /**
-     * @return a {@link FT_Vector} view of the {@code top_right} field.
-     */
-    public FT_Vector top_right() {
-        return ntop_right(address());
-    }
-
-    /**
-     * @return a {@link FT_Vector} view of the {@code bottom_right} field.
-     */
-    public FT_Vector bottom_right() {
-        return nbottom_right(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_ClipBox} structs.
-     */
+    /** An array of {@link FT_ClipBox} structs. */
     public static class Buffer extends StructBuffer<FT_ClipBox, Buffer> implements NativeResource {
 
         private static final FT_ClipBox ELEMENT_FACTORY = FT_ClipBox.create(-1L);
@@ -316,33 +251,14 @@ public class FT_ClipBox extends Struct<FT_ClipBox> implements NativeResource {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link FT_Vector} view of the {@code bottom_left} field.
-         */
-        public FT_Vector bottom_left() {
-            return FT_ClipBox.nbottom_left(address());
-        }
-
-        /**
-         * @return a {@link FT_Vector} view of the {@code top_left} field.
-         */
-        public FT_Vector top_left() {
-            return FT_ClipBox.ntop_left(address());
-        }
-
-        /**
-         * @return a {@link FT_Vector} view of the {@code top_right} field.
-         */
-        public FT_Vector top_right() {
-            return FT_ClipBox.ntop_right(address());
-        }
-
-        /**
-         * @return a {@link FT_Vector} view of the {@code bottom_right} field.
-         */
-        public FT_Vector bottom_right() {
-            return FT_ClipBox.nbottom_right(address());
-        }
+        /** @return a {@link FT_Vector} view of the {@code bottom_left} field. */
+        public FT_Vector bottom_left() { return FT_ClipBox.nbottom_left(address()); }
+        /** @return a {@link FT_Vector} view of the {@code top_left} field. */
+        public FT_Vector top_left() { return FT_ClipBox.ntop_left(address()); }
+        /** @return a {@link FT_Vector} view of the {@code top_right} field. */
+        public FT_Vector top_right() { return FT_ClipBox.ntop_right(address()); }
+        /** @return a {@link FT_Vector} view of the {@code bottom_right} field. */
+        public FT_Vector bottom_right() { return FT_ClipBox.nbottom_right(address()); }
 
     }
 

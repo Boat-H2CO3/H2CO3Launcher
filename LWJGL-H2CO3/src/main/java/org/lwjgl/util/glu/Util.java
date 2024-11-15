@@ -69,9 +69,9 @@ import java.nio.IntBuffer;
 public class Util {
 
 	/**
-     * temp IntBuffer of one for getting an int from some GL functions
-     */
-    private static final IntBuffer scratch = BufferUtils.createIntBuffer(16);
+	 * temp IntBuffer of one for getting an int from some GL functions
+	 */
+	private static IntBuffer scratch = BufferUtils.createIntBuffer(16);
 
 	/**
 	 * Return ceiling of integer division
@@ -209,46 +209,46 @@ public class Util {
 				break;
 			case GL_RGB:
 			case GL_BGR:
-                n = 3;
-                break;
-            case GL_RGBA:
-            case GL_BGRA:
-                n = 4;
-                break;
-            default:
-                n = 0;
-        }
+				n = 3;
+				break;
+			case GL_RGBA:
+			case GL_BGRA:
+				n = 4;
+				break;
+			default :
+				n = 0;
+		}
 
-        switch (type) {
-            case GL_UNSIGNED_BYTE:
-                m = 1;
-                break;
-            case GL_BYTE:
-                m = 1;
-                break;
-            case GL_BITMAP:
-                m = 1;
-                break;
-            case GL_UNSIGNED_SHORT:
-                m = 2;
-                break;
-            case GL_SHORT:
-                m = 2;
-                break;
-            case GL_UNSIGNED_INT:
-                m = 4;
-                break;
-            case GL_INT:
-                m = 4;
-                break;
-            case GL_FLOAT:
-                m = 4;
-                break;
-            default:
-                m = 0;
-        }
+		switch ( type ) {
+			case GL_UNSIGNED_BYTE:
+				m = 1;
+				break;
+			case GL_BYTE:
+				m = 1;
+				break;
+			case GL_BITMAP:
+				m = 1;
+				break;
+			case GL_UNSIGNED_SHORT:
+				m = 2;
+				break;
+			case GL_SHORT:
+				m = 2;
+				break;
+			case GL_UNSIGNED_INT:
+				m = 4;
+				break;
+			case GL_INT:
+				m = 4;
+				break;
+			case GL_FLOAT:
+				m = 4;
+				break;
+			default :
+				m = 0;
+		}
 
-        return n * m;
+		return n * m;
 	}
 
 	/**

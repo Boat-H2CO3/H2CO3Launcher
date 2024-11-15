@@ -1,5 +1,5 @@
 //
-// Created by cainiaohh on 2022/10/11.
+// Created by Tungsten on 2022/10/11.
 //
 
 #include <internal.h>
@@ -34,7 +34,7 @@ GLFWbool _glfwInitVulkan(int mode)
     _glfw.vk.handle = _glfw_dlopen("libvulkan.1.dylib");
     if (!_glfw.vk.handle)
         _glfw.vk.handle = _glfwLoadLocalVulkanLoaderNS();
-#elif defined(_GLFW_H2CO3LAUNCHER)
+#elif defined(_GLFW_H2CO3Launcher)
     _glfw.vk.handle = _glfw_dlopen("libvulkan.so");
 #else
     _glfw.vk.handle = _glfw_dlopen("libvulkan.so.1");
@@ -116,7 +116,7 @@ GLFWbool _glfwInitVulkan(int mode)
             _glfw.vk.KHR_xlib_surface = GLFW_TRUE;
         else if (strcmp(ep[i].extensionName, "VK_KHR_xcb_surface") == 0)
             _glfw.vk.KHR_xcb_surface = GLFW_TRUE;
-#elif defined(_GLFW_H2CO3LAUNCHER)
+#elif defined(_GLFW_H2CO3Launcher)
         else if (strcmp(ep[i].extensionName, "VK_KHR_android_surface") == 0)
             _glfw.vk.KHR_android_surface = GLFW_TRUE;
 #elif defined(_GLFW_WAYLAND)

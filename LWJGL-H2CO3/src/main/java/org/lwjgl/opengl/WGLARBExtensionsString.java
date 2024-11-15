@@ -5,14 +5,13 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.JNI.callPP;
-import static org.lwjgl.system.MemoryUtil.memASCIISafe;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/WGL_ARB_extensions_string.txt">WGL_ARB_extensions_string</a> extension.

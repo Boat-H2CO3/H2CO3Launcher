@@ -1,3 +1,7 @@
+//
+// Created by Tungsten on 2022/10/12.
+//
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <jni.h>
@@ -84,7 +88,7 @@ static void *logger_thread() {
         memset(buffer, '\0', sizeof(buffer));
         _s = read(h2co3LauncherFd[0], buffer, sizeof(buffer) - 1);
         if (_s < 0) {
-            __android_log_print(ANDROID_LOG_ERROR, "H2CO3LAUNCHER", "Failed to read log!");
+            __android_log_print(ANDROID_LOG_ERROR, "H2CO3Launcher", "Failed to read log!");
             close(h2co3LauncherFd[0]);
             close(h2co3LauncherFd[1]);
             (*vm)->DetachCurrentThread(vm);
@@ -108,22 +112,22 @@ JNIEXPORT jint JNICALL Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherB
     setvbuf(stdout, 0, _IOLBF, 0);
     setvbuf(stderr, 0, _IONBF, 0);
     if  (pipe(h2co3LauncherFd) < 0) {
-        __android_log_print(ANDROID_LOG_ERROR, "H2CO3LAUNCHER", "Failed to create log pipe!");
+        __android_log_print(ANDROID_LOG_ERROR, "H2CO3Launcher", "Failed to create log pipe!");
         return 1;
     }
     if (dup2(h2co3LauncherFd[1], STDOUT_FILENO) != STDOUT_FILENO &&
         dup2(h2co3LauncherFd[1], STDERR_FILENO) != STDERR_FILENO) {
-        __android_log_print(ANDROID_LOG_ERROR, "H2CO3LAUNCHER", "failed to redirect stdio!");
+        __android_log_print(ANDROID_LOG_ERROR, "H2CO3Launcher", "failed to redirect stdio!");
         return 2;
     }
     jclass bridge = (*env) -> FindClass(env, "org/koishi/launcher/h2co3/core/launch/H2CO3LauncherBridge");
     log_method = (*env) -> GetMethodID(env, bridge, "receiveLog", "(Ljava/lang/String;)V");
     if (!log_method) {
-        __android_log_print(ANDROID_LOG_ERROR, "H2CO3LAUNCHER", "Failed to find receive method!");
+        __android_log_print(ANDROID_LOG_ERROR, "H2CO3Launcher", "Failed to find receive method!");
         return 4;
     }
     h2co3Launcher->logFile = fdopen(h2co3LauncherFd[1], "a");
-    H2CO3_INTERNAL_LOG("Log pipe ready.");
+    H2CO3Launcher_INTERNAL_LOG("Log pipe ready.");
     (*env)->GetJavaVM(env, &log_pipe_jvm);
     int result = pthread_create(&logger, 0, logger_thread, 0);
     if (result != 0){
@@ -163,7 +167,7 @@ JNIEXPORT jint JNICALL Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherB
     handle = dlopen(lib_name, RTLD_GLOBAL | RTLD_LAZY);
 
     char * error = dlerror();
-    __android_log_print(error == NULL ? ANDROID_LOG_INFO : ANDROID_LOG_ERROR, "H2CO3LAUNCHER", "loading %s (error = %s)", lib_name, error);
+    __android_log_print(error == NULL ? ANDROID_LOG_INFO : ANDROID_LOG_ERROR, "H2CO3Launcher", "loading %s (error = %s)", lib_name, error);
 
     if (handle == NULL) {
         ret = -1;
@@ -180,7 +184,7 @@ JNIEXPORT void JNICALL Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherB
     if (updateLdLibPath == NULL) {
         updateLdLibPath = dlsym(libdl_handle, "__loader_android_update_LD_LIBRARY_PATH");
         char * error = dlerror();
-        __android_log_print(error == NULL ? ANDROID_LOG_INFO : ANDROID_LOG_ERROR, "H2CO3LAUNCHER", "loading %s (error = %s)", "libdl.so", error);
+        __android_log_print(error == NULL ? ANDROID_LOG_INFO : ANDROID_LOG_ERROR, "H2CO3Launcher", "loading %s (error = %s)", "libdl.so", error);
     }
     android_update_LD_LIBRARY_PATH = (android_update_LD_LIBRARY_PATH_t) updateLdLibPath;
     const char* ldLibPathUtf = (*env)->GetStringUTFChars(env, ldLibraryPath, 0);
@@ -190,7 +194,7 @@ JNIEXPORT void JNICALL Java_org_koishi_launcher_h2co3_core_launch_H2CO3LauncherB
 
 typedef void (*exit_func)(int);
 
-_Noreturn static void nominal_exit(int code) {
+_Noreturn void nominal_exit(int code) {
     JNIEnv *env;
     jint errorCode = (*exitTrap_jvm)->GetEnv(exitTrap_jvm, (void**)&env, JNI_VERSION_1_6);
     if(errorCode == JNI_EDETACHED) {
@@ -227,7 +231,7 @@ _Noreturn static void nominal_exit(int code) {
 }
 
 static void custom_exit(int code) {
-    __android_log_print(code == 0 ? ANDROID_LOG_INFO : ANDROID_LOG_ERROR, "H2CO3LAUNCHER", "JVM exit with code %d.", code);
+    __android_log_print(code == 0 ? ANDROID_LOG_INFO : ANDROID_LOG_ERROR, "H2CO3Launcher", "JVM exit with code %d.", code);
     // If the exit was already done (meaning it is recursive or from a different thread), pass the call through
     if(exit_tripped) {
         BYTEHOOK_CALL_PREV(custom_exit, exit_func, code);

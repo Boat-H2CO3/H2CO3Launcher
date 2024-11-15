@@ -5,24 +5,14 @@
  */
 package org.lwjgl.system.libc;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT1;
-import static org.lwjgl.system.MemoryUtil.memASCIISafe;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.CustomBuffer;
-import org.lwjgl.system.Library;
-import org.lwjgl.system.NativeType;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Native bindings to string.h. */
 public class LibCString {

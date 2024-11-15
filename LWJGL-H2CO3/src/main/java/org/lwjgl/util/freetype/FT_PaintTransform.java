@@ -5,22 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure representing a {@code COLR} v1 {@code PaintTransform} paint table.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_PaintTransform {
  *     {@link FT_OpaquePaint FT_OpaquePaintRec} paint;
@@ -29,27 +26,21 @@ import javax.annotation.Nullable;
  */
 public class FT_PaintTransform extends Struct<FT_PaintTransform> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            PAINT,
-            AFFINE;
+        PAINT,
+        AFFINE;
 
     static {
         Layout layout = __struct(
-                __member(FT_OpaquePaint.SIZEOF, FT_OpaquePaint.ALIGNOF),
-                __member(FT_Affine23.SIZEOF, FT_Affine23.ALIGNOF)
+            __member(FT_OpaquePaint.SIZEOF, FT_OpaquePaint.ALIGNOF),
+            __member(FT_Affine23.SIZEOF, FT_Affine23.ALIGNOF)
         );
 
         SIZEOF = layout.getSize();
@@ -63,6 +54,11 @@ public class FT_PaintTransform extends Struct<FT_PaintTransform> {
         super(address, container);
     }
 
+    @Override
+    protected FT_PaintTransform create(long address, @Nullable ByteBuffer container) {
+        return new FT_PaintTransform(address, container);
+    }
+
     /**
      * Creates a {@code FT_PaintTransform} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -73,16 +69,23 @@ public class FT_PaintTransform extends Struct<FT_PaintTransform> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_PaintTransform} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link FT_OpaquePaint} view of the {@code paint} field. */
+    @NativeType("FT_OpaquePaintRec")
+    public FT_OpaquePaint paint() { return npaint(address()); }
+    /** @return a {@link FT_Affine23} view of the {@code affine} field. */
+    public FT_Affine23 affine() { return naffine(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_PaintTransform} instance for the specified memory address. */
     public static FT_PaintTransform create(long address) {
         return new FT_PaintTransform(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_PaintTransform createSafe(long address) {
         return address == NULL ? null : new FT_PaintTransform(address, null);
@@ -98,9 +101,7 @@ public class FT_PaintTransform extends Struct<FT_PaintTransform> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -108,52 +109,14 @@ public class FT_PaintTransform extends Struct<FT_PaintTransform> {
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #paint}.
-     */
-    public static FT_OpaquePaint npaint(long struct) {
-        return FT_OpaquePaint.create(struct + FT_PaintTransform.PAINT);
-    }
-
-    /**
-     * Unsafe version of {@link #affine}.
-     */
-    public static FT_Affine23 naffine(long struct) {
-        return FT_Affine23.create(struct + FT_PaintTransform.AFFINE);
-    }
-
-    @Override
-    protected FT_PaintTransform create(long address, @Nullable ByteBuffer container) {
-        return new FT_PaintTransform(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #paint}. */
+    public static FT_OpaquePaint npaint(long struct) { return FT_OpaquePaint.create(struct + FT_PaintTransform.PAINT); }
+    /** Unsafe version of {@link #affine}. */
+    public static FT_Affine23 naffine(long struct) { return FT_Affine23.create(struct + FT_PaintTransform.AFFINE); }
 
     // -----------------------------------
 
-    /**
-     * @return a {@link FT_OpaquePaint} view of the {@code paint} field.
-     */
-    @NativeType("FT_OpaquePaintRec")
-    public FT_OpaquePaint paint() {
-        return npaint(address());
-    }
-
-    /**
-     * @return a {@link FT_Affine23} view of the {@code affine} field.
-     */
-    public FT_Affine23 affine() {
-        return naffine(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_PaintTransform} structs.
-     */
+    /** An array of {@link FT_PaintTransform} structs. */
     public static class Buffer extends StructBuffer<FT_PaintTransform, Buffer> {
 
         private static final FT_PaintTransform ELEMENT_FACTORY = FT_PaintTransform.create(-1L);
@@ -189,20 +152,11 @@ public class FT_PaintTransform extends Struct<FT_PaintTransform> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link FT_OpaquePaint} view of the {@code paint} field.
-         */
+        /** @return a {@link FT_OpaquePaint} view of the {@code paint} field. */
         @NativeType("FT_OpaquePaintRec")
-        public FT_OpaquePaint paint() {
-            return FT_PaintTransform.npaint(address());
-        }
-
-        /**
-         * @return a {@link FT_Affine23} view of the {@code affine} field.
-         */
-        public FT_Affine23 affine() {
-            return FT_PaintTransform.naffine(address());
-        }
+        public FT_OpaquePaint paint() { return FT_PaintTransform.npaint(address()); }
+        /** @return a {@link FT_Affine23} view of the {@code affine} field. */
+        public FT_Affine23 affine() { return FT_PaintTransform.naffine(address()); }
 
     }
 

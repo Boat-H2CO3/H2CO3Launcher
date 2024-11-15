@@ -5,30 +5,16 @@
  */
 package org.lwjgl.system.linux.liburing;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkGT;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBuffer;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.memLongBuffer;
-import static org.lwjgl.system.MemoryUtil.memShortBuffer;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * IO submission data structure (Submission Queue Entry).
@@ -727,7 +713,7 @@ public class IOURingSQE extends Struct<IOURingSQE> implements NativeResource {
     public static ByteBuffer ncmd(long struct) { return memByteBuffer(struct + IOURingSQE.CMD, 0); }
     /** Unsafe version of {@link #cmd(int) cmd}. */
     public static byte ncmd(long struct, int index) {
-        return UNSAFE.getByte(null, struct + IOURingSQE.CMD + check(index, 0));
+        return UNSAFE.getByte(null, struct + IOURingSQE.CMD + check(index, 0) * 1);
     }
 
     /** Unsafe version of {@link #opcode(byte) opcode}. */
@@ -822,11 +808,11 @@ public class IOURingSQE extends Struct<IOURingSQE> implements NativeResource {
     /** Unsafe version of {@link #cmd(ByteBuffer) cmd}. */
     public static void ncmd(long struct, ByteBuffer value) {
         if (CHECKS) { checkGT(value, 0); }
-        memCopy(memAddress(value), struct + IOURingSQE.CMD, value.remaining());
+        memCopy(memAddress(value), struct + IOURingSQE.CMD, value.remaining() * 1);
     }
     /** Unsafe version of {@link #cmd(int, byte) cmd}. */
     public static void ncmd(long struct, int index, byte value) {
-        UNSAFE.putByte(null, struct + IOURingSQE.CMD + check(index, 0), value);
+        UNSAFE.putByte(null, struct + IOURingSQE.CMD + check(index, 0) * 1, value);
     }
 
     // -----------------------------------

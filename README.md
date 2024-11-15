@@ -1,10 +1,10 @@
 [点击切换为中文](./Documents/README_cn.md)
-# Boat_H2CO3
+# H2CO3Launcher
 
 A Minecraft launcher based on the Boat App as the core.
 
-[![Android CI](https://github.com/bilicainiaohh/Boat_H2CO3NewUI/actions/workflows/android.yml/badge.svg)](https://github.com/bilicainiaohh/Boat_H2CO3NewUI/actions/workflows/android.yml)
-[Beta Download](https://nightly.link/Boat-H2CO3/Boat_H2CO3/workflows/android/H2CO3_main/H2CO3-debug.zip)
+[![Android CI](https://github.com/bilicainiaohh/H2CO3LauncherNewUI/actions/workflows/android.yml/badge.svg)](https://github.com/bilicainiaohh/H2CO3LauncherNewUI/actions/workflows/android.yml)
+[Beta Download](https://nightly.link/Boat-H2CO3/H2CO3Launcher/workflows/android/H2CO3_main/H2CO3-debug.zip)
 
 ## Repository Description
 

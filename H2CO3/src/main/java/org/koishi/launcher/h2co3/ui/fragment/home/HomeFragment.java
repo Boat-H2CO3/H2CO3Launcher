@@ -218,6 +218,7 @@ public class HomeFragment extends H2CO3Fragment implements View.OnClickListener 
     public void onClick(View v) {
         if (v == playButton) {
             startActivity(new Intent(requireActivity(), H2CO3LauncherClientActivity.class));
+            h2co3Settings.setH2CO3Launch(false);
             attachControllerInterface();
         } else if (v == userListButton) {
             toggleUserListVisibility();

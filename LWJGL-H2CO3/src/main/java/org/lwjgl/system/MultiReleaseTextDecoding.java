@@ -4,15 +4,11 @@
  */
 package org.lwjgl.system;
 
-import static org.lwjgl.system.Checks.DEBUG;
-import static org.lwjgl.system.MemoryUtil.ARRAY_TLC_BYTE;
-import static org.lwjgl.system.MemoryUtil.ARRAY_TLC_CHAR;
-import static org.lwjgl.system.MemoryUtil.ARRAY_TLC_SIZE;
-import static org.lwjgl.system.MemoryUtil.UNSAFE;
-import static org.lwjgl.system.MemoryUtil.memByteBuffer;
+import java.nio.*;
+import java.nio.charset.*;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * String decoding utilities.

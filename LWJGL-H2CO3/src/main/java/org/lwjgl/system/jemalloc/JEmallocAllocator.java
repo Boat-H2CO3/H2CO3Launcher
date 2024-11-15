@@ -5,14 +5,9 @@
  */
 package org.lwjgl.system.jemalloc;
 
-import static org.lwjgl.system.jemalloc.JEmalloc.Functions;
-import static org.lwjgl.system.jemalloc.JEmalloc.nje_aligned_alloc;
-import static org.lwjgl.system.jemalloc.JEmalloc.nje_calloc;
-import static org.lwjgl.system.jemalloc.JEmalloc.nje_free;
-import static org.lwjgl.system.jemalloc.JEmalloc.nje_malloc;
-import static org.lwjgl.system.jemalloc.JEmalloc.nje_realloc;
+import org.lwjgl.system.MemoryUtil.*;
 
-import org.lwjgl.system.MemoryUtil.MemoryAllocator;
+import static org.lwjgl.system.jemalloc.JEmalloc.*;
 
 /** A {@link MemoryAllocator} implementation using the jemalloc library. */
 public class JEmallocAllocator implements MemoryAllocator {

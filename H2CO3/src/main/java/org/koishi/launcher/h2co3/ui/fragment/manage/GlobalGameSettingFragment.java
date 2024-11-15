@@ -73,6 +73,9 @@ public class GlobalGameSettingFragment extends H2CO3Fragment {
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         activityManager.getMemoryInfo(memoryInfo);
         float maxMemoryMB = (float) (memoryInfo.totalMem / (1024 * 1024));
+        if (settings.getGameMemoryMax() > maxMemoryMB){
+            preferenceSetGameMemory.setValues(256, maxMemoryMB);
+        }
         preferenceSetGameMemory.setInitValues(256, maxMemoryMB);
         preferenceSetGameMemory.setStepSize(1);
         int[] initialValue = {settings.getGameMemoryMin(), settings.getGameMemoryMax()};

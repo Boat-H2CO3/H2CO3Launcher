@@ -4,37 +4,19 @@
  */
 package org.lwjgl.system;
 
-import static org.lwjgl.system.APIUtil.DEBUG_STREAM;
-import static org.lwjgl.system.APIUtil.apiCreateCIF;
-import static org.lwjgl.system.APIUtil.apiLog;
-import static org.lwjgl.system.MemoryUtil.MemoryAllocationReport;
-import static org.lwjgl.system.MemoryUtil.MemoryAllocator;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.StackWalkUtil.stackWalkArray;
-import static org.lwjgl.system.StackWalkUtil.stackWalkGetTrace;
-import static org.lwjgl.system.libc.LibCStdlib.naligned_alloc;
-import static org.lwjgl.system.libc.LibCStdlib.naligned_free;
-import static org.lwjgl.system.libc.LibCStdlib.ncalloc;
-import static org.lwjgl.system.libc.LibCStdlib.nfree;
-import static org.lwjgl.system.libc.LibCStdlib.nmalloc;
-import static org.lwjgl.system.libc.LibCStdlib.nrealloc;
-import static org.lwjgl.system.libffi.LibFFI.FFI_DEFAULT_ABI;
-import static org.lwjgl.system.libffi.LibFFI.ffi_type_pointer;
-import static org.lwjgl.system.libffi.LibFFI.ffi_type_void;
+import org.lwjgl.system.libffi.*;
 
-import org.lwjgl.system.libffi.FFICIF;
+import javax.annotation.*;
+import java.util.*;
+import java.util.Map.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicLong;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.StackWalkUtil.*;
+import static org.lwjgl.system.libc.LibCStdlib.*;
+import static org.lwjgl.system.libffi.LibFFI.*;
 
 /** Provides {@link MemoryAllocator} implementations for {@link MemoryUtil} to use. */
 final class MemoryManage {

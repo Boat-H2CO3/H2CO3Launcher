@@ -5,17 +5,16 @@
  */
 package org.lwjgl.glfw;
 
-import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memUTF8;
+import javax.annotation.*;
 
-import org.lwjgl.system.APIUtil;
-import org.lwjgl.system.Callback;
+import org.lwjgl.system.*;
+
+import static org.lwjgl.system.MemoryUtil.*;
 
 import java.io.PrintStream;
 import java.util.Map;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.glfw.GLFW.*;
 
 /**
  * Instances of this class may be passed to the {@link GLFW#glfwSetErrorCallback SetErrorCallback} method.
@@ -96,7 +95,7 @@ public abstract class GLFWErrorCallback extends Callback implements GLFWErrorCal
      */
     public static GLFWErrorCallback createPrint(PrintStream stream) {
         return new GLFWErrorCallback() {
-            private final Map<Integer, String> ERROR_CODES = APIUtil.apiClassTokens((field, value) -> 0x10000 < value && value < 0x20000, null, GLFW.class);
+            private Map<Integer, String> ERROR_CODES = APIUtil.apiClassTokens((field, value) -> 0x10000 < value && value < 0x20000, null, GLFW.class);
 
             @Override
             public void invoke(int error, long description) {

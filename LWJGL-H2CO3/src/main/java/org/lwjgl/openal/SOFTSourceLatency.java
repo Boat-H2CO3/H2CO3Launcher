@@ -5,21 +5,14 @@
  */
 package org.lwjgl.openal;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.JNI.invokeJJJV;
-import static org.lwjgl.system.JNI.invokeJV;
-import static org.lwjgl.system.JNI.invokePPPV;
-import static org.lwjgl.system.JNI.invokePV;
-import static org.lwjgl.system.JNI.invokeV;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import java.nio.*;
 
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeType;
+import org.lwjgl.system.*;
 
-import java.nio.DoubleBuffer;
-import java.nio.LongBuffer;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Native bindings to the <a href="https://openal-soft.org/openal-extensions/SOFT_source_latency.txt">SOFT_source_latency</a> extension.

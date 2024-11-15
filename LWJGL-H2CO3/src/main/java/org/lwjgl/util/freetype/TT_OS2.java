@@ -5,25 +5,20 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBuffer;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure to model a TrueType {@code OS/2} table.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct TT_OS2 {
  *     FT_UShort version;
@@ -69,101 +64,95 @@ import javax.annotation.Nullable;
  */
 public class TT_OS2 extends Struct<TT_OS2> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            VERSION,
-            XAVGCHARWIDTH,
-            USWEIGHTCLASS,
-            USWIDTHCLASS,
-            FSTYPE,
-            YSUBSCRIPTXSIZE,
-            YSUBSCRIPTYSIZE,
-            YSUBSCRIPTXOFFSET,
-            YSUBSCRIPTYOFFSET,
-            YSUPERSCRIPTXSIZE,
-            YSUPERSCRIPTYSIZE,
-            YSUPERSCRIPTXOFFSET,
-            YSUPERSCRIPTYOFFSET,
-            YSTRIKEOUTSIZE,
-            YSTRIKEOUTPOSITION,
-            SFAMILYCLASS,
-            PANOSE,
-            ULUNICODERANGE1,
-            ULUNICODERANGE2,
-            ULUNICODERANGE3,
-            ULUNICODERANGE4,
-            ACHVENDID,
-            FSSELECTION,
-            USFIRSTCHARINDEX,
-            USLASTCHARINDEX,
-            STYPOASCENDER,
-            STYPODESCENDER,
-            STYPOLINEGAP,
-            USWINASCENT,
-            USWINDESCENT,
-            ULCODEPAGERANGE1,
-            ULCODEPAGERANGE2,
-            SXHEIGHT,
-            SCAPHEIGHT,
-            USDEFAULTCHAR,
-            USBREAKCHAR,
-            USMAXCONTEXT,
-            USLOWEROPTICALPOINTSIZE,
-            USUPPEROPTICALPOINTSIZE;
+        VERSION,
+        XAVGCHARWIDTH,
+        USWEIGHTCLASS,
+        USWIDTHCLASS,
+        FSTYPE,
+        YSUBSCRIPTXSIZE,
+        YSUBSCRIPTYSIZE,
+        YSUBSCRIPTXOFFSET,
+        YSUBSCRIPTYOFFSET,
+        YSUPERSCRIPTXSIZE,
+        YSUPERSCRIPTYSIZE,
+        YSUPERSCRIPTXOFFSET,
+        YSUPERSCRIPTYOFFSET,
+        YSTRIKEOUTSIZE,
+        YSTRIKEOUTPOSITION,
+        SFAMILYCLASS,
+        PANOSE,
+        ULUNICODERANGE1,
+        ULUNICODERANGE2,
+        ULUNICODERANGE3,
+        ULUNICODERANGE4,
+        ACHVENDID,
+        FSSELECTION,
+        USFIRSTCHARINDEX,
+        USLASTCHARINDEX,
+        STYPOASCENDER,
+        STYPODESCENDER,
+        STYPOLINEGAP,
+        USWINASCENT,
+        USWINDESCENT,
+        ULCODEPAGERANGE1,
+        ULCODEPAGERANGE2,
+        SXHEIGHT,
+        SCAPHEIGHT,
+        USDEFAULTCHAR,
+        USBREAKCHAR,
+        USMAXCONTEXT,
+        USLOWEROPTICALPOINTSIZE,
+        USUPPEROPTICALPOINTSIZE;
 
     static {
         Layout layout = __struct(
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __array(1, 10),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __array(1, 4),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2)
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __array(1, 10),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __array(1, 4),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2)
         );
 
         SIZEOF = layout.getSize();
@@ -214,6 +203,11 @@ public class TT_OS2 extends Struct<TT_OS2> {
         super(address, container);
     }
 
+    @Override
+    protected TT_OS2 create(long address, @Nullable ByteBuffer container) {
+        return new TT_OS2(address, container);
+    }
+
     /**
      * Creates a {@code TT_OS2} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -224,16 +218,141 @@ public class TT_OS2 extends Struct<TT_OS2> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code TT_OS2} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code version} field. */
+    @NativeType("FT_UShort")
+    public short version() { return nversion(address()); }
+    /** @return the value of the {@code xAvgCharWidth} field. */
+    @NativeType("FT_Short")
+    public short xAvgCharWidth() { return nxAvgCharWidth(address()); }
+    /** @return the value of the {@code usWeightClass} field. */
+    @NativeType("FT_UShort")
+    public short usWeightClass() { return nusWeightClass(address()); }
+    /** @return the value of the {@code usWidthClass} field. */
+    @NativeType("FT_UShort")
+    public short usWidthClass() { return nusWidthClass(address()); }
+    /** @return the value of the {@code fsType} field. */
+    @NativeType("FT_UShort")
+    public short fsType() { return nfsType(address()); }
+    /** @return the value of the {@code ySubscriptXSize} field. */
+    @NativeType("FT_Short")
+    public short ySubscriptXSize() { return nySubscriptXSize(address()); }
+    /** @return the value of the {@code ySubscriptYSize} field. */
+    @NativeType("FT_Short")
+    public short ySubscriptYSize() { return nySubscriptYSize(address()); }
+    /** @return the value of the {@code ySubscriptXOffset} field. */
+    @NativeType("FT_Short")
+    public short ySubscriptXOffset() { return nySubscriptXOffset(address()); }
+    /** @return the value of the {@code ySubscriptYOffset} field. */
+    @NativeType("FT_Short")
+    public short ySubscriptYOffset() { return nySubscriptYOffset(address()); }
+    /** @return the value of the {@code ySuperscriptXSize} field. */
+    @NativeType("FT_Short")
+    public short ySuperscriptXSize() { return nySuperscriptXSize(address()); }
+    /** @return the value of the {@code ySuperscriptYSize} field. */
+    @NativeType("FT_Short")
+    public short ySuperscriptYSize() { return nySuperscriptYSize(address()); }
+    /** @return the value of the {@code ySuperscriptXOffset} field. */
+    @NativeType("FT_Short")
+    public short ySuperscriptXOffset() { return nySuperscriptXOffset(address()); }
+    /** @return the value of the {@code ySuperscriptYOffset} field. */
+    @NativeType("FT_Short")
+    public short ySuperscriptYOffset() { return nySuperscriptYOffset(address()); }
+    /** @return the value of the {@code yStrikeoutSize} field. */
+    @NativeType("FT_Short")
+    public short yStrikeoutSize() { return nyStrikeoutSize(address()); }
+    /** @return the value of the {@code yStrikeoutPosition} field. */
+    @NativeType("FT_Short")
+    public short yStrikeoutPosition() { return nyStrikeoutPosition(address()); }
+    /** @return the value of the {@code sFamilyClass} field. */
+    @NativeType("FT_Short")
+    public short sFamilyClass() { return nsFamilyClass(address()); }
+    /** @return a {@link ByteBuffer} view of the {@code panose} field. */
+    @NativeType("FT_Byte[10]")
+    public ByteBuffer panose() { return npanose(address()); }
+    /** @return the value at the specified index of the {@code panose} field. */
+    @NativeType("FT_Byte")
+    public byte panose(int index) { return npanose(address(), index); }
+    /** @return the value of the {@code ulUnicodeRange1} field. */
+    @NativeType("FT_ULong")
+    public long ulUnicodeRange1() { return nulUnicodeRange1(address()); }
+    /** @return the value of the {@code ulUnicodeRange2} field. */
+    @NativeType("FT_ULong")
+    public long ulUnicodeRange2() { return nulUnicodeRange2(address()); }
+    /** @return the value of the {@code ulUnicodeRange3} field. */
+    @NativeType("FT_ULong")
+    public long ulUnicodeRange3() { return nulUnicodeRange3(address()); }
+    /** @return the value of the {@code ulUnicodeRange4} field. */
+    @NativeType("FT_ULong")
+    public long ulUnicodeRange4() { return nulUnicodeRange4(address()); }
+    /** @return a {@link ByteBuffer} view of the {@code achVendID} field. */
+    @NativeType("FT_Char[4]")
+    public ByteBuffer achVendID() { return nachVendID(address()); }
+    /** @return the value at the specified index of the {@code achVendID} field. */
+    @NativeType("FT_Char")
+    public byte achVendID(int index) { return nachVendID(address(), index); }
+    /** @return the value of the {@code fsSelection} field. */
+    @NativeType("FT_UShort")
+    public short fsSelection() { return nfsSelection(address()); }
+    /** @return the value of the {@code usFirstCharIndex} field. */
+    @NativeType("FT_UShort")
+    public short usFirstCharIndex() { return nusFirstCharIndex(address()); }
+    /** @return the value of the {@code usLastCharIndex} field. */
+    @NativeType("FT_UShort")
+    public short usLastCharIndex() { return nusLastCharIndex(address()); }
+    /** @return the value of the {@code sTypoAscender} field. */
+    @NativeType("FT_Short")
+    public short sTypoAscender() { return nsTypoAscender(address()); }
+    /** @return the value of the {@code sTypoDescender} field. */
+    @NativeType("FT_Short")
+    public short sTypoDescender() { return nsTypoDescender(address()); }
+    /** @return the value of the {@code sTypoLineGap} field. */
+    @NativeType("FT_Short")
+    public short sTypoLineGap() { return nsTypoLineGap(address()); }
+    /** @return the value of the {@code usWinAscent} field. */
+    @NativeType("FT_UShort")
+    public short usWinAscent() { return nusWinAscent(address()); }
+    /** @return the value of the {@code usWinDescent} field. */
+    @NativeType("FT_UShort")
+    public short usWinDescent() { return nusWinDescent(address()); }
+    /** @return the value of the {@code ulCodePageRange1} field. */
+    @NativeType("FT_ULong")
+    public long ulCodePageRange1() { return nulCodePageRange1(address()); }
+    /** @return the value of the {@code ulCodePageRange2} field. */
+    @NativeType("FT_ULong")
+    public long ulCodePageRange2() { return nulCodePageRange2(address()); }
+    /** @return the value of the {@code sxHeight} field. */
+    @NativeType("FT_Short")
+    public short sxHeight() { return nsxHeight(address()); }
+    /** @return the value of the {@code sCapHeight} field. */
+    @NativeType("FT_Short")
+    public short sCapHeight() { return nsCapHeight(address()); }
+    /** @return the value of the {@code usDefaultChar} field. */
+    @NativeType("FT_UShort")
+    public short usDefaultChar() { return nusDefaultChar(address()); }
+    /** @return the value of the {@code usBreakChar} field. */
+    @NativeType("FT_UShort")
+    public short usBreakChar() { return nusBreakChar(address()); }
+    /** @return the value of the {@code usMaxContext} field. */
+    @NativeType("FT_UShort")
+    public short usMaxContext() { return nusMaxContext(address()); }
+    /** @return the value of the {@code usLowerOpticalPointSize} field. */
+    @NativeType("FT_UShort")
+    public short usLowerOpticalPointSize() { return nusLowerOpticalPointSize(address()); }
+    /** @return the value of the {@code usUpperOpticalPointSize} field. */
+    @NativeType("FT_UShort")
+    public short usUpperOpticalPointSize() { return nusUpperOpticalPointSize(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code TT_OS2} instance for the specified memory address. */
     public static TT_OS2 create(long address) {
         return new TT_OS2(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static TT_OS2 createSafe(long address) {
         return address == NULL ? null : new TT_OS2(address, null);
@@ -249,648 +368,104 @@ public class TT_OS2 extends Struct<TT_OS2> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #version}.
-     */
-    public static short nversion(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.VERSION);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #xAvgCharWidth}.
-     */
-    public static short nxAvgCharWidth(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.XAVGCHARWIDTH);
-    }
-
-    /**
-     * Unsafe version of {@link #usWeightClass}.
-     */
-    public static short nusWeightClass(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USWEIGHTCLASS);
-    }
-
-    /**
-     * Unsafe version of {@link #usWidthClass}.
-     */
-    public static short nusWidthClass(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USWIDTHCLASS);
-    }
-
-    /**
-     * Unsafe version of {@link #fsType}.
-     */
-    public static short nfsType(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.FSTYPE);
-    }
-
-    /**
-     * Unsafe version of {@link #ySubscriptXSize}.
-     */
-    public static short nySubscriptXSize(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.YSUBSCRIPTXSIZE);
-    }
-
-    /**
-     * Unsafe version of {@link #ySubscriptYSize}.
-     */
-    public static short nySubscriptYSize(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.YSUBSCRIPTYSIZE);
-    }
-
-    /**
-     * Unsafe version of {@link #ySubscriptXOffset}.
-     */
-    public static short nySubscriptXOffset(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.YSUBSCRIPTXOFFSET);
-    }
-
-    /**
-     * Unsafe version of {@link #ySubscriptYOffset}.
-     */
-    public static short nySubscriptYOffset(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.YSUBSCRIPTYOFFSET);
-    }
-
-    /**
-     * Unsafe version of {@link #ySuperscriptXSize}.
-     */
-    public static short nySuperscriptXSize(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.YSUPERSCRIPTXSIZE);
-    }
-
-    /**
-     * Unsafe version of {@link #ySuperscriptYSize}.
-     */
-    public static short nySuperscriptYSize(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.YSUPERSCRIPTYSIZE);
-    }
-
-    /**
-     * Unsafe version of {@link #ySuperscriptXOffset}.
-     */
-    public static short nySuperscriptXOffset(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.YSUPERSCRIPTXOFFSET);
-    }
-
-    /**
-     * Unsafe version of {@link #ySuperscriptYOffset}.
-     */
-    public static short nySuperscriptYOffset(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.YSUPERSCRIPTYOFFSET);
-    }
-
-    /**
-     * Unsafe version of {@link #yStrikeoutSize}.
-     */
-    public static short nyStrikeoutSize(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.YSTRIKEOUTSIZE);
-    }
-
-    /**
-     * Unsafe version of {@link #yStrikeoutPosition}.
-     */
-    public static short nyStrikeoutPosition(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.YSTRIKEOUTPOSITION);
-    }
-
-    /**
-     * Unsafe version of {@link #sFamilyClass}.
-     */
-    public static short nsFamilyClass(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.SFAMILYCLASS);
-    }
-
-    /**
-     * Unsafe version of {@link #panose}.
-     */
-    public static ByteBuffer npanose(long struct) {
-        return memByteBuffer(struct + TT_OS2.PANOSE, 10);
-    }
-
-    /**
-     * Unsafe version of {@link #panose(int) panose}.
-     */
+    /** Unsafe version of {@link #version}. */
+    public static short nversion(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.VERSION); }
+    /** Unsafe version of {@link #xAvgCharWidth}. */
+    public static short nxAvgCharWidth(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.XAVGCHARWIDTH); }
+    /** Unsafe version of {@link #usWeightClass}. */
+    public static short nusWeightClass(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USWEIGHTCLASS); }
+    /** Unsafe version of {@link #usWidthClass}. */
+    public static short nusWidthClass(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USWIDTHCLASS); }
+    /** Unsafe version of {@link #fsType}. */
+    public static short nfsType(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.FSTYPE); }
+    /** Unsafe version of {@link #ySubscriptXSize}. */
+    public static short nySubscriptXSize(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.YSUBSCRIPTXSIZE); }
+    /** Unsafe version of {@link #ySubscriptYSize}. */
+    public static short nySubscriptYSize(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.YSUBSCRIPTYSIZE); }
+    /** Unsafe version of {@link #ySubscriptXOffset}. */
+    public static short nySubscriptXOffset(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.YSUBSCRIPTXOFFSET); }
+    /** Unsafe version of {@link #ySubscriptYOffset}. */
+    public static short nySubscriptYOffset(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.YSUBSCRIPTYOFFSET); }
+    /** Unsafe version of {@link #ySuperscriptXSize}. */
+    public static short nySuperscriptXSize(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.YSUPERSCRIPTXSIZE); }
+    /** Unsafe version of {@link #ySuperscriptYSize}. */
+    public static short nySuperscriptYSize(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.YSUPERSCRIPTYSIZE); }
+    /** Unsafe version of {@link #ySuperscriptXOffset}. */
+    public static short nySuperscriptXOffset(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.YSUPERSCRIPTXOFFSET); }
+    /** Unsafe version of {@link #ySuperscriptYOffset}. */
+    public static short nySuperscriptYOffset(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.YSUPERSCRIPTYOFFSET); }
+    /** Unsafe version of {@link #yStrikeoutSize}. */
+    public static short nyStrikeoutSize(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.YSTRIKEOUTSIZE); }
+    /** Unsafe version of {@link #yStrikeoutPosition}. */
+    public static short nyStrikeoutPosition(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.YSTRIKEOUTPOSITION); }
+    /** Unsafe version of {@link #sFamilyClass}. */
+    public static short nsFamilyClass(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.SFAMILYCLASS); }
+    /** Unsafe version of {@link #panose}. */
+    public static ByteBuffer npanose(long struct) { return memByteBuffer(struct + TT_OS2.PANOSE, 10); }
+    /** Unsafe version of {@link #panose(int) panose}. */
     public static byte npanose(long struct, int index) {
-        return UNSAFE.getByte(null, struct + TT_OS2.PANOSE + check(index, 10));
+        return UNSAFE.getByte(null, struct + TT_OS2.PANOSE + check(index, 10) * 1);
     }
-
-    /**
-     * Unsafe version of {@link #ulUnicodeRange1}.
-     */
-    public static long nulUnicodeRange1(long struct) {
-        return memGetCLong(struct + TT_OS2.ULUNICODERANGE1);
-    }
-
-    /**
-     * Unsafe version of {@link #ulUnicodeRange2}.
-     */
-    public static long nulUnicodeRange2(long struct) {
-        return memGetCLong(struct + TT_OS2.ULUNICODERANGE2);
-    }
-
-    /**
-     * Unsafe version of {@link #ulUnicodeRange3}.
-     */
-    public static long nulUnicodeRange3(long struct) {
-        return memGetCLong(struct + TT_OS2.ULUNICODERANGE3);
-    }
-
-    /**
-     * Unsafe version of {@link #ulUnicodeRange4}.
-     */
-    public static long nulUnicodeRange4(long struct) {
-        return memGetCLong(struct + TT_OS2.ULUNICODERANGE4);
-    }
-
-    /**
-     * Unsafe version of {@link #achVendID}.
-     */
-    public static ByteBuffer nachVendID(long struct) {
-        return memByteBuffer(struct + TT_OS2.ACHVENDID, 4);
-    }
-
-    /**
-     * Unsafe version of {@link #achVendID(int) achVendID}.
-     */
+    /** Unsafe version of {@link #ulUnicodeRange1}. */
+    public static long nulUnicodeRange1(long struct) { return memGetCLong(struct + TT_OS2.ULUNICODERANGE1); }
+    /** Unsafe version of {@link #ulUnicodeRange2}. */
+    public static long nulUnicodeRange2(long struct) { return memGetCLong(struct + TT_OS2.ULUNICODERANGE2); }
+    /** Unsafe version of {@link #ulUnicodeRange3}. */
+    public static long nulUnicodeRange3(long struct) { return memGetCLong(struct + TT_OS2.ULUNICODERANGE3); }
+    /** Unsafe version of {@link #ulUnicodeRange4}. */
+    public static long nulUnicodeRange4(long struct) { return memGetCLong(struct + TT_OS2.ULUNICODERANGE4); }
+    /** Unsafe version of {@link #achVendID}. */
+    public static ByteBuffer nachVendID(long struct) { return memByteBuffer(struct + TT_OS2.ACHVENDID, 4); }
+    /** Unsafe version of {@link #achVendID(int) achVendID}. */
     public static byte nachVendID(long struct, int index) {
-        return UNSAFE.getByte(null, struct + TT_OS2.ACHVENDID + check(index, 4));
+        return UNSAFE.getByte(null, struct + TT_OS2.ACHVENDID + check(index, 4) * 1);
     }
-
-    /**
-     * Unsafe version of {@link #fsSelection}.
-     */
-    public static short nfsSelection(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.FSSELECTION);
-    }
-
-    /**
-     * Unsafe version of {@link #usFirstCharIndex}.
-     */
-    public static short nusFirstCharIndex(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USFIRSTCHARINDEX);
-    }
-
-    /**
-     * Unsafe version of {@link #usLastCharIndex}.
-     */
-    public static short nusLastCharIndex(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USLASTCHARINDEX);
-    }
-
-    /**
-     * Unsafe version of {@link #sTypoAscender}.
-     */
-    public static short nsTypoAscender(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.STYPOASCENDER);
-    }
-
-    /**
-     * Unsafe version of {@link #sTypoDescender}.
-     */
-    public static short nsTypoDescender(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.STYPODESCENDER);
-    }
-
-    /**
-     * Unsafe version of {@link #sTypoLineGap}.
-     */
-    public static short nsTypoLineGap(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.STYPOLINEGAP);
-    }
-
-    /**
-     * Unsafe version of {@link #usWinAscent}.
-     */
-    public static short nusWinAscent(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USWINASCENT);
-    }
-
-    /**
-     * Unsafe version of {@link #usWinDescent}.
-     */
-    public static short nusWinDescent(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USWINDESCENT);
-    }
-
-    /**
-     * Unsafe version of {@link #ulCodePageRange1}.
-     */
-    public static long nulCodePageRange1(long struct) {
-        return memGetCLong(struct + TT_OS2.ULCODEPAGERANGE1);
-    }
-
-    /**
-     * Unsafe version of {@link #ulCodePageRange2}.
-     */
-    public static long nulCodePageRange2(long struct) {
-        return memGetCLong(struct + TT_OS2.ULCODEPAGERANGE2);
-    }
-
-    /**
-     * Unsafe version of {@link #sxHeight}.
-     */
-    public static short nsxHeight(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.SXHEIGHT);
-    }
-
-    /**
-     * Unsafe version of {@link #sCapHeight}.
-     */
-    public static short nsCapHeight(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.SCAPHEIGHT);
-    }
-
-    /**
-     * Unsafe version of {@link #usDefaultChar}.
-     */
-    public static short nusDefaultChar(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USDEFAULTCHAR);
-    }
-
-    /**
-     * Unsafe version of {@link #usBreakChar}.
-     */
-    public static short nusBreakChar(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USBREAKCHAR);
-    }
-
-    /**
-     * Unsafe version of {@link #usMaxContext}.
-     */
-    public static short nusMaxContext(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USMAXCONTEXT);
-    }
+    /** Unsafe version of {@link #fsSelection}. */
+    public static short nfsSelection(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.FSSELECTION); }
+    /** Unsafe version of {@link #usFirstCharIndex}. */
+    public static short nusFirstCharIndex(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USFIRSTCHARINDEX); }
+    /** Unsafe version of {@link #usLastCharIndex}. */
+    public static short nusLastCharIndex(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USLASTCHARINDEX); }
+    /** Unsafe version of {@link #sTypoAscender}. */
+    public static short nsTypoAscender(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.STYPOASCENDER); }
+    /** Unsafe version of {@link #sTypoDescender}. */
+    public static short nsTypoDescender(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.STYPODESCENDER); }
+    /** Unsafe version of {@link #sTypoLineGap}. */
+    public static short nsTypoLineGap(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.STYPOLINEGAP); }
+    /** Unsafe version of {@link #usWinAscent}. */
+    public static short nusWinAscent(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USWINASCENT); }
+    /** Unsafe version of {@link #usWinDescent}. */
+    public static short nusWinDescent(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USWINDESCENT); }
+    /** Unsafe version of {@link #ulCodePageRange1}. */
+    public static long nulCodePageRange1(long struct) { return memGetCLong(struct + TT_OS2.ULCODEPAGERANGE1); }
+    /** Unsafe version of {@link #ulCodePageRange2}. */
+    public static long nulCodePageRange2(long struct) { return memGetCLong(struct + TT_OS2.ULCODEPAGERANGE2); }
+    /** Unsafe version of {@link #sxHeight}. */
+    public static short nsxHeight(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.SXHEIGHT); }
+    /** Unsafe version of {@link #sCapHeight}. */
+    public static short nsCapHeight(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.SCAPHEIGHT); }
+    /** Unsafe version of {@link #usDefaultChar}. */
+    public static short nusDefaultChar(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USDEFAULTCHAR); }
+    /** Unsafe version of {@link #usBreakChar}. */
+    public static short nusBreakChar(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USBREAKCHAR); }
+    /** Unsafe version of {@link #usMaxContext}. */
+    public static short nusMaxContext(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USMAXCONTEXT); }
+    /** Unsafe version of {@link #usLowerOpticalPointSize}. */
+    public static short nusLowerOpticalPointSize(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USLOWEROPTICALPOINTSIZE); }
+    /** Unsafe version of {@link #usUpperOpticalPointSize}. */
+    public static short nusUpperOpticalPointSize(long struct) { return UNSAFE.getShort(null, struct + TT_OS2.USUPPEROPTICALPOINTSIZE); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #usLowerOpticalPointSize}.
-     */
-    public static short nusLowerOpticalPointSize(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USLOWEROPTICALPOINTSIZE);
-    }
-
-    /**
-     * Unsafe version of {@link #usUpperOpticalPointSize}.
-     */
-    public static short nusUpperOpticalPointSize(long struct) {
-        return UNSAFE.getShort(null, struct + TT_OS2.USUPPEROPTICALPOINTSIZE);
-    }
-
-    @Override
-    protected TT_OS2 create(long address, @Nullable ByteBuffer container) {
-        return new TT_OS2(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return the value of the {@code version} field.
-     */
-    @NativeType("FT_UShort")
-    public short version() {
-        return nversion(address());
-    }
-
-    /**
-     * @return the value of the {@code xAvgCharWidth} field.
-     */
-    @NativeType("FT_Short")
-    public short xAvgCharWidth() {
-        return nxAvgCharWidth(address());
-    }
-
-    /**
-     * @return the value of the {@code usWeightClass} field.
-     */
-    @NativeType("FT_UShort")
-    public short usWeightClass() {
-        return nusWeightClass(address());
-    }
-
-    /**
-     * @return the value of the {@code usWidthClass} field.
-     */
-    @NativeType("FT_UShort")
-    public short usWidthClass() {
-        return nusWidthClass(address());
-    }
-
-    /**
-     * @return the value of the {@code fsType} field.
-     */
-    @NativeType("FT_UShort")
-    public short fsType() {
-        return nfsType(address());
-    }
-
-    /**
-     * @return the value of the {@code ySubscriptXSize} field.
-     */
-    @NativeType("FT_Short")
-    public short ySubscriptXSize() {
-        return nySubscriptXSize(address());
-    }
-
-    /**
-     * @return the value of the {@code ySubscriptYSize} field.
-     */
-    @NativeType("FT_Short")
-    public short ySubscriptYSize() {
-        return nySubscriptYSize(address());
-    }
-
-    /**
-     * @return the value of the {@code ySubscriptXOffset} field.
-     */
-    @NativeType("FT_Short")
-    public short ySubscriptXOffset() {
-        return nySubscriptXOffset(address());
-    }
-
-    /**
-     * @return the value of the {@code ySubscriptYOffset} field.
-     */
-    @NativeType("FT_Short")
-    public short ySubscriptYOffset() {
-        return nySubscriptYOffset(address());
-    }
-
-    /**
-     * @return the value of the {@code ySuperscriptXSize} field.
-     */
-    @NativeType("FT_Short")
-    public short ySuperscriptXSize() {
-        return nySuperscriptXSize(address());
-    }
-
-    /**
-     * @return the value of the {@code ySuperscriptYSize} field.
-     */
-    @NativeType("FT_Short")
-    public short ySuperscriptYSize() {
-        return nySuperscriptYSize(address());
-    }
-
-    /**
-     * @return the value of the {@code ySuperscriptXOffset} field.
-     */
-    @NativeType("FT_Short")
-    public short ySuperscriptXOffset() {
-        return nySuperscriptXOffset(address());
-    }
-
-    /**
-     * @return the value of the {@code ySuperscriptYOffset} field.
-     */
-    @NativeType("FT_Short")
-    public short ySuperscriptYOffset() {
-        return nySuperscriptYOffset(address());
-    }
-
-    /**
-     * @return the value of the {@code yStrikeoutSize} field.
-     */
-    @NativeType("FT_Short")
-    public short yStrikeoutSize() {
-        return nyStrikeoutSize(address());
-    }
-
-    /**
-     * @return the value of the {@code yStrikeoutPosition} field.
-     */
-    @NativeType("FT_Short")
-    public short yStrikeoutPosition() {
-        return nyStrikeoutPosition(address());
-    }
-
-    /**
-     * @return the value of the {@code sFamilyClass} field.
-     */
-    @NativeType("FT_Short")
-    public short sFamilyClass() {
-        return nsFamilyClass(address());
-    }
-
-    /**
-     * @return a {@link ByteBuffer} view of the {@code panose} field.
-     */
-    @NativeType("FT_Byte[10]")
-    public ByteBuffer panose() {
-        return npanose(address());
-    }
-
-    /**
-     * @return the value at the specified index of the {@code panose} field.
-     */
-    @NativeType("FT_Byte")
-    public byte panose(int index) {
-        return npanose(address(), index);
-    }
-
-    /**
-     * @return the value of the {@code ulUnicodeRange1} field.
-     */
-    @NativeType("FT_ULong")
-    public long ulUnicodeRange1() {
-        return nulUnicodeRange1(address());
-    }
-
-    /**
-     * @return the value of the {@code ulUnicodeRange2} field.
-     */
-    @NativeType("FT_ULong")
-    public long ulUnicodeRange2() {
-        return nulUnicodeRange2(address());
-    }
-
-    /**
-     * @return the value of the {@code ulUnicodeRange3} field.
-     */
-    @NativeType("FT_ULong")
-    public long ulUnicodeRange3() {
-        return nulUnicodeRange3(address());
-    }
-
-    /**
-     * @return the value of the {@code ulUnicodeRange4} field.
-     */
-    @NativeType("FT_ULong")
-    public long ulUnicodeRange4() {
-        return nulUnicodeRange4(address());
-    }
-
-    /**
-     * @return a {@link ByteBuffer} view of the {@code achVendID} field.
-     */
-    @NativeType("FT_Char[4]")
-    public ByteBuffer achVendID() {
-        return nachVendID(address());
-    }
-
-    /**
-     * @return the value at the specified index of the {@code achVendID} field.
-     */
-    @NativeType("FT_Char")
-    public byte achVendID(int index) {
-        return nachVendID(address(), index);
-    }
-
-    /**
-     * @return the value of the {@code fsSelection} field.
-     */
-    @NativeType("FT_UShort")
-    public short fsSelection() {
-        return nfsSelection(address());
-    }
-
-    /**
-     * @return the value of the {@code usFirstCharIndex} field.
-     */
-    @NativeType("FT_UShort")
-    public short usFirstCharIndex() {
-        return nusFirstCharIndex(address());
-    }
-
-    /**
-     * @return the value of the {@code usLastCharIndex} field.
-     */
-    @NativeType("FT_UShort")
-    public short usLastCharIndex() {
-        return nusLastCharIndex(address());
-    }
-
-    /**
-     * @return the value of the {@code sTypoAscender} field.
-     */
-    @NativeType("FT_Short")
-    public short sTypoAscender() {
-        return nsTypoAscender(address());
-    }
-
-    /**
-     * @return the value of the {@code sTypoDescender} field.
-     */
-    @NativeType("FT_Short")
-    public short sTypoDescender() {
-        return nsTypoDescender(address());
-    }
-
-    /**
-     * @return the value of the {@code sTypoLineGap} field.
-     */
-    @NativeType("FT_Short")
-    public short sTypoLineGap() {
-        return nsTypoLineGap(address());
-    }
-
-    /**
-     * @return the value of the {@code usWinAscent} field.
-     */
-    @NativeType("FT_UShort")
-    public short usWinAscent() {
-        return nusWinAscent(address());
-    }
-
-    /**
-     * @return the value of the {@code usWinDescent} field.
-     */
-    @NativeType("FT_UShort")
-    public short usWinDescent() {
-        return nusWinDescent(address());
-    }
-
-    /**
-     * @return the value of the {@code ulCodePageRange1} field.
-     */
-    @NativeType("FT_ULong")
-    public long ulCodePageRange1() {
-        return nulCodePageRange1(address());
-    }
-
-    /**
-     * @return the value of the {@code ulCodePageRange2} field.
-     */
-    @NativeType("FT_ULong")
-    public long ulCodePageRange2() {
-        return nulCodePageRange2(address());
-    }
-
-    /**
-     * @return the value of the {@code sxHeight} field.
-     */
-    @NativeType("FT_Short")
-    public short sxHeight() {
-        return nsxHeight(address());
-    }
-
-    /**
-     * @return the value of the {@code sCapHeight} field.
-     */
-    @NativeType("FT_Short")
-    public short sCapHeight() {
-        return nsCapHeight(address());
-    }
-
-    /**
-     * @return the value of the {@code usDefaultChar} field.
-     */
-    @NativeType("FT_UShort")
-    public short usDefaultChar() {
-        return nusDefaultChar(address());
-    }
-
-    /**
-     * @return the value of the {@code usBreakChar} field.
-     */
-    @NativeType("FT_UShort")
-    public short usBreakChar() {
-        return nusBreakChar(address());
-    }
-
-    /**
-     * @return the value of the {@code usMaxContext} field.
-     */
-    @NativeType("FT_UShort")
-    public short usMaxContext() {
-        return nusMaxContext(address());
-    }
-
-    /**
-     * @return the value of the {@code usLowerOpticalPointSize} field.
-     */
-    @NativeType("FT_UShort")
-    public short usLowerOpticalPointSize() {
-        return nusLowerOpticalPointSize(address());
-    }
-
-    /**
-     * @return the value of the {@code usUpperOpticalPointSize} field.
-     */
-    @NativeType("FT_UShort")
-    public short usUpperOpticalPointSize() {
-        return nusUpperOpticalPointSize(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link TT_OS2} structs.
-     */
+    /** An array of {@link TT_OS2} structs. */
     public static class Buffer extends StructBuffer<TT_OS2, Buffer> {
 
         private static final TT_OS2 ELEMENT_FACTORY = TT_OS2.create(-1L);
@@ -926,333 +501,129 @@ public class TT_OS2 extends Struct<TT_OS2> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code version} field.
-         */
+        /** @return the value of the {@code version} field. */
         @NativeType("FT_UShort")
-        public short version() {
-            return TT_OS2.nversion(address());
-        }
-
-        /**
-         * @return the value of the {@code xAvgCharWidth} field.
-         */
+        public short version() { return TT_OS2.nversion(address()); }
+        /** @return the value of the {@code xAvgCharWidth} field. */
         @NativeType("FT_Short")
-        public short xAvgCharWidth() {
-            return TT_OS2.nxAvgCharWidth(address());
-        }
-
-        /**
-         * @return the value of the {@code usWeightClass} field.
-         */
+        public short xAvgCharWidth() { return TT_OS2.nxAvgCharWidth(address()); }
+        /** @return the value of the {@code usWeightClass} field. */
         @NativeType("FT_UShort")
-        public short usWeightClass() {
-            return TT_OS2.nusWeightClass(address());
-        }
-
-        /**
-         * @return the value of the {@code usWidthClass} field.
-         */
+        public short usWeightClass() { return TT_OS2.nusWeightClass(address()); }
+        /** @return the value of the {@code usWidthClass} field. */
         @NativeType("FT_UShort")
-        public short usWidthClass() {
-            return TT_OS2.nusWidthClass(address());
-        }
-
-        /**
-         * @return the value of the {@code fsType} field.
-         */
+        public short usWidthClass() { return TT_OS2.nusWidthClass(address()); }
+        /** @return the value of the {@code fsType} field. */
         @NativeType("FT_UShort")
-        public short fsType() {
-            return TT_OS2.nfsType(address());
-        }
-
-        /**
-         * @return the value of the {@code ySubscriptXSize} field.
-         */
+        public short fsType() { return TT_OS2.nfsType(address()); }
+        /** @return the value of the {@code ySubscriptXSize} field. */
         @NativeType("FT_Short")
-        public short ySubscriptXSize() {
-            return TT_OS2.nySubscriptXSize(address());
-        }
-
-        /**
-         * @return the value of the {@code ySubscriptYSize} field.
-         */
+        public short ySubscriptXSize() { return TT_OS2.nySubscriptXSize(address()); }
+        /** @return the value of the {@code ySubscriptYSize} field. */
         @NativeType("FT_Short")
-        public short ySubscriptYSize() {
-            return TT_OS2.nySubscriptYSize(address());
-        }
-
-        /**
-         * @return the value of the {@code ySubscriptXOffset} field.
-         */
+        public short ySubscriptYSize() { return TT_OS2.nySubscriptYSize(address()); }
+        /** @return the value of the {@code ySubscriptXOffset} field. */
         @NativeType("FT_Short")
-        public short ySubscriptXOffset() {
-            return TT_OS2.nySubscriptXOffset(address());
-        }
-
-        /**
-         * @return the value of the {@code ySubscriptYOffset} field.
-         */
+        public short ySubscriptXOffset() { return TT_OS2.nySubscriptXOffset(address()); }
+        /** @return the value of the {@code ySubscriptYOffset} field. */
         @NativeType("FT_Short")
-        public short ySubscriptYOffset() {
-            return TT_OS2.nySubscriptYOffset(address());
-        }
-
-        /**
-         * @return the value of the {@code ySuperscriptXSize} field.
-         */
+        public short ySubscriptYOffset() { return TT_OS2.nySubscriptYOffset(address()); }
+        /** @return the value of the {@code ySuperscriptXSize} field. */
         @NativeType("FT_Short")
-        public short ySuperscriptXSize() {
-            return TT_OS2.nySuperscriptXSize(address());
-        }
-
-        /**
-         * @return the value of the {@code ySuperscriptYSize} field.
-         */
+        public short ySuperscriptXSize() { return TT_OS2.nySuperscriptXSize(address()); }
+        /** @return the value of the {@code ySuperscriptYSize} field. */
         @NativeType("FT_Short")
-        public short ySuperscriptYSize() {
-            return TT_OS2.nySuperscriptYSize(address());
-        }
-
-        /**
-         * @return the value of the {@code ySuperscriptXOffset} field.
-         */
+        public short ySuperscriptYSize() { return TT_OS2.nySuperscriptYSize(address()); }
+        /** @return the value of the {@code ySuperscriptXOffset} field. */
         @NativeType("FT_Short")
-        public short ySuperscriptXOffset() {
-            return TT_OS2.nySuperscriptXOffset(address());
-        }
-
-        /**
-         * @return the value of the {@code ySuperscriptYOffset} field.
-         */
+        public short ySuperscriptXOffset() { return TT_OS2.nySuperscriptXOffset(address()); }
+        /** @return the value of the {@code ySuperscriptYOffset} field. */
         @NativeType("FT_Short")
-        public short ySuperscriptYOffset() {
-            return TT_OS2.nySuperscriptYOffset(address());
-        }
-
-        /**
-         * @return the value of the {@code yStrikeoutSize} field.
-         */
+        public short ySuperscriptYOffset() { return TT_OS2.nySuperscriptYOffset(address()); }
+        /** @return the value of the {@code yStrikeoutSize} field. */
         @NativeType("FT_Short")
-        public short yStrikeoutSize() {
-            return TT_OS2.nyStrikeoutSize(address());
-        }
-
-        /**
-         * @return the value of the {@code yStrikeoutPosition} field.
-         */
+        public short yStrikeoutSize() { return TT_OS2.nyStrikeoutSize(address()); }
+        /** @return the value of the {@code yStrikeoutPosition} field. */
         @NativeType("FT_Short")
-        public short yStrikeoutPosition() {
-            return TT_OS2.nyStrikeoutPosition(address());
-        }
-
-        /**
-         * @return the value of the {@code sFamilyClass} field.
-         */
+        public short yStrikeoutPosition() { return TT_OS2.nyStrikeoutPosition(address()); }
+        /** @return the value of the {@code sFamilyClass} field. */
         @NativeType("FT_Short")
-        public short sFamilyClass() {
-            return TT_OS2.nsFamilyClass(address());
-        }
-
-        /**
-         * @return a {@link ByteBuffer} view of the {@code panose} field.
-         */
+        public short sFamilyClass() { return TT_OS2.nsFamilyClass(address()); }
+        /** @return a {@link ByteBuffer} view of the {@code panose} field. */
         @NativeType("FT_Byte[10]")
-        public ByteBuffer panose() {
-            return TT_OS2.npanose(address());
-        }
-
-        /**
-         * @return the value at the specified index of the {@code panose} field.
-         */
+        public ByteBuffer panose() { return TT_OS2.npanose(address()); }
+        /** @return the value at the specified index of the {@code panose} field. */
         @NativeType("FT_Byte")
-        public byte panose(int index) {
-            return TT_OS2.npanose(address(), index);
-        }
-
-        /**
-         * @return the value of the {@code ulUnicodeRange1} field.
-         */
+        public byte panose(int index) { return TT_OS2.npanose(address(), index); }
+        /** @return the value of the {@code ulUnicodeRange1} field. */
         @NativeType("FT_ULong")
-        public long ulUnicodeRange1() {
-            return TT_OS2.nulUnicodeRange1(address());
-        }
-
-        /**
-         * @return the value of the {@code ulUnicodeRange2} field.
-         */
+        public long ulUnicodeRange1() { return TT_OS2.nulUnicodeRange1(address()); }
+        /** @return the value of the {@code ulUnicodeRange2} field. */
         @NativeType("FT_ULong")
-        public long ulUnicodeRange2() {
-            return TT_OS2.nulUnicodeRange2(address());
-        }
-
-        /**
-         * @return the value of the {@code ulUnicodeRange3} field.
-         */
+        public long ulUnicodeRange2() { return TT_OS2.nulUnicodeRange2(address()); }
+        /** @return the value of the {@code ulUnicodeRange3} field. */
         @NativeType("FT_ULong")
-        public long ulUnicodeRange3() {
-            return TT_OS2.nulUnicodeRange3(address());
-        }
-
-        /**
-         * @return the value of the {@code ulUnicodeRange4} field.
-         */
+        public long ulUnicodeRange3() { return TT_OS2.nulUnicodeRange3(address()); }
+        /** @return the value of the {@code ulUnicodeRange4} field. */
         @NativeType("FT_ULong")
-        public long ulUnicodeRange4() {
-            return TT_OS2.nulUnicodeRange4(address());
-        }
-
-        /**
-         * @return a {@link ByteBuffer} view of the {@code achVendID} field.
-         */
+        public long ulUnicodeRange4() { return TT_OS2.nulUnicodeRange4(address()); }
+        /** @return a {@link ByteBuffer} view of the {@code achVendID} field. */
         @NativeType("FT_Char[4]")
-        public ByteBuffer achVendID() {
-            return TT_OS2.nachVendID(address());
-        }
-
-        /**
-         * @return the value at the specified index of the {@code achVendID} field.
-         */
+        public ByteBuffer achVendID() { return TT_OS2.nachVendID(address()); }
+        /** @return the value at the specified index of the {@code achVendID} field. */
         @NativeType("FT_Char")
-        public byte achVendID(int index) {
-            return TT_OS2.nachVendID(address(), index);
-        }
-
-        /**
-         * @return the value of the {@code fsSelection} field.
-         */
+        public byte achVendID(int index) { return TT_OS2.nachVendID(address(), index); }
+        /** @return the value of the {@code fsSelection} field. */
         @NativeType("FT_UShort")
-        public short fsSelection() {
-            return TT_OS2.nfsSelection(address());
-        }
-
-        /**
-         * @return the value of the {@code usFirstCharIndex} field.
-         */
+        public short fsSelection() { return TT_OS2.nfsSelection(address()); }
+        /** @return the value of the {@code usFirstCharIndex} field. */
         @NativeType("FT_UShort")
-        public short usFirstCharIndex() {
-            return TT_OS2.nusFirstCharIndex(address());
-        }
-
-        /**
-         * @return the value of the {@code usLastCharIndex} field.
-         */
+        public short usFirstCharIndex() { return TT_OS2.nusFirstCharIndex(address()); }
+        /** @return the value of the {@code usLastCharIndex} field. */
         @NativeType("FT_UShort")
-        public short usLastCharIndex() {
-            return TT_OS2.nusLastCharIndex(address());
-        }
-
-        /**
-         * @return the value of the {@code sTypoAscender} field.
-         */
+        public short usLastCharIndex() { return TT_OS2.nusLastCharIndex(address()); }
+        /** @return the value of the {@code sTypoAscender} field. */
         @NativeType("FT_Short")
-        public short sTypoAscender() {
-            return TT_OS2.nsTypoAscender(address());
-        }
-
-        /**
-         * @return the value of the {@code sTypoDescender} field.
-         */
+        public short sTypoAscender() { return TT_OS2.nsTypoAscender(address()); }
+        /** @return the value of the {@code sTypoDescender} field. */
         @NativeType("FT_Short")
-        public short sTypoDescender() {
-            return TT_OS2.nsTypoDescender(address());
-        }
-
-        /**
-         * @return the value of the {@code sTypoLineGap} field.
-         */
+        public short sTypoDescender() { return TT_OS2.nsTypoDescender(address()); }
+        /** @return the value of the {@code sTypoLineGap} field. */
         @NativeType("FT_Short")
-        public short sTypoLineGap() {
-            return TT_OS2.nsTypoLineGap(address());
-        }
-
-        /**
-         * @return the value of the {@code usWinAscent} field.
-         */
+        public short sTypoLineGap() { return TT_OS2.nsTypoLineGap(address()); }
+        /** @return the value of the {@code usWinAscent} field. */
         @NativeType("FT_UShort")
-        public short usWinAscent() {
-            return TT_OS2.nusWinAscent(address());
-        }
-
-        /**
-         * @return the value of the {@code usWinDescent} field.
-         */
+        public short usWinAscent() { return TT_OS2.nusWinAscent(address()); }
+        /** @return the value of the {@code usWinDescent} field. */
         @NativeType("FT_UShort")
-        public short usWinDescent() {
-            return TT_OS2.nusWinDescent(address());
-        }
-
-        /**
-         * @return the value of the {@code ulCodePageRange1} field.
-         */
+        public short usWinDescent() { return TT_OS2.nusWinDescent(address()); }
+        /** @return the value of the {@code ulCodePageRange1} field. */
         @NativeType("FT_ULong")
-        public long ulCodePageRange1() {
-            return TT_OS2.nulCodePageRange1(address());
-        }
-
-        /**
-         * @return the value of the {@code ulCodePageRange2} field.
-         */
+        public long ulCodePageRange1() { return TT_OS2.nulCodePageRange1(address()); }
+        /** @return the value of the {@code ulCodePageRange2} field. */
         @NativeType("FT_ULong")
-        public long ulCodePageRange2() {
-            return TT_OS2.nulCodePageRange2(address());
-        }
-
-        /**
-         * @return the value of the {@code sxHeight} field.
-         */
+        public long ulCodePageRange2() { return TT_OS2.nulCodePageRange2(address()); }
+        /** @return the value of the {@code sxHeight} field. */
         @NativeType("FT_Short")
-        public short sxHeight() {
-            return TT_OS2.nsxHeight(address());
-        }
-
-        /**
-         * @return the value of the {@code sCapHeight} field.
-         */
+        public short sxHeight() { return TT_OS2.nsxHeight(address()); }
+        /** @return the value of the {@code sCapHeight} field. */
         @NativeType("FT_Short")
-        public short sCapHeight() {
-            return TT_OS2.nsCapHeight(address());
-        }
-
-        /**
-         * @return the value of the {@code usDefaultChar} field.
-         */
+        public short sCapHeight() { return TT_OS2.nsCapHeight(address()); }
+        /** @return the value of the {@code usDefaultChar} field. */
         @NativeType("FT_UShort")
-        public short usDefaultChar() {
-            return TT_OS2.nusDefaultChar(address());
-        }
-
-        /**
-         * @return the value of the {@code usBreakChar} field.
-         */
+        public short usDefaultChar() { return TT_OS2.nusDefaultChar(address()); }
+        /** @return the value of the {@code usBreakChar} field. */
         @NativeType("FT_UShort")
-        public short usBreakChar() {
-            return TT_OS2.nusBreakChar(address());
-        }
-
-        /**
-         * @return the value of the {@code usMaxContext} field.
-         */
+        public short usBreakChar() { return TT_OS2.nusBreakChar(address()); }
+        /** @return the value of the {@code usMaxContext} field. */
         @NativeType("FT_UShort")
-        public short usMaxContext() {
-            return TT_OS2.nusMaxContext(address());
-        }
-
-        /**
-         * @return the value of the {@code usLowerOpticalPointSize} field.
-         */
+        public short usMaxContext() { return TT_OS2.nusMaxContext(address()); }
+        /** @return the value of the {@code usLowerOpticalPointSize} field. */
         @NativeType("FT_UShort")
-        public short usLowerOpticalPointSize() {
-            return TT_OS2.nusLowerOpticalPointSize(address());
-        }
-
-        /**
-         * @return the value of the {@code usUpperOpticalPointSize} field.
-         */
+        public short usLowerOpticalPointSize() { return TT_OS2.nusLowerOpticalPointSize(address()); }
+        /** @return the value of the {@code usUpperOpticalPointSize} field. */
         @NativeType("FT_UShort")
-        public short usUpperOpticalPointSize() {
-            return TT_OS2.nusUpperOpticalPointSize(address());
-        }
+        public short usUpperOpticalPointSize() { return TT_OS2.nusUpperOpticalPointSize(address()); }
 
     }
 

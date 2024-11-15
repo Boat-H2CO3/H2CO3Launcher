@@ -55,15 +55,18 @@ import java.util.StringTokenizer;
 
 public class XPMFile {
 
-    private static final int WIDTH = 0;
-    private static final int HEIGHT = 1;
-    private static final int NUMBER_OF_COLORS = 2;
-    private static final int CHARACTERS_PER_PIXEL = 3;
-    private static int[] format = new int[4];
-    /**
-     * Array of bytes (RGBA)
-     */
-    private byte[] bytes;
+	/** Array of bytes (RGBA) */
+	private byte bytes[];
+
+	private static final int WIDTH = 0;
+
+	private static final int HEIGHT = 1;
+
+	private static final int NUMBER_OF_COLORS = 2;
+
+	private static final int CHARACTERS_PER_PIXEL = 3;
+
+	private static int[] format = new int[4];
 
 	/*
 	 * Private constructor, use load(String filename)
