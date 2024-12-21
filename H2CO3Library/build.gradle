@@ -35,6 +35,8 @@ configurations.configureEach {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment:2.8.0'
@@ -83,7 +85,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.14'
     implementation 'androidx.webkit:webkit:1.11.0'
     implementation "org.greenrobot:eventbus:3.3.1"
-    implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     implementation 'com.github.marschall:zipfilesystem-standalone:1.0.1'
     implementation 'io.noties.markwon:core:4.6.2'
     implementation 'io.noties.markwon:ext-tables:4.6.2'
