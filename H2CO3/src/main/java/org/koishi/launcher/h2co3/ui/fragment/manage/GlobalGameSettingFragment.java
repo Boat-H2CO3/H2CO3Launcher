@@ -3,6 +3,7 @@ package org.koishi.launcher.h2co3.ui.fragment.manage;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.core.H2CO3Settings;
+import org.koishi.launcher.h2co3.core.H2CO3Tools;
+import org.koishi.launcher.h2co3.core.message.H2CO3MessageManager;
 import org.koishi.launcher.h2co3.resources.component.preference.H2CO3EditTextPreference;
 import org.koishi.launcher.h2co3.resources.component.preference.H2CO3ListPreference;
 import org.koishi.launcher.h2co3.resources.component.preference.H2CO3RangeSliderPreference;
@@ -29,6 +32,9 @@ public class GlobalGameSettingFragment extends H2CO3Fragment {
     private H2CO3SliderPreference preferenceSetWindowResolution;
     private H2CO3Settings settings;
     private H2CO3EditTextPreference preferenceSetJoinServer;
+
+    private static final float VALUE_FROM = 256.0f;
+    private static final float VALUE_TO = 2020.0f;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         settings = new H2CO3Settings();
@@ -76,14 +82,21 @@ public class GlobalGameSettingFragment extends H2CO3Fragment {
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         activityManager.getMemoryInfo(memoryInfo);
         float maxMemoryMB = (float) (memoryInfo.totalMem / (1024 * 1024));
-        if (settings.getGameMemoryMax() > maxMemoryMB){
-            preferenceSetGameMemory.setValues(256, maxMemoryMB);
+
+        if (settings.getGameMemoryMax() > maxMemoryMB) {
+            settings.setGameMemoryMax((int) maxMemoryMB);
         }
-        preferenceSetGameMemory.setInitValues(256, maxMemoryMB);
+
+        preferenceSetGameMemory.setInitValues(256, (int) maxMemoryMB);
         preferenceSetGameMemory.setStepSize(1);
         int[] initialValue = {settings.getGameMemoryMin(), settings.getGameMemoryMax()};
         preferenceSetGameMemory.setValues(initialValue[0], initialValue[1]);
+
         preferenceSetGameMemory.setOnRangeChangeListener((preference, valueFrom, valueTo) -> {
+            if (valueFrom < VALUE_FROM || valueTo > VALUE_TO) {
+                H2CO3Tools.showMessage(H2CO3MessageManager.NotificationItem.Type.ERROR, "Game memory values out of range: " + valueFrom + ", " + valueTo);
+                return;
+            }
             settings.setGameMemoryMin((int) valueFrom);
             settings.setGameMemoryMax((int) valueTo);
         });

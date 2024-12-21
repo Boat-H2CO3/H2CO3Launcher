@@ -70,7 +70,6 @@ public abstract class H2CO3LauncherActivity extends H2CO3Activity implements Tex
 
     @Override
     public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
-        // Properly release resources if needed
         launcherLib.setSurfaceDestroyed(true);
         return true;
     }
@@ -96,7 +95,11 @@ public abstract class H2CO3LauncherActivity extends H2CO3Activity implements Tex
     }
 
     public void setGrabCursor(boolean isGrabbed) {
-        runOnUiThread(() -> h2co3LauncherInterface.setGrabCursor(isGrabbed));
+        runOnUiThread(() -> {
+            if (h2co3LauncherInterface != null) {
+                h2co3LauncherInterface.setGrabCursor(isGrabbed);
+            }
+        });
     }
 
     @Override
@@ -109,12 +112,12 @@ public abstract class H2CO3LauncherActivity extends H2CO3Activity implements Tex
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        return h2co3LauncherInterface.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
+        return h2co3LauncherInterface != null && h2co3LauncherInterface.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
     }
 
     @Override
     public boolean dispatchGenericMotionEvent(MotionEvent event) {
-        return h2co3LauncherInterface.dispatchGenericMotionEvent(event) || super.dispatchGenericMotionEvent(event);
+        return h2co3LauncherInterface != null && h2co3LauncherInterface.dispatchGenericMotionEvent(event) || super.dispatchGenericMotionEvent(event);
     }
 
     public int[] getPointer() {

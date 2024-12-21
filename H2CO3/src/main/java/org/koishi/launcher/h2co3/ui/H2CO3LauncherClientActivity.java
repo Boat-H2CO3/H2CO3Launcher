@@ -185,7 +185,7 @@ public class H2CO3LauncherClientActivity extends H2CO3LauncherActivity implement
 
             @Override
             public void onStart() {
-                // No operation
+                CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_VISIBLE, 1);
             }
 
             @Override
@@ -208,6 +208,30 @@ public class H2CO3LauncherClientActivity extends H2CO3LauncherActivity implement
                 // No operation
             }
         };
+    }
+
+    @Override
+    protected void onPause() {
+        CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_HOVERED, 0);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_HOVERED, 1);
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_VISIBLE, 1);
+    }
+
+    @Override
+    protected void onStop() {
+        CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_VISIBLE, 0);
+        super.onStop();
     }
 
     @Override
@@ -273,17 +297,9 @@ public class H2CO3LauncherClientActivity extends H2CO3LauncherActivity implement
 
     @Override
     public void setPointerInc(int xInc, int yInc) {
-        if (!grabbed) {
-            int x = Math.min(Math.max(GRABBED_POINTER[0] + xInc, 0), screenWidth);
-            int y = Math.min(Math.max(GRABBED_POINTER[1] + yInc, 0), screenHeight);
-            GRABBED_POINTER[0] = x;
-            GRABBED_POINTER[1] = y;
-            setPointer(x, y);
-            cursorIcon.setX(x);
-            cursorIcon.setY(y);
-        } else {
-            setPointer(getPointer()[0] + xInc, getPointer()[1] + yInc);
-        }
+        int x = grabbed ? getPointer()[0] + xInc : Math.min(Math.max(GRABBED_POINTER[0] + xInc, 0), screenWidth);
+        int y = grabbed ? getPointer()[1] + yInc : Math.min(Math.max(GRABBED_POINTER[1] + yInc, 0), screenHeight);
+        setPointer(x, y);
     }
 
     @Override
@@ -309,7 +325,7 @@ public class H2CO3LauncherClientActivity extends H2CO3LauncherActivity implement
 
     @Override
     public void typeWords(String str) {
-        if (str != null) {
+        if (str != null && !str.isEmpty()) {
             for (char c : str.toCharArray()) {
                 setKey(0, c, true);
                 setKey(0, c, false);

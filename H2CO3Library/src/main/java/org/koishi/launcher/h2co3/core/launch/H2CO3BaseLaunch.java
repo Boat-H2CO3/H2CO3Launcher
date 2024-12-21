@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class H2CO3BaseLaunch {
@@ -29,7 +30,16 @@ public class H2CO3BaseLaunch {
         bridge.setLogPath(logFilePath);
         bridge.setGameDir(gameHelper.getGameDirectory());
         bridge.setRenderer(gameHelper.getRenderer().toString());
-        Thread gameThread = new Thread(() -> {
+        Thread gameThread = createGameThread(context, gameHelper, bridge, width, height, task);
+        if (task.equals("Minecraft")) {
+            gameThread.setPriority(Thread.MAX_PRIORITY);
+        }
+        bridge.setThread(gameThread);
+        return bridge;
+    }
+
+    private static Thread createGameThread(Context context, H2CO3Settings gameHelper, H2CO3LauncherBridge bridge, int width, int height, String task) {
+        return new Thread(() -> {
             try {
                 logStartInfo(bridge, task);
                 setEnv(context, gameHelper, bridge, task.equals("Minecraft"));
@@ -42,12 +52,6 @@ public class H2CO3BaseLaunch {
                 Log.e(TAG, "Error launching " + task, e);
             }
         });
-
-        if (task.equals("Minecraft")) {
-            gameThread.setPriority(Thread.MAX_PRIORITY);
-        }
-        bridge.setThread(gameThread);
-        return bridge;
     }
 
     public static H2CO3LauncherBridge launchMinecraft(Context context, H2CO3Settings gameHelper, int width, int height) throws IOException {
@@ -85,7 +89,7 @@ public class H2CO3BaseLaunch {
         bridge.setLdLibraryPath(getLibraryPath(context, null));
         printTaskTitle(bridge, task + " Logs");
         bridge.setupExitTrap(bridge);
-        bridge.getCallback().onLog("Hook success");
+        bridge.getCallback().onLog("Hook success\n");
         int exitCode = H2CO3JVMLauncher.launchJVM(args);
         bridge.onExit(exitCode);
         printTaskTitle(bridge, task + " Logs");
@@ -117,16 +121,22 @@ public class H2CO3BaseLaunch {
         bridge.setLdLibraryPath(getLibraryPath(context, javaPath, gameHelper.getRenderer() == H2CO3Settings.Renderer.RENDERER_CUSTOM ? RendererPlugin.getSelected().getPath() : null));
         printTaskTitle(bridge, task + " Logs");
         bridge.setupExitTrap(bridge);
-        bridge.getCallback().onLog("Hook success");
+        bridge.getCallback().onLog("Hook success\n");
         int exitCode = H2CO3JVMLauncher.launchJVM(args);
         bridge.onExit(exitCode);
         printTaskTitle(bridge, task + " Logs");
     }
 
     public static void printTaskTitle(H2CO3LauncherBridge bridge, String task) throws IOException {
-        if (bridge != null && bridge.getCallback() != null) {
-            bridge.getCallback().onLog("==================== " + task + " ====================\n");
-        }
+        Optional.ofNullable(bridge)
+                .map(H2CO3LauncherBridge::getCallback)
+                .ifPresent(callback -> {
+                    try {
+                        callback.onLog("==================== " + task + " ====================\n");
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error printing task title", e);
+                    }
+                });
     }
 
     public static void logWorkingDirectory(H2CO3LauncherBridge bridge, H2CO3Settings gameHelper) throws IOException {

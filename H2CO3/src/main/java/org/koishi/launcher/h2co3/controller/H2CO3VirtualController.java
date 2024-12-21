@@ -177,10 +177,12 @@ public class H2CO3VirtualController extends BaseController implements View.OnCli
             case KEYBOARD_BUTTON -> h2CO3ControlClient.setKey(mTranslation.trans(e.getKeyName()), e.isPressed());
             case MOUSE_BUTTON -> h2CO3ControlClient.setMouseButton(mTranslation.trans(e.getKeyName()), e.isPressed());
             case MOUSE_POINTER, MOUSE_POINTER_INC -> Optional.ofNullable(e.getPointer()).ifPresent(pointer -> {
-                if (e.getType() == MOUSE_POINTER) {
-                    h2CO3ControlClient.setPointer(pointer[0], pointer[1]);
-                } else {
-                    h2CO3ControlClient.setPointerInc(pointer[0], pointer[1]);
+                if (pointer.length >= 2) {
+                    if (e.getType() == MOUSE_POINTER) {
+                        h2CO3ControlClient.setPointer(pointer[0], pointer[1]);
+                    } else {
+                        h2CO3ControlClient.setPointerInc(pointer[0], pointer[1]);
+                    }
                 }
             });
             case TYPE_WORDS -> typeWords(e.getChars());
@@ -224,7 +226,7 @@ public class H2CO3VirtualController extends BaseController implements View.OnCli
     }
 
     private int[] calculateMarginsOnScreen(OnscreenInput i, float leftScale, float topScale) {
-        if (i.getSize() == null) {
+        if (i.getSize() == null || i.getSize().length < 2) {
             return null;
         }
 
@@ -259,13 +261,15 @@ public class H2CO3VirtualController extends BaseController implements View.OnCli
 
     private void loadConfigFromFile() {
         SharedPreferences sp = context.getSharedPreferences(SP_FILE_NAME, SP_MODE);
-        switchCustomizeKeyboard.setChecked(sp.getBoolean(SP_ENABLE_CKB, true));
-        switchPEItembar.setChecked(sp.getBoolean(SP_ENABLE_ITEMBAR, true));
-        switchTouchpad.setChecked(sp.getBoolean(SP_ENABLE_ONSCREEN_TOUCHPAD, true));
-        switchDebugInfo.setChecked(sp.getBoolean(SP_ENABLE_DEBUG_INFO, false));
-        if (!sp.contains(SP_FIRST_LOADER)) {
-            resetAllPosOnScreen();
-            ((CustomizeKeyboard) customizeKeyboard).mManager.loadKeyboard(new CustomizeKeyboardMaker(context).createDefaultKeyboard());
+        if (sp != null) {
+            switchCustomizeKeyboard.setChecked(sp.getBoolean(SP_ENABLE_CKB, true));
+            switchPEItembar.setChecked(sp.getBoolean(SP_ENABLE_ITEMBAR, true));
+            switchTouchpad.setChecked(sp.getBoolean(SP_ENABLE_ONSCREEN_TOUCHPAD, true));
+            switchDebugInfo.setChecked(sp.getBoolean(SP_ENABLE_DEBUG_INFO, false));
+            if (!sp.contains(SP_FIRST_LOADER)) {
+                resetAllPosOnScreen();
+                ((CustomizeKeyboard) customizeKeyboard).mManager.loadKeyboard(new CustomizeKeyboardMaker(context).createDefaultKeyboard());
+            }
         }
     }
 

@@ -154,21 +154,6 @@ public class CkbManager {
         }
     }
 
-    public void exportKeyboard(String fileName) {
-        GameButtonRecorder[] gbrs = new GameButtonRecorder[buttonList.size()];
-        for (int a = 0; a < buttonList.size(); a++) {
-            GameButtonRecorder gbr = new GameButtonRecorder();
-            gbr.recordData(buttonList.get(a));
-            gbrs[a] = gbr;
-        }
-        KeyboardRecorder kr = new KeyboardRecorder();
-        kr.setScreenArgs(mContext.getResources().getDisplayMetrics().widthPixels, mContext.getResources().getDisplayMetrics().heightPixels);
-        kr.setRecorderDatas(gbrs);
-        kr.setVersionCode(KeyboardRecorder.VERSION_THIS);
-
-        outputFile(kr, fileName);
-    }
-
     public void autoSaveKeyboard() {
         exportKeyboard(LAST_KEYBOARD_LAYOUT_NAME);
     }
@@ -194,21 +179,6 @@ public class CkbManager {
         }
     }
 
-    private void handleLoadError(File file) {
-        DialogUtils.createBothChoicesDialog(mContext,
-                mContext.getString(org.koishi.launcher.h2co3.library.R.string.title_note),
-                mContext.getString(org.koishi.launcher.h2co3.library.R.string.tips_try_to_convert_keyboard_layout),
-                mContext.getString(org.koishi.launcher.h2co3.library.R.string.title_ok),
-                mContext.getString(org.koishi.launcher.h2co3.library.R.string.title_cancel),
-                new DialogSupports() {
-                    @Override
-                    public void runWhenPositive() {
-                        super.runWhenPositive();
-                        handleConversionResult(file);
-                    }
-                });
-    }
-
     private void handleConversionResult(File file) {
         GameButtonConverter converter = new GameButtonConverter(mContext);
         if (converter.convertAndOutput(file)) {
@@ -224,11 +194,6 @@ public class CkbManager {
                     mContext.getString(org.koishi.launcher.h2co3.library.R.string.title_ok),
                     null);
         }
-    }
-
-    public boolean loadKeyboard(String fileName) {
-        File file = new File(H2CO3Tools.H2CO3_CONTROL_DIR + "/" + fileName);
-        return loadKeyboard(file);
     }
 
     public void loadKeyboard(KeyboardRecorder kr) {
@@ -267,5 +232,39 @@ public class CkbManager {
             }
             hasHide = (i == HIDE_BUTTON);
         }
+    }
+
+    public boolean loadKeyboard(String fileName) {
+        File file = new File(H2CO3Tools.H2CO3_CONTROL_DIR + "/" + fileName);
+        return loadKeyboard(file);
+    }
+
+    private void handleLoadError(File file) {
+        DialogUtils.createBothChoicesDialog(mContext,
+                mContext.getString(org.koishi.launcher.h2co3.library.R.string.title_note),
+                mContext.getString(org.koishi.launcher.h2co3.library.R.string.tips_try_to_convert_keyboard_layout),
+                mContext.getString(org.koishi.launcher.h2co3.library.R.string.title_ok),
+                mContext.getString(org.koishi.launcher.h2co3.library.R.string.title_cancel),
+                new DialogSupports() {
+                    @Override
+                    public void runWhenPositive() {
+                        handleConversionResult(file);
+                    }
+                });
+    }
+
+    public void exportKeyboard(String fileName) {
+        GameButtonRecorder[] gbrs = new GameButtonRecorder[buttonList.size()];
+        for (int a = 0; a < buttonList.size(); a++) {
+            GameButtonRecorder gbr = new GameButtonRecorder();
+            gbr.recordData(buttonList.get(a));
+            gbrs[a] = gbr;
+        }
+        KeyboardRecorder kr = new KeyboardRecorder();
+        kr.setScreenArgs(mContext.getResources().getDisplayMetrics().widthPixels, mContext.getResources().getDisplayMetrics().heightPixels);
+        kr.setRecorderDatas(gbrs);
+        kr.setVersionCode(KeyboardRecorder.VERSION_THIS);
+
+        outputFile(kr, fileName);
     }
 }
