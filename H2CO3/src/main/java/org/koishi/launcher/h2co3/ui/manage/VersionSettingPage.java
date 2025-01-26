@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AlertDialog;
 
-import org.koishi.launcher.h2co3.util.RendererUtil;
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.control.SelectControllerDialog;
 import org.koishi.launcher.h2co3.game.H2CO3LauncherGameRepository;
@@ -17,11 +16,9 @@ import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3.setting.VersionSetting;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
 import org.koishi.launcher.h2co3.util.FXUtils;
+import org.koishi.launcher.h2co3.util.RendererUtil;
 import org.koishi.launcher.h2co3.util.RequestCodes;
 import org.koishi.launcher.h2co3.util.WeakListenerHolder;
-import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig;
-import org.koishi.launcher.h2co3launcher.plugins.DriverPlugin;
-import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3core.event.Event;
 import org.koishi.launcher.h2co3core.fakefx.beans.InvalidationListener;
 import org.koishi.launcher.h2co3core.fakefx.beans.binding.Bindings;
@@ -38,6 +35,9 @@ import org.koishi.launcher.h2co3core.util.Lang;
 import org.koishi.launcher.h2co3core.util.Logging;
 import org.koishi.launcher.h2co3core.util.io.FileUtils;
 import org.koishi.launcher.h2co3core.util.platform.MemoryUtils;
+import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig;
+import org.koishi.launcher.h2co3launcher.plugins.DriverPlugin;
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3library.browser.FileBrowser;
 import org.koishi.launcher.h2co3library.browser.options.LibMode;
 import org.koishi.launcher.h2co3library.browser.options.SelectionMode;
@@ -440,14 +440,10 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
             } else {
                 y = 0;
             }
-            RendererUtil.openRendererMenu(getContext(), view, pos[0], y, ConvertUtils.dip2px(getContext(), 200), windowHeight - y, name -> {
-                rendererText.setText(name);
-            });
+            RendererUtil.openRendererMenu(getContext(), view, pos[0], y, ConvertUtils.dip2px(getContext(), 200), windowHeight - y, globalSetting, name -> rendererText.setText(name));
         }
         if (view == driverButton) {
-            RendererUtil.openDriverMenu(getContext(), view, name -> {
-                driverText.setText(name);
-            });
+            RendererUtil.openDriverMenu(getContext(), view, globalSetting, name -> driverText.setText(name));
         }
         if (view == rendererInstallButton) {
             new AlertDialog.Builder(getContext())

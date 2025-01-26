@@ -27,9 +27,6 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import com.google.gson.annotations.JsonAdapter
-import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig
-import org.koishi.launcher.h2co3launcher.plugins.RendererPlugin
-import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools
 import org.koishi.launcher.h2co3core.fakefx.beans.InvalidationListener
 import org.koishi.launcher.h2co3core.fakefx.beans.property.BooleanProperty
 import org.koishi.launcher.h2co3core.fakefx.beans.property.DoubleProperty
@@ -47,6 +44,9 @@ import org.koishi.launcher.h2co3core.task.Schedulers
 import org.koishi.launcher.h2co3core.task.Task
 import org.koishi.launcher.h2co3core.util.Lang
 import org.koishi.launcher.h2co3core.util.platform.MemoryUtils
+import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig
+import org.koishi.launcher.h2co3launcher.plugins.RendererPlugin
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools
 import java.lang.reflect.Type
 
 @JsonAdapter(VersionSetting.Serializer::class)
@@ -393,8 +393,8 @@ class VersionSetting : Cloneable {
                 vs.isBeGesture = json["beGesture"]?.asBoolean ?: false
                 vs.isVKDriverSystem = json["vulkanDriverSystem"]?.asBoolean ?: false
                 vs.controller = json["controller"]?.asString ?: ("00000000")
-                vs.renderer = H2CO3LauncherConfig.Renderer.entries.toTypedArray()[json["renderer"]?.asInt
-                    ?: H2CO3LauncherConfig.Renderer.RENDERER_GL4ES.ordinal]
+                val renderers = H2CO3LauncherConfig.Renderer.entries.toTypedArray()
+                vs.renderer = renderers[json["renderer"]?.asInt?.coerceIn(0, renderers.size - 1) ?: 0]
                 vs.driver = json["driver"]?.asString ?: "Turnip"
                 vs.isIsolateGameDir = json["isolateGameDir"]?.asBoolean ?: false
                 vs.customRenderer = json["customRenderer"]?.asString ?: ""

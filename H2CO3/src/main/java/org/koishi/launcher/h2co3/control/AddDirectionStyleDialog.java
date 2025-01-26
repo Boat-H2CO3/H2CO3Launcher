@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.control.data.BaseInfoData;
-import org.koishi.launcher.h2co3.control.data.ButtonStyles;
 import org.koishi.launcher.h2co3.control.data.ControlButtonStyle;
 import org.koishi.launcher.h2co3.control.data.ControlDirectionStyle;
 import org.koishi.launcher.h2co3.control.data.DirectionStyles;
@@ -52,6 +51,7 @@ public class AddDirectionStyleDialog extends H2CO3LauncherDialog implements View
 
     private ControlButtonStyle buttonStyle;
     private boolean isEdit;
+    private ControlButtonStyle beforeStyle;
 
     public AddDirectionStyleDialog(@NonNull Context context, ControlDirectionStyle beforeStyle, boolean isEdit, Callback callback) {
         super(context);
@@ -104,9 +104,23 @@ public class AddDirectionStyleDialog extends H2CO3LauncherDialog implements View
             H2CO3LauncherTextView buttonStyleText = buttonStyleLayout.findViewById(R.id.button_style_text);
             H2CO3LauncherButton buttonStyleSet = buttonStyleLayout.findViewById(R.id.set_button_style);
 
-            buttonStyle = ButtonStyles.getStyles().get(0);
+            buttonStyle = new ControlButtonStyle("");
             buttonStyleText.setText(buttonStyle.getName());
             buttonStyleText.stringProperty().bind(buttonStyle.nameProperty());
+            buttonStyle.setTextSize(style.getButtonStyle().getTextSize());
+            buttonStyle.setTextColor(style.getButtonStyle().getTextColor());
+            buttonStyle.setStrokeWidth(style.getButtonStyle().getStrokeWidth());
+            buttonStyle.setStrokeColor(style.getButtonStyle().getStrokeColor());
+            buttonStyle.setCornerRadius(style.getButtonStyle().getCornerRadius());
+            buttonStyle.setFillColor(style.getButtonStyle().getFillColor());
+            buttonStyle.setTextSizePressed(style.getButtonStyle().getTextSizePressed());
+            buttonStyle.setTextColorPressed(style.getButtonStyle().getTextColorPressed());
+            buttonStyle.setStrokeWidthPressed(style.getButtonStyle().getStrokeWidthPressed());
+            buttonStyle.setStrokeColorPressed(style.getButtonStyle().getStrokeColorPressed());
+            buttonStyle.setCornerRadiusPressed(style.getButtonStyle().getCornerRadiusPressed());
+            buttonStyle.setFillColorPressed(style.getButtonStyle().getFillColorPressed());
+            buttonStyle.setFillColorPressed(style.getButtonStyle().getFillColorPressed());
+            this.beforeStyle = buttonStyle.clone();
             style.getButtonStyle().textSizeProperty().bind(buttonStyle.textSizeProperty());
             style.getButtonStyle().textColorProperty().bind(buttonStyle.textColorProperty());
             style.getButtonStyle().strokeWidthProperty().bind(buttonStyle.strokeWidthProperty());
@@ -135,6 +149,7 @@ public class AddDirectionStyleDialog extends H2CO3LauncherDialog implements View
                     buttonStyle.setStrokeColorPressed(style.getStrokeColorPressed());
                     buttonStyle.setCornerRadiusPressed(style.getCornerRadiusPressed());
                     buttonStyle.setFillColorPressed(style.getFillColorPressed());
+                    changeDirectionStyle();
                 });
                 dialog.show();
             });
@@ -328,6 +343,19 @@ public class AddDirectionStyleDialog extends H2CO3LauncherDialog implements View
             }
         }
         if (v == negative) {
+            buttonStyle.setTextSize(beforeStyle.getTextSize());
+            buttonStyle.setTextColor(beforeStyle.getTextColor());
+            buttonStyle.setStrokeWidth(beforeStyle.getStrokeWidth());
+            buttonStyle.setStrokeColor(beforeStyle.getStrokeColor());
+            buttonStyle.setCornerRadius(beforeStyle.getCornerRadius());
+            buttonStyle.setFillColor(beforeStyle.getFillColor());
+            buttonStyle.setTextSizePressed(beforeStyle.getTextSizePressed());
+            buttonStyle.setTextColorPressed(beforeStyle.getTextColorPressed());
+            buttonStyle.setStrokeWidthPressed(beforeStyle.getStrokeWidthPressed());
+            buttonStyle.setStrokeColorPressed(beforeStyle.getStrokeColorPressed());
+            buttonStyle.setCornerRadiusPressed(beforeStyle.getCornerRadiusPressed());
+            buttonStyle.setFillColorPressed(beforeStyle.getFillColorPressed());
+            buttonStyle.setFillColorPressed(beforeStyle.getFillColorPressed());
             dismiss();
         }
     }

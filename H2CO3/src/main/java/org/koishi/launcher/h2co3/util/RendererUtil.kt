@@ -1,3 +1,4 @@
+//Created by Mio
 package org.koishi.launcher.h2co3.util
 
 import android.content.Context
@@ -25,6 +26,7 @@ class RendererUtil {
             y: Int,
             width: Int,
             height: Int,
+            isGlobal: Boolean,
             callback: Consumer<String>
         ) {
             val listView = ListView(context)
@@ -42,8 +44,7 @@ class RendererUtil {
                     }
                 })
             listView.setOnItemClickListener { _, _, position, _ ->
-                val versionSetting =
-                    Profiles.getSelectedProfile().versionSetting
+                val versionSetting = if (isGlobal) Profiles.getSelectedProfile().global else Profiles.getSelectedProfile().versionSetting
                 val rendererList = mutableListOf<H2CO3LauncherConfig.Renderer>().apply {
                     add(H2CO3LauncherConfig.Renderer.RENDERER_GL4ES)
                     add(H2CO3LauncherConfig.Renderer.RENDERER_VIRGL)
@@ -80,6 +81,7 @@ class RendererUtil {
         fun openDriverMenu(
             context: Context,
             view: View,
+            isGlobal: Boolean,
             callback: Consumer<String>
         ) {
             val listView = ListView(context)
@@ -91,8 +93,7 @@ class RendererUtil {
                     }
                 })
             listView.setOnItemClickListener { _, _, position, _ ->
-                val versionSetting =
-                    Profiles.getSelectedProfile().versionSetting
+                val versionSetting = if (isGlobal) Profiles.getSelectedProfile().global else Profiles.getSelectedProfile().versionSetting
                 versionSetting.driver = DriverPlugin.driverList[position].driver
                 DriverPlugin.selected = DriverPlugin.driverList[position]
                 popupWindow?.dismiss()

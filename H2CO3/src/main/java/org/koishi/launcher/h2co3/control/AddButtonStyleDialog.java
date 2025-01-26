@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.android.material.tabs.TabLayout;
+
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.control.data.ButtonStyles;
 import org.koishi.launcher.h2co3.control.data.ControlButtonStyle;
@@ -55,7 +56,7 @@ public class AddButtonStyleDialog extends H2CO3LauncherDialog implements View.On
         setContentView(R.layout.dialog_add_button_style);
         setCancelable(false);
         this.callback = callback;
-        this.style = beforeStyle == null ? new ControlButtonStyle("") : beforeStyle;
+        this.style = beforeStyle == null ? new ControlButtonStyle("") : beforeStyle.clone();
         this.isEdit = isEdit;
 
         positive = findViewById(R.id.positive);
