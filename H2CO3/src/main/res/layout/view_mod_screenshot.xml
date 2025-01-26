@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView
+            android:id="@+id/screenshot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter" />
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView
+            android:id="@+id/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_baseline_refresh_24"
+            android:visibility="gone" />
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            app:auto_text_tint="true" />
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:textSize="11sp"
+            app:auto_text_tint="true" />
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+</layout>

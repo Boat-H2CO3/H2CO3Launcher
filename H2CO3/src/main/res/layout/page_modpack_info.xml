@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ui_bg_color"
+    android:paddingStart="10dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="10dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_container_white"
+                android:padding="10dp"
+                android:text="@string/modpack_wizard_step_initialization_warning"
+                app:auto_text_background_tint="true"
+                app:auto_text_tint="true"/>
+            
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_container_white"
+                android:orientation="vertical"
+                app:auto_linear_background_tint="true">
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/modpack_wizard_step_initialization_exported_version"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:id="@+id/game_version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        app:auto_text_tint="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/modpack_name"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+                        android:id="@+id/name"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:hint="@string/input_hint_not_empty"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:auto_edit_tint="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/archive_author"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+                        android:id="@+id/author"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:hint="@string/input_hint_not_empty"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:auto_edit_tint="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/archive_version"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+                        android:id="@+id/version"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:hint="@string/input_hint_not_empty"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:auto_edit_tint="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:id="@+id/file_api_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/modpack_file_api"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+                        android:id="@+id/file_api"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:auto_edit_tint="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:id="@+id/minecraft_args_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/settings_advanced_minecraft_arguments"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+                        android:id="@+id/minecraft_args"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:auto_edit_tint="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:id="@+id/jvm_args_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/settings_advanced_jvm_args"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+                        android:id="@+id/jvm_args"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:auto_edit_tint="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:id="@+id/origin_url_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/modpack_origin_url"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+                        android:id="@+id/origin_url"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:auto_edit_tint="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:id="@+id/mcbbs_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/modpack_origin_mcbbs"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+                        android:id="@+id/mcbbs"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:auto_edit_tint="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <View
+                    android:id="@+id/split_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:id="@+id/memory_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="@string/settings_memory"
+                        app:auto_text_tint="true"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:singleLine="true"
+                            android:text="@string/settings_memory_lower_bound"
+                            app:auto_text_tint="true"/>
+
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSeekBar
+                            android:id="@+id/memory"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:max="16384"/>
+
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                            android:id="@+id/memory_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:singleLine="true"
+                            app:auto_text_tint="true"/>
+
+                    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="@string/modpack_desc"
+                        app:auto_text_tint="true"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+                        android:id="@+id/desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center"
+                        android:gravity="top"
+                        android:textSize="14sp"
+                        app:auto_edit_tint="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <View
+                    android:id="@+id/split_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:id="@+id/server_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/account_injector_server"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSpinner
+                        android:id="@+id/server"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <View
+                    android:id="@+id/split_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:id="@+id/force_update_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/modpack_wizard_step_initialization_force_update"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch
+                        android:id="@+id/force_update"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/modpack_wizard_step_initialization_save"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:id="@+id/path_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:singleLine="true"
+                        app:auto_text_tint="true"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+                        android:id="@+id/path"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/ic_baseline_edit_24"
+                        app:auto_tint="true"
+                        app:no_padding="true"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp">
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/archive_name"
+                        app:auto_text_tint="true"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+                        android:id="@+id/file_name"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:hint="@string/input_hint_not_empty"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:auto_edit_tint="true"/>
+
+                    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:text=".zip"
+                        app:auto_text_tint="true"
+                        tools:ignore="HardcodedText"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+            </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+                android:id="@+id/next"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/button_next"
+                app:ripple="true"/>
+
+        </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
