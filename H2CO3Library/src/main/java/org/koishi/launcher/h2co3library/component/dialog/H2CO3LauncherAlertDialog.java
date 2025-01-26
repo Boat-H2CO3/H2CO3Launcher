@@ -1,0 +1,214 @@
+package org.koishi.launcher.h2co3library.component.dialog;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Point;
+import android.text.Spanned;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ScrollView;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.utils.widget.ImageFilterView;
+
+import org.koishi.launcher.h2co3library.R;
+import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
+import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
+import org.koishi.launcher.h2co3library.util.ConvertUtils;
+
+public class H2CO3LauncherAlertDialog extends H2CO3LauncherDialog implements View.OnClickListener {
+
+    private String titleString;
+
+    private ButtonListener positiveListener;
+    private ButtonListener negativeListener;
+
+    private View parent;
+    private ImageFilterView icon;
+    private H2CO3LauncherTextView title;
+    private ScrollView scrollView;
+    private H2CO3LauncherTextView message;
+    private H2CO3LauncherButton positive;
+    private H2CO3LauncherButton negative;
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public H2CO3LauncherAlertDialog(@NonNull Context context) {
+        super(context);
+
+        setContentView(R.layout.dialog_alert);
+
+        parent = findViewById(R.id.parent);
+
+        icon = findViewById(R.id.image);
+        title = findViewById(R.id.title);
+        scrollView = findViewById(R.id.text_scroll);
+        message = findViewById(R.id.text);
+        positive = findViewById(R.id.positive);
+        negative = findViewById(R.id.negative);
+
+        checkHeight();
+
+        positive.setVisibility(View.GONE);
+        negative.setVisibility(View.GONE);
+
+        positive.setOnClickListener(this);
+        negative.setOnClickListener(this);
+
+        icon.setImageDrawable(getContext().getDrawable(R.drawable.ic_baseline_info_24));
+        title.setText(getContext().getString(R.string.dialog_info));
+    }
+
+    private void checkHeight() {
+        parent.post(() -> message.post(() -> {
+            WindowManager wm = getWindow().getWindowManager();
+            Point point = new Point();
+            wm.getDefaultDisplay().getSize(point);
+            int maxHeight = point.y - ConvertUtils.dip2px(getContext(), 30);
+            if (parent.getMeasuredHeight() < maxHeight) {
+                ViewGroup.LayoutParams layoutParams = scrollView.getLayoutParams();
+                layoutParams.height = message.getMeasuredHeight();
+                scrollView.setLayoutParams(layoutParams);
+                getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            } else {
+                getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, maxHeight);
+            }
+        }));
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == positive) {
+            if (positiveListener != null) {
+                positiveListener.onClick();
+            }
+            dismiss();
+        }
+        if (view == negative) {
+            if (negativeListener != null) {
+                negativeListener.onClick();
+            }
+            dismiss();
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void setAlertLevel(AlertLevel alertLevel) {
+        switch (alertLevel) {
+            case ALERT:
+                icon.setImageDrawable(getContext().getDrawable(R.drawable.ic_baseline_warning_24));
+                if (titleString == null) {
+                    title.setText(getContext().getString(R.string.dialog_alert));
+                }
+                break;
+            default:
+                icon.setImageDrawable(getContext().getDrawable(R.drawable.ic_baseline_info_24));
+                if (titleString == null) {
+                    title.setText(getContext().getString(R.string.dialog_info));
+                }
+                break;
+        }
+    }
+
+    public void setTitle(String title) {
+        titleString = title;
+        this.title.setText(title);
+    }
+
+    public void setMessage(String message) {
+        this.message.setText(message);
+        checkHeight();
+    }
+
+    public void setMessage(CharSequence message) {
+        this.message.setText(message);
+        checkHeight();
+    }
+
+    public void setMessage(Spanned message) {
+        this.message.setText(message);
+        checkHeight();
+    }
+
+    public void setPositiveButton(String text, ButtonListener listener) {
+        positive.setVisibility(View.VISIBLE);
+        positive.setText(text);
+        positiveListener = listener;
+    }
+
+    public void setNegativeButton(String text, ButtonListener listener) {
+        negative.setVisibility(View.VISIBLE);
+        negative.setText(text);
+        negativeListener = listener;
+    }
+
+    public enum AlertLevel {
+        ALERT,
+        INFO
+    }
+
+    public interface ButtonListener {
+        void onClick();
+    }
+
+    public static class Builder {
+
+        private Context context;
+        private H2CO3LauncherAlertDialog dialog;
+
+        public Builder(Context context) {
+            this.context = context;
+            dialog = new H2CO3LauncherAlertDialog(context);
+        }
+
+        public H2CO3LauncherAlertDialog create() {
+            return dialog;
+        }
+
+        public Builder setAlertLevel(AlertLevel alertLevel) {
+            dialog.setAlertLevel(alertLevel);
+            return this;
+        }
+
+        public Builder setCancelable(boolean cancelable) {
+            dialog.setCancelable(cancelable);
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            dialog.setTitle(title);
+            return this;
+        }
+
+        public Builder setMessage(String message) {
+            dialog.setMessage(message);
+            return this;
+        }
+
+        public Builder setMessage(CharSequence message) {
+            dialog.setMessage(message);
+            return this;
+        }
+
+        public Builder setPositiveButton(ButtonListener listener) {
+            dialog.setPositiveButton(context.getString(R.string.dialog_positive), listener);
+            return this;
+        }
+
+        public Builder setPositiveButton(String text, ButtonListener listener) {
+            dialog.setPositiveButton(text, listener);
+            return this;
+        }
+
+        public Builder setNegativeButton(ButtonListener listener) {
+            dialog.setNegativeButton(context.getString(R.string.dialog_negative), listener);
+            return this;
+        }
+
+        public Builder setNegativeButton(String text, ButtonListener listener) {
+            dialog.setNegativeButton(text, listener);
+            return this;
+        }
+    }
+
+}

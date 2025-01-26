@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+        android:id="@+id/current_folder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:singleLine="true"
+        app:auto_text_tint="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.7"/>
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_folder"
+        app:layout_constraintWidth_percent="0.7"/>
+
+    <View
+        android:id="@+id/split"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/list"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/shared_dir"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:singleLine="true"
+        android:text="@string/file_browser_shared"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/split"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/private_dir"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:singleLine="true"
+        android:text="@string/file_browser_private"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/split"
+        app:layout_constraintTop_toBottomOf="@+id/shared_dir"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/open_external"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:singleLine="true"
+        android:text="@string/file_browser_open_external"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/split"
+        app:layout_constraintTop_toBottomOf="@+id/private_dir"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/select_external"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:singleLine="true"
+        android:text="@string/file_browser_select_external"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/split"
+        app:layout_constraintTop_toBottomOf="@+id/open_external"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+        android:id="@+id/mode_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:singleLine="true"
+        android:text="@string/file_browser_mode"
+        app:layout_constraintBottom_toTopOf="@+id/type_hint"
+        app:layout_constraintStart_toEndOf="@+id/split"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+        android:id="@+id/mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="end"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/type"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+        android:id="@+id/type_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="15dp"
+        android:singleLine="true"
+        android:text="@string/file_browser_selection"
+        app:layout_constraintBottom_toTopOf="@+id/close"
+        app:layout_constraintStart_toEndOf="@+id/split"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="end"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/close"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/close"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:singleLine="true"
+        android:text="@string/file_browser_close"
+        app:layout_constraintBottom_toTopOf="@id/confirm"
+        app:layout_constraintEnd_toStartOf="@+id/back"
+        app:layout_constraintStart_toEndOf="@+id/split"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/back"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:singleLine="true"
+        android:text="@string/file_browser_back"
+        app:layout_constraintBottom_toTopOf="@id/confirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/close"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/confirm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:singleLine="true"
+        android:text="@string/file_browser_positive"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/split"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
