@@ -8,28 +8,17 @@ configurations.default.setCanBeResolved(true)
 
 project.setArchivesBaseName('lwjgl')
 
-def libsDir = "${rootDir}/H2CO3/src/main/assets/app_runtime/h2co3Launcher/lwjgl"
-def h2co3LauncherDir = "${rootDir}/H2CO3/src/main/assets/app_runtime/h2co3Launcher/"
+project.setLibsDirName("${rootDir}/H2CO3/src/main/assets/runtime/lwjgl-h2co3")
 
-project.setLibsDirName(libsDir)
-
-tasks.register('buildLwjgl') {
-    dependsOn 'jar'
-    doLast {
-        compileJava {
-            options.compilerArgs += '-Xlint:none'
-        }
-    }
-}
-tasks.build.dependsOn('buildLwjgl')
+task buildLwjglH2CO3(dependsOn:'jar')
 jar {
     doLast {
         archiveFileName = 'lwjgl.jar'
         manifest {
             attributes 'Manifest-Version': '3.3.3'
         }
-        destinationDirectory.set(file(libsDir))
-        File versionFile = file("$h2co3LauncherDir/version")
+        destinationDirectory.set(file("../H2CO3/src/main/assets/runtime/lwjgl-h2co3"))
+        File versionFile = file("../H2CO3/src/main/assets/runtime/lwjgl-h2co3/version")
         versionFile.write(String.valueOf(new Date().getTime()))
     }
 }
@@ -40,16 +29,7 @@ java {
     }
 }
 
-tasks.withType(JavaExec).configureEach {
-    jvmArgs += "--add-modules=jdk.unsupported"
-}
-
 dependencies {
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 }

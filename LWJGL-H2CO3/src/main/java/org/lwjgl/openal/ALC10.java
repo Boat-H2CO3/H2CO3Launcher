@@ -5,16 +5,33 @@
  */
 package org.lwjgl.openal;
 
-import javax.annotation.*;
+import static org.lwjgl.system.Checks.CHECKS;
+import static org.lwjgl.system.Checks.check;
+import static org.lwjgl.system.Checks.checkNT1;
+import static org.lwjgl.system.Checks.checkNT1Safe;
+import static org.lwjgl.system.Checks.checkNTSafe;
+import static org.lwjgl.system.JNI.invokeP;
+import static org.lwjgl.system.JNI.invokePI;
+import static org.lwjgl.system.JNI.invokePP;
+import static org.lwjgl.system.JNI.invokePPI;
+import static org.lwjgl.system.JNI.invokePPP;
+import static org.lwjgl.system.JNI.invokePPV;
+import static org.lwjgl.system.JNI.invokePPZ;
+import static org.lwjgl.system.JNI.invokePV;
+import static org.lwjgl.system.JNI.invokePZ;
+import static org.lwjgl.system.MemoryStack.stackGet;
+import static org.lwjgl.system.MemoryUtil.NULL;
+import static org.lwjgl.system.MemoryUtil.memAddress;
+import static org.lwjgl.system.MemoryUtil.memAddressSafe;
+import static org.lwjgl.system.MemoryUtil.memUTF8Safe;
 
-import java.nio.*;
+import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.NativeType;
 
-import org.lwjgl.system.*;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
-import static org.lwjgl.system.Checks.*;
-import static org.lwjgl.system.JNI.*;
-import static org.lwjgl.system.MemoryStack.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import javax.annotation.Nullable;
 
 /** Native bindings to ALC 1.0 functionality. */
 public class ALC10 {
@@ -59,7 +76,7 @@ public class ALC10 {
 
     static ALCcontext alcContext;
 
-    public static ALCcontext alcCreateContext(ALCdevice device, IntBuffer attrList) {
+    public static ALCcontext alcCreateContext(ALCdevice device, java.nio.IntBuffer attrList) {
         long alContextHandle = alcCreateContext(device.device, attrList);
         alcContext = new ALCcontext(alContextHandle);
         return alcContext;
@@ -69,7 +86,7 @@ public class ALC10 {
         return AL.alcDevice;
     }
 
-    public static void alcGetInteger(ALCdevice device, int pname, IntBuffer integerdata) {
+    public static void alcGetInteger(ALCdevice device, int pname, java.nio.IntBuffer integerdata) {
         int res = alcGetInteger(device.device, pname);
         integerdata.put(0, res);
     }

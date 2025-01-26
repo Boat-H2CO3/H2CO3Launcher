@@ -8,7 +8,7 @@ configurations.default.setCanBeResolved(true)
 
 project.setArchivesBaseName('lwjgl')
 
-project.setLibsDirName("${rootDir}/H2CO3/src/main/assets/app_runtime/h2co3Launcher/lwjgl_pojav")
+project.setLibsDirName("${rootDir}/H2CO3/src/main/assets/runtime/lwjgl")
 
 task buildLwjgl(dependsOn:'jar')
 jar {
@@ -24,7 +24,7 @@ jar {
         attributes 'Manifest-Version': '3.3.3'
     }
     doLast {
-        File versionFile = file("../H2CO3/src/main/assets/app_runtime/version")
+        File versionFile = file("../H2CO3/src/main/assets/runtime/lwjgl/version")
         versionFile.write(String.valueOf(new Date().getTime()))
     }
 }

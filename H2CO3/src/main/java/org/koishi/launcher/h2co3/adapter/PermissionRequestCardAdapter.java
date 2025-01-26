@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import org.koishi.launcher.h2co3.R;
-import org.koishi.launcher.h2co3.resources.component.adapter.H2CO3RecycleAdapter;
-import org.koishi.launcher.h2co3.resources.component.PermissionRequestCard;
+import org.koishi.launcher.h2co3.view.PermissionRequestCard;
+import org.koishi.launcher.h2co3library.component.H2CO3RecycleAdapter;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class PermissionRequestCardAdapter extends H2CO3RecycleAdapter<Permission
 
     @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public H2CO3RecycleAdapter.BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.item_permission_request, parent, false);
         return new ViewHolder(view);
     }

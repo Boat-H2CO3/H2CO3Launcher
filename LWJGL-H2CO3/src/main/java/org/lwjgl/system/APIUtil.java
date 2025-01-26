@@ -4,27 +4,61 @@
  */
 package org.lwjgl.system;
 
-import org.lwjgl.*;
-import org.lwjgl.system.libffi.*;
-import org.lwjgl.system.linux.*;
-import org.lwjgl.system.macosx.*;
-import org.lwjgl.system.windows.*;
-
-import javax.annotation.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.nio.*;
-import java.nio.file.*;
-import java.util.*;
-import java.util.function.*;
-import java.util.regex.*;
-import java.util.stream.*;
-
-import static org.lwjgl.system.Checks.*;
-import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.Checks.DEBUG;
+import static org.lwjgl.system.Checks.DEBUG_FUNCTIONS;
+import static org.lwjgl.system.MemoryStack.POINTER_SHIFT;
+import static org.lwjgl.system.MemoryStack.POINTER_SIZE;
+import static org.lwjgl.system.MemoryStack.stackPush;
+import static org.lwjgl.system.MemoryUtil.BUFFER_BYTE;
+import static org.lwjgl.system.MemoryUtil.MemoryAllocator;
+import static org.lwjgl.system.MemoryUtil.NATIVE_ORDER;
+import static org.lwjgl.system.MemoryUtil.NULL;
+import static org.lwjgl.system.MemoryUtil.memASCII;
+import static org.lwjgl.system.MemoryUtil.memAddress;
+import static org.lwjgl.system.MemoryUtil.memGetAddress;
+import static org.lwjgl.system.MemoryUtil.memPointerBuffer;
+import static org.lwjgl.system.MemoryUtil.memPutAddress;
+import static org.lwjgl.system.MemoryUtil.memPutDouble;
+import static org.lwjgl.system.MemoryUtil.memPutFloat;
+import static org.lwjgl.system.MemoryUtil.memPutLong;
+import static org.lwjgl.system.MemoryUtil.nmemFree;
 import static org.lwjgl.system.MemoryUtil.wrap;
-import static org.lwjgl.system.MemoryUtil.*;
-import static org.lwjgl.system.libffi.LibFFI.*;
+import static org.lwjgl.system.libffi.LibFFI.FFI_DEFAULT_ABI;
+import static org.lwjgl.system.libffi.LibFFI.FFI_OK;
+import static org.lwjgl.system.libffi.LibFFI.FFI_STDCALL;
+import static org.lwjgl.system.libffi.LibFFI.FFI_TYPE_STRUCT;
+import static org.lwjgl.system.libffi.LibFFI.ffi_prep_cif;
+import static org.lwjgl.system.libffi.LibFFI.ffi_prep_cif_var;
+
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.system.libffi.FFICIF;
+import org.lwjgl.system.libffi.FFIType;
+import org.lwjgl.system.linux.LinuxLibrary;
+import org.lwjgl.system.macosx.MacOSXLibrary;
+import org.lwjgl.system.windows.WindowsLibrary;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 /**
  * Utility class useful to API bindings. [INTERNAL USE ONLY]

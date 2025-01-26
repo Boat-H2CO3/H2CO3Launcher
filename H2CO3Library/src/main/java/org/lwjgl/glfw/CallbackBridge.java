@@ -8,10 +8,10 @@ import android.view.Choreographer;
 
 import androidx.annotation.Nullable;
 
-import org.koishi.launcher.h2co3.core.H2CO3Tools;
-import org.koishi.launcher.h2co3.core.launch.H2CO3LauncherBridge;
-import org.koishi.launcher.h2co3.core.launch.keycodes.LwjglGlfwKeycode;
-import org.koishi.launcher.h2co3.core.launch.keycodes.LwjglKeycodeMap;
+import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
+import org.koishi.launcher.h2co3launcher.keycodes.LwjglGlfwKeycode;
+import org.koishi.launcher.h2co3launcher.keycodes.LwjglKeycodeMap;
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 
 import java.util.function.Consumer;
 
@@ -117,7 +117,7 @@ public class CallbackBridge {
     // Called from JRE side
     @SuppressWarnings("unused")
     public static @Nullable String accessAndroidClipboard(int type, String copy) {
-        ClipboardManager clipboard = (ClipboardManager) H2CO3Tools.CONTEXT.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboard = (ClipboardManager) H2CO3LauncherTools.CONTEXT.getSystemService(Context.CLIPBOARD_SERVICE);
         switch (type) {
             case CLIPBOARD_COPY:
                 ClipData clip = ClipData.newPlainText("H2CO3Launcher Clipboard", copy);

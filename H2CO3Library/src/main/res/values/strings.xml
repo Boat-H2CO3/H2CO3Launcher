@@ -1,238 +1,45 @@
-<!--
-  ~ //
-  ~ // Created by cainiaohh on 2024-03-31.
-  ~ //
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">H2CO3Launcher</string>
-    <string name="app_restart">Restart</string>
-    <string name="action_sign_in">Sign</string>
-    <string name="add_directory">New Directory</string>
-    <string name="assets_download">Downloading Assets</string>
-    <string name="assets_download_all">Validating assets integrity</string>
-    <string name="assets_index_malformed">Index files of downloaded assets were corrupted.</string>
-    <string name="about_desc">H2CO3Launcher is an Android Minecraft Launcher, allows user to launch Minecraft: Java Edition on Android device.  H2CO3Launcher is developed by Boat-H2CO3.  H2CO3Launcher\'s most features are modified based on HMCLCore.  The app borrows and quotes some codes of PojavLauncher, Boat, FoldCraftLauncher and HMCL-PE, so if you are going to distribute this app, please follow GPL-v3 License.</string>
+    <string name="app_version" translatable="false">auto_change_by_gradle</string>
 
-    <string name="button_ok">OK</string>
-    <string name="button_cancel">Cancel</string>
-
-    <string name="curse_api_key">null</string>
-    <string name="crash_test">Crash test</string>
-    <string name="crash_hint">App is crashed! Do not worry, app will restart if you press the restart button. You can also view the information from this page.</string>
-    <string name="crash_title">Error</string>
-
-    <string name="download_release">release</string>
-    <string name="download_snapshot">snapshot</string>
-    <string name="download_old_beta">Old</string>
-    <string name="download_tip">Tip</string>
-    <string name="download_page_title">Downloading</string>
-    <string name="dialog_title_choose_installer_version">Choose installer version</string>
+    <string name="curse_api_key" translatable="false">null</string>
 
     <string name="file_browser_provider" translatable="false">org.koishi.launcher.h2co3.provider</string>
+    <string name="file_browser_document_provider" translatable="false">org.koishi.launcher.h2co3.document.provider</string>
+    <string name="file_browser_title">File Browser</string>
+    <string name="file_browser_back">Back</string>
+    <string name="file_browser_close">Exit</string>
+    <string name="file_browser_shared">Shared directory</string>
+    <string name="file_browser_private">Private directory</string>
+    <string name="file_browser_open_external">Open in external APP(Like MT)</string>
+    <string name="file_browser_select_external">Select with external APP</string>
+    <string name="file_browser_private_alert">Cannot access to private directory, please check the permission.</string>
+    <string name="file_browser_mode">Mode:</string>
+    <string name="file_browser_mode_browse">Browse File</string>
+    <string name="file_browser_mode_file">Pick File</string>
+    <string name="file_browser_mode_folder">Pick Folder</string>
+    <string name="file_browser_selection">Type:</string>
+    <string name="file_browser_selection_simple">Single Selection</string>
+    <string name="file_browser_selection_multiple">Multiple Selection</string>
+    <string name="file_browser_positive">Confirm</string>
+    <string name="file_browser_positive_alert">No file/directory selected!</string>
+    <string name="file_browser_share_title">Share the file</string>
+    <string name="file_browser_share_message">Are you sure to share this file?</string>
 
-    <string name="install_installer_fabric" translatable="false">Fabric</string>
-    <string name="install_installer_fabric_api" translatable="false">Fabric API</string>
-    <string name="install_installer_fabric_api_warning">Warning: Fabric API is a mod, and will be installed into the mod directory of the game instance. Please do not change the working directory of the game, or the Fabric API will not work. If you do want to change these settings, you should reinstall it.</string>
-    <string name="install_installer_forge" translatable="false">Forge</string>
-    <string name="install_installer_neoforge" translatable="false">NeoForge</string>
-    <string name="install_installer_game" translatable="false">Minecraft</string>
-    <string name="install_installer_incompatible">Incompatible with %s</string>
-    <string name="install_installer_install">Install %s</string>
-    <string name="install_installer_install_offline">Install/Update from Local File</string>
-    <string name="install_installer_install_offline_extension">Forge/OptiFine installer</string>
-    <string name="install_installer_liteloader" translatable="false">LiteLoader</string>
-    <string name="install_installer_not_installed">Not Selected</string>
-    <string name="install_installer_optifine" translatable="false">OptiFine</string>
-    <string name="install_installer_quilt" translatable="false">Quilt</string>
-    <string name="install_installer_quilt_api" translatable="false">QSL/QFAPI</string>
+    <string name="crash_reporter_title">Crash Report</string>
+    <string name="crash_reporter_hint">H2CO3Launcher has encountered an unresolvable error, please seek help from the developer or others.</string>
+    <string name="crash_reporter_restart">Restart</string>
+    <string name="crash_reporter_close">Exit</string>
+    <string name="crash_reporter_copy">Copy</string>
+    <string name="crash_reporter_share">Share</string>
+    <string name="crash_reporter_toast">Copy successfully!</string>
 
-    <string name="login_password">Password</string>
-    <string name="login_api" translatable="false">API</string>
-    <string name="login_failed">"Login failed"</string>
-    <string name="login_name">Email or  Name</string>
-    <string name="login_offline">Offline</string>
-    <string name="login_microsoft">Microsoft</string>
-    <string name="login_other">Other</string>
-    <string name="login_wait">Wait…</string>
-    <string name="login_yggdrasil">Yggdrasil API</string>
-    <string name="login_unified_pass">Unified Pass</string>
-    <string name="launcher_initial_install_check">Checking files…</string>
+    <string name="color_picker_title">Color Picker</string>
+    <string name="color_picker_arrow" translatable="false">→</string>
+    <string name="color_picker_toast">Unknown color!</string>
 
-    <string name="message_delete">"Do you want to delete "</string>
-
-    <string name="runtime_h2co3launcher" translatable="false">H2CO3Launcher</string>
-    <string name="runtime_java8" translatable="false">JAVA 8</string>
-    <string name="runtime_java11" translatable="false">JAVA 11</string>
-    <string name="runtime_java17" translatable="false">JAVA 17</string>
-    <string name="runtime_java21" translatable="false">JAVA 21</string>
-
-    <string name="storage_permission">Storage Permission</string>
-    <string name="storage_permission_description">Allows software to read and write to internal storage.</string>
-    <string name="sweet_smell">114514</string>
-    <string name="spinner_official">official</string>
-    <string name="spinner_bmclapi">bmclapi</string>
-
-    <string name="title_home">Home</string>
-    <string name="title_directory">Directory</string>
-    <string name="title_manage">Manage</string>
-    <string name="title_install_runtime">Runtime is installing</string>
-    <string name="title_warn">Warn</string>
-    <string name="title_refresh">Refresh</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_delete">Delete</string>
-    <string name="title_all">All</string>
-    <string name="title_in_game">In-game</string>
-    <string name="title_out_game">Out-game</string>
-    <string name="title_restore">Restore</string>
-    <string name="title_show">show</string>
-    <string name="title_import">Import</string>
-    <string name="title_output">Export</string>
-    <string name="title_ok">OK</string>
-    <string name="title_cancel">Cancel</string>
-    <string name="title_step">Operation</string>
-    <string name="title_theme">Theme</string>
-    <string name="title_name">Name</string>
-    <string name="title_size">size</string>
-    <string name="title_width">Width</string>
-    <string name="title_height">Height</string>
-    <string name="title_keep">Keep</string>
-    <string name="title_corner">Corner</string>
-    <string name="title_hide">Hide</string>
-    <string name="title_edit">Edit</string>
-    <string name="title_error">Error</string>
-    <string name="title_over_write">Overwrite</string>
-    <string name="title_note">Prompt</string>
-    <string name="title_virtual_controller">Virtual controller</string>
-    <string name="title_global_setting">Global Settings</string>
-    <string name="title_custom_keyboard">Custom Keyboard</string>
-    <string name="title_pc_keyboard">PC Keyboard</string>
-    <string name="title_pe_keyboard">MCPE Keyboard</string>
-    <string name="title_pe_itembar">MCPE Item Bar</string>
-    <string name="title_pe_joystick">MCPE Joystick</string>
-    <string name="title_touchpad">Touchpad</string>
-    <string name="title_inputbox">Input Box</string>
-    <string name="title_inputbox_config">Input Box Settings</string>
-    <string name="title_alpha_size">Transperancy</string>
-    <string name="title_move">Move</string>
-    <string name="title_itembar_config">MCPE Item Bar Settings</string>
-    <string name="title_pe_keyboard_config">MCPE Keyboard Settings</string>
-    <string name="title_pe_joystick_config">MCPE Joystick Settings</string>
-    <string name="title_pc_keyboard_config">PC Keyboard Settings</string>
-    <string name="title_screen_touchpad_config">Screen Touchpad Settings</string>
-    <string name="title_custom_keyboard_config">Custom Keyboard Settings</string>
-    <string name="title_button_config">Key Settings</string>
-    <string name="title_sensitivity">Sensitivity</string>
-    <string name="title_trigger">Trigger</string>
-    <string name="title_mode">Mode</string>
-    <string name="title_point">Point</string>
-    <string name="title_slide_touch">Slide</string>
-    <string name="title_effect">Effect</string>
-    <string name="title_total_count">Total</string>
-    <string name="title_add">Add</string>
-    <string name="title_clear">Empty</string>
-    <string name="title_choice">Select</string>
-    <string name="title_save">Save</string>
-    <string name="title_mould">Template</string>
-    <string name="title_custom_button_editor">Custom Key Editor</string>
-    <string name="title_margin_left">Left Margin</string>
-    <string name="title_margin_top">Top Margin</string>
-    <string name="title_mapping">Mapping</string>
-    <string name="title_back_color">Background Color</string>
-    <string name="title_text_color">Text Color</string>
-    <string name="title_text_size">Text Size</string>
-    <string name="title_sight_follow">Sight Follow</string>
-    <string name="title_input_chars">Input Chars</string>
-    <string name="title_copy">Copy</string>
-    <string name="title_mouse_lb">Left Button</string>
-    <string name="title_mouse_rb">Right Button</string>
-    <string name="title_mouse_cb">Middle Button</string>
-    <string name="title_wheel_up">Wheel Up</string>
-    <string name="title_wheel_down">Wheel Down</string>
-    <string name="title_un_alpha_size">Opacity</string>
-    <string name="title_colorpicker">Color picker</string>
-    <string name="title_multi_line" translatable="false">Multi line</string>
-    <string name="title_order">Order</string>
-    <string name="title_input">Input</string>
-    <string name="title_shortcut">Shortcut</string>
-    <string name="title_console">Console</string>
-    <string name="title_default">Default</string>
-    <string name="title_version">Versions</string>
-    <string name="title_remove">Remove</string>
-    <string name="title_action">Action</string>
-    <string name="title_reg">Register</string>
-    <string name="title_runtime">Java Runtime</string>
-    <string name="title_progress">Progress</string>
-    <string name="title_terminal">Terminal</string>
-    <string name="title_point_up" translatable="false">↑</string>
-    <string name="title_point_right" translatable="false">→</string>
-    <string name="title_point_left" translatable="false">←</string>
-    <string name="title_point_down" translatable="false">↓</string>
-    <string name="title_enter" translatable="false">Enter</string>
-    <string name="title_t_enter" translatable="false">T + Enter</string>
-    <string name="title_done" translatable="false">Done</string>
-    <string name="title_download">Download</string>
-    <string name="title_runtime_install_tips">Install runtime</string>
-    <string name="title_minecraftVersion">Minecraft</string>
-    <string name="title_modList">Mod</string>
-    <string name="title_modPackList">ModPack</string>
-    <string name="title_resourcesPack">ResourcesPack</string>
-    <string name="title_global_game_setting">Global game settings</string>
-    <string name="title_h2co3_launcher_setting">Launcher Setting</string>
-    <string name="title_help">Help</string>
-    <string name="title_about">About</string>
-    <string name="title_third_lib">Third-party libraries used</string>
-    <string name="title_forge" translatable="false">Forge</string>
-    <string name="title_neo_forge" translatable="false">NeoForge</string>
-    <string name="title_optifine" translatable="false">Optifine</string>
-    <string name="title_fabric" translatable="false">Fabric</string>
-    <string name="title_fabric_api" translatable="false">FabricApi</string>
-    <string name="title_quilt" translatable="false">Quilt</string>
-    <string name="title_qsl_qfapi" translatable="false">QSL &amp; QSAPI</string>
-    <string name="title_liteloader" translatable="false">LiteLoader</string>
-    <string name="title_notification">Notification</string>
-    <string name="title_menu_java_auto">Auto choose</string>
-    <string name="title_java_vesion">Java version</string>
-    <string name="tips_failed_to_import_keyboard_layout">Failed to load the keyboard file, the file is damaged!</string>
-    <string name="tips_successed_to_import_keyboard_layout">The keyboard file is loaded successfully!</string>
-    <string name="tips_filename_can_not_be_void">The file name cannot be empty!</string>
-    <string name="tips_filename_has_been_used">"A file with the same name exists. Do you want to overwrite the existing file? Overwrite operation is not recoverable"</string>
-    <string name="tips_are_you_sure_to_delete_file">You are about to delete the file %s. This operation cannot be recovered.</string>
-    <string name="tips_are_you_sure_to_import_keyboard_layout">You are about to load the file %s. The load operation will clear your current configuration. Please make sure you have saved the current template.</string>
-    <string name="tips_are_you_sure_to_clear_all_buttons">You are about to clear all the currently added custom buttons. This operation will not affect the saved template files. The clearing operation cannot be restored.</string>
-    <string name="tips_are_you_sure_to_restore_setting">Are you sure that you want to restore the default settings?</string>
-    <string name="tips_are_you_sure_to_delete_button">Are you sure that you want to delete this button?  It cannot be restored after performing this operation.</string>
-    <string name="tips_are_you_sure_to_clone_button">Are you sure that you want to copy this button?  After performing this operation, the editing object will be switched to a new button.</string>
-    <string name="tips_itembar_warn">*Note: The inventory is only visible in the game</string>
-    <string name="tips_stand_keyboard_buttons">Standard keyboard keys</string>
-    <string name="tips_stand_mouse_button">Standard Mouse button</string>
-    <string name="tips_selected">Selected：</string>
-    <string name="tips_please_change_file_name">Please change the file name!</string>
-    <string name="tips_are_you_sure_to_auto_config_layout">Are you sure you want to configure the layout automatically? This will change your controller and automatically calculate possible layout locations.</string>
-    <string name="tips_try_to_convert_keyboard_layout">Try to convert the keyboard file?</string>
-    <string name="tips_successed_to_convert_keyboard_file">Success to convert it，new file name: %s</string>
-    <string name="tips_failed_to_convert_keyboard_file">Failed to convert the keyboard file.</string>
-
-    <string name="user_add">Create User</string>
-    <string name="user_state_offline">Offline</string>
-    <string name="user_state_microsoft">Microsoft</string>
-    <string name="user_state_other">"Server: "</string>
-
-    <string name="ver_input_hint">/storage/emulated/0 or /sdcard or /mnt/sdcard</string>
-    <string name="ver_not_dir">It is not a directory</string>
-    <string name="ver_already_exists">Directory already exists</string>
-    <string name="ver_not_right_dir">It is not a right directory.</string>
-    <string name="ver_add_done">Done</string>
-    <string name="ver_null_dir">This directory was disappointed or null.</string>
-    <string name="ver_if_del">Delete this version?</string>
-    <string name="ver_type_release">Release</string>
-    <string name="ver_if_remove">Remove this dir?</string>
-
-    <string name="welcome_permission_hint">H2CO3Launcher needs some necessary permissions to ensure its normal operation.</string>
-    <string name="title_pri_ver_dir">Private Version Directory</string>
-    <string name="title_game_memory">Game memory (MB)</string>
-    <string name="title_window_resolution">Window resolution (%)</string>
-    <string name="title_join_server">Server address</string>
-    <string name="title_enable_monet">Material monet</string>
-
+    <string name="dialog_alert">Alert</string>
+    <string name="dialog_info">Info</string>
+    <string name="dialog_positive">OK</string>
+    <string name="dialog_negative">Cancel</string>
 </resources>

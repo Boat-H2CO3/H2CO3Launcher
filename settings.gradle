@@ -1,7 +1,5 @@
 pluginManagement {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://repo.huaweicloud.com/repository/maven/' }
         maven { url 'https://jitpack.io' }
         maven {
@@ -20,8 +18,6 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://repo.huaweicloud.com/repository/maven/' }
         maven { url 'https://jitpack.io' }
         maven {
@@ -32,13 +28,12 @@ dependencyResolutionManagement {
         }
         mavenCentral()
         google()
-        mavenCentral()
     }
 }
 
 rootProject.name = "H2CO3Launcher"
 include ':H2CO3'
 include ':H2CO3Library'
-include ':H2CO3Launcher'
+include ':ZipFileSystem'
 include ':LWJGL-H2CO3'
 include ':LWJGL-POJAV' 

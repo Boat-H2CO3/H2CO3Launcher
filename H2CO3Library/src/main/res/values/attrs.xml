@@ -1,5 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="use_theme_color" format="boolean"/>
+    <declare-styleable name="H2CO3LauncherView">
+        <attr name="use_theme_color"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherButton">
+        <attr name="ripple" format="boolean"/>
+        <attr name="shape" format="integer"/>
+        <attr name="auto_padding" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherImageButton">
+        <attr name="auto_tint" format="boolean"/>
+        <attr name="no_padding" format="boolean"/>
+        <attr name="use_theme_color"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherImageView">
+        <attr name="auto_src_tint" format="boolean"/>
+        <attr name="use_theme_color"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherTextView">
+        <attr name="auto_text_background_tint" format="boolean"/>
+        <attr name="auto_text_tint" format="boolean"/>
+        <attr name="use_theme_color"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherCheckedTextView">
+        <attr name="auto_checked_text_background_tint" format="boolean"/>
+        <attr name="auto_checked_text_tint" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherEditText">
+        <attr name="auto_edit_tint" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherCheckBox">
+        <attr name="auto_hint_tint" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherTitleView">
+        <attr name="title" format="string" localization="suggested" />
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherTabLayout">
+        <attr name="follow_theme" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherPreciseSeekBar">
+        <attr name="auto_button_tint" format="boolean"/>
+        <attr name="min_value" format="integer"/>
+        <attr name="max_value" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherLinearLayout">
+        <attr name="auto_linear_background_tint" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherConstraintLayout">
+        <attr name="auto_constraint_background_tint" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="H2CO3LauncherRadioButton">
+        <attr name="text_with_theme_color" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="ColorPickerView" parent="ColorPanelView">
+        <attr name="cpv_alphaChannelVisible" format="boolean|reference"/>
+        <attr name="cpv_alphaChannelText" format="string|reference"/>
+        <attr name="cpv_sliderColor" format="color|reference"/>
+        <attr name="cpv_borderColor" format="color|reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="HorizontalListView">
+        <attr name="dividerWidth" format="dimension" />
+        <attr name="android:divider" />
+        <attr name="android:requiresFadingEdge" />
+        <attr name="android:fadingEdgeLength" />
+    </declare-styleable>
+
+    <declare-styleable name="KeycodeView">
+        <attr name="keycode" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="LogWindow">
+        <attr name="auto_log_tint" format="boolean"/>
+    </declare-styleable>
 
     <declare-styleable name="BubbleLayout">
         <attr name="background_color" format="color" />
@@ -35,5 +109,4 @@
         <attr name="h2co3_color_message_error" format="color"/>
         <attr name="h2co3_color_message_info" format="color"/>
     </declare-styleable>
-
 </resources>

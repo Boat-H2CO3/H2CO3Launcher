@@ -3,19 +3,22 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_global_game_setting"
-            android:title="@string/title_global_game_setting" />
+            android:id="@+id/navigation_settings_type_global_manage"
+            android:title="@string/settings_type_global_manage" />
 
         <item
-            android:id="@+id/navigation_h2co3_launcher_setting"
-            android:title="@string/title_h2co3_launcher_setting" />
+            android:id="@+id/navigation_settings_launcher"
+            android:title="@string/settings_launcher" />
 
         <item
             android:id="@+id/navigation_help"
-            android:title="@string/title_help" />
+            android:title="@string/help" />
 
         <item
+            android:id="@+id/navigation_community"
+            android:title="@string/community" />
+        <item
             android:id="@+id/navigation_about"
-            android:title="@string/title_about" />
+            android:title="@string/about" />
     </group>
 </menu>

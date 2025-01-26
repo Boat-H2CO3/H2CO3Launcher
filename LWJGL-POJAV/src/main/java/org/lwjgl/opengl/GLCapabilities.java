@@ -5,14 +5,16 @@
  */
 package org.lwjgl.opengl;
 
-import org.lwjgl.system.*;
-import java.util.Set;
-import org.lwjgl.*;
-import java.util.function.IntFunction;
+import static org.lwjgl.system.Checks.checkFunctions;
+import static org.lwjgl.system.Checks.reportMissing;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
-import static org.lwjgl.system.APIUtil.*;
-import static org.lwjgl.system.Checks.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.system.FunctionProvider;
+import org.lwjgl.system.ThreadLocalUtil;
+
+import java.util.Set;
+import java.util.function.IntFunction;
 
 /** Defines the capabilities of an OpenGL context. */
 public final class GLCapabilities {
@@ -4832,6 +4834,8 @@ public final class GLCapabilities {
 
     GLCapabilities(FunctionProvider provider, Set<String> ext, boolean fc, IntFunction<PointerBuffer> bufferFactory) {
         forwardCompatible = fc;
+
+        RendererInit.onCreateCapabilities(provider);
 
         PointerBuffer caps = bufferFactory.apply(ADDRESS_BUFFER_SIZE);
 

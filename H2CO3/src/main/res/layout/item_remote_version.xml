@@ -1,61 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <org.koishi.launcher.h2co3.resources.component.H2CO3CardView
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
         android:id="@+id/parent"
-        style="@style/Theme.H2CO3.CardViewOutlined"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_container_white_clickable"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="8dp"
+        android:stateListAnimator="@xml/anim_scale"
+        app:auto_linear_background_tint="true">
 
-        <LinearLayout
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView
+            android:id="@+id/icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/icon"
-                    style="@style/Theme.H2CO3.IconNormal.NoBackGround"
-                    android:layout_width="@dimen/app_40dp"
-                    android:layout_height="@dimen/app_40dp"
-                    android:duplicateParentState="true"
-                    android:importantForAccessibility="no" />
-
-                <LinearLayout
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                    android:id="@+id/version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:auto_text_tint="true" />
 
-                    <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
-                        android:id="@+id/version"
-                        style="@style/Theme.H2CO3.CardTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/app_name"
-                        android:textSize="16sp" />
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                    android:id="@+id/tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:paddingStart="4dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:textSize="11sp"
+                    app:auto_text_tint="true" />
 
-                    <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
-                        android:id="@+id/tag"
-                        style="@style/Theme.H2CO3.CardContent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/app_name" />
-                </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </LinearLayout>
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textSize="12sp"
+                app:auto_text_tint="true" />
 
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </LinearLayout>
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+            android:id="@+id/wiki"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_earth_24"
+            android:stateListAnimator="@xml/anim_scale_large"
+            android:visibility="gone"
+            app:auto_tint="true" />
 
-    </org.koishi.launcher.h2co3.resources.component.H2CO3CardView>
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -3,19 +3,23 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_minecraftVersion"
-            android:title="@string/title_minecraftVersion" />
+            android:id="@+id/navigation_version_game"
+            android:title="@string/version_game" />
 
         <item
-            android:id="@+id/navigation_modList"
-            android:title="@string/title_modList" />
+            android:id="@+id/navigation_modpack"
+            android:title="@string/modpack" />
 
         <item
-            android:id="@+id/navigation_modPackList"
-            android:title="@string/title_modPackList" />
+            android:id="@+id/navigation_mods"
+            android:title="@string/mods" />
 
         <item
-            android:id="@+id/navigation_resourcesPack"
-            android:title="@string/title_resourcesPack" />
+            android:id="@+id/navigation_resourcepack"
+            android:title="@string/resourcepack" />
+
+        <item
+            android:id="@+id/navigation_world"
+            android:title="@string/world" />
     </group>
 </menu>

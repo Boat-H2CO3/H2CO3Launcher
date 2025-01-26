@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Theme.H2CO3.Material" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Theme.H2CO3.Material" parent="Theme.Material3.Light.Rikka">
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
@@ -32,6 +32,13 @@
     <style name="Theme.H2CO3.Base" parent="Theme.H2CO3.Material">
         <item name="android:textCursorDrawable">@drawable/textfield_cursor</item>
         <item name="fontFamily">@font/josefin_sans</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>0
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
     </style>
 
     <style name="Theme.H2CO3.Styled" parent="Theme.H2CO3.Base">
@@ -39,11 +46,6 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Rikka.Material3</item>
         <item name="shapeAppearanceLargeComponent">@style/AppTheme.ShapeOverlay.Large</item>
         <item name="textAppearanceBodySmall">@style/TextAppearance.H2CO3.BodySmall</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="Theme.H2CO3" parent="Theme.H2CO3.Styled" />
@@ -59,9 +61,11 @@
         <item name="fontFamily">@font/josefin_sans</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
     </style>
 
     <style name="Theme.H2CO3.Styled.DynamicColors" parent="Theme.H2CO3.Base.DynamicColors">
@@ -73,13 +77,24 @@
 
     <style name="Theme.H2CO3.DynamicColors" parent="Theme.H2CO3.Styled.DynamicColors" />
 
-    <style name="FullScreen" parent="Theme.H2CO3">
-        <item name="android:windowBackground">?android:colorBackground</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
+    <style name="ActivityAnimation">
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+        <item name="android:taskOpenEnterAnimation">@null</item>
+        <item name="android:taskOpenExitAnimation">@null</item>
+        <item name="android:taskCloseEnterAnimation">@null</item>
+        <item name="android:taskCloseExitAnimation">@null</item>
+        <item name="android:taskToFrontEnterAnimation">@null</item>
+        <item name="android:taskToFrontExitAnimation">@null</item>
+        <item name="android:taskToBackEnterAnimation">@null</item>
+        <item name="android:taskToBackExitAnimation">@null</item>
     </style>
 
+    <style name="TabTextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="singleLine">true</item>
+    </style>
 </resources>

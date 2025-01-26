@@ -4,26 +4,39 @@
  */
 package org.lwjgl.glfw;
 
-import android.util.*;
+import static org.lwjgl.opengl.GL20.GL_EXTENSIONS;
+import static org.lwjgl.opengl.GL20.glGetString;
+import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
+import static org.lwjgl.system.Checks.CHECKS;
+import static org.lwjgl.system.Checks.checkSafe;
+import static org.lwjgl.system.JNI.callJV;
+import static org.lwjgl.system.JNI.callV;
+import static org.lwjgl.system.JNI.invokeI;
+import static org.lwjgl.system.JNI.invokeP;
+import static org.lwjgl.system.JNI.invokePP;
+import static org.lwjgl.system.JNI.invokePV;
+import static org.lwjgl.system.JNI.invokeV;
+import static org.lwjgl.system.MemoryStack.stackGet;
+import static org.lwjgl.system.MemoryUtil.memAddressSafe;
+import static org.lwjgl.system.MemoryUtil.memPutInt;
+import static org.lwjgl.system.MemoryUtil.memUTF8Safe;
 
-import java.lang.annotation.Native;
-import java.lang.reflect.*;
-import java.nio.*;
+import android.util.ArrayMap;
 
-import javax.annotation.*;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.system.Library;
+import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.NativeType;
+import org.lwjgl.system.SharedLibrary;
 
-import org.lwjgl.*;
-import org.lwjgl.system.*;
+import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.Map;
 
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.system.APIUtil.*;
-import static org.lwjgl.system.Checks.*;
-import static org.lwjgl.system.JNI.*;
-import static org.lwjgl.system.MemoryStack.*;
-import static org.lwjgl.system.MemoryUtil.*;
-import java.util.*;
-
-import sun.misc.Unsafe;
+import javax.annotation.Nullable;
 
 public class GLFW
 {
@@ -508,6 +521,7 @@ public class GLFW
     private static ArrayMap<Long, GLFWWindowProperties> mGLFWWindowMap;
     public static boolean mGLFWIsInputReady;
     private static boolean mGLFWInputPumping;
+    private static boolean mGLFWWindowVisibleOnCreation = true;
     public static final ByteBuffer keyDownBuffer = ByteBuffer.allocateDirect(317);
     public static final ByteBuffer mouseDownBuffer = ByteBuffer.allocateDirect(8);
 
@@ -1009,6 +1023,13 @@ public class GLFW
 
         mGLFWWindowMap.put(ptr, win);
         mainContext = ptr;
+
+        if(mGLFWWindowVisibleOnCreation || monitor != 0) {
+            // Show window by default if GLFW_VISIBLE hint is specified on creation or
+            // if the monitor is nonnull (fullscreen requested)
+            glfwShowWindow(ptr);
+        }
+
         return ptr;
         //Return our context
     }
@@ -1025,7 +1046,9 @@ public class GLFW
         nglfwSetShowingWindow(mGLFWWindowMap.size() == 0 ? 0 : mGLFWWindowMap.keyAt(mGLFWWindowMap.size() - 1));
     }
 
-    public static void glfwDefaultWindowHints() {}
+    public static void glfwDefaultWindowHints() {
+        mGLFWWindowVisibleOnCreation = true;
+    }
 
     public static void glfwGetWindowSize(long window, IntBuffer width, IntBuffer height) {
         if (width != null) width.put(internalGetWindow(window).width);
@@ -1048,10 +1071,17 @@ public class GLFW
     }
 
     public static void glfwShowWindow(long window) {
+        GLFWWindowProperties win = internalGetWindow(window);
+        win.windowAttribs.put(GLFW_HOVERED, 1);
+        win.windowAttribs.put(GLFW_VISIBLE, 1);
         nglfwSetShowingWindow(window);
     }
 
     public static void glfwWindowHint(int hint, int value) {
+        if (hint == GLFW_VISIBLE) {
+            mGLFWWindowVisibleOnCreation = value == GLFW_TRUE;
+            return;
+        }
         long __functionAddress = Functions.SetWindowHint;
         invokeV(hint, value, __functionAddress);
     }

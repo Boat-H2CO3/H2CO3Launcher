@@ -27,7 +27,6 @@ import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowFocusCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowIcon;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowIconifyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPosCallback;
@@ -824,7 +823,7 @@ public class Display {
     }
 
     public static DisplayMode[] getAvailableDisplayModes() throws LWJGLException {
-        GLFWVidMode.Buffer modes = GLFW.glfwGetVideoModes(GLFW.glfwGetPrimaryMonitor());
+        GLFWVidMode.Buffer modes = GLFW.glfwGetVideoModes(org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor());
 
         DisplayMode[] displayModes = new DisplayMode[modes.capacity()];
 

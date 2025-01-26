@@ -12,7 +12,7 @@ public abstract class H2CO3LauncherInjectorCallback extends Callback implements 
         H2CO3LauncherInjectorCallbackI instance = Callback.get(functionPointer);
         return instance instanceof H2CO3LauncherInjectorCallback
                 ? (H2CO3LauncherInjectorCallback)instance
-                : new Container(functionPointer, instance);
+                : new H2CO3LauncherInjectorCallback.Container(functionPointer, instance);
     }
 
     /** Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}. */
@@ -25,7 +25,7 @@ public abstract class H2CO3LauncherInjectorCallback extends Callback implements 
     public static H2CO3LauncherInjectorCallback create(H2CO3LauncherInjectorCallbackI instance) {
         return instance instanceof H2CO3LauncherInjectorCallback
                 ? (H2CO3LauncherInjectorCallback)instance
-                : new Container(instance.address(), instance);
+                : new H2CO3LauncherInjectorCallback.Container(instance.address(), instance);
     }
 
     protected H2CO3LauncherInjectorCallback() {

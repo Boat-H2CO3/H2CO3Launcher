@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,11 +13,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"
-                app:title="@string/title_warn" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/splash_runtime_title" />
 
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -35,56 +36,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <org.koishi.launcher.h2co3.resources.component.H2CO3CardView
-                android:id="@+id/open_1"
-                style="@style/Theme.H2CO3.CardViewElevated"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="?attr/colorError">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            style="@style/Theme.H2CO3.IconMaterial"
-                            android:layout_width="@dimen/app_40dp"
-                            android:layout_height="@dimen/app_40dp"
-                            android:duplicateParentState="true"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_btm_custom_normal" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
-                                style="@style/Theme.H2CO3.CardContent"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/title_runtime_install_tips"
-                                android:textColor="?colorOnTertiary" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-            </org.koishi.launcher.h2co3.resources.component.H2CO3CardView>
-
-            <org.koishi.launcher.h2co3.resources.component.H2CO3CardView
-                android:id="@+id/h2co3Launcher"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cacio"
                 style="@style/Theme.H2CO3.CardViewOutlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -101,16 +54,15 @@
                         android:layout_marginRight="@dimen/app_15dp">
 
                         <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/h2co3Launcher_task_icon"
+                            android:id="@+id/cacio_task_icon"
                             style="@style/Theme.H2CO3.IconMaterial"
                             android:layout_width="@dimen/app_40dp"
                             android:layout_height="@dimen/app_40dp"
                             android:duplicateParentState="true"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_done" />
+                            android:importantForAccessibility="no" />
 
                         <ProgressBar
-                            android:id="@+id/h2co3Launcher_task_progress"
+                            android:id="@+id/cacio_task_progress"
                             android:layout_width="@dimen/app_40dp"
                             android:layout_height="@dimen/app_40dp" />
 
@@ -122,19 +74,219 @@
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
                             style="@style/Theme.H2CO3.CardTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/runtime_h2co3launcher"
+                            android:text="@string/splash_runtime_cacio"
                             android:textSize="16sp" />
                     </LinearLayout>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </org.koishi.launcher.h2co3.resources.component.H2CO3CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <org.koishi.launcher.h2co3.resources.component.H2CO3CardView
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cacio11"
+                style="@style/Theme.H2CO3.CardViewOutlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="@dimen/app_40dp"
+                        android:layout_height="@dimen/app_40dp"
+                        android:layout_marginRight="@dimen/app_15dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/cacio11_task_icon"
+                            style="@style/Theme.H2CO3.IconMaterial"
+                            android:layout_width="@dimen/app_40dp"
+                            android:layout_height="@dimen/app_40dp"
+                            android:duplicateParentState="true"
+                            android:importantForAccessibility="no" />
+
+                        <ProgressBar
+                            android:id="@+id/cacio11_task_progress"
+                            android:layout_width="@dimen/app_40dp"
+                            android:layout_height="@dimen/app_40dp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                            style="@style/Theme.H2CO3.CardTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/splash_runtime_cacio11"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cacio17"
+                style="@style/Theme.H2CO3.CardViewOutlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="@dimen/app_40dp"
+                        android:layout_height="@dimen/app_40dp"
+                        android:layout_marginRight="@dimen/app_15dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/cacio17_task_icon"
+                            style="@style/Theme.H2CO3.IconMaterial"
+                            android:layout_width="@dimen/app_40dp"
+                            android:layout_height="@dimen/app_40dp"
+                            android:duplicateParentState="true"
+                            android:importantForAccessibility="no" />
+
+                        <ProgressBar
+                            android:id="@+id/cacio17_task_progress"
+                            android:layout_width="@dimen/app_40dp"
+                            android:layout_height="@dimen/app_40dp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                            style="@style/Theme.H2CO3.CardTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/splash_runtime_cacio17"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/jna"
+                style="@style/Theme.H2CO3.CardViewOutlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="@dimen/app_40dp"
+                        android:layout_height="@dimen/app_40dp"
+                        android:layout_marginRight="@dimen/app_15dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/jna_task_icon"
+                            style="@style/Theme.H2CO3.IconMaterial"
+                            android:layout_width="@dimen/app_40dp"
+                            android:layout_height="@dimen/app_40dp"
+                            android:duplicateParentState="true"
+                            android:importantForAccessibility="no" />
+
+                        <ProgressBar
+                            android:id="@+id/jna_task_progress"
+                            android:layout_width="@dimen/app_40dp"
+                            android:layout_height="@dimen/app_40dp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                            style="@style/Theme.H2CO3.CardTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/splash_runtime_jna"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/lwjgl"
+                style="@style/Theme.H2CO3.CardViewOutlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="@dimen/app_40dp"
+                        android:layout_height="@dimen/app_40dp"
+                        android:layout_marginRight="@dimen/app_15dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/lwjgl_task_icon"
+                            style="@style/Theme.H2CO3.IconMaterial"
+                            android:layout_width="@dimen/app_40dp"
+                            android:layout_height="@dimen/app_40dp"
+                            android:duplicateParentState="true"
+                            android:importantForAccessibility="no" />
+
+                        <ProgressBar
+                            android:id="@+id/lwjgl_task_progress"
+                            android:layout_width="@dimen/app_40dp"
+                            android:layout_height="@dimen/app_40dp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                            style="@style/Theme.H2CO3.CardTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/splash_runtime_lwjgl"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/java8"
                 style="@style/Theme.H2CO3.CardViewOutlined"
                 android:layout_width="match_parent"
@@ -157,8 +309,7 @@
                             android:layout_width="@dimen/app_40dp"
                             android:layout_height="@dimen/app_40dp"
                             android:duplicateParentState="true"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_done" />
+                            android:importantForAccessibility="no" />
 
                         <ProgressBar
                             android:id="@+id/java8_task_progress"
@@ -173,19 +324,19 @@
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
                             style="@style/Theme.H2CO3.CardTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/runtime_java8"
+                            android:text="@string/splash_runtime_java8"
                             android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
 
-            </org.koishi.launcher.h2co3.resources.component.H2CO3CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <org.koishi.launcher.h2co3.resources.component.H2CO3CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/java11"
                 style="@style/Theme.H2CO3.CardViewOutlined"
                 android:layout_width="match_parent"
@@ -208,8 +359,7 @@
                             android:layout_width="@dimen/app_40dp"
                             android:layout_height="@dimen/app_40dp"
                             android:duplicateParentState="true"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_done" />
+                            android:importantForAccessibility="no" />
 
                         <ProgressBar
                             android:id="@+id/java11_task_progress"
@@ -224,19 +374,19 @@
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
                             style="@style/Theme.H2CO3.CardTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/runtime_java11"
+                            android:text="@string/splash_runtime_java11"
                             android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
 
-            </org.koishi.launcher.h2co3.resources.component.H2CO3CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <org.koishi.launcher.h2co3.resources.component.H2CO3CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/java17"
                 style="@style/Theme.H2CO3.CardViewOutlined"
                 android:layout_width="match_parent"
@@ -259,8 +409,7 @@
                             android:layout_width="@dimen/app_40dp"
                             android:layout_height="@dimen/app_40dp"
                             android:duplicateParentState="true"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_done" />
+                            android:importantForAccessibility="no" />
 
                         <ProgressBar
                             android:id="@+id/java17_task_progress"
@@ -275,19 +424,19 @@
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
                             style="@style/Theme.H2CO3.CardTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/runtime_java17"
+                            android:text="@string/splash_runtime_java17"
                             android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
 
-            </org.koishi.launcher.h2co3.resources.component.H2CO3CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <org.koishi.launcher.h2co3.resources.component.H2CO3CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/java21"
                 style="@style/Theme.H2CO3.CardViewOutlined"
                 android:layout_width="match_parent"
@@ -310,8 +459,7 @@
                             android:layout_width="@dimen/app_40dp"
                             android:layout_height="@dimen/app_40dp"
                             android:duplicateParentState="true"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_done" />
+                            android:importantForAccessibility="no" />
 
                         <ProgressBar
                             android:id="@+id/java21_task_progress"
@@ -326,17 +474,17 @@
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
                             style="@style/Theme.H2CO3.CardTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/runtime_java21"
+                            android:text="@string/splash_runtime_java21"
                             android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
 
-            </org.koishi.launcher.h2co3.resources.component.H2CO3CardView>
+            </com.google.android.material.card.MaterialCardView>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.core.widget.NestedScrollView>
@@ -345,10 +493,10 @@
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="?attr/colorSurface">
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/linearProgressIndicator"
@@ -358,18 +506,19 @@
             android:progress="4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/nextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_arrow_right_black" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

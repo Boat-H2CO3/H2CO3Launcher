@@ -1,20 +1,22 @@
 package org.lwjgl.glfw;
 
-import org.lwjgl.system.*;
-
-import javax.annotation.Nullable;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
 import static org.lwjgl.system.APIUtil.apiLog;
 import static org.lwjgl.system.JNI.invokePP;
 import static org.lwjgl.system.MemoryUtil.memAddressSafe;
 
+import org.lwjgl.system.JNI;
+import org.lwjgl.system.NativeType;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import javax.annotation.Nullable;
+
 /**
  * By Tungsten
- * This class is for Fold Craft Launcher.
+ * This class is for H2CO3Launcher.
  */
 public class H2CO3LauncherInjector {
 

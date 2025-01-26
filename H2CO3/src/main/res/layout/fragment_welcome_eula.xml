@@ -24,7 +24,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="@string/title_warn" />
+                app:title="@string/splash_eula_next" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_bar_layout">
 
-        <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
             android:id="@+id/eulaText"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -71,7 +71,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_arrow_right_black" />
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

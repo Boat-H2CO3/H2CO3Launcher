@@ -19,7 +19,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <org.koishi.launcher.h2co3.resources.component.H2CO3CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="180dp"
                 android:layout_height="180dp"
                 android:layout_centerInParent="true"
@@ -40,9 +40,9 @@
 
                 </LinearLayout>
 
-            </org.koishi.launcher.h2co3.resources.component.H2CO3CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                 android:textAppearance="@style/TextAppearance.Material3.DisplayMedium"
                 android:visibility="gone" />
 
-            <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
                 android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_right_black" />
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

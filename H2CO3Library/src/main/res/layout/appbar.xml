@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     app:liftOnScroll="true">
 
-    <org.koishi.launcher.h2co3.resources.component.H2CO3ToolBar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,6 +18,6 @@
         app:layout_collapseMode="pin"
         tools:title="Title">
 
-    </org.koishi.launcher.h2co3.resources.component.H2CO3ToolBar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
 </com.google.android.material.appbar.AppBarLayout>

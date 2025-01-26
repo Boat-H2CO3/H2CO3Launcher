@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <org.koishi.launcher.h2co3.resources.component.H2CO3CardView
+    <com.google.android.material.card.MaterialCardView
         style="@style/Theme.H2CO3.CardViewElevated"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -16,7 +16,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView
                 android:id="@+id/icon"
                 style="@style/Theme.H2CO3.IconMaterial"
                 android:layout_width="@dimen/app_40dp"
@@ -31,7 +31,7 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
-                <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
                     android:id="@+id/title"
                     style="@style/Theme.H2CO3.CardContent"
                     android:layout_width="wrap_content"
@@ -41,5 +41,5 @@
 
         </LinearLayout>
 
-    </org.koishi.launcher.h2co3.resources.component.H2CO3CardView>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.appcompat.widget.LinearLayoutCompat>
