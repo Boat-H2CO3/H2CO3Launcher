@@ -2,7 +2,8 @@ package org.koishi.launcher.h2co3.ui.version;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ListView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.setting.Profiles;
@@ -11,12 +12,13 @@ import org.koishi.launcher.h2co3library.component.ui.H2CO3LauncherCommonPage;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherUILayout;
+import org.koishi.launcher.h2co3library.component.view.H2CO3RecyclerView;
 
 public class VersionListPage extends H2CO3LauncherCommonPage implements View.OnClickListener {
 
     private H2CO3LauncherButton refresh;
     private H2CO3LauncherButton newProfile;
-    private ListView profileListView;
+    private H2CO3RecyclerView profileListView;
 
     private VersionList versionList;
 
@@ -31,7 +33,7 @@ public class VersionListPage extends H2CO3LauncherCommonPage implements View.OnC
         newProfile = findViewById(R.id.new_profile);
         profileListView = findViewById(R.id.profile_list);
         H2CO3LauncherProgressBar progressBar = findViewById(R.id.progress);
-        ListView versionListView = findViewById(R.id.version_list);
+        H2CO3RecyclerView versionListView = findViewById(R.id.version_list);
 
         refresh.setOnClickListener(this);
         newProfile.setOnClickListener(this);
@@ -49,6 +51,7 @@ public class VersionListPage extends H2CO3LauncherCommonPage implements View.OnC
 
     public void refreshProfile() {
         ProfileListAdapter adapter = new ProfileListAdapter(getContext(), Profiles.getProfiles());
+        profileListView.setLayoutManager(new LinearLayoutManager(getContext()));
         profileListView.setAdapter(adapter);
     }
 
@@ -59,7 +62,7 @@ public class VersionListPage extends H2CO3LauncherCommonPage implements View.OnC
         }
         if (view == newProfile) {
             AddProfileDialog dialog = new AddProfileDialog(getContext());
-            dialog.show();
+            dialog.createDialog();
         }
     }
 }

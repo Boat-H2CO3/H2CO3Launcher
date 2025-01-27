@@ -2,14 +2,12 @@ package org.koishi.launcher.h2co3.ui
 
 import android.content.Context
 import org.koishi.launcher.h2co3.R
-import org.koishi.launcher.h2co3.ui.account.AccountUI
 import org.koishi.launcher.h2co3.ui.controller.ControllerUI
 import org.koishi.launcher.h2co3.ui.download.DownloadUI
 import org.koishi.launcher.h2co3.ui.main.MainUI
 import org.koishi.launcher.h2co3.ui.manage.ManageUI
 import org.koishi.launcher.h2co3.ui.multiplayer.MultiplayerUI
 import org.koishi.launcher.h2co3.ui.setting.SettingUI
-import org.koishi.launcher.h2co3.ui.version.VersionUI
 import org.koishi.launcher.h2co3core.util.Logging
 import org.koishi.launcher.h2co3library.component.ui.H2CO3LauncherBaseUI
 import org.koishi.launcher.h2co3library.component.ui.H2CO3LauncherCommonUI

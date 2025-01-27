@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import org.koishi.launcher.h2co3.R;
+import org.koishi.launcher.h2co3.activity.H2CO3MainActivity;
 import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3.setting.Profiles;
 import org.koishi.launcher.h2co3.ui.UIManager;
@@ -15,7 +16,7 @@ import org.koishi.launcher.h2co3.util.RequestCodes;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3library.browser.FileBrowser;
 import org.koishi.launcher.h2co3library.browser.options.LibMode;
-import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherDialog;
+import org.koishi.launcher.h2co3library.component.dialog.H2CO3CustomViewDialog;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton;
@@ -24,7 +25,7 @@ import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
 import java.io.File;
 import java.util.ArrayList;
 
-public class AddProfileDialog extends H2CO3LauncherDialog implements View.OnClickListener {
+public class AddProfileDialog extends H2CO3CustomViewDialog implements View.OnClickListener {
 
     private H2CO3LauncherEditText editText;
     private H2CO3LauncherTextView pathText;
@@ -34,13 +35,14 @@ public class AddProfileDialog extends H2CO3LauncherDialog implements View.OnClic
 
     public AddProfileDialog(@NonNull Context context) {
         super(context);
-        setContentView(R.layout.dialog_add_profile);
+        setCustomView(R.layout.dialog_add_profile);
         setCancelable(false);
         editText = findViewById(R.id.name);
         pathText = findViewById(R.id.path);
         editPath = findViewById(R.id.edit);
         positive = findViewById(R.id.positive);
         negative = findViewById(R.id.negative);
+        alertDialog = create();
         editPath.setOnClickListener(this);
         positive.setOnClickListener(this);
         negative.setOnClickListener(this);
@@ -66,12 +68,12 @@ public class AddProfileDialog extends H2CO3LauncherDialog implements View.OnClic
                 Toast.makeText(getContext(), getContext().getString(R.string.profile_already_exist), Toast.LENGTH_SHORT).show();
             } else {
                 Profiles.getProfiles().add(new Profile(editText.getText().toString(), new File(pathText.getText().toString())));
-                ((VersionListPage) VersionPageManager.getInstance().getAllPages().get(0)).refreshProfile();
-                dismiss();
+                H2CO3MainActivity.getInstance().uiManager.getMainUI().refreshProfile();
+                dismissDialog();
             }
         }
         if (view == negative) {
-            dismiss();
+            dismissDialog();
         }
     }
 }

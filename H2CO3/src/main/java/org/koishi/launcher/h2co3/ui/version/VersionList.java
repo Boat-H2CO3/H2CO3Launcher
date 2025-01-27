@@ -5,9 +5,11 @@ import static org.koishi.launcher.h2co3core.util.Logging.LOG;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ListView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.JsonParseException;
+
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.game.H2CO3LauncherGameRepository;
 import org.koishi.launcher.h2co3.setting.Profile;
@@ -19,6 +21,7 @@ import org.koishi.launcher.h2co3core.mod.ModpackConfiguration;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
+import org.koishi.launcher.h2co3library.component.view.H2CO3RecyclerView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,11 +32,11 @@ import java.util.stream.Collectors;
 public class VersionList {
 
     private final Context context;
-    private final ListView listView;
+    private final H2CO3RecyclerView listView;
     private final H2CO3LauncherButton refreshButton;
     private final H2CO3LauncherProgressBar progressBar;
 
-    public VersionList(Context context, ListView listView, H2CO3LauncherButton refreshButton, H2CO3LauncherProgressBar progressBar) {
+    public VersionList(Context context, H2CO3RecyclerView listView, H2CO3LauncherButton refreshButton, H2CO3LauncherProgressBar progressBar) {
         this.context = context;
         this.listView = listView;
         this.refreshButton = refreshButton;
@@ -79,6 +82,7 @@ public class VersionList {
                         })
                         .collect(Collectors.toList());
                 Schedulers.androidUIThread().execute(() -> {
+                    listView.setLayoutManager(new LinearLayoutManager(context));
                     VersionListAdapter adapter = new VersionListAdapter(context, (ArrayList<VersionListItem>) children);
                     listView.setAdapter(adapter);
                     refreshButton.setEnabled(true);

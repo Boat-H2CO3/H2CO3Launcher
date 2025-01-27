@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.CustomViewTarget;
 import com.bumptech.glide.request.transition.Transition;
+
 import org.koishi.launcher.h2co3.H2CO3LauncherApplication;
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.control.GameMenu;
@@ -127,7 +128,7 @@ public class MenuView extends View {
                 }
             });
         } else {
-            icon = BitmapFactory.decodeResource(H2CO3LauncherApplication.getCurrentActivity().getResources(), R.drawable.img_app);
+            icon = BitmapFactory.decodeResource(H2CO3LauncherApplication.getCurrentActivity().getResources(), R.drawable.img_command);
         }
     }
 

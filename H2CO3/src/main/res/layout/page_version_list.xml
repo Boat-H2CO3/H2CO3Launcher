@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.3">
 
-        <ListView
+        <org.koishi.launcher.h2co3library.component.view.H2CO3RecyclerView
             android:id="@+id/profile_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -50,12 +50,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/left">
 
-        <ListView
+        <org.koishi.launcher.h2co3library.component.view.H2CO3RecyclerView
             android:id="@+id/version_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp" />
+            android:layout_height="match_parent" />
 
         <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar
             android:id="@+id/progress"

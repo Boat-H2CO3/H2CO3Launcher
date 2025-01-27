@@ -13,6 +13,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -66,6 +67,7 @@ import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherUILayout;
+import org.koishi.launcher.h2co3library.component.view.H2CO3RecyclerView;
 import org.koishi.launcher.h2co3library.util.ConvertUtils;
 
 import java.io.IOException;
@@ -106,7 +108,7 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
     private H2CO3LauncherButton addLoginServer;
     private H2CO3LauncherButton refresh;
     private H2CO3LauncherButton newProfile;
-    private ListView profileListView;
+    private H2CO3RecyclerView profileListView;
 
     private VersionList versionList;
     private ListView accountListView;
@@ -220,7 +222,7 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
         newProfile = versionDialogView.findViewById(R.id.new_profile);
         profileListView = versionDialogView.findViewById(R.id.profile_list);
         H2CO3LauncherProgressBar progressBar = versionDialogView.findViewById(R.id.progress);
-        ListView versionListView = versionDialogView.findViewById(R.id.version_list);
+        H2CO3RecyclerView versionListView = versionDialogView.findViewById(R.id.version_list);
         refreshProfile();
         versionList = new VersionList(getContext(), versionListView, refresh, progressBar);
         versionDialogBuilder = createDialogBuilder(R.string.version, versionDialogView);
@@ -356,6 +358,7 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
 
     public void refreshProfile() {
         ProfileListAdapter adapter = new ProfileListAdapter(getContext(), Profiles.getProfiles());
+        profileListView.setLayoutManager(new LinearLayoutManager(getContext()));
         profileListView.setAdapter(adapter);
     }
 
@@ -495,7 +498,7 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
             versionList.refreshList();
         } else if (view == newProfile) {
             AddProfileDialog dialog = new AddProfileDialog(getContext());
-            dialog.show();
+            dialog.createDialog();
         }
     }
 
