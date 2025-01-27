@@ -12,7 +12,6 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.card.MaterialCardView;
@@ -30,6 +29,9 @@ import org.koishi.launcher.h2co3.ui.account.AccountListItem;
 import org.koishi.launcher.h2co3.ui.account.AddAuthlibInjectorServerDialog;
 import org.koishi.launcher.h2co3.ui.account.CreateAccountDialog;
 import org.koishi.launcher.h2co3.ui.account.ServerListAdapter;
+import org.koishi.launcher.h2co3.ui.version.AddProfileDialog;
+import org.koishi.launcher.h2co3.ui.version.ProfileListAdapter;
+import org.koishi.launcher.h2co3.ui.version.VersionList;
 import org.koishi.launcher.h2co3.ui.version.Versions;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
 import org.koishi.launcher.h2co3.util.WeakListenerHolder;
@@ -49,6 +51,7 @@ import org.koishi.launcher.h2co3core.mod.RemoteMod;
 import org.koishi.launcher.h2co3core.mod.RemoteModRepository;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.task.Task;
+import org.koishi.launcher.h2co3core.util.LocaleUtils;
 import org.koishi.launcher.h2co3core.util.Logging;
 import org.koishi.launcher.h2co3core.util.fakefx.BindingMapping;
 import org.koishi.launcher.h2co3core.util.io.HttpRequest;
@@ -56,7 +59,6 @@ import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
 import org.koishi.launcher.h2co3launcher.plugins.DriverPlugin;
 import org.koishi.launcher.h2co3launcher.plugins.RendererPlugin;
 import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherAlertDialog;
-
 import org.koishi.launcher.h2co3library.component.ui.H2CO3LauncherCommonUI;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText;
@@ -64,7 +66,6 @@ import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherUILayout;
-import org.koishi.launcher.h2co3core.util.LocaleUtils;
 import org.koishi.launcher.h2co3library.util.ConvertUtils;
 
 import java.io.IOException;
@@ -78,7 +79,7 @@ import java.util.stream.Stream;
 public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListener {
 
     public static final String ANNOUNCEMENT_URL = "https://raw.githubusercontent.com/Boat-H2CO3/H2CO3Launcher-Repo/refs/heads/main/res/announcement_v2.txt";
-    public static final String ANNOUNCEMENT_URL_CN = "https://gitee.com/h2co3Launcher-team/H2CO3Launcher-Repo/raw/main/res/announcement_v2.txt";
+    public static final String ANNOUNCEMENT_URL_CN = "https://gitee.com/cainiaohanhanyai/H2CO3Launcher-Repo/raw/main/res/announcement_v2.txt";
     private static WeakReference<MainUI> instance;
     private MaterialCardView announcementLayout;
     private H2CO3LauncherTextView title;
@@ -94,6 +95,7 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
     private H2CO3LauncherProgressBar versionProgress;
     private H2CO3LauncherTextView versionName;
     private H2CO3LauncherTextView versionHint;
+    private MaterialCardView versionLayout;
     private H2CO3LauncherImageView icon;
     private H2CO3LauncherButton account;
     private MaterialCardView version;
@@ -102,26 +104,32 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
     private H2CO3LauncherButton addOfflineAccount;
     private H2CO3LauncherButton addMicrosoftAccount;
     private H2CO3LauncherButton addLoginServer;
+    private H2CO3LauncherButton refresh;
+    private H2CO3LauncherButton newProfile;
+    private ListView profileListView;
+
+    private VersionList versionList;
     private ListView accountListView;
     private AccountListAdapter accountListAdapter;
     private ObjectProperty<Account> currentAccount;
     private WeakListenerHolder holder = new WeakListenerHolder();
     private Profile profile;
     private Consumer<Event> onVersionIconChangedListener;
-    private MaterialAlertDialogBuilder accountDialogBuilder;
-    private View accountDialogView;
+    private MaterialAlertDialogBuilder accountDialogBuilder, versionDialogBuilder;
+    private View accountDialogView, versionDialogView;
+
     public MainUI(Context context, H2CO3LauncherUILayout parent, int id) {
         super(context, parent, id);
     }
 
     public static MainUI getInstance() {
-        return instance.get();
+        return instance != null ? instance.get() : null;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        initializeViews();
+        getActivity().runOnUiThread(this::initializeViews);
         setupRemoteMod();
         root.post(() -> {
             setupClickListeners();
@@ -134,9 +142,7 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
     @Override
     public void onStart() {
         super.onStart();
-        addLoadingCallback(() -> {
-            refresh().start();
-        });
+        addLoadingCallback(() -> refresh().start());
     }
 
     @Override
@@ -176,7 +182,6 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
             }
         });
         return Task.runAsync(() -> {
-
         });
     }
 
@@ -197,23 +202,47 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
         versionHint = findViewById(R.id.version_hint);
         icon = findViewById(R.id.icon);
         account = findViewById(R.id.account);
-        version = findViewById(R.id.version);
+        version = findViewById(R.id.version_layout);
         root = findViewById(R.id.root);
 
-        accountDialogView = LayoutInflater.from(getActivity()).inflate(R.layout.main_dialog_account, null);
+        accountDialogView = inflateDialogView(R.layout.main_dialog_account);
+        versionDialogView = inflateDialogView(R.layout.page_version_list);
+
         addOfflineAccount = accountDialogView.findViewById(R.id.offline);
         addMicrosoftAccount = accountDialogView.findViewById(R.id.microsoft);
         addLoginServer = accountDialogView.findViewById(R.id.add_login_server);
-        addOfflineAccount.setOnClickListener(this);
-        addMicrosoftAccount.setOnClickListener(this);
-        addLoginServer.setOnClickListener(this);
         ListView serverListView = accountDialogView.findViewById(R.id.server_list);
         serverListView.setAdapter(new ServerListAdapter(getContext()));
         accountListView = accountDialogView.findViewById(R.id.list);
+        accountDialogBuilder = createDialogBuilder(R.string.account, accountDialogView);
 
-        accountDialogBuilder = new MaterialAlertDialogBuilder(getActivity());
-        accountDialogBuilder.setTitle(R.string.account);
-        accountDialogBuilder.setView(accountDialogView);
+        refresh = versionDialogView.findViewById(R.id.refresh);
+        newProfile = versionDialogView.findViewById(R.id.new_profile);
+        profileListView = versionDialogView.findViewById(R.id.profile_list);
+        H2CO3LauncherProgressBar progressBar = versionDialogView.findViewById(R.id.progress);
+        ListView versionListView = versionDialogView.findViewById(R.id.version_list);
+        refreshProfile();
+        versionList = new VersionList(getContext(), versionListView, refresh, progressBar);
+        versionDialogBuilder = createDialogBuilder(R.string.version, versionDialogView);
+
+        setClickListeners(hide, addOfflineAccount, addMicrosoftAccount, addLoginServer, refresh, newProfile);
+    }
+
+    private View inflateDialogView(int layoutResId) {
+        return LayoutInflater.from(getActivity()).inflate(layoutResId, null);
+    }
+
+    private MaterialAlertDialogBuilder createDialogBuilder(int titleResId, View view) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
+        builder.setTitle(titleResId);
+        builder.setView(view);
+        return builder;
+    }
+
+    private void setClickListeners(View... views) {
+        for (View view : views) {
+            view.setOnClickListener(this);
+        }
     }
 
     private void setupRemoteMod() {
@@ -245,13 +274,8 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
     }
 
     private void setupClickListeners() {
-        accountName.setOnClickListener(this);
-        executeJar.setOnClickListener(this);
-        account.setOnClickListener(this);
-        version.setOnClickListener(this);
+        setClickListeners(accountName, executeJar, account, version, launch, launchH2CO3);
         executeJar.setOnLongClickListener(v -> showJarExecuteDialog());
-        launch.setOnClickListener(this);
-        launchH2CO3.setOnClickListener(this);
     }
 
     private void setupAccountDisplay() {
@@ -290,7 +314,7 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
     }
 
     private boolean showJarExecuteDialog() {
-        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.edit_text, null);
+        View dialogView = inflateDialogView(R.layout.edit_text);
         H2CO3LauncherEditText jarArgumentsEditText = dialogView.findViewById(android.R.id.text1);
         jarArgumentsEditText.setHint("-jar xxx");
         jarArgumentsEditText.setLines(1);
@@ -308,31 +332,35 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
         return true;
     }
 
-    private void showVersionDialog() {
-    }
-
-    private void showAccountDialog() {
-        if (accountDialogView.getParent() != null) {
-            ((ViewGroup) accountDialogView.getParent()).removeView(accountDialogView);
+    private void showDialog(AlertDialog dialog, View view) {
+        if (view.getParent() != null) {
+            ((ViewGroup) view.getParent()).removeView(view);
         }
-
-        AlertDialog dialog = accountDialogBuilder.create();
-
-        dialog.setOnShowListener(dialogInterface -> {
-            Window window = dialog.getWindow();
-            if (window != null) {
-                WindowManager.LayoutParams layoutParams = window.getAttributes();
-                layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-                layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-                window.setAttributes(layoutParams);
-            }
-        });
-
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(layoutParams);
         dialog.show();
     }
 
+    private void showVersionDialog() {
+        AlertDialog dialog = versionDialogBuilder.create();
+        showDialog(dialog, versionDialogView);
+    }
+
+    private void showAccountDialog() {
+        AlertDialog dialog = accountDialogBuilder.create();
+        showDialog(dialog, accountDialogView);
+    }
+
+    public void refreshProfile() {
+        ProfileListAdapter adapter = new ProfileListAdapter(getContext(), Profiles.getProfiles());
+        profileListView.setAdapter(adapter);
+    }
+
     private void loadVersion(String version) {
-        versionProgress.setVisibility(View.VISIBLE);
+        Schedulers.androidUIThread().execute(() -> versionProgress.setVisibility(View.VISIBLE));
         if (Profiles.getSelectedProfile() != profile) {
             profile = Profiles.getSelectedProfile();
             if (profile != null) {
@@ -418,7 +446,6 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
                         date.setText(AndroidUtils.getLocalizedText(getContext(), "update_date", announcement.getDate()));
                     }).start();
         } catch (Exception e) {
-            e.printStackTrace();
             Logging.LOG.log(Level.WARNING, "Failed to get announcement!", e);
         }
     }
@@ -455,17 +482,20 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
         } else if (view == launchH2CO3) {
             H2CO3LauncherBridge.BACKEND_IS_H2CO3 = true;
             launchGame();
-        }else if (view == addOfflineAccount) {
+        } else if (view == addOfflineAccount) {
             CreateAccountDialog dialog = new CreateAccountDialog(getContext(), Accounts.FACTORY_OFFLINE);
-            dialog.rootAlert.show();
-        }
-        if (view == addMicrosoftAccount) {
+            dialog.createDialog();
+        } else if (view == addMicrosoftAccount) {
             CreateAccountDialog dialog = new CreateAccountDialog(getContext(), Accounts.FACTORY_MICROSOFT);
-            dialog.rootAlert.show();
-        }
-        if (view == addLoginServer) {
+            dialog.createDialog();
+        } else if (view == addLoginServer) {
             AddAuthlibInjectorServerDialog dialog = new AddAuthlibInjectorServerDialog(getContext());
             dialog.dialog.show();
+        } else if (view == refresh) {
+            versionList.refreshList();
+        } else if (view == newProfile) {
+            AddProfileDialog dialog = new AddProfileDialog(getContext());
+            dialog.show();
         }
     }
 

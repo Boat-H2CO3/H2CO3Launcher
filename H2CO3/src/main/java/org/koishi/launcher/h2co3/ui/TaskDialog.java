@@ -5,9 +5,11 @@ import static org.koishi.launcher.h2co3core.util.Lang.tryCast;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -49,6 +51,7 @@ import org.koishi.launcher.h2co3core.task.Task;
 import org.koishi.launcher.h2co3core.task.TaskExecutor;
 import org.koishi.launcher.h2co3core.task.TaskListener;
 import org.koishi.launcher.h2co3core.util.Lang;
+import org.koishi.launcher.h2co3core.util.Logging;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3library.component.H2CO3RecycleAdapter;
 import org.koishi.launcher.h2co3library.component.dialog.H2CO3CustomViewDialog;
@@ -62,20 +65,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickListener {
 
-    private final RecyclerView leftTaskListView, rightTaskListView;
+    private final RecyclerView leftTaskListView;
+    private final RecyclerView rightTaskListView;
     private final Consumer<FileDownloadTask.SpeedEvent> speedEventHandler;
-    private TaskExecutor executor;
     private TaskCancellationAction onCancel;
     private MaterialToolbar speedView;
+    private TaskExecutor executor;
 
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     public TaskDialog(@NonNull Context context, @NotNull TaskCancellationAction cancel) {
         super(context, org.koishi.launcher.h2co3library.R.style.ThemeOverlay_App_MaterialAlertDialog_FullScreen);
         setCustomView(R.layout.dialog_task);
+        setNegativeButton(getContext().getText(org.koishi.launcher.h2co3library.R.string.dialog_negative), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Optional.ofNullable(executor).ifPresent(TaskExecutor::cancel);
+                onCancel.getCancellationAction().accept(TaskDialog.this);
+                alertDialog.dismiss();
+            }
+        });
         alertDialog = create();
         alertDialog.setCancelable(false);
 
@@ -84,12 +97,6 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
         speedView = findViewById(R.id.tb_speed);
 
         setCancel(cancel);
-
-        setNegativeButton(org.koishi.launcher.h2co3library.R.string.dialog_negative, (dialog, which) -> {
-            Optional.ofNullable(executor).ifPresent(TaskExecutor::cancel);
-            Optional.ofNullable(onCancel).ifPresent(action -> action.getCancellationAction().accept(TaskDialog.this));
-            dialog.dismiss();
-        });
 
         speedEventHandler = speedEvent -> {
             String unit = "B/s";
@@ -112,6 +119,7 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
     }
 
     public void setExecutor(TaskExecutor executor) {
+        this.executor = executor;
         setExecutor(executor, true);
     }
 
@@ -123,18 +131,25 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
                 executor.addTaskListener(new TaskListener() {
                     @Override
                     public void onStop(boolean success, TaskExecutor executor) {
-                        Schedulers.androidUIThread().execute(alertDialog::dismiss);
+                        Schedulers.androidUIThread().execute(() -> alertDialog.dismiss());
                     }
                 });
             }
 
-            LeftTaskListPane leftTaskListPane = new LeftTaskListPane(getContext(), new ArrayList<>());
-            leftTaskListView.setLayoutManager(new LinearLayoutManager(getContext()));
-            leftTaskListView.setAdapter(leftTaskListPane);
-            RightTaskListPane rightTaskListPane = new RightTaskListPane(getContext(), new ArrayList<>());
-            rightTaskListView.setLayoutManager(new LinearLayoutManager(getContext()));
-            rightTaskListView.setAdapter(rightTaskListPane);
+            setupTaskList(executor);
         }
+    }
+
+    private void setupTaskList(TaskExecutor executor) {
+        RightTaskListPane rightTaskListPane = new RightTaskListPane(getContext(), executor, new ArrayList<>());
+        rightTaskListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        rightTaskListView.setAdapter(rightTaskListPane);
+
+        LeftTaskListPane leftTaskListPane = new LeftTaskListPane(getContext(), executor, new ArrayList<>());
+        leftTaskListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        leftTaskListView.setAdapter(leftTaskListPane);
+
+
     }
 
     public void setCancel(TaskCancellationAction onCancel) {
@@ -143,13 +158,14 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+        // Handle click events if necessary
     }
 
     public class LeftTaskListPane extends H2CO3RecycleAdapter<View> {
 
         private final List<StageNode> stageNodes = new ArrayList<>();
 
-        public LeftTaskListPane(Context context, ArrayList<View> listBox) {
+        public LeftTaskListPane(Context context, TaskExecutor executor, ArrayList<View> listBox) {
             super(listBox, context);
             setExecutor(executor);
         }
@@ -158,6 +174,8 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
         protected void bindData(BaseViewHolder holder, int position) {
             View view = data.get(position);
             LinearLayoutCompat container = (LinearLayoutCompat) holder.itemView;
+
+            // Remove view from parent if it exists
             if (view.getParent() != null) {
                 ((ViewGroup) view.getParent()).removeView(view);
             }
@@ -182,9 +200,8 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
                 public void onStart() {
                     Schedulers.androidUIThread().execute(() -> {
                         stageNodes.clear();
-                        data.clear();
-                        List<StageNode> newNodes = stages.stream().map(it -> new StageNode(getContext(), it)).collect(Collectors.toList());
-                        stageNodes.addAll(newNodes);
+                        stageNodes.addAll(stages.stream().map(it -> new StageNode(getContext(), it)).collect(Collectors.toList()));
+                        Logging.LOG.log(Level.WARNING, stages.toString());
                         for (StageNode stageNode : stageNodes) {
                             data.add(stageNode.getView());
                             notifyItemInserted(data.size() - 1);
@@ -201,9 +218,7 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
 
                 @Override
                 public void onRunning(Task<?> task) {
-                    if (!task.getSignificance().shouldShow() || task.getName() == null)
-                        return;
-
+                    if (!task.getSignificance().shouldShow() || task.getName() == null) return;
                     setTaskName(task);
                 }
 
@@ -317,8 +332,14 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
             public StageNode(Context context, String stage) {
                 this.context = context;
                 this.stage = stage;
-
                 parent = LayoutInflater.from(context).inflate(R.layout.item_downloading_state, null);
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                parent.setLayoutParams(layoutParams);
+
                 title = parent.findViewById(R.id.title);
                 icon = parent.findViewById(R.id.icon);
 
@@ -331,20 +352,30 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
             }
 
             private String getStageMessage(String stageKey, String stageValue) {
-                switch (stageKey) {
-                    case "h2co3.modpack": return getLocalizedText(context, "install_modpack");
-                    case "h2co3.modpack.download": return getLocalizedText(context, "launch_state_modpack");
-                    case "h2co3.install.assets": return getLocalizedText(context, "assets_download");
-                    case "h2co3.install.game": return getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_game") + " " + stageValue);
-                    case "h2co3.install.forge": return getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_forge") + " " + stageValue);
-                    case "h2co3.install.neoforge": return getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_neoforge") + " " + stageValue);
-                    case "h2co3.install.liteloader": return getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_liteloader") + " " + stageValue);
-                    case "h2co3.install.optifine": return getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_optifine") + " " + stageValue);
-                    case "h2co3.install.fabric": return getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_fabric") + " " + stageValue);
-                    case "h2co3.install.fabric-api": return getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_fabric-api") + " " + stageValue);
-                    case "h2co3.install.quilt": return getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_quilt") + " " + stageValue);
-                    default: return getLocalizedText(context, stageKey.replace(".", "_").replace("-", "_"));
-                }
+                return switch (stageKey) {
+                    case "h2co3.modpack" -> getLocalizedText(context, "install_modpack");
+                    case "h2co3.modpack.download" ->
+                            getLocalizedText(context, "launch_state_modpack");
+                    case "h2co3.install.assets" -> getLocalizedText(context, "assets_download");
+                    case "h2co3.install.game" ->
+                            getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_game") + " " + stageValue);
+                    case "h2co3.install.forge" ->
+                            getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_forge") + " " + stageValue);
+                    case "h2co3.install.neoforge" ->
+                            getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_neoforge") + " " + stageValue);
+                    case "h2co3.install.liteloader" ->
+                            getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_liteloader") + " " + stageValue);
+                    case "h2co3.install.optifine" ->
+                            getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_optifine") + " " + stageValue);
+                    case "h2co3.install.fabric" ->
+                            getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_fabric") + " " + stageValue);
+                    case "h2co3.install.fabric-api" ->
+                            getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_fabric-api") + " " + stageValue);
+                    case "h2co3.install.quilt" ->
+                            getLocalizedText(context, "install_installer_install", getLocalizedText(context, "install_installer_quilt") + " " + stageValue);
+                    default ->
+                            getLocalizedText(context, stageKey.replace(".", "_").replace("-", "_"));
+                };
             }
 
             public void begin() {
@@ -372,10 +403,11 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
 
             @SuppressLint("DefaultLocale")
             public void updateCounter(int count, int total) {
-                if (total > 0)
+                if (total > 0) {
                     title.setText(String.format("%s - %d/%d", message, count, total));
-                else
+                } else {
                     title.setText(message);
+                }
             }
 
             public View getView() {
@@ -387,7 +419,7 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
     public final class RightTaskListPane extends H2CO3RecycleAdapter<Task<?>> {
         private final Map<Task<?>, ProgressListNode> nodes = new HashMap<>();
 
-        public RightTaskListPane(Context context, ArrayList<Task<?>> taskList) {
+        public RightTaskListPane(Context context, TaskExecutor executor, ArrayList<Task<?>> taskList) {
             super(taskList, context);
             setExecutor(executor);
         }
@@ -428,7 +460,6 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
                 @Override
                 public void onRunning(Task<?> task) {
                     if (!task.getSignificance().shouldShow() || task.getName() == null) return;
-
                     Schedulers.androidUIThread().execute(() -> addTask(task));
                 }
 
@@ -448,6 +479,7 @@ public class TaskDialog extends H2CO3CustomViewDialog implements View.OnClickLis
             ProgressListNode node = new ProgressListNode(getContext(), task);
             nodes.put(task, node);
             data.add(task);
+            Logging.LOG.log(Level.WARNING, data.toString());
             notifyItemInserted(data.size() - 1);
         }
 

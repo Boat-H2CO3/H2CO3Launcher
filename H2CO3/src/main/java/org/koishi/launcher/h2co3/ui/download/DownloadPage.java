@@ -6,7 +6,6 @@ import static org.koishi.launcher.h2co3.ui.download.DownloadPageManager.PAGE_ID_
 import static org.koishi.launcher.h2co3.ui.download.DownloadPageManager.getInstance;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -14,9 +13,9 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
+import org.jetbrains.annotations.Nullable;
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.setting.DownloadProviders;
 import org.koishi.launcher.h2co3.setting.Profile;
@@ -47,8 +46,7 @@ import org.koishi.launcher.h2co3core.task.TaskExecutor;
 import org.koishi.launcher.h2co3core.util.Lang;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.io.NetworkUtils;
-import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherAlertDialog;
-
+import org.koishi.launcher.h2co3library.component.dialog.H2CO3MaterialDialog;
 import org.koishi.launcher.h2co3library.component.ui.H2CO3LauncherCommonPage;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText;
@@ -57,8 +55,6 @@ import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSpinner;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherUILayout;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -151,8 +147,7 @@ public class DownloadPage extends H2CO3LauncherCommonPage implements ManageUI.Ve
                         if (exception instanceof CancellationException) {
                             Toast.makeText(context, context.getString(R.string.message_cancelled), Toast.LENGTH_SHORT).show();
                         } else {
-                            H2CO3LauncherAlertDialog.Builder builder = new H2CO3LauncherAlertDialog.Builder(context);
-                            builder.setAlertLevel(H2CO3LauncherAlertDialog.AlertLevel.ALERT);
+                            H2CO3MaterialDialog builder = new H2CO3MaterialDialog(context);
                             builder.setCancelable(false);
                             builder.setTitle(context.getString(R.string.install_failed_downloading));
                             builder.setMessage(DownloadProviders.localizeErrorMessage(context, exception));

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <com.google.android.material.card.MaterialCardView
         style="@style/Theme.H2CO3.CardViewElevated"
@@ -22,22 +23,15 @@
                 android:layout_width="@dimen/app_40dp"
                 android:layout_height="@dimen/app_40dp"
                 android:duplicateParentState="true"
-                android:importantForAccessibility="no"
+                android:importantForAccessibility="yes"
                 android:src="@drawable/ic_done" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                android:id="@+id/title"
+                style="@style/Theme.H2CO3.CardContent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
-                    android:id="@+id/title"
-                    style="@style/Theme.H2CO3.CardContent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/app_name" />
-            </LinearLayout>
+                android:text="@string/app_name" />
 
         </LinearLayout>
 

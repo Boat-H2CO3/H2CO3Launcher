@@ -13,16 +13,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:background="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
+        app:tabBackground="@null"
         app:tabGravity="fill"
         app:tabTextAppearance="@style/TabTextAppearance"
         app:tabUnboundedRipple="false">
@@ -30,17 +32,17 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/account_methods_offline"/>
+            android:text="@string/account_methods_offline" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/account_methods_microsoft"/>
+            android:text="@string/account_methods_microsoft" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/account_methods_authlib_injector"/>
+            android:text="@string/account_methods_authlib_injector" />
 
     </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTabLayout>
 
@@ -49,15 +51,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/login"
-        app:layout_constraintTop_toBottomOf="@+id/tab_layout"/>
-    
+        app:layout_constraintTop_toBottomOf="@+id/tab_layout" />
+
     <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/account_login"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
         android:id="@+id/cancel"
@@ -65,6 +67,6 @@
         android:layout_height="wrap_content"
         android:text="@string/dialog_negative"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

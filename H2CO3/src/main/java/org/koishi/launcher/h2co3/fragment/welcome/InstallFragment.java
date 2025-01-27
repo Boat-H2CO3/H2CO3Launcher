@@ -47,6 +47,7 @@ public class InstallFragment extends H2CO3LauncherFragment implements View.OnCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_welcome_install, container, false);
+        H2CO3LauncherTools.loadPaths(requireContext());
         root = findViewById(view, R.id.root);
         cacioProgress = findViewById(view, R.id.cacio_task_progress);
         cacioIcon = findViewById(view, R.id.cacio_task_icon);

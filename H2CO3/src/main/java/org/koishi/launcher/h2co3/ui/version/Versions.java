@@ -3,9 +3,6 @@ package org.koishi.launcher.h2co3.ui.version;
 import android.content.Context;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatDialog;
-
-import org.koishi.launcher.h2co3.activity.H2CO3MainActivity;
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.game.LauncherHelper;
 import org.koishi.launcher.h2co3.setting.Accounts;
@@ -224,13 +221,13 @@ public class Versions {
         Account account = Accounts.getSelectedAccount();
         if (account == null) {
             CreateAccountDialog dialog = new CreateAccountDialog(context, (AccountFactory<?>) null);
-            dialog.setOnDismissListener(dialogInterface -> {
+            dialog.alertDialog.setOnDismissListener(dialogInterface -> {
                 Account newAccount = Accounts.getSelectedAccount();
                 if (newAccount != null) {
                     action.accept(newAccount);
                 }
             });
-            dialog.show();
+            dialog.createDialog();
         } else {
             action.accept(account);
         }

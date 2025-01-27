@@ -36,8 +36,6 @@ import org.koishi.launcher.h2co3.setting.Profiles;
 import org.koishi.launcher.h2co3.setting.VersionSetting;
 import org.koishi.launcher.h2co3.ui.TaskDialog;
 import org.koishi.launcher.h2co3.util.TaskCancellationAction;
-import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
-import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3core.auth.Account;
 import org.koishi.launcher.h2co3core.auth.AuthInfo;
 import org.koishi.launcher.h2co3core.auth.AuthenticationException;
@@ -65,10 +63,12 @@ import org.koishi.launcher.h2co3core.util.LibFilter;
 import org.koishi.launcher.h2co3core.util.Logging;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.io.ResponseCodeException;
+import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherAlertDialog;
 import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherDialog;
+import org.koishi.launcher.h2co3library.component.dialog.H2CO3MaterialDialog;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
-
 import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
@@ -80,7 +80,10 @@ import java.net.URL;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
@@ -317,15 +320,10 @@ public final class LauncherHelper {
                             } else if (ex instanceof AccessDeniedException) {
                                 message = getLocalizedText(context, "exception_access_denied", ((AccessDeniedException) ex).getFile());
                             } else {
-                                if (ex == null) {
-                                    message = "Task failed without exception!";
-                                } else {
-                                    message = StringUtils.getStackTrace(ex);
-                                }
+                                message = StringUtils.getStackTrace(ex);
                             }
 
-                            H2CO3LauncherAlertDialog.Builder builder = new H2CO3LauncherAlertDialog.Builder(context);
-                            builder.setAlertLevel(H2CO3LauncherAlertDialog.AlertLevel.ALERT);
+                            H2CO3MaterialDialog builder = new H2CO3MaterialDialog(context);
                             builder.setCancelable(false);
                             builder.setTitle(context.getString(R.string.launch_failed));
                             builder.setMessage(message);

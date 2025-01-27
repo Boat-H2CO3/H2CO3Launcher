@@ -12,7 +12,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3core.util.platform.OperatingSystem;
-import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherDialog;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText;
 
@@ -27,7 +26,7 @@ public class DownloadAddonDialog extends MaterialAlertDialogBuilder implements V
     public DownloadAddonDialog(@NonNull Context context, String name, Callback callback) {
         super(context);
         this.callback = callback;
-        View view =  LayoutInflater.from(getContext()).inflate(R.layout.edit_text, null);
+        View view =  LayoutInflater.from(getContext()).inflate(R.layout.dialog_edit, null);
         setView(view);
         alertDialog = this.create();
         alertDialog.setCancelable(false);

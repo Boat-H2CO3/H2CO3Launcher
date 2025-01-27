@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -49,8 +48,7 @@ import org.koishi.launcher.h2co3core.task.Task;
 import org.koishi.launcher.h2co3core.task.TaskExecutor;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3library.component.H2CO3LauncherAdapter;
-import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherAlertDialog;
-import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherDialog;
+import org.koishi.launcher.h2co3library.component.dialog.H2CO3CustomViewDialog;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton;
@@ -63,12 +61,11 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Pattern;
 
-public class CreateAccountDialog extends MaterialAlertDialogBuilder implements View.OnClickListener, TabLayout.OnTabSelectedListener {
+public class CreateAccountDialog extends H2CO3CustomViewDialog implements View.OnClickListener, TabLayout.OnTabSelectedListener {
 
     private static final Pattern USERNAME_CHECKER_PATTERN = Pattern.compile("^[A-Za-z0-9_]+$");
     private static CreateAccountDialog instance;
     private final ObjectProperty<OAuthServer.GrantDeviceCodeEvent> deviceCode = new SimpleObjectProperty<>();
-    public AlertDialog rootAlert;
     private H2CO3LauncherTextView title;
     private H2CO3LauncherTabLayout tabLayout;
     private RelativeLayout detailsContainer;
@@ -82,15 +79,14 @@ public class CreateAccountDialog extends MaterialAlertDialogBuilder implements V
     public CreateAccountDialog(@NonNull Context context, AccountFactory<?> factory) {
         super(context);
         instance = this;
-        View rootView = LayoutInflater.from(context).inflate(R.layout.dialog_create_account, null);
-        setView(rootView);
-        rootAlert = this.create();
-        rootAlert.setCancelable(false);
-        title = rootView.findViewById(R.id.title);
-        tabLayout = rootView.findViewById(R.id.tab_layout);
-        detailsContainer = rootView.findViewById(R.id.detail_container);
-        login = rootView.findViewById(R.id.login);
-        cancel = rootView.findViewById(R.id.cancel);
+        setCustomView(R.layout.dialog_create_account);
+        title = getCustomView().findViewById(R.id.title);
+        tabLayout = getCustomView().findViewById(R.id.tab_layout);
+        detailsContainer = getCustomView().findViewById(R.id.detail_container);
+        login = getCustomView().findViewById(R.id.login);
+        cancel = getCustomView().findViewById(R.id.cancel);
+        alertDialog = create();
+        alertDialog.setCancelable(false);
         login.setOnClickListener(this);
         cancel.setOnClickListener(this);
         init(factory);
@@ -191,12 +187,12 @@ public class CreateAccountDialog extends MaterialAlertDialogBuilder implements V
                         login.setEnabled(true);
                         cancel.setEnabled(true);
                         UIManager.getInstance().getMainUI().refresh().start();
-                        rootAlert.dismiss();
+                        dismissDialog();
                     }, exception -> {
                         login.setEnabled(true);
                         cancel.setEnabled(true);
                         if (exception instanceof NoSelectedCharacterException) {
-                            rootAlert.dismiss();
+                            dismissDialog();
                         } else {
                             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
                             builder.setMessage(Accounts.localizeErrorMessage(getContext(), exception))
@@ -233,7 +229,8 @@ public class CreateAccountDialog extends MaterialAlertDialogBuilder implements V
         if (loginTask != null) {
             loginTask.cancel();
         }
-        rootAlert.dismiss();
+        dismissDialog();
+        create().dismiss();
     }
 
     @Override

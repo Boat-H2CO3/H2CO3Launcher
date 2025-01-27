@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.koishi.launcher.h2co3.R;
-import org.koishi.launcher.h2co3.setting.Accounts;
 import org.koishi.launcher.h2co3core.auth.authlibinjector.AuthlibInjectorServer;
 import org.koishi.launcher.h2co3core.fakefx.beans.InvalidationListener;
 import org.koishi.launcher.h2co3core.fakefx.collections.ObservableList;
@@ -61,7 +60,7 @@ public class ServerListAdapter extends H2CO3LauncherAdapter {
         viewHolder.url.setText(server.getUrl());
         viewHolder.parent.setOnClickListener(v -> {
             CreateAccountDialog dialog = new CreateAccountDialog(getContext(), server);
-            dialog.rootAlert.show();
+            dialog.createDialog();
         });
         viewHolder.delete.setOnClickListener(v -> config().getAuthlibInjectorServers().remove(server));
         return view;

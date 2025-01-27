@@ -5,19 +5,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
-        android:fitsSystemWindows="true">
+        android:background="@null">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_speed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             android:background="@null"
             android:elevation="0dp"
             app:title="@string/app_name" />
@@ -42,19 +39,18 @@
             app:layout_constraintGuide_percent="0.45"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <org.koishi.launcher.h2co3library.component.view.H2CO3RecyclerView
             android:id="@+id/list_right"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/list_left" />
+            app:layout_constraintStart_toEndOf="@id/list_left" />
 
         <androidx.constraintlayout.widget.Placeholder
             android:id="@+id/placeholder_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

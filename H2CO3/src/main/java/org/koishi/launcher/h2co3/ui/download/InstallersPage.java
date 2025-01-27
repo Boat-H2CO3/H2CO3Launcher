@@ -1,14 +1,12 @@
 package org.koishi.launcher.h2co3.ui.download;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatDialog;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -30,6 +28,7 @@ import org.koishi.launcher.h2co3core.download.UnsupportedInstallationException;
 import org.koishi.launcher.h2co3core.download.VersionMismatchException;
 import org.koishi.launcher.h2co3core.download.game.GameAssetIndexDownloadTask;
 import org.koishi.launcher.h2co3core.download.game.LibraryDownloadException;
+import org.koishi.launcher.h2co3core.message.H2CO3MessageManager;
 import org.koishi.launcher.h2co3core.task.DownloadException;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.task.Task;
@@ -37,8 +36,8 @@ import org.koishi.launcher.h2co3core.task.TaskExecutor;
 import org.koishi.launcher.h2co3core.task.TaskListener;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.io.ResponseCodeException;
-import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherAlertDialog;
-
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
+import org.koishi.launcher.h2co3library.component.dialog.H2CO3MaterialDialog;
 import org.koishi.launcher.h2co3library.component.ui.H2CO3LauncherTempPage;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton;
@@ -61,6 +60,7 @@ public class InstallersPage extends H2CO3LauncherTempPage implements View.OnClic
 
     private H2CO3LauncherEditText editText;
     private H2CO3LauncherImageButton install;
+    private AlertDialog taskListPaneAlert;
 
     public InstallersPage(Context context, int id, H2CO3LauncherUILayout parent, int resId, final String gameVersion) {
         super(context, id, parent, resId);
@@ -69,10 +69,9 @@ public class InstallersPage extends H2CO3LauncherTempPage implements View.OnClic
     }
 
     public static void alertFailureMessage(Context context, Exception exception, Runnable next) {
-        H2CO3LauncherAlertDialog.Builder builder = new H2CO3LauncherAlertDialog.Builder(context);
+        H2CO3MaterialDialog builder = new H2CO3MaterialDialog(context);
         builder.setCancelable(false);
-        builder.setAlertLevel(H2CO3LauncherAlertDialog.AlertLevel.ALERT);
-        builder.setNegativeButton(context.getString(org.koishi.launcher.h2co3library.R.string.dialog_positive), next::run);
+        builder.setNegativeButton(context.getString(org.koishi.launcher.h2co3library.R.string.dialog_positive), (dialogInterface, i) -> next.run());
         String title;
         String msg;
         if (exception instanceof LibraryDownloadException) {
@@ -224,28 +223,28 @@ public class InstallersPage extends H2CO3LauncherTempPage implements View.OnClic
                 Task<Void> task = builder.buildAsync().whenComplete(any -> Profiles.getSelectedProfile().getRepository().refreshVersions())
                         .thenRunAsync(Schedulers.androidUIThread(), () -> Profiles.getSelectedProfile().setSelectedVersion(name));
 
-                TaskDialog pane = new TaskDialog(getContext(), new TaskCancellationAction(TaskDialog::dismissDialog));
+                TaskDialog taskListPane = new TaskDialog(getContext(), new TaskCancellationAction(TaskDialog::dismissDialog));
+                taskListPaneAlert = taskListPane.create();
+                taskListPane.setCancel(new TaskCancellationAction(taskListPaneAlert::dismiss));
+                taskListPaneAlert.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                taskListPaneAlert.show();
+
                 Schedulers.androidUIThread().execute(() -> {
                     TaskExecutor executor = task.executor(new TaskListener() {
                         @Override
                         public void onStop(boolean success, TaskExecutor executor) {
                             Schedulers.androidUIThread().execute(() -> {
+                                taskListPaneAlert.dismiss();
                                 if (success) {
-                                    MaterialAlertDialogBuilder builder1 = new MaterialAlertDialogBuilder(getContext());
-                                    builder1.setCancelable(false);
-                                    builder1.setMessage(getContext().getString(R.string.install_success));
-                                    builder1.setNegativeButton(getContext().getString(org.koishi.launcher.h2co3library.R.string.dialog_positive), (dialogInterface, i) -> DownloadPageManager.getInstance().dismissCurrentTempPage());
-                                    builder1.show();
-                                } else {
-                                    if (executor.getException() == null)
-                                        return;
-                                    alertFailureMessage(getContext(), executor.getException(), () -> {});
+                                    H2CO3LauncherTools.showMessage(H2CO3MessageManager.NotificationItem.Type.INFO, getContext().getString(R.string.install_success));
+                                } else if (executor.getException() != null) {
+                                    H2CO3LauncherTools.showMessage(H2CO3MessageManager.NotificationItem.Type.ERROR, String.valueOf(executor.getException()));
                                 }
                             });
                         }
                     });
-                    pane.setExecutor(executor);
-                    pane.createDialog();
+                    taskListPane.setExecutor(executor, true);
+                    taskListPaneAlert.show();
                     executor.start();
                 });
             }

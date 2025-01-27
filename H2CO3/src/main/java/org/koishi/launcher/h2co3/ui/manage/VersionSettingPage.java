@@ -373,7 +373,7 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
         builder.setSuffix(suffix);
         builder.create().browse(getActivity(), RequestCodes.SELECT_VERSION_ICON_CODE, (requestCode, resultCode, data) -> {
             if (requestCode == RequestCodes.SELECT_VERSION_ICON_CODE && resultCode == Activity.RESULT_OK && data != null) {
-                if (FileBrowser.getSelectedFiles(data).size() == 0)
+                if (FileBrowser.getSelectedFiles(data).isEmpty())
                     return;
 
                 String path = FileBrowser.getSelectedFiles(data).get(0);

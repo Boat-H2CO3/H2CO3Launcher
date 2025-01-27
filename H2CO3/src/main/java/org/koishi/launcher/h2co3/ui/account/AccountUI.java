@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ListView;
 
-import androidx.appcompat.widget.LinearLayoutCompat;
-
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.setting.Accounts;
 import org.koishi.launcher.h2co3core.fakefx.collections.ObservableList;
@@ -83,11 +81,11 @@ public class AccountUI extends H2CO3LauncherCommonUI implements View.OnClickList
     public void onClick(View view) {
         if (view == addOfflineAccount) {
             CreateAccountDialog dialog = new CreateAccountDialog(getContext(), Accounts.FACTORY_OFFLINE);
-            dialog.rootAlert.show();
+            dialog.createDialog();
         }
         if (view == addMicrosoftAccount) {
             CreateAccountDialog dialog = new CreateAccountDialog(getContext(), Accounts.FACTORY_MICROSOFT);
-            dialog.rootAlert.show();
+            dialog.createDialog();
         }
         if (view == addLoginServer) {
             AddAuthlibInjectorServerDialog dialog = new AddAuthlibInjectorServerDialog(getContext());
