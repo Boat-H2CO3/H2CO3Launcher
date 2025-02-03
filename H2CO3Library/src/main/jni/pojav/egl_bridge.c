@@ -27,7 +27,10 @@
 #include <android/dlext.h>
 #include "ctxbridges/bridge_tbl.h"
 #include "ctxbridges/osm_bridge.h"
-#include "h2co3Launcher/include/utils.h"
+#include "ctxbridges/egl_loader.h"
+#include "virgl/virgl.h"
+#include "h2co3_launcher/include/utils.h"
+#include "h2co3_launcher/include/h2co3_launcher_bridge.h"
 
 #define GLFW_CLIENT_API 0x22001
 /* Consider GLFW_NO_API as Vulkan API */
@@ -44,10 +47,7 @@ struct PotatoBridge potatoBridge;
 
 void bigcore_set_affinity();
 
-#include "ctxbridges/egl_loader.h"
-#include "ctxbridges/osmesa_loader.h"
-#include "pojav/virgl/virgl.h"
-#include "h2co3Launcher/include/h2co3Launcher_bridge.h"
+void* loadTurnipVulkan();
 
 #define RENDERER_GL4ES 1
 #define RENDERER_VK_ZINK 2

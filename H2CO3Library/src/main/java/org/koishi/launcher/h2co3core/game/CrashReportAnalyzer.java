@@ -17,7 +17,11 @@
  */
 package org.koishi.launcher.h2co3core.game;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +39,7 @@ public final class CrashReportAnalyzer {
             "mods", "mod", "impl", "org", "com", "cn", "cc", "jp", // title
             "core", "config", "registries", "lib", "ruby", "mc", "codec", "recipe", "channel", "embedded", "done", "net", "netty", "network", "load", "github", "handler", "content", "feature", // misc
             "file", "machine", "shader", "general", "helper", "init", "library", "api", "integration", "engine", "preload", "preinit",
-            "h2co3Launcher", "tungsten", // h2co3Launcher
+            "h2co3_launcher", "tungsten", // h2co3Launcher
             "fml", "minecraftforge", "forge", "cpw", "modlauncher", "launchwrapper", "objectweb", "asm", "event", "eventhandler", "handshake", "modapi", "kcauldron", // forge
             "fabricmc", "loader", "game", "knot", "launch", "mixin" // fabric
     ));

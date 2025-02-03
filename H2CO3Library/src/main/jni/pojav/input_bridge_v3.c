@@ -21,7 +21,7 @@
 #include <android/log.h>
 
 #include "environ/environ.h"
-#include "h2co3Launcher/include/h2co3Launcher_internal.h"
+#include "h2co3_launcher/include/h2co3_launcher_internal.h"
 
 #define EVENT_TYPE_CHAR 1000
 #define EVENT_TYPE_CHAR_MODS 1001

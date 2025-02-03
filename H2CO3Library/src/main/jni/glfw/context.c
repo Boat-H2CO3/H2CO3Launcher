@@ -9,8 +9,8 @@
 #include <string.h>
 #include <limits.h>
 #include <stdio.h>
-#include "h2co3Launcher_bridge.h"
-#include "h2co3Launcher_internal.h"
+#include "h2co3_launcher_bridge.h"
+#include "h2co3_launcher_internal.h"
 
 
 //////////////////////////////////////////////////////////////////////////

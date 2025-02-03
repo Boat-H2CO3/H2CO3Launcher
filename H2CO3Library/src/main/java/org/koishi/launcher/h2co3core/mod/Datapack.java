@@ -18,6 +18,7 @@
 package org.koishi.launcher.h2co3core.mod;
 
 import com.google.gson.JsonParseException;
+
 import org.koishi.launcher.h2co3core.fakefx.beans.property.BooleanProperty;
 import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleBooleanProperty;
 import org.koishi.launcher.h2co3core.fakefx.collections.FXCollections;
@@ -31,8 +32,17 @@ import org.koishi.launcher.h2co3core.util.io.FileUtils;
 import org.koishi.launcher.h2co3core.util.io.Unzipper;
 
 import java.io.IOException;
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 
 public class Datapack {
@@ -86,7 +96,7 @@ public class Datapack {
                  FileSystem zip = CompressingUtils.createReadOnlyZipFileSystem(path)) {
                 Path resourcesZip = zip.getPath("resources.zip");
                 if (Files.isRegularFile(resourcesZip)) {
-                    Path temp = Files.createTempFile("h2co3Launcher", ".zip");
+                    Path temp = Files.createTempFile("h2co3_launcher", ".zip");
                     Files.copy(resourcesZip, temp, StandardCopyOption.REPLACE_EXISTING);
                     try (FileSystem resources = CompressingUtils.createReadOnlyZipFileSystem(temp)) {
                         FileUtils.copyDirectory(resources.getPath("/"), dest.getPath("/"));

@@ -1,37 +1,35 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE            := h2co3Launcher
+LOCAL_MODULE            := h2co3_launcher
 LOCAL_SHARED_LIBRARIES  := bytehook
-LOCAL_SRC_FILES         := h2co3Launcher/h2co3Launcher_bridge.c \
-                           h2co3Launcher/h2co3Launcher_event.c \
-                           h2co3Launcher/h2co3Launcher_loader.c \
-                           h2co3Launcher/jre_launcher.c \
-                           h2co3Launcher/utils.c
-LOCAL_C_INCLUDES        := $(LOCAL_PATH)/h2co3Launcher/include
+LOCAL_SRC_FILES         := h2co3_launcher/h2co3_launcher_bridge.c \
+                           h2co3_launcher/h2co3_launcher_event.c \
+                           h2co3_launcher/h2co3_launcher_loader.c \
+                           h2co3_launcher/jre_launcher.c \
+                           h2co3_launcher/utils.c
+LOCAL_C_INCLUDES        := $(LOCAL_PATH)/h2co3_launcher/include
 LOCAL_LDLIBS            := -llog -ldl -landroid
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE            := glfw
-LOCAL_SHARED_LIBRARIES  := h2co3Launcher
+LOCAL_SHARED_LIBRARIES  := h2co3_launcher driver_helper
 LOCAL_SRC_FILES         := glfw/context.c \
                            glfw/init.c \
                            glfw/input.c \
                            glfw/monitor.c \
                            glfw/vulkan.c \
                            glfw/window.c \
-                           glfw/h2co3Launcher_init.c \
-                           glfw/h2co3Launcher_monitor.c \
-                           glfw/h2co3Launcher_window.c \
+                           glfw/h2co3_launcher_init.c \
+                           glfw/h2co3_launcher_monitor.c \
+                           glfw/h2co3_launcher_window.c \
                            glfw/egl_context.c \
                            glfw/osmesa_context.c \
                            glfw/platform.c \
                            glfw/posix_thread.c \
-                           glfw/posix_time.c \
-                           glfw/driver_helper.c \
-                           driver_helper/nsbypass.c
-LOCAL_C_INCLUDES        := $(LOCAL_PATH)/h2co3Launcher/include \
+                           glfw/posix_time.c
+LOCAL_C_INCLUDES        := $(LOCAL_PATH)/h2co3_launcher/include \
                            $(LOCAL_PATH)/glfw/include
 LOCAL_CFLAGS            := -Wall
 LOCAL_LDLIBS            := -llog -ldl -landroid
@@ -41,13 +39,26 @@ LOCAL_LDLIBS            += -lEGL -lGLESv2
 endif
 include $(BUILD_SHARED_LIBRARY)
 
-#ifeq ($(TARGET_ARCH_ABI), arm64-v8a)
 include $(CLEAR_VARS)
-LOCAL_MODULE            := linkerhook
-LOCAL_SRC_FILES         := driver_helper/hook.c
-LOCAL_LDFLAGS           := -z global
+LOCAL_LDLIBS := -ldl -llog -landroid
+LOCAL_MODULE := driver_helper
+LOCAL_SRC_FILES := \
+    driver_helper/driver_helper.c \
+    driver_helper/nsbypass.c
+LOCAL_CFLAGS += -rdynamic
+ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
+LOCAL_CFLAGS += -DADRENO_POSSIBLE
+LOCAL_LDLIBS += -lEGL -lGLESv2
+endif
 include $(BUILD_SHARED_LIBRARY)
-#endif
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := linkerhook
+LOCAL_SRC_FILES := \
+    linkerhook/linkerhook.cpp \
+    linkerhook/linkerns.c
+LOCAL_LDFLAGS := -z global
+include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE            := awt_headless
@@ -62,7 +73,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE            := pojavexec_awt
-LOCAL_SHARED_LIBRARIES  := h2co3Launcher
+LOCAL_SHARED_LIBRARIES  := h2co3_launcher
 LOCAL_SRC_FILES         := awt/awt_bridge.c
 include $(BUILD_SHARED_LIBRARY)
 
@@ -71,7 +82,7 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS := -ldl -llog -landroid
 # -lGLESv2
 LOCAL_MODULE := pojavexec
-LOCAL_SHARED_LIBRARIES  := h2co3Launcher
+LOCAL_SHARED_LIBRARIES  := h2co3_launcher driver_helper
 # LOCAL_CFLAGS += -DDEBUG
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
@@ -85,8 +96,7 @@ LOCAL_SRC_FILES := \
     pojav/ctxbridges/swap_interval_no_egl.c \
     pojav/environ/environ.c \
     pojav/input_bridge_v3.c \
-    pojav/virgl/virgl.c \
-    driver_helper/nsbypass.c
+    pojav/virgl/virgl.c
 LOCAL_C_INCLUDES        := $(LOCAL_PATH)/pojav
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
 LOCAL_CFLAGS += -DADRENO_POSSIBLE

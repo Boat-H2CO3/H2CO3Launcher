@@ -21,7 +21,6 @@ import androidx.core.content.FileProvider;
 import org.koishi.launcher.h2co3launcher.keycodes.H2CO3LauncherKeycodes;
 import org.koishi.launcher.h2co3launcher.keycodes.LwjglGlfwKeycode;
 import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
-
 import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
@@ -74,7 +73,7 @@ public class H2CO3LauncherBridge implements Serializable {
     public static boolean BACKEND_IS_H2CO3 = false;
 
     static {
-        System.loadLibrary("h2co3Launcher");
+        System.loadLibrary("h2co3_launcher");
         System.loadLibrary("pojavexec_awt");
     }
 

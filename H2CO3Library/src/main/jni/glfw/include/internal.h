@@ -187,7 +187,7 @@ typedef void (APIENTRY * PFN_vkVoidFunction)(void);
   #define vkGetInstanceProcAddr _glfw.vk.GetInstanceProcAddr
 #endif
 
-#include "h2co3Launcher_platform.h"
+#include "h2co3_launcher_platform.h"
 
 // Constructs a version number string from the public header macros
 #define _GLFW_CONCAT_VERSION(m, n, r) #m "." #n "." #r

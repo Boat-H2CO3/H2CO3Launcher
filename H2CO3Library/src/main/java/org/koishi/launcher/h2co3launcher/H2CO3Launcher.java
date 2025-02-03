@@ -10,6 +10,7 @@ import android.util.ArrayMap;
 
 import com.jaredrummler.android.device.DeviceName;
 import com.oracle.dalvik.VMLauncher;
+
 import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
 import org.koishi.launcher.h2co3launcher.plugins.DriverPlugin;
 import org.koishi.launcher.h2co3launcher.plugins.FFmpegPlugin;
@@ -503,7 +504,7 @@ public class H2CO3Launcher {
         return bridge;
     }
 
-    private static String getSocName() {
+    public static String getSocName() {
         String name = null;
         try {
             Process process = Runtime.getRuntime().exec("getprop ro.soc.model");

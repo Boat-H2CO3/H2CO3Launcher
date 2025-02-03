@@ -204,10 +204,10 @@ public final class LauncherHelper {
                     );
                 }).withStage("launch.state.dependencies")
                 .thenComposeAsync(() -> {
-                    try (InputStream input = LauncherHelper.class.getResourceAsStream("/assets/game/H2CO3LibFixer.jar")) {
+                    try (InputStream input = LauncherHelper.class.getResourceAsStream("/assets/game/H2CO3LibPatcher.jar")) {
                         Files.copy(input, new File(H2CO3LauncherTools.LIB_FIXER_PATH).toPath(), StandardCopyOption.REPLACE_EXISTING);
                     } catch (IOException e) {
-                        Logging.LOG.log(Level.WARNING, "Unable to unpack H2CO3LibFixer.jar", e);
+                        Logging.LOG.log(Level.WARNING, "Unable to unpack H2CO3LibPatcher.jar", e);
                     }
                     return null;
                 })

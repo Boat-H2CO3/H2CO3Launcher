@@ -106,7 +106,7 @@ extern "C" {
  * Include it unconditionally to avoid surprising side-effects.
  */
 #include <stdint.h>
-#include "h2co3Launcher_bridge.h"
+#include "h2co3_launcher_bridge.h"
 
 #if defined(GLFW_INCLUDE_VULKAN)
   #include <vulkan/vulkan.h>

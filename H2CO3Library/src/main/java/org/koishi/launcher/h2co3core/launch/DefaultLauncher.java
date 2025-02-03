@@ -25,12 +25,8 @@ import android.content.Context;
 import android.os.Build;
 
 import com.google.gson.GsonBuilder;
-import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig;
-import org.koishi.launcher.h2co3launcher.H2CO3Launcher;
-import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
-import org.koishi.launcher.h2co3launcher.utils.Architecture;
+
 import org.koishi.launcher.h2co3core.auth.AuthInfo;
-import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3core.game.Argument;
 import org.koishi.launcher.h2co3core.game.Arguments;
 import org.koishi.launcher.h2co3core.game.GameRepository;
@@ -44,11 +40,28 @@ import org.koishi.launcher.h2co3core.util.io.IOUtils;
 import org.koishi.launcher.h2co3core.util.platform.CommandBuilder;
 import org.koishi.launcher.h2co3core.util.platform.OperatingSystem;
 import org.koishi.launcher.h2co3core.util.versioning.VersionNumber;
+import org.koishi.launcher.h2co3launcher.H2CO3Launcher;
+import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig;
+import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
+import org.koishi.launcher.h2co3launcher.utils.Architecture;
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TimeZone;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -219,6 +232,7 @@ public class DefaultLauncher extends Launcher {
         res.addDefault("-Dorg.lwjgl.vulkan.libname=", "libvulkan.so");
         res.addDefault("-Dsodium.checks.issue2561=", "false");
         res.addDefault("-Djdk.lang.Process.launchMechanism=", "FORK");
+        res.addDefault("-Dcpu.name=", H2CO3Launcher.getSocName());
         File libJna = new File(H2CO3LauncherTools.RUNTIME_DIR, "jna");
         if (jnaVersion != null && !jnaVersion.isEmpty()) {
             libJna = new File(libJna, jnaVersion);

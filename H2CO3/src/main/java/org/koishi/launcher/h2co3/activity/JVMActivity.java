@@ -19,12 +19,11 @@ import org.koishi.launcher.h2co3.control.JarExecutorMenu;
 import org.koishi.launcher.h2co3.control.MenuCallback;
 import org.koishi.launcher.h2co3.control.MenuType;
 import org.koishi.launcher.h2co3.setting.GameOption;
+import org.koishi.launcher.h2co3core.util.Logging;
 import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
 import org.koishi.launcher.h2co3launcher.keycodes.H2CO3LauncherKeycodes;
 import org.koishi.launcher.h2co3launcher.keycodes.LwjglGlfwKeycode;
-import org.koishi.launcher.h2co3core.util.Logging;
 import org.koishi.launcher.h2co3library.component.BaseActivity;
-
 import org.lwjgl.glfw.CallbackBridge;
 
 import java.util.Objects;
@@ -37,6 +36,7 @@ public class JVMActivity extends BaseActivity implements TextureView.SurfaceText
     private TextureView textureView;
     private MenuCallback menu;
     private boolean isTranslated = false;
+    private static boolean isRunning = false;
     private int output = 0;
 
     public static void setH2CO3LauncherBridge(H2CO3LauncherBridge h2co3LauncherBridge, MenuType menuType) {
@@ -85,6 +85,17 @@ public class JVMActivity extends BaseActivity implements TextureView.SurfaceText
 
     @Override
     public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
+        if (isRunning) {
+            h2co3LauncherBridge.setSurfaceTexture(surfaceTexture);
+            if (H2CO3LauncherBridge.BACKEND_IS_H2CO3) {
+                h2co3LauncherBridge.setH2CO3LauncherNativeWindow(new Surface(surfaceTexture));
+            } else {
+                CallbackBridge.setupBridgeWindow(new Surface(surfaceTexture));
+            }
+            menu.onGraphicOutput();
+            return;
+        }
+        isRunning = true;
         Logging.LOG.log(Level.INFO, "surface ready, start jvm now!");
         h2co3LauncherBridge.setSurfaceDestroyed(false);
         int width = menuType == MenuType.GAME ? (int) ((i + ((GameMenu) menu).getMenuSetting().getCursorOffset()) * h2co3LauncherBridge.getScaleFactor()) : H2CO3LauncherBridge.DEFAULT_WIDTH;

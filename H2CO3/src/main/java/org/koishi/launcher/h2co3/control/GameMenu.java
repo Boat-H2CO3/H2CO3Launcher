@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.gson.GsonBuilder;
-import org.koishi.launcher.h2co3.touch.TouchController;
+
 import org.koishi.launcher.h2co3.BuildConfig;
 import org.koishi.launcher.h2co3.H2CO3LauncherApplication;
 import org.koishi.launcher.h2co3.R;
@@ -41,12 +40,9 @@ import org.koishi.launcher.h2co3.setting.Controller;
 import org.koishi.launcher.h2co3.setting.Controllers;
 import org.koishi.launcher.h2co3.setting.GameOption;
 import org.koishi.launcher.h2co3.setting.MenuSetting;
+import org.koishi.launcher.h2co3.touch.TouchController;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
 import org.koishi.launcher.h2co3.util.FXUtils;
-import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
-import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridgeCallback;
-import org.koishi.launcher.h2co3launcher.keycodes.H2CO3LauncherKeycodes;
-import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3core.fakefx.beans.binding.Bindings;
 import org.koishi.launcher.h2co3core.fakefx.beans.property.BooleanProperty;
 import org.koishi.launcher.h2co3core.fakefx.beans.property.IntegerProperty;
@@ -59,9 +55,12 @@ import org.koishi.launcher.h2co3core.fakefx.collections.ObservableList;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.util.Logging;
 import org.koishi.launcher.h2co3core.util.io.FileUtils;
+import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
+import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridgeCallback;
+import org.koishi.launcher.h2co3launcher.keycodes.H2CO3LauncherKeycodes;
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3library.component.BaseActivity;
 import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherAlertDialog;
-
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout;
@@ -319,6 +318,9 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
     }
 
     private void refreshViewGroupList(H2CO3LauncherSpinner<ControlViewGroup> spinner) {
+        if (getViewGroup() != null) {
+            setViewGroup(null);
+        }
         ArrayList<String> viewGroupNameList = controllerProperty.get().viewGroups().stream().map(ControlViewGroup::getName).collect(Collectors.toCollection(ArrayList::new));
         spinner.setDataList(new ArrayList<>(controllerProperty.get().viewGroups()));
         ArrayAdapter<String> viewGroupNameAdapter = new ArrayAdapter<>(activity, R.layout.item_spinner_small, viewGroupNameList);
