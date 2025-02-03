@@ -3,15 +3,12 @@ name: Android CI
 on:
   workflow_dispatch:
   push:
-    branches:
-      - 'H2CO3_main'
+    branches: H2CO3_main
   pull_request:
-    branches:
-      - 'H2CO3_main'
+    branches: H2CO3_main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -20,11 +17,11 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          java-version: 21
+          distribution: temurin
           cache: gradle
 
-      - name: Build Debug .apk
+      - name: Build Debug APK
         run: gradle assembleDebug
 
       - name: Upload APK
