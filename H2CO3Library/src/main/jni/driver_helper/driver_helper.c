@@ -13,7 +13,7 @@
 //#define ADRENO_POSSIBLE
 #ifdef ADRENO_POSSIBLE
 
-*bool checkAdrenoGraphics() {
+bool checkAdrenoGraphics() {
     EGLDisplay eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     if (eglDisplay == EGL_NO_DISPLAY || eglInitialize(eglDisplay, NULL, NULL) != EGL_TRUE) 
         return false;
