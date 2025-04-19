@@ -5,23 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure representing a {@code COLR} v1 {@code PaintTranslate} paint table. Used for translating downstream paints by a given x and y~delta.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_PaintTranslate {
  *     {@link FT_OpaquePaint FT_OpaquePaintRec} paint;
@@ -31,29 +27,23 @@ import javax.annotation.Nullable;
  */
 public class FT_PaintTranslate extends Struct<FT_PaintTranslate> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            PAINT,
-            DX,
-            DY;
+        PAINT,
+        DX,
+        DY;
 
     static {
         Layout layout = __struct(
-                __member(FT_OpaquePaint.SIZEOF, FT_OpaquePaint.ALIGNOF),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE)
+            __member(FT_OpaquePaint.SIZEOF, FT_OpaquePaint.ALIGNOF),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -68,6 +58,11 @@ public class FT_PaintTranslate extends Struct<FT_PaintTranslate> {
         super(address, container);
     }
 
+    @Override
+    protected FT_PaintTranslate create(long address, @Nullable ByteBuffer container) {
+        return new FT_PaintTranslate(address, container);
+    }
+
     /**
      * Creates a {@code FT_PaintTranslate} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -78,16 +73,27 @@ public class FT_PaintTranslate extends Struct<FT_PaintTranslate> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_PaintTranslate} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link FT_OpaquePaint} view of the {@code paint} field. */
+    @NativeType("FT_OpaquePaintRec")
+    public FT_OpaquePaint paint() { return npaint(address()); }
+    /** @return the value of the {@code dx} field. */
+    @NativeType("FT_Fixed")
+    public long dx() { return ndx(address()); }
+    /** @return the value of the {@code dy} field. */
+    @NativeType("FT_Fixed")
+    public long dy() { return ndy(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_PaintTranslate} instance for the specified memory address. */
     public static FT_PaintTranslate create(long address) {
         return new FT_PaintTranslate(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_PaintTranslate createSafe(long address) {
         return address == NULL ? null : new FT_PaintTranslate(address, null);
@@ -103,78 +109,24 @@ public class FT_PaintTranslate extends Struct<FT_PaintTranslate> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #paint}.
-     */
-    public static FT_OpaquePaint npaint(long struct) {
-        return FT_OpaquePaint.create(struct + FT_PaintTranslate.PAINT);
-    }
+    // -----------------------------------
+
+    /** Unsafe version of {@link #paint}. */
+    public static FT_OpaquePaint npaint(long struct) { return FT_OpaquePaint.create(struct + FT_PaintTranslate.PAINT); }
+    /** Unsafe version of {@link #dx}. */
+    public static long ndx(long struct) { return memGetCLong(struct + FT_PaintTranslate.DX); }
+    /** Unsafe version of {@link #dy}. */
+    public static long ndy(long struct) { return memGetCLong(struct + FT_PaintTranslate.DY); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #dx}.
-     */
-    public static long ndx(long struct) {
-        return memGetCLong(struct + FT_PaintTranslate.DX);
-    }
-
-    /**
-     * Unsafe version of {@link #dy}.
-     */
-    public static long ndy(long struct) {
-        return memGetCLong(struct + FT_PaintTranslate.DY);
-    }
-
-    @Override
-    protected FT_PaintTranslate create(long address, @Nullable ByteBuffer container) {
-        return new FT_PaintTranslate(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return a {@link FT_OpaquePaint} view of the {@code paint} field.
-     */
-    @NativeType("FT_OpaquePaintRec")
-    public FT_OpaquePaint paint() {
-        return npaint(address());
-    }
-
-    /**
-     * @return the value of the {@code dx} field.
-     */
-    @NativeType("FT_Fixed")
-    public long dx() {
-        return ndx(address());
-    }
-
-    /**
-     * @return the value of the {@code dy} field.
-     */
-    @NativeType("FT_Fixed")
-    public long dy() {
-        return ndy(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_PaintTranslate} structs.
-     */
+    /** An array of {@link FT_PaintTranslate} structs. */
     public static class Buffer extends StructBuffer<FT_PaintTranslate, Buffer> {
 
         private static final FT_PaintTranslate ELEMENT_FACTORY = FT_PaintTranslate.create(-1L);
@@ -210,29 +162,15 @@ public class FT_PaintTranslate extends Struct<FT_PaintTranslate> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link FT_OpaquePaint} view of the {@code paint} field.
-         */
+        /** @return a {@link FT_OpaquePaint} view of the {@code paint} field. */
         @NativeType("FT_OpaquePaintRec")
-        public FT_OpaquePaint paint() {
-            return FT_PaintTranslate.npaint(address());
-        }
-
-        /**
-         * @return the value of the {@code dx} field.
-         */
+        public FT_OpaquePaint paint() { return FT_PaintTranslate.npaint(address()); }
+        /** @return the value of the {@code dx} field. */
         @NativeType("FT_Fixed")
-        public long dx() {
-            return FT_PaintTranslate.ndx(address());
-        }
-
-        /**
-         * @return the value of the {@code dy} field.
-         */
+        public long dx() { return FT_PaintTranslate.ndx(address()); }
+        /** @return the value of the {@code dy} field. */
         @NativeType("FT_Fixed")
-        public long dy() {
-            return FT_PaintTranslate.ndy(address());
-        }
+        public long dy() { return FT_PaintTranslate.ndy(address()); }
 
     }
 

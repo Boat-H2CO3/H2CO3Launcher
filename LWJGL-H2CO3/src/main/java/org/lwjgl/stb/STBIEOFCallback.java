@@ -5,11 +5,11 @@
  */
 package org.lwjgl.stb;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
+import javax.annotation.*;
 
-import org.lwjgl.system.Callback;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Instances of this class may be set to the {@code eof} field of the {@link STBIIOCallbacks} struct.

@@ -5,30 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memShortBufferSafe;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * This structure holds the data of the {@code CPAL} table.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Palette_Data {
  *     FT_UShort num_palettes;
@@ -40,33 +31,27 @@ import javax.annotation.Nullable;
  */
 public class FT_Palette_Data extends Struct<FT_Palette_Data> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            NUM_PALETTES,
-            PALETTE_NAME_IDS,
-            PALETTE_FLAGS,
-            NUM_PALETTE_ENTRIES,
-            PALETTE_ENTRY_NAME_IDS;
+        NUM_PALETTES,
+        PALETTE_NAME_IDS,
+        PALETTE_FLAGS,
+        NUM_PALETTE_ENTRIES,
+        PALETTE_ENTRY_NAME_IDS;
 
     static {
         Layout layout = __struct(
-                __member(2),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(2),
-                __member(POINTER_SIZE)
+            __member(2),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(2),
+            __member(POINTER_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -83,6 +68,11 @@ public class FT_Palette_Data extends Struct<FT_Palette_Data> implements NativeRe
         super(address, container);
     }
 
+    @Override
+    protected FT_Palette_Data create(long address, @Nullable ByteBuffer container) {
+        return new FT_Palette_Data(address, container);
+    }
+
     /**
      * Creates a {@code FT_Palette_Data} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -93,38 +83,52 @@ public class FT_Palette_Data extends Struct<FT_Palette_Data> implements NativeRe
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_Palette_Data} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code num_palettes} field. */
+    @NativeType("FT_UShort")
+    public short num_palettes() { return nnum_palettes(address()); }
+    /** @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_name_ids} field. */
+    @Nullable
+    @NativeType("FT_UShort const *")
+    public ShortBuffer palette_name_ids() { return npalette_name_ids(address()); }
+    /** @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_flags} field. */
+    @Nullable
+    @NativeType("FT_UShort const *")
+    public ShortBuffer palette_flags() { return npalette_flags(address()); }
+    /** @return the value of the {@code num_palette_entries} field. */
+    @NativeType("FT_UShort")
+    public short num_palette_entries() { return nnum_palette_entries(address()); }
+    /** @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_entry_name_ids} field. */
+    @Nullable
+    @NativeType("FT_UShort const *")
+    public ShortBuffer palette_entry_name_ids() { return npalette_entry_name_ids(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Palette_Data} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_Palette_Data malloc() {
         return new FT_Palette_Data(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Palette_Data} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_Palette_Data} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_Palette_Data calloc() {
         return new FT_Palette_Data(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Palette_Data} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_Palette_Data} instance allocated with {@link BufferUtils}. */
     public static FT_Palette_Data create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_Palette_Data(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_Palette_Data} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_Palette_Data} instance for the specified memory address. */
     public static FT_Palette_Data create(long address) {
         return new FT_Palette_Data(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Palette_Data createSafe(long address) {
         return address == NULL ? null : new FT_Palette_Data(address, null);
@@ -148,8 +152,6 @@ public class FT_Palette_Data extends Struct<FT_Palette_Data> implements NativeRe
         return new Buffer(nmemCallocChecked(capacity, SIZEOF), capacity);
     }
 
-    // -----------------------------------
-
     /**
      * Returns a new {@link Buffer} instance allocated with {@link BufferUtils}.
      *
@@ -170,9 +172,7 @@ public class FT_Palette_Data extends Struct<FT_Palette_Data> implements NativeRe
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -216,104 +216,22 @@ public class FT_Palette_Data extends Struct<FT_Palette_Data> implements NativeRe
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #num_palettes}.
-     */
-    public static short nnum_palettes(long struct) {
-        return UNSAFE.getShort(null, struct + FT_Palette_Data.NUM_PALETTES);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #palette_name_ids() palette_name_ids}.
-     */
-    @Nullable
-    public static ShortBuffer npalette_name_ids(long struct) {
-        return memShortBufferSafe(memGetAddress(struct + FT_Palette_Data.PALETTE_NAME_IDS), Short.toUnsignedInt(nnum_palettes(struct)));
-    }
-
-    /**
-     * Unsafe version of {@link #palette_flags() palette_flags}.
-     */
-    @Nullable
-    public static ShortBuffer npalette_flags(long struct) {
-        return memShortBufferSafe(memGetAddress(struct + FT_Palette_Data.PALETTE_FLAGS), Short.toUnsignedInt(nnum_palettes(struct)));
-    }
-
-    /**
-     * Unsafe version of {@link #num_palette_entries}.
-     */
-    public static short nnum_palette_entries(long struct) {
-        return UNSAFE.getShort(null, struct + FT_Palette_Data.NUM_PALETTE_ENTRIES);
-    }
-
-    /**
-     * Unsafe version of {@link #palette_entry_name_ids() palette_entry_name_ids}.
-     */
-    @Nullable
-    public static ShortBuffer npalette_entry_name_ids(long struct) {
-        return memShortBufferSafe(memGetAddress(struct + FT_Palette_Data.PALETTE_ENTRY_NAME_IDS), Short.toUnsignedInt(nnum_palette_entries(struct)));
-    }
-
-    @Override
-    protected FT_Palette_Data create(long address, @Nullable ByteBuffer container) {
-        return new FT_Palette_Data(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #num_palettes}. */
+    public static short nnum_palettes(long struct) { return UNSAFE.getShort(null, struct + FT_Palette_Data.NUM_PALETTES); }
+    /** Unsafe version of {@link #palette_name_ids() palette_name_ids}. */
+    @Nullable public static ShortBuffer npalette_name_ids(long struct) { return memShortBufferSafe(memGetAddress(struct + FT_Palette_Data.PALETTE_NAME_IDS), Short.toUnsignedInt(nnum_palettes(struct))); }
+    /** Unsafe version of {@link #palette_flags() palette_flags}. */
+    @Nullable public static ShortBuffer npalette_flags(long struct) { return memShortBufferSafe(memGetAddress(struct + FT_Palette_Data.PALETTE_FLAGS), Short.toUnsignedInt(nnum_palettes(struct))); }
+    /** Unsafe version of {@link #num_palette_entries}. */
+    public static short nnum_palette_entries(long struct) { return UNSAFE.getShort(null, struct + FT_Palette_Data.NUM_PALETTE_ENTRIES); }
+    /** Unsafe version of {@link #palette_entry_name_ids() palette_entry_name_ids}. */
+    @Nullable public static ShortBuffer npalette_entry_name_ids(long struct) { return memShortBufferSafe(memGetAddress(struct + FT_Palette_Data.PALETTE_ENTRY_NAME_IDS), Short.toUnsignedInt(nnum_palette_entries(struct))); }
 
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code num_palettes} field.
-     */
-    @NativeType("FT_UShort")
-    public short num_palettes() {
-        return nnum_palettes(address());
-    }
-
-    /**
-     * @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_name_ids} field.
-     */
-    @Nullable
-    @NativeType("FT_UShort const *")
-    public ShortBuffer palette_name_ids() {
-        return npalette_name_ids(address());
-    }
-
-    /**
-     * @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_flags} field.
-     */
-    @Nullable
-    @NativeType("FT_UShort const *")
-    public ShortBuffer palette_flags() {
-        return npalette_flags(address());
-    }
-
-    /**
-     * @return the value of the {@code num_palette_entries} field.
-     */
-    @NativeType("FT_UShort")
-    public short num_palette_entries() {
-        return nnum_palette_entries(address());
-    }
-
-    /**
-     * @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_entry_name_ids} field.
-     */
-    @Nullable
-    @NativeType("FT_UShort const *")
-    public ShortBuffer palette_entry_name_ids() {
-        return npalette_entry_name_ids(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Palette_Data} structs.
-     */
+    /** An array of {@link FT_Palette_Data} structs. */
     public static class Buffer extends StructBuffer<FT_Palette_Data, Buffer> implements NativeResource {
 
         private static final FT_Palette_Data ELEMENT_FACTORY = FT_Palette_Data.create(-1L);
@@ -349,48 +267,24 @@ public class FT_Palette_Data extends Struct<FT_Palette_Data> implements NativeRe
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code num_palettes} field.
-         */
+        /** @return the value of the {@code num_palettes} field. */
         @NativeType("FT_UShort")
-        public short num_palettes() {
-            return FT_Palette_Data.nnum_palettes(address());
-        }
-
-        /**
-         * @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_name_ids} field.
-         */
+        public short num_palettes() { return FT_Palette_Data.nnum_palettes(address()); }
+        /** @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_name_ids} field. */
         @Nullable
         @NativeType("FT_UShort const *")
-        public ShortBuffer palette_name_ids() {
-            return FT_Palette_Data.npalette_name_ids(address());
-        }
-
-        /**
-         * @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_flags} field.
-         */
+        public ShortBuffer palette_name_ids() { return FT_Palette_Data.npalette_name_ids(address()); }
+        /** @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_flags} field. */
         @Nullable
         @NativeType("FT_UShort const *")
-        public ShortBuffer palette_flags() {
-            return FT_Palette_Data.npalette_flags(address());
-        }
-
-        /**
-         * @return the value of the {@code num_palette_entries} field.
-         */
+        public ShortBuffer palette_flags() { return FT_Palette_Data.npalette_flags(address()); }
+        /** @return the value of the {@code num_palette_entries} field. */
         @NativeType("FT_UShort")
-        public short num_palette_entries() {
-            return FT_Palette_Data.nnum_palette_entries(address());
-        }
-
-        /**
-         * @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_entry_name_ids} field.
-         */
+        public short num_palette_entries() { return FT_Palette_Data.nnum_palette_entries(address()); }
+        /** @return a {@link ShortBuffer} view of the data pointed to by the {@code palette_entry_name_ids} field. */
         @Nullable
         @NativeType("FT_UShort const *")
-        public ShortBuffer palette_entry_name_ids() {
-            return FT_Palette_Data.npalette_entry_name_ids(address());
-        }
+        public ShortBuffer palette_entry_name_ids() { return FT_Palette_Data.npalette_entry_name_ids(address()); }
 
     }
 

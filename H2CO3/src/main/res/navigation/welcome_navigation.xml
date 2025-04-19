@@ -7,70 +7,70 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="org.koishi.launcher.h2co3.ui.fragment.welcome.WelcomeFragment"
+        android:name="org.koishi.launcher.h2co3.fragment.welcome.WelcomeFragment"
         android:label="WelcomeFragment"
         tools:layout="@layout/fragment_welcome_welcome">
         <action
             android:id="@+id/action_welcomeFragment_to_eulaFragment"
             app:destination="@id/eulaFragment"
-            app:enterAnim="@anim/fragment_in"
-            app:exitAnim="@anim/fragment_out"
+            app:enterAnim="@anim/page_show"
+            app:exitAnim="@anim/page_hide"
             app:popEnterAnim="@anim/fragment_in_pop"
             app:popExitAnim="@anim/fragment_out_pop" />
         <action
             android:id="@+id/action_welcomeFragment_to_permissionRequestFragment"
             app:destination="@id/permissionRequestFragment"
-            app:enterAnim="@anim/fragment_in"
-            app:exitAnim="@anim/fragment_out"
+            app:enterAnim="@anim/page_show"
+            app:exitAnim="@anim/page_hide"
             app:popEnterAnim="@anim/fragment_in_pop"
             app:popExitAnim="@anim/fragment_out_pop" />
         <action
             android:id="@+id/action_welcomeFragment_to_installFragment"
             app:destination="@id/installFragment"
-            app:enterAnim="@anim/fragment_in"
-            app:exitAnim="@anim/fragment_out"
+            app:enterAnim="@anim/page_show"
+            app:exitAnim="@anim/page_hide"
             app:popEnterAnim="@anim/fragment_in_pop"
             app:popExitAnim="@anim/fragment_out_pop" />
     </fragment>
 
     <fragment
         android:id="@+id/eulaFragment"
-        android:name="org.koishi.launcher.h2co3.ui.fragment.welcome.EulaFragment"
+        android:name="org.koishi.launcher.h2co3.fragment.welcome.EulaFragment"
         android:label="EulaFragment"
         tools:layout="@layout/fragment_welcome_eula">
         <action
             android:id="@+id/action_eulaFragment_to_permissionRequestFragment"
             app:destination="@id/permissionRequestFragment"
-            app:enterAnim="@anim/fragment_in"
-            app:exitAnim="@anim/fragment_out"
+            app:enterAnim="@anim/page_show"
+            app:exitAnim="@anim/page_hide"
             app:popEnterAnim="@anim/fragment_in_pop"
             app:popExitAnim="@anim/fragment_out_pop" />
         <action
             android:id="@+id/action_eulaFragment_to_installFragment"
             app:destination="@id/installFragment"
-            app:enterAnim="@anim/fragment_in"
-            app:exitAnim="@anim/fragment_out"
+            app:enterAnim="@anim/page_show"
+            app:exitAnim="@anim/page_hide"
             app:popEnterAnim="@anim/fragment_in_pop"
             app:popExitAnim="@anim/fragment_out_pop" />
     </fragment>
 
     <fragment
         android:id="@+id/permissionRequestFragment"
-        android:name="org.koishi.launcher.h2co3.ui.fragment.welcome.PermissionRequestFragment"
+        android:name="org.koishi.launcher.h2co3.fragment.welcome.PermissionRequestFragment"
         android:label="PermissionRequestFragment"
         tools:layout="@layout/fragment_welcome_permission_request">
         <action
             android:id="@+id/action_permissionRequestFragment_to_installFragment"
             app:destination="@id/installFragment"
-            app:enterAnim="@anim/fragment_in"
-            app:exitAnim="@anim/fragment_out"
+            app:enterAnim="@anim/page_show"
+            app:exitAnim="@anim/page_hide"
             app:popEnterAnim="@anim/fragment_in_pop"
             app:popExitAnim="@anim/fragment_out_pop" />
     </fragment>
 
     <fragment
         android:id="@+id/installFragment"
-        android:name="org.koishi.launcher.h2co3.ui.fragment.welcome.InstallFragment"
+        android:name="org.koishi.launcher.h2co3.fragment.welcome.InstallFragment"
         android:label="InstallFragment"
         tools:layout="@layout/fragment_welcome_install" />
 

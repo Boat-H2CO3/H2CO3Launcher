@@ -5,35 +5,16 @@
  */
 package org.lwjgl.system.linux;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkGT;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBuffer;
-import static org.lwjgl.system.MemoryUtil.memCLongBuffer;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.memPutCLong;
-import static org.lwjgl.system.MemoryUtil.memShortBuffer;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.CLongBuffer;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * Client message event.
@@ -390,7 +371,7 @@ public class XClientMessageEvent extends Struct<XClientMessageEvent> implements 
     public static ByteBuffer ndata_b(long struct) { return memByteBuffer(struct + XClientMessageEvent.DATA_B, 20); }
     /** Unsafe version of {@link #data_b(int) data_b}. */
     public static byte ndata_b(long struct, int index) {
-        return UNSAFE.getByte(null, struct + XClientMessageEvent.DATA_B + check(index, 20));
+        return UNSAFE.getByte(null, struct + XClientMessageEvent.DATA_B + check(index, 20) * 1);
     }
     /** Unsafe version of {@link #data_s}. */
     public static ShortBuffer ndata_s(long struct) { return memShortBuffer(struct + XClientMessageEvent.DATA_S, 10); }
@@ -422,11 +403,11 @@ public class XClientMessageEvent extends Struct<XClientMessageEvent> implements 
     /** Unsafe version of {@link #data_b(ByteBuffer) data_b}. */
     public static void ndata_b(long struct, ByteBuffer value) {
         if (CHECKS) { checkGT(value, 20); }
-        memCopy(memAddress(value), struct + XClientMessageEvent.DATA_B, value.remaining());
+        memCopy(memAddress(value), struct + XClientMessageEvent.DATA_B, value.remaining() * 1);
     }
     /** Unsafe version of {@link #data_b(int, byte) data_b}. */
     public static void ndata_b(long struct, int index, byte value) {
-        UNSAFE.putByte(null, struct + XClientMessageEvent.DATA_B + check(index, 20), value);
+        UNSAFE.putByte(null, struct + XClientMessageEvent.DATA_B + check(index, 20) * 1, value);
     }
     /** Unsafe version of {@link #data_s(ShortBuffer) data_s}. */
     public static void ndata_s(long struct, ShortBuffer value) {

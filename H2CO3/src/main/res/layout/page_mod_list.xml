@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ui_bg_color"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp">
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+        android:id="@+id/warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_container_white"
+        android:padding="10dp"
+        android:text="@string/mods_not_modded"
+        app:auto_text_background_tint="true"
+        app:auto_text_tint="true"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/left"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/warning"
+        app:layout_constraintWidth_percent="0.3">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+            android:id="@+id/search_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textSize="14sp"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/search"
+            app:ripple="true"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+            android:id="@+id/normal_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+                android:id="@+id/add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/mods_add"
+                app:ripple="true"/>
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+                android:id="@+id/check_update_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/mods_check_updates"
+                app:ripple="true"/>
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+                android:id="@+id/refresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/action_refresh"
+                app:ripple="true"/>
+
+        </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+            android:id="@+id/selected_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+                android:id="@+id/check_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/mods_check_updates"
+                app:ripple="true"/>
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+                android:id="@+id/delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/button_remove"
+                app:ripple="true"/>
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+                android:id="@+id/select_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/button_select_all"
+                app:ripple="true"/>
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+                android:id="@+id/cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/button_cancel"
+                app:ripple="true"/>
+
+        </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <RelativeLayout
+        android:id="@+id/right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/left"
+        app:layout_constraintTop_toBottomOf="@id/warning">
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

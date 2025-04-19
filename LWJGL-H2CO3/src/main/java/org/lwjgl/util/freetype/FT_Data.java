@@ -5,32 +5,22 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBuffer;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * Read-only binary data represented as a pointer and a length.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Data {
  *     FT_Byte const * pointer;
@@ -39,27 +29,21 @@ import javax.annotation.Nullable;
  */
 public class FT_Data extends Struct<FT_Data> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            POINTER,
-            LENGTH;
+        POINTER,
+        LENGTH;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(4)
+            __member(POINTER_SIZE),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -73,6 +57,11 @@ public class FT_Data extends Struct<FT_Data> implements NativeResource {
         super(address, container);
     }
 
+    @Override
+    protected FT_Data create(long address, @Nullable ByteBuffer container) {
+        return new FT_Data(address, container);
+    }
+
     /**
      * Creates a {@code FT_Data} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -83,38 +72,55 @@ public class FT_Data extends Struct<FT_Data> implements NativeResource {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link ByteBuffer} view of the data pointed to by the {@code pointer} field. */
+    @NativeType("FT_Byte const *")
+    public ByteBuffer pointer() { return npointer(address()); }
+    /** @return the value of the {@code length} field. */
+    @NativeType("FT_UInt")
+    public int length() { return nlength(address()); }
+
+    /** Sets the address of the specified {@link ByteBuffer} to the {@code pointer} field. */
+    public FT_Data pointer(@NativeType("FT_Byte const *") ByteBuffer value) { npointer(address(), value); return this; }
+
     /**
-     * Returns a new {@code FT_Data} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
+     * Copies the specified struct data to this struct.
+     *
+     * @param src the source struct
+     *
+     * @return this struct
      */
+    public FT_Data set(FT_Data src) {
+        memCopy(src.address(), address(), SIZEOF);
+        return this;
+    }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Data} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_Data malloc() {
         return new FT_Data(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Data} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_Data} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_Data calloc() {
         return new FT_Data(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Data} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_Data} instance allocated with {@link BufferUtils}. */
     public static FT_Data create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_Data(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_Data} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_Data} instance for the specified memory address. */
     public static FT_Data create(long address) {
         return new FT_Data(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Data createSafe(long address) {
         return address == NULL ? null : new FT_Data(address, null);
@@ -128,8 +134,6 @@ public class FT_Data extends Struct<FT_Data> implements NativeResource {
     public static Buffer malloc(int capacity) {
         return new Buffer(nmemAllocChecked(__checkMalloc(capacity, SIZEOF)), capacity);
     }
-
-    // -----------------------------------
 
     /**
      * Returns a new {@link Buffer} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
@@ -160,9 +164,7 @@ public class FT_Data extends Struct<FT_Data> implements NativeResource {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -206,34 +208,17 @@ public class FT_Data extends Struct<FT_Data> implements NativeResource {
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #pointer() pointer}.
-     */
-    public static ByteBuffer npointer(long struct) {
-        return memByteBuffer(memGetAddress(struct + FT_Data.POINTER), nlength(struct));
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #length}.
-     */
-    public static int nlength(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Data.LENGTH);
-    }
+    /** Unsafe version of {@link #pointer() pointer}. */
+    public static ByteBuffer npointer(long struct) { return memByteBuffer(memGetAddress(struct + FT_Data.POINTER), nlength(struct)); }
+    /** Unsafe version of {@link #length}. */
+    public static int nlength(long struct) { return UNSAFE.getInt(null, struct + FT_Data.LENGTH); }
 
-    /**
-     * Unsafe version of {@link #pointer(ByteBuffer) pointer}.
-     */
-    public static void npointer(long struct, ByteBuffer value) {
-        memPutAddress(struct + FT_Data.POINTER, memAddress(value));
-        nlength(struct, value.remaining());
-    }
-
-    /**
-     * Sets the specified value to the {@code length} field of the specified {@code struct}.
-     */
-    public static void nlength(long struct, int value) {
-        UNSAFE.putInt(null, struct + FT_Data.LENGTH, value);
-    }
+    /** Unsafe version of {@link #pointer(ByteBuffer) pointer}. */
+    public static void npointer(long struct, ByteBuffer value) { memPutAddress(struct + FT_Data.POINTER, memAddress(value)); nlength(struct, value.remaining()); }
+    /** Sets the specified value to the {@code length} field of the specified {@code struct}. */
+    public static void nlength(long struct, int value) { UNSAFE.putInt(null, struct + FT_Data.LENGTH, value); }
 
     /**
      * Validates pointer members that should not be {@code NULL}.
@@ -244,58 +229,9 @@ public class FT_Data extends Struct<FT_Data> implements NativeResource {
         check(memGetAddress(struct + FT_Data.POINTER));
     }
 
-    @Override
-    protected FT_Data create(long address, @Nullable ByteBuffer container) {
-        return new FT_Data(address, container);
-    }
-
     // -----------------------------------
 
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    /**
-     * @return a {@link ByteBuffer} view of the data pointed to by the {@code pointer} field.
-     */
-    @NativeType("FT_Byte const *")
-    public ByteBuffer pointer() {
-        return npointer(address());
-    }
-
-    /**
-     * @return the value of the {@code length} field.
-     */
-    @NativeType("FT_UInt")
-    public int length() {
-        return nlength(address());
-    }
-
-    /**
-     * Sets the address of the specified {@link ByteBuffer} to the {@code pointer} field.
-     */
-    public FT_Data pointer(@NativeType("FT_Byte const *") ByteBuffer value) {
-        npointer(address(), value);
-        return this;
-    }
-
-    /**
-     * Copies the specified struct data to this struct.
-     *
-     * @param src the source struct
-     * @return this struct
-     */
-    public FT_Data set(FT_Data src) {
-        memCopy(src.address(), address(), SIZEOF);
-        return this;
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Data} structs.
-     */
+    /** An array of {@link FT_Data} structs. */
     public static class Buffer extends StructBuffer<FT_Data, Buffer> implements NativeResource {
 
         private static final FT_Data ELEMENT_FACTORY = FT_Data.create(-1L);
@@ -331,29 +267,15 @@ public class FT_Data extends Struct<FT_Data> implements NativeResource {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link ByteBuffer} view of the data pointed to by the {@code pointer} field.
-         */
+        /** @return a {@link ByteBuffer} view of the data pointed to by the {@code pointer} field. */
         @NativeType("FT_Byte const *")
-        public ByteBuffer pointer() {
-            return FT_Data.npointer(address());
-        }
-
-        /**
-         * @return the value of the {@code length} field.
-         */
+        public ByteBuffer pointer() { return FT_Data.npointer(address()); }
+        /** @return the value of the {@code length} field. */
         @NativeType("FT_UInt")
-        public int length() {
-            return FT_Data.nlength(address());
-        }
+        public int length() { return FT_Data.nlength(address()); }
 
-        /**
-         * Sets the address of the specified {@link ByteBuffer} to the {@code pointer} field.
-         */
-        public Buffer pointer(@NativeType("FT_Byte const *") ByteBuffer value) {
-            FT_Data.npointer(address(), value);
-            return this;
-        }
+        /** Sets the address of the specified {@link ByteBuffer} to the {@code pointer} field. */
+        public Buffer pointer(@NativeType("FT_Byte const *") ByteBuffer value) { FT_Data.npointer(address(), value); return this; }
 
     }
 

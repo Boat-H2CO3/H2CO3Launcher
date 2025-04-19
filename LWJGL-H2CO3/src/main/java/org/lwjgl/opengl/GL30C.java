@@ -5,32 +5,20 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.APIUtil.apiGetMappedBuffer;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT1;
-import static org.lwjgl.system.Checks.checkSafe;
-import static org.lwjgl.system.JNI.callPPPPV;
-import static org.lwjgl.system.JNI.callPV;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.memASCII;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
-import static org.lwjgl.system.MemoryUtil.memByteBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memUTF8Safe;
+import javax.annotation.*;
 
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.APIUtil;
-import org.lwjgl.system.MemoryStack;
+import java.nio.*;
+
+import org.lwjgl.*;
+
+import org.lwjgl.system.*;
 import org.lwjgl.system.MemoryUtil;
-import org.lwjgl.system.NativeType;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * The OpenGL functionality of a forward compatible context, up to version 3.0.

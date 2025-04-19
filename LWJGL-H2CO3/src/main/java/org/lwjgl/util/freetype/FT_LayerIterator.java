@@ -5,29 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * This iterator object is needed for {@link FreeType#FT_Get_Color_Glyph_Layer Get_Color_Glyph_Layer}.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_LayerIterator {
  *     FT_UInt num_layers;
@@ -37,29 +29,23 @@ import javax.annotation.Nullable;
  */
 public class FT_LayerIterator extends Struct<FT_LayerIterator> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            NUM_LAYERS,
-            LAYER,
-            P;
+        NUM_LAYERS,
+        LAYER,
+        P;
 
     static {
         Layout layout = __struct(
-                __member(4),
-                __member(4),
-                __member(POINTER_SIZE)
+            __member(4),
+            __member(4),
+            __member(POINTER_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -74,6 +60,11 @@ public class FT_LayerIterator extends Struct<FT_LayerIterator> implements Native
         super(address, container);
     }
 
+    @Override
+    protected FT_LayerIterator create(long address, @Nullable ByteBuffer container) {
+        return new FT_LayerIterator(address, container);
+    }
+
     /**
      * Creates a {@code FT_LayerIterator} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -84,44 +75,52 @@ public class FT_LayerIterator extends Struct<FT_LayerIterator> implements Native
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code num_layers} field. */
+    @NativeType("FT_UInt")
+    public int num_layers() { return nnum_layers(address()); }
+    /** @return the value of the {@code layer} field. */
+    @NativeType("FT_UInt")
+    public int layer() { return nlayer(address()); }
     /**
-     * Returns a new {@code FT_LayerIterator} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
+     * @return a {@link ByteBuffer} view of the data pointed to by the {@code p} field.
+     *
+     * @param capacity the number of elements in the returned buffer
      */
+    @Nullable
+    @NativeType("FT_Byte *")
+    public ByteBuffer p(int capacity) { return np(address(), capacity); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_LayerIterator} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_LayerIterator malloc() {
         return new FT_LayerIterator(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_LayerIterator} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_LayerIterator} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_LayerIterator calloc() {
         return new FT_LayerIterator(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_LayerIterator} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_LayerIterator} instance allocated with {@link BufferUtils}. */
     public static FT_LayerIterator create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_LayerIterator(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_LayerIterator} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_LayerIterator} instance for the specified memory address. */
     public static FT_LayerIterator create(long address) {
         return new FT_LayerIterator(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_LayerIterator createSafe(long address) {
         return address == NULL ? null : new FT_LayerIterator(address, null);
     }
-
-    // -----------------------------------
 
     /**
      * Returns a new {@link Buffer} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
@@ -161,9 +160,7 @@ public class FT_LayerIterator extends Struct<FT_LayerIterator> implements Native
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -207,71 +204,18 @@ public class FT_LayerIterator extends Struct<FT_LayerIterator> implements Native
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #num_layers}.
-     */
-    public static int nnum_layers(long struct) {
-        return UNSAFE.getInt(null, struct + FT_LayerIterator.NUM_LAYERS);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #layer}.
-     */
-    public static int nlayer(long struct) {
-        return UNSAFE.getInt(null, struct + FT_LayerIterator.LAYER);
-    }
-
-    /**
-     * Unsafe version of {@link #p(int) p}.
-     */
-    @Nullable
-    public static ByteBuffer np(long struct, int capacity) {
-        return memByteBufferSafe(memGetAddress(struct + FT_LayerIterator.P), capacity);
-    }
-
-    @Override
-    protected FT_LayerIterator create(long address, @Nullable ByteBuffer container) {
-        return new FT_LayerIterator(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #num_layers}. */
+    public static int nnum_layers(long struct) { return UNSAFE.getInt(null, struct + FT_LayerIterator.NUM_LAYERS); }
+    /** Unsafe version of {@link #layer}. */
+    public static int nlayer(long struct) { return UNSAFE.getInt(null, struct + FT_LayerIterator.LAYER); }
+    /** Unsafe version of {@link #p(int) p}. */
+    @Nullable public static ByteBuffer np(long struct, int capacity) { return memByteBufferSafe(memGetAddress(struct + FT_LayerIterator.P), capacity); }
 
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code num_layers} field.
-     */
-    @NativeType("FT_UInt")
-    public int num_layers() {
-        return nnum_layers(address());
-    }
-
-    /**
-     * @return the value of the {@code layer} field.
-     */
-    @NativeType("FT_UInt")
-    public int layer() {
-        return nlayer(address());
-    }
-
-    /**
-     * @param capacity the number of elements in the returned buffer
-     * @return a {@link ByteBuffer} view of the data pointed to by the {@code p} field.
-     */
-    @Nullable
-    @NativeType("FT_Byte *")
-    public ByteBuffer p(int capacity) {
-        return np(address(), capacity);
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_LayerIterator} structs.
-     */
+    /** An array of {@link FT_LayerIterator} structs. */
     public static class Buffer extends StructBuffer<FT_LayerIterator, Buffer> implements NativeResource {
 
         private static final FT_LayerIterator ELEMENT_FACTORY = FT_LayerIterator.create(-1L);
@@ -307,31 +251,20 @@ public class FT_LayerIterator extends Struct<FT_LayerIterator> implements Native
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code num_layers} field.
-         */
+        /** @return the value of the {@code num_layers} field. */
         @NativeType("FT_UInt")
-        public int num_layers() {
-            return FT_LayerIterator.nnum_layers(address());
-        }
-
-        /**
-         * @return the value of the {@code layer} field.
-         */
+        public int num_layers() { return FT_LayerIterator.nnum_layers(address()); }
+        /** @return the value of the {@code layer} field. */
         @NativeType("FT_UInt")
-        public int layer() {
-            return FT_LayerIterator.nlayer(address());
-        }
-
+        public int layer() { return FT_LayerIterator.nlayer(address()); }
         /**
-         * @param capacity the number of elements in the returned buffer
          * @return a {@link ByteBuffer} view of the data pointed to by the {@code p} field.
+         *
+         * @param capacity the number of elements in the returned buffer
          */
         @Nullable
         @NativeType("FT_Byte *")
-        public ByteBuffer p(int capacity) {
-            return FT_LayerIterator.np(address(), capacity);
-        }
+        public ByteBuffer p(int capacity) { return FT_LayerIterator.np(address(), capacity); }
 
     }
 

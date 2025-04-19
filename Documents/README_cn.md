@@ -1,9 +1,9 @@
-# Boat_H2CO3
+# H2CO3Launcher
 
 基于 Boat App 作为核心制作的 Minecraft 启动器。
 
-[![Android CI](https://github.com/bilicainiaohh/Boat_H2CO3NewUI/actions/workflows/android.yml/badge.svg)](https://github.com/bilicainiaohh/Boat_H2CO3NewUI/actions/workflows/android.yml)
-[测试版下载](https://nightly.link/Boat-H2CO3/Boat_H2CO3/workflows/android/H2CO3_main/H2CO3-debug.zip)
+[![Android CI](https://github.com/bilicainiaohh/H2CO3LauncherNewUI/actions/workflows/android.yml/badge.svg)](https://github.com/bilicainiaohh/H2CO3LauncherNewUI/actions/workflows/android.yml)
+[测试版下载](https://nightly.link/Boat-H2CO3/H2CO3Launcher/workflows/android/H2CO3_main/H2CO3-debug.zip)
 
 ## 仓库说明
 

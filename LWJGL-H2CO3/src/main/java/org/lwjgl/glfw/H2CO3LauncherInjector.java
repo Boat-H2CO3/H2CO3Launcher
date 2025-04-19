@@ -1,9 +1,3 @@
-/*
- * //
- * // Created by cainiaohh on 2024-03-31.
- * //
- */
-
 package org.lwjgl.glfw;
 
 import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
@@ -21,7 +15,7 @@ import java.lang.reflect.Method;
 import javax.annotation.Nullable;
 
 /**
- * By ciniaohh
+ * By Tungsten
  * This class is for H2CO3Launcher.
  */
 public class H2CO3LauncherInjector {
@@ -32,7 +26,7 @@ public class H2CO3LauncherInjector {
     private static boolean get = false;
     private static ClassLoader classLoader;
 
-    private static final String HIT_RESULT_TYPE_UNKNOWN = "UNKNOWN";
+    private static final String HIT_RESULT_TYPE_UNKNOWN      = "UNKNOWN";
     private static final String HIT_RESULT_TYPE_MISS         = "MISS";
     private static final String HIT_RESULT_TYPE_BLOCK        = "BLOCK";
     private static final String HIT_RESULT_TYPE_BLOCK_OLD    = "TILE";
@@ -58,7 +52,7 @@ public class H2CO3LauncherInjector {
     private static String param3 = null;
 
     public static void setClassLoader(ClassLoader classLoader) {
-        String prop = System.getProperty("h2co3launcher.injector");
+        String prop = System.getProperty("h2co3Launcher.injector");
         if (!get && prop != null && !prop.isEmpty()) {
             H2CO3LauncherInjector.classLoader = classLoader;
             String[] props = prop.split(":");
@@ -90,8 +84,8 @@ public class H2CO3LauncherInjector {
     }
 
     @Nullable
-    @NativeType("H2CO3injectorfun")
-    public static H2CO3LauncherInjectorCallback glfwSetH2CO3LauncherInjectorCallback(@Nullable @NativeType("H2CO3injectorfun") H2CO3LauncherInjectorCallbackI cbfun) {
+    @NativeType("H2CO3LauncherInjectorfun")
+    public static H2CO3LauncherInjectorCallback glfwSetH2CO3LauncherInjectorCallback(@Nullable @NativeType("H2CO3LauncherInjectorfun") H2CO3LauncherInjectorCallbackI cbfun) {
         return H2CO3LauncherInjectorCallback.createSafe(nglfwSetH2CO3LauncherInjectorCallback(memAddressSafe(cbfun)));
     }
 
@@ -122,7 +116,7 @@ public class H2CO3LauncherInjector {
     public static void getHitResultType() {
         if (!get) {
             nglfwSetHitResultType(HIT_RESULT_TYPE_UNKNOWN);
-            apiLog("H2CO3Launcher Injector not initialized!");
+            apiLog("H2CO3Launcher Injector not initialized!\n");
             return;
         }
         if (param0 != null && param1 != null && param2 != null && param3 != null) {
@@ -154,8 +148,7 @@ public class H2CO3LauncherInjector {
                     }
                 }
                 success = true;
-            } catch (ClassNotFoundException | NoSuchFieldException | NoSuchMethodException |
-                     IllegalAccessException | InvocationTargetException e) {
+            } catch (ClassNotFoundException | NoSuchFieldException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 apiLog(e.getMessage());
             }
             if (level == INJECTOR_LEVEL_2) {

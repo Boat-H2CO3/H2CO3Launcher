@@ -5,28 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A structure representing a {@code ColorStop} value of the 'COLR' v1 extensions.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_ColorStop {
  *     FT_Fixed stop_offset;
@@ -35,27 +28,21 @@ import javax.annotation.Nullable;
  */
 public class FT_ColorStop extends Struct<FT_ColorStop> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            STOP_OFFSET,
-            COLOR;
+        STOP_OFFSET,
+        COLOR;
 
     static {
         Layout layout = __struct(
-                __member(CLONG_SIZE),
-                __member(FT_ColorIndex.SIZEOF, FT_ColorIndex.ALIGNOF)
+            __member(CLONG_SIZE),
+            __member(FT_ColorIndex.SIZEOF, FT_ColorIndex.ALIGNOF)
         );
 
         SIZEOF = layout.getSize();
@@ -69,6 +56,11 @@ public class FT_ColorStop extends Struct<FT_ColorStop> implements NativeResource
         super(address, container);
     }
 
+    @Override
+    protected FT_ColorStop create(long address, @Nullable ByteBuffer container) {
+        return new FT_ColorStop(address, container);
+    }
+
     /**
      * Creates a {@code FT_ColorStop} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -79,40 +71,39 @@ public class FT_ColorStop extends Struct<FT_ColorStop> implements NativeResource
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_ColorStop} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code stop_offset} field. */
+    @NativeType("FT_Fixed")
+    public long stop_offset() { return nstop_offset(address()); }
+    /** @return a {@link FT_ColorIndex} view of the {@code color} field. */
+    public FT_ColorIndex color() { return ncolor(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_ColorStop} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_ColorStop malloc() {
         return new FT_ColorStop(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_ColorStop} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_ColorStop} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_ColorStop calloc() {
         return new FT_ColorStop(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_ColorStop} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_ColorStop} instance allocated with {@link BufferUtils}. */
     public static FT_ColorStop create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_ColorStop(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_ColorStop} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_ColorStop} instance for the specified memory address. */
     public static FT_ColorStop create(long address) {
         return new FT_ColorStop(address, null);
     }
 
-    // -----------------------------------
-
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_ColorStop createSafe(long address) {
         return address == NULL ? null : new FT_ColorStop(address, null);
@@ -156,9 +147,7 @@ public class FT_ColorStop extends Struct<FT_ColorStop> implements NativeResource
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -202,52 +191,16 @@ public class FT_ColorStop extends Struct<FT_ColorStop> implements NativeResource
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #stop_offset}.
-     */
-    public static long nstop_offset(long struct) {
-        return memGetCLong(struct + FT_ColorStop.STOP_OFFSET);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #color}.
-     */
-    public static FT_ColorIndex ncolor(long struct) {
-        return FT_ColorIndex.create(struct + FT_ColorStop.COLOR);
-    }
-
-    @Override
-    protected FT_ColorStop create(long address, @Nullable ByteBuffer container) {
-        return new FT_ColorStop(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #stop_offset}. */
+    public static long nstop_offset(long struct) { return memGetCLong(struct + FT_ColorStop.STOP_OFFSET); }
+    /** Unsafe version of {@link #color}. */
+    public static FT_ColorIndex ncolor(long struct) { return FT_ColorIndex.create(struct + FT_ColorStop.COLOR); }
 
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code stop_offset} field.
-     */
-    @NativeType("FT_Fixed")
-    public long stop_offset() {
-        return nstop_offset(address());
-    }
-
-    /**
-     * @return a {@link FT_ColorIndex} view of the {@code color} field.
-     */
-    public FT_ColorIndex color() {
-        return ncolor(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_ColorStop} structs.
-     */
+    /** An array of {@link FT_ColorStop} structs. */
     public static class Buffer extends StructBuffer<FT_ColorStop, Buffer> implements NativeResource {
 
         private static final FT_ColorStop ELEMENT_FACTORY = FT_ColorStop.create(-1L);
@@ -283,20 +236,11 @@ public class FT_ColorStop extends Struct<FT_ColorStop> implements NativeResource
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code stop_offset} field.
-         */
+        /** @return the value of the {@code stop_offset} field. */
         @NativeType("FT_Fixed")
-        public long stop_offset() {
-            return FT_ColorStop.nstop_offset(address());
-        }
-
-        /**
-         * @return a {@link FT_ColorIndex} view of the {@code color} field.
-         */
-        public FT_ColorIndex color() {
-            return FT_ColorStop.ncolor(address());
-        }
+        public long stop_offset() { return FT_ColorStop.nstop_offset(address()); }
+        /** @return a {@link FT_ColorIndex} view of the {@code color} field. */
+        public FT_ColorIndex color() { return FT_ColorStop.ncolor(address()); }
 
     }
 

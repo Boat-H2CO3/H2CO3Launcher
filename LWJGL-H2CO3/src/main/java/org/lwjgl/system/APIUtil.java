@@ -585,8 +585,8 @@ public final class APIUtil {
         MemoryAllocator allocator = MemoryUtil.getAllocator();
 
         PointerBuffer elementBuffer = PointerBuffer.create(
-                allocator.malloc((long) (members.length + 1) * POINTER_SIZE),
-                members.length + 1
+            allocator.malloc((members.length + 1) * POINTER_SIZE),
+            members.length + 1
         );
         for (int i = 0; i < members.length; i++) {
             elementBuffer.put(i, members[i]);
@@ -625,20 +625,20 @@ public final class APIUtil {
         }
 
         return FFIType.create(allocator.malloc(FFIType.SIZEOF))
-                .size(maxType.size())
-                .alignment(maxAlignment)
-                .type(FFI_TYPE_STRUCT)
-                .elements(PointerBuffer.create(allocator.malloc(2L * POINTER_SIZE), 2)
-                        .put(0, maxType)
-                        .put(1, NULL));
+            .size(maxType.size())
+            .alignment(maxAlignment)
+            .type(FFI_TYPE_STRUCT)
+            .elements(PointerBuffer.create(allocator.malloc(2 * POINTER_SIZE), 2)
+                .put(0, maxType)
+                .put(1, NULL));
     }
 
     public static FFIType apiCreateArray(FFIType type, int length) {
         MemoryAllocator allocator = MemoryUtil.getAllocator();
 
         PointerBuffer elementBuffer = PointerBuffer.create(
-                allocator.malloc((long) (length + 1) * POINTER_SIZE),
-                length + 1
+            allocator.malloc((length + 1) * POINTER_SIZE),
+            length + 1
         );
         for (int i = 0; i < length; i++) {
             elementBuffer.put(i, type);
@@ -655,7 +655,7 @@ public final class APIUtil {
         // These CIFs will never be deallocated, use the allocator directly to ignore them when detecting memory leaks.
         MemoryAllocator allocator = MemoryUtil.getAllocator();
 
-        PointerBuffer pArgTypes = PointerBuffer.create(allocator.malloc((long) atypes.length * POINTER_SIZE), atypes.length);
+        PointerBuffer pArgTypes = PointerBuffer.create(allocator.malloc(atypes.length * POINTER_SIZE), atypes.length);
         for (int i = 0; i < atypes.length; i++) {
             pArgTypes.put(i, atypes[i]);
         }
@@ -675,7 +675,7 @@ public final class APIUtil {
         // These CIFs will never be deallocated, use the allocator directly to ignore them when detecting memory leaks.
         MemoryAllocator allocator = MemoryUtil.getAllocator();
 
-        PointerBuffer pArgTypes = PointerBuffer.create(allocator.malloc((long) atypes.length * POINTER_SIZE), atypes.length);
+        PointerBuffer pArgTypes = PointerBuffer.create(allocator.malloc(atypes.length * POINTER_SIZE), atypes.length);
         for (int i = 0; i < atypes.length; i++) {
             pArgTypes.put(i, atypes[i]);
         }

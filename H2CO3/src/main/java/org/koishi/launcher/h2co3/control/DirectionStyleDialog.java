@@ -1,0 +1,85 @@
+package org.koishi.launcher.h2co3.control;
+
+import android.content.Context;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import org.koishi.launcher.h2co3.R;
+import org.koishi.launcher.h2co3.control.data.ControlDirectionStyle;
+import org.koishi.launcher.h2co3.control.data.DirectionStyles;
+import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherDialog;
+import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
+import org.koishi.launcher.h2co3library.component.view.HorizontalListView;
+
+public class DirectionStyleDialog extends H2CO3LauncherDialog implements View.OnClickListener {
+
+    private final boolean select;
+    private final ControlDirectionStyle initStyle;
+    private final Callback callback;
+
+    private H2CO3LauncherButton addStyle;
+    private H2CO3LauncherButton editStyle;
+    private H2CO3LauncherButton positive;
+
+    private HorizontalListView listView;
+    private DirectionStyleAdapter adapter;
+
+    public DirectionStyleDialog(@NonNull Context context, boolean select, @Nullable ControlDirectionStyle initStyle, Callback callback) {
+        super(context);
+        this.select = select;
+        this.initStyle = initStyle;
+        this.callback = callback;
+        setContentView(R.layout.dialog_manage_direction_style);
+        setCancelable(false);
+
+        addStyle = findViewById(R.id.add_style);
+        editStyle = findViewById(R.id.edit_style);
+        positive = findViewById(R.id.positive);
+        addStyle.setOnClickListener(this);
+        editStyle.setOnClickListener(this);
+        positive.setOnClickListener(this);
+
+        listView = findViewById(R.id.list);
+        refreshList();
+
+        if (!select) {
+            editStyle.setVisibility(View.GONE);
+        }
+    }
+
+    public void refreshList() {
+        adapter = new DirectionStyleAdapter(getContext(), DirectionStyles.getStyles(), select, initStyle);
+        listView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == addStyle) {
+            AddDirectionStyleDialog dialog = new AddDirectionStyleDialog(getContext(), null, false, style -> {
+                DirectionStyles.addStyle(style);
+                refreshList();
+            });
+            dialog.show();
+        }
+        if (v == editStyle) {
+            AddDirectionStyleDialog dialog = new AddDirectionStyleDialog(getContext(), adapter.getSelectedStyle(), true, style -> {
+                DirectionStyles.removeStyles(adapter.getSelectedStyle());
+                DirectionStyles.addStyle(style);
+                refreshList();
+            });
+            dialog.show();
+        }
+        if (v == positive) {
+            dismiss();
+            if (callback != null && select) {
+                callback.onStyleSelect(adapter.getSelectedStyle());
+            }
+        }
+    }
+
+    public interface Callback {
+        void onStyleSelect(ControlDirectionStyle style);
+    }
+}

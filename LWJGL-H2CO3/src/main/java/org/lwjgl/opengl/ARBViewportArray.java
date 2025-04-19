@@ -5,11 +5,9 @@
  */
 package org.lwjgl.opengl;
 
-import org.lwjgl.system.NativeType;
+import java.nio.*;
 
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import org.lwjgl.system.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_viewport_array.txt">ARB_viewport_array</a> extension.

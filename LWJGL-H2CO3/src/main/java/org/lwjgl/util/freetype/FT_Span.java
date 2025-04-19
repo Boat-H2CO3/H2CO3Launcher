@@ -5,22 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure to model a single span of consecutive pixels when rendering an anti-aliased bitmap.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Span {
  *     short x;
@@ -30,29 +27,23 @@ import javax.annotation.Nullable;
  */
 public class FT_Span extends Struct<FT_Span> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            X,
-            LEN,
-            COVERAGE;
+        X,
+        LEN,
+        COVERAGE;
 
     static {
         Layout layout = __struct(
-                __member(2),
-                __member(2),
-                __member(1)
+            __member(2),
+            __member(2),
+            __member(1)
         );
 
         SIZEOF = layout.getSize();
@@ -67,6 +58,11 @@ public class FT_Span extends Struct<FT_Span> {
         super(address, container);
     }
 
+    @Override
+    protected FT_Span create(long address, @Nullable ByteBuffer container) {
+        return new FT_Span(address, container);
+    }
+
     /**
      * Creates a {@code FT_Span} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -77,16 +73,26 @@ public class FT_Span extends Struct<FT_Span> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_Span} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code x} field. */
+    public short x() { return nx(address()); }
+    /** @return the value of the {@code len} field. */
+    @NativeType("unsigned short")
+    public short len() { return nlen(address()); }
+    /** @return the value of the {@code coverage} field. */
+    @NativeType("unsigned char")
+    public byte coverage() { return ncoverage(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Span} instance for the specified memory address. */
     public static FT_Span create(long address) {
         return new FT_Span(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Span createSafe(long address) {
         return address == NULL ? null : new FT_Span(address, null);
@@ -102,77 +108,24 @@ public class FT_Span extends Struct<FT_Span> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #x}.
-     */
-    public static short nx(long struct) {
-        return UNSAFE.getShort(null, struct + FT_Span.X);
-    }
+    // -----------------------------------
+
+    /** Unsafe version of {@link #x}. */
+    public static short nx(long struct) { return UNSAFE.getShort(null, struct + FT_Span.X); }
+    /** Unsafe version of {@link #len}. */
+    public static short nlen(long struct) { return UNSAFE.getShort(null, struct + FT_Span.LEN); }
+    /** Unsafe version of {@link #coverage}. */
+    public static byte ncoverage(long struct) { return UNSAFE.getByte(null, struct + FT_Span.COVERAGE); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #len}.
-     */
-    public static short nlen(long struct) {
-        return UNSAFE.getShort(null, struct + FT_Span.LEN);
-    }
-
-    /**
-     * Unsafe version of {@link #coverage}.
-     */
-    public static byte ncoverage(long struct) {
-        return UNSAFE.getByte(null, struct + FT_Span.COVERAGE);
-    }
-
-    @Override
-    protected FT_Span create(long address, @Nullable ByteBuffer container) {
-        return new FT_Span(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return the value of the {@code x} field.
-     */
-    public short x() {
-        return nx(address());
-    }
-
-    /**
-     * @return the value of the {@code len} field.
-     */
-    @NativeType("unsigned short")
-    public short len() {
-        return nlen(address());
-    }
-
-    /**
-     * @return the value of the {@code coverage} field.
-     */
-    @NativeType("unsigned char")
-    public byte coverage() {
-        return ncoverage(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Span} structs.
-     */
+    /** An array of {@link FT_Span} structs. */
     public static class Buffer extends StructBuffer<FT_Span, Buffer> {
 
         private static final FT_Span ELEMENT_FACTORY = FT_Span.create(-1L);
@@ -208,28 +161,14 @@ public class FT_Span extends Struct<FT_Span> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code x} field.
-         */
-        public short x() {
-            return FT_Span.nx(address());
-        }
-
-        /**
-         * @return the value of the {@code len} field.
-         */
+        /** @return the value of the {@code x} field. */
+        public short x() { return FT_Span.nx(address()); }
+        /** @return the value of the {@code len} field. */
         @NativeType("unsigned short")
-        public short len() {
-            return FT_Span.nlen(address());
-        }
-
-        /**
-         * @return the value of the {@code coverage} field.
-         */
+        public short len() { return FT_Span.nlen(address()); }
+        /** @return the value of the {@code coverage} field. */
         @NativeType("unsigned char")
-        public byte coverage() {
-            return FT_Span.ncoverage(address());
-        }
+        public byte coverage() { return FT_Span.ncoverage(address()); }
 
     }
 

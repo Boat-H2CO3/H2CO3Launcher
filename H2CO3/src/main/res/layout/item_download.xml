@@ -10,7 +10,7 @@
         android:layout_marginHorizontal="@dimen/app_10dp"
         android:layout_marginVertical="@dimen/app_5dp">
 
-        <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
             android:id="@+id/fileNameText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -18,12 +18,12 @@
             android:lines="1"
             android:text="@string/app_name" />
 
-        <org.koishi.launcher.h2co3.resources.component.H2CO3LinearProgress
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LinearProgress
             android:id="@+id/fileProgress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
             android:id="@+id/state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

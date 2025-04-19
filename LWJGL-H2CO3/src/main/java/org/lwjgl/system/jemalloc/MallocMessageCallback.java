@@ -5,12 +5,11 @@
  */
 package org.lwjgl.system.jemalloc;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memASCII;
+import javax.annotation.*;
 
-import org.lwjgl.system.Callback;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Instances of this class may be passed to the {@link JEmalloc#je_malloc_usable_size malloc_usable_size} method.

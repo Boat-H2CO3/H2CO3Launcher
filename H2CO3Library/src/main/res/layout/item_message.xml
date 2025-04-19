@@ -6,7 +6,7 @@
     android:gravity="center_vertical"
     android:paddingBottom="@dimen/app_5dp">
 
-    <org.koishi.launcher.h2co3.resources.component.message.H2CO3MessageItemView
+    <org.koishi.launcher.h2co3library.component.view.H2CO3MessageItemView
         android:id="@+id/message_item_view"
         style="@style/Theme.H2CO3.CardViewElevated"
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_height="@dimen/app_40dp"
                 android:duplicateParentState="true"
                 android:importantForAccessibility="no"
-                app:srcCompat="@drawable/ic_menu_about" />
+                app:srcCompat="@drawable/ic_outline_info_24" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
-                <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
                     android:id="@+id/tv_type"
                     style="@style/Theme.H2CO3.CardTitle"
                     android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
                     android:text="@string/app_name"
                     android:textSize="16sp" />
 
-                <org.koishi.launcher.h2co3.resources.component.H2CO3TextView
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
                     android:id="@+id/tv_message"
                     style="@style/Theme.H2CO3.CardTitle"
                     android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
 
         </LinearLayout>
 
-    </org.koishi.launcher.h2co3.resources.component.message.H2CO3MessageItemView>
+    </org.koishi.launcher.h2co3library.component.view.H2CO3MessageItemView>
 
 </RelativeLayout>
 

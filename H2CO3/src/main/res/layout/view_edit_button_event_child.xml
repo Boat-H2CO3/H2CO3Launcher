@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="@string/edit_button_event_auto_keep"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch
+            android:id="@+id/auto_keep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="@string/edit_button_event_auto_click"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch
+            android:id="@+id/auto_click"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="@string/edit_button_event_open_menu"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch
+            android:id="@+id/open_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="@string/edit_button_event_touch_mode"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch
+            android:id="@+id/touch_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="@string/edit_button_event_mouse_mode"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch
+            android:id="@+id/mouse_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="@string/edit_button_event_input"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch
+            android:id="@+id/input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="@string/edit_button_event_quick_input"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch
+            android:id="@+id/quick_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="@string/edit_button_event_output_text"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+            android:id="@+id/output_text"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:textSize="12sp"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="@string/edit_button_event_keycodes"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+            android:id="@+id/keycode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="8dp"
+            android:text="@string/menu_control_set"
+            app:auto_padding="false"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="@string/edit_button_event_bind_group"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+            android:id="@+id/bind_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="8dp"
+            android:text="@string/menu_control_set"
+            app:auto_padding="false"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+</org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>

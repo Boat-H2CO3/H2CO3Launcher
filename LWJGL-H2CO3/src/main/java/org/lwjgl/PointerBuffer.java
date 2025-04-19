@@ -4,37 +4,14 @@
  */
 package org.lwjgl;
 
-import static org.lwjgl.system.CheckIntrinsics.checkFromIndexSize;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MemoryUtil.memASCII;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddress0;
-import static org.lwjgl.system.MemoryUtil.memByteBuffer;
-import static org.lwjgl.system.MemoryUtil.memDoubleBuffer;
-import static org.lwjgl.system.MemoryUtil.memFloatBuffer;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memIntBuffer;
-import static org.lwjgl.system.MemoryUtil.memLongBuffer;
-import static org.lwjgl.system.MemoryUtil.memPointerBuffer;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.memShortBuffer;
-import static org.lwjgl.system.MemoryUtil.memUTF16;
-import static org.lwjgl.system.MemoryUtil.memUTF8;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.CustomBuffer;
-import org.lwjgl.system.Pointer;
+import javax.annotation.*;
+import java.nio.*;
 
-import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ReadOnlyBufferException;
-import java.nio.ShortBuffer;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.CheckIntrinsics.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** This class is a container for architecture-independent pointer data. Its interface mirrors the {@link LongBuffer} API for convenience. */
 public class PointerBuffer extends CustomBuffer<PointerBuffer> implements Comparable<PointerBuffer> {
@@ -139,7 +116,7 @@ public class PointerBuffer extends CustomBuffer<PointerBuffer> implements Compar
             return true;
         }
 
-        private PointerBuffer newInstance(final ByteBuffer source) {
+        protected PointerBuffer newInstance(final ByteBuffer source) {
             return new PointerBufferR(source);
         }
 

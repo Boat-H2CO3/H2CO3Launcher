@@ -5,22 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure representing a {@code COLR} v1 {@code PaintGlyph} paint table.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_PaintGlyph {
  *     {@link FT_OpaquePaint FT_OpaquePaintRec} paint;
@@ -29,27 +26,21 @@ import javax.annotation.Nullable;
  */
 public class FT_PaintGlyph extends Struct<FT_PaintGlyph> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            PAINT,
-            GLYPHID;
+        PAINT,
+        GLYPHID;
 
     static {
         Layout layout = __struct(
-                __member(FT_OpaquePaint.SIZEOF, FT_OpaquePaint.ALIGNOF),
-                __member(4)
+            __member(FT_OpaquePaint.SIZEOF, FT_OpaquePaint.ALIGNOF),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -63,6 +54,11 @@ public class FT_PaintGlyph extends Struct<FT_PaintGlyph> {
         super(address, container);
     }
 
+    @Override
+    protected FT_PaintGlyph create(long address, @Nullable ByteBuffer container) {
+        return new FT_PaintGlyph(address, container);
+    }
+
     /**
      * Creates a {@code FT_PaintGlyph} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -73,16 +69,24 @@ public class FT_PaintGlyph extends Struct<FT_PaintGlyph> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_PaintGlyph} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link FT_OpaquePaint} view of the {@code paint} field. */
+    @NativeType("FT_OpaquePaintRec")
+    public FT_OpaquePaint paint() { return npaint(address()); }
+    /** @return the value of the {@code glyphID} field. */
+    @NativeType("FT_UInt")
+    public int glyphID() { return nglyphID(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_PaintGlyph} instance for the specified memory address. */
     public static FT_PaintGlyph create(long address) {
         return new FT_PaintGlyph(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_PaintGlyph createSafe(long address) {
         return address == NULL ? null : new FT_PaintGlyph(address, null);
@@ -98,9 +102,7 @@ public class FT_PaintGlyph extends Struct<FT_PaintGlyph> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -108,53 +110,14 @@ public class FT_PaintGlyph extends Struct<FT_PaintGlyph> {
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #paint}.
-     */
-    public static FT_OpaquePaint npaint(long struct) {
-        return FT_OpaquePaint.create(struct + FT_PaintGlyph.PAINT);
-    }
-
-    /**
-     * Unsafe version of {@link #glyphID}.
-     */
-    public static int nglyphID(long struct) {
-        return UNSAFE.getInt(null, struct + FT_PaintGlyph.GLYPHID);
-    }
-
-    @Override
-    protected FT_PaintGlyph create(long address, @Nullable ByteBuffer container) {
-        return new FT_PaintGlyph(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #paint}. */
+    public static FT_OpaquePaint npaint(long struct) { return FT_OpaquePaint.create(struct + FT_PaintGlyph.PAINT); }
+    /** Unsafe version of {@link #glyphID}. */
+    public static int nglyphID(long struct) { return UNSAFE.getInt(null, struct + FT_PaintGlyph.GLYPHID); }
 
     // -----------------------------------
 
-    /**
-     * @return a {@link FT_OpaquePaint} view of the {@code paint} field.
-     */
-    @NativeType("FT_OpaquePaintRec")
-    public FT_OpaquePaint paint() {
-        return npaint(address());
-    }
-
-    /**
-     * @return the value of the {@code glyphID} field.
-     */
-    @NativeType("FT_UInt")
-    public int glyphID() {
-        return nglyphID(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_PaintGlyph} structs.
-     */
+    /** An array of {@link FT_PaintGlyph} structs. */
     public static class Buffer extends StructBuffer<FT_PaintGlyph, Buffer> {
 
         private static final FT_PaintGlyph ELEMENT_FACTORY = FT_PaintGlyph.create(-1L);
@@ -190,21 +153,12 @@ public class FT_PaintGlyph extends Struct<FT_PaintGlyph> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link FT_OpaquePaint} view of the {@code paint} field.
-         */
+        /** @return a {@link FT_OpaquePaint} view of the {@code paint} field. */
         @NativeType("FT_OpaquePaintRec")
-        public FT_OpaquePaint paint() {
-            return FT_PaintGlyph.npaint(address());
-        }
-
-        /**
-         * @return the value of the {@code glyphID} field.
-         */
+        public FT_OpaquePaint paint() { return FT_PaintGlyph.npaint(address()); }
+        /** @return the value of the {@code glyphID} field. */
         @NativeType("FT_UInt")
-        public int glyphID() {
-            return FT_PaintGlyph.nglyphID(address());
-        }
+        public int glyphID() { return FT_PaintGlyph.nglyphID(address()); }
 
     }
 

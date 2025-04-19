@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_item"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_baseline_keyboard_24"
+        android:tint="@android:color/darker_gray" />
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:singleLine="true" />
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherCheckBox
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp" />
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+        android:id="@+id/up"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_baseline_arrow_upward_24"
+        android:tint="@android:color/darker_gray" />
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+        android:id="@+id/down"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_baseline_arrow_downward_24"
+        android:tint="@android:color/darker_gray" />
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+        android:id="@+id/edit"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_baseline_edit_24"
+        android:tint="@android:color/darker_gray" />
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+        android:id="@+id/delete"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_baseline_delete_24"
+        android:tint="@android:color/darker_gray" />
+
+</LinearLayout>

@@ -5,21 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure representing a {@code PaintSolid} value of the {@code COLR} v1 extensions.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_PaintSolid {
  *     {@link FT_ColorIndex FT_ColorIndex} color;
@@ -27,25 +25,19 @@ import javax.annotation.Nullable;
  */
 public class FT_PaintSolid extends Struct<FT_PaintSolid> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            COLOR;
+        COLOR;
 
     static {
         Layout layout = __struct(
-                __member(FT_ColorIndex.SIZEOF, FT_ColorIndex.ALIGNOF)
+            __member(FT_ColorIndex.SIZEOF, FT_ColorIndex.ALIGNOF)
         );
 
         SIZEOF = layout.getSize();
@@ -58,6 +50,11 @@ public class FT_PaintSolid extends Struct<FT_PaintSolid> {
         super(address, container);
     }
 
+    @Override
+    protected FT_PaintSolid create(long address, @Nullable ByteBuffer container) {
+        return new FT_PaintSolid(address, container);
+    }
+
     /**
      * Creates a {@code FT_PaintSolid} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -68,16 +65,20 @@ public class FT_PaintSolid extends Struct<FT_PaintSolid> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_PaintSolid} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link FT_ColorIndex} view of the {@code color} field. */
+    public FT_ColorIndex color() { return ncolor(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_PaintSolid} instance for the specified memory address. */
     public static FT_PaintSolid create(long address) {
         return new FT_PaintSolid(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_PaintSolid createSafe(long address) {
         return address == NULL ? null : new FT_PaintSolid(address, null);
@@ -93,47 +94,20 @@ public class FT_PaintSolid extends Struct<FT_PaintSolid> {
         return new Buffer(address, capacity);
     }
 
-    // -----------------------------------
-
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #color}.
-     */
-    public static FT_ColorIndex ncolor(long struct) {
-        return FT_ColorIndex.create(struct + FT_PaintSolid.COLOR);
-    }
+    // -----------------------------------
 
-    @Override
-    protected FT_PaintSolid create(long address, @Nullable ByteBuffer container) {
-        return new FT_PaintSolid(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #color}. */
+    public static FT_ColorIndex ncolor(long struct) { return FT_ColorIndex.create(struct + FT_PaintSolid.COLOR); }
 
     // -----------------------------------
 
-    /**
-     * @return a {@link FT_ColorIndex} view of the {@code color} field.
-     */
-    public FT_ColorIndex color() {
-        return ncolor(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_PaintSolid} structs.
-     */
+    /** An array of {@link FT_PaintSolid} structs. */
     public static class Buffer extends StructBuffer<FT_PaintSolid, Buffer> {
 
         private static final FT_PaintSolid ELEMENT_FACTORY = FT_PaintSolid.create(-1L);
@@ -169,12 +143,8 @@ public class FT_PaintSolid extends Struct<FT_PaintSolid> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link FT_ColorIndex} view of the {@code color} field.
-         */
-        public FT_ColorIndex color() {
-            return FT_PaintSolid.ncolor(address());
-        }
+        /** @return a {@link FT_ColorIndex} view of the {@code color} field. */
+        public FT_ColorIndex color() { return FT_PaintSolid.ncolor(address()); }
 
     }
 

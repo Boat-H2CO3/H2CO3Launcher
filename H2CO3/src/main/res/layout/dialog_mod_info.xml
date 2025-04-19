@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="400dp"
+    android:layout_height="240dp"
+    android:padding="15dp">
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView
+            android:id="@+id/icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:textStyle="bold"/>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                    android:id="@+id/version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:singleLine="true"
+                    android:textSize="11sp"/>
+
+            </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                android:id="@+id/file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"/>
+
+        </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/positive"
+        app:layout_constraintTop_toBottomOf="@+id/top">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </ScrollView>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mods_url"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/positive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_positive"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

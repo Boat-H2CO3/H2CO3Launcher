@@ -20,5 +20,5 @@
         android:id="@+id/action_item_setting"
         android:icon="@drawable/ic_menu_settings"
         android:showAsAction="ifRoom"
-        android:title="@string/title_global_setting" />
+        android:title="@string/setting" />
 </menu>

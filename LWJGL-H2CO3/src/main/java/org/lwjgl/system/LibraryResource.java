@@ -4,18 +4,14 @@
  */
 package org.lwjgl.system;
 
-import static org.lwjgl.system.APIUtil.DEBUG_STREAM;
-import static org.lwjgl.system.APIUtil.apiLogMore;
-import static org.lwjgl.system.Checks.DEBUG;
+import javax.annotation.*;
+import java.net.*;
+import java.nio.channels.*;
+import java.nio.file.*;
+import java.util.function.*;
 
-import java.net.URL;
-import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
 
 /**
  * Handles loading of native resources in LWJGL. [INTERNAL USE ONLY]

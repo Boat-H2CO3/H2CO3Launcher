@@ -4,54 +4,26 @@
  */
 package org.lwjgl.system;
 
-import static org.lwjgl.system.APIUtil.apiCheckAllocation;
-import static org.lwjgl.system.APIUtil.apiGetBytes;
-import static org.lwjgl.system.APIUtil.apiLog;
-import static org.lwjgl.system.APIUtil.apiLogMore;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.DEBUG;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MathUtil.mathHasZeroByte;
-import static org.lwjgl.system.MathUtil.mathHasZeroShort;
-import static org.lwjgl.system.MemoryUtil.LazyInit.ALLOCATOR;
-import static org.lwjgl.system.MemoryUtil.LazyInit.ALLOCATOR_IMPL;
-import static org.lwjgl.system.Pointer.BITS32;
-import static org.lwjgl.system.Pointer.BITS64;
-import static org.lwjgl.system.Pointer.CLONG_SHIFT;
-import static org.lwjgl.system.Pointer.CLONG_SIZE;
-import static org.lwjgl.system.Pointer.POINTER_SHIFT;
-import static org.lwjgl.system.Pointer.POINTER_SIZE;
-import static org.lwjgl.system.jni.JNINativeInterface.NewDirectByteBuffer;
-import static org.lwjgl.system.libc.LibCString.nmemset;
-import static java.lang.Character.isHighSurrogate;
-import static java.lang.Character.toCodePoint;
-import static java.lang.Math.min;
+import org.lwjgl.*;
+import org.lwjgl.system.MemoryManage.*;
+import org.lwjgl.system.MemoryUtil.MemoryAllocationReport.*;
 
-import org.lwjgl.CLongBuffer;
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.MemoryManage.DebugAllocator;
-import org.lwjgl.system.MemoryUtil.MemoryAllocationReport.Aggregate;
+import javax.annotation.*;
+import java.lang.reflect.*;
+import java.nio.*;
+import java.nio.charset.*;
+import java.util.*;
+import java.util.function.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.nio.Buffer;
-import java.nio.BufferOverflowException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.CharBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
-import java.util.function.LongPredicate;
-
-import javax.annotation.Nullable;
+import static java.lang.Character.*;
+import static java.lang.Math.*;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MathUtil.*;
+import static org.lwjgl.system.MemoryUtil.LazyInit.*;
+import static org.lwjgl.system.Pointer.*;
+import static org.lwjgl.system.jni.JNINativeInterface.*;
+import static org.lwjgl.system.libc.LibCString.*;
 
 /**
  * This class provides functionality for managing native memory.

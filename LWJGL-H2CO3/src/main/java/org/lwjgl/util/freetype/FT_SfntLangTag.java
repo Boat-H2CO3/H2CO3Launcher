@@ -5,27 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBuffer;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_SfntLangTag {
  *     FT_Byte * string;
@@ -34,27 +26,21 @@ import javax.annotation.Nullable;
  */
 public class FT_SfntLangTag extends Struct<FT_SfntLangTag> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            STRING,
-            STRING_LEN;
+        STRING,
+        STRING_LEN;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(4)
+            __member(POINTER_SIZE),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -68,6 +54,11 @@ public class FT_SfntLangTag extends Struct<FT_SfntLangTag> implements NativeReso
         super(address, container);
     }
 
+    @Override
+    protected FT_SfntLangTag create(long address, @Nullable ByteBuffer container) {
+        return new FT_SfntLangTag(address, container);
+    }
+
     /**
      * Creates a {@code FT_SfntLangTag} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -78,40 +69,40 @@ public class FT_SfntLangTag extends Struct<FT_SfntLangTag> implements NativeReso
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_SfntLangTag} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link ByteBuffer} view of the data pointed to by the {@code string} field. */
+    @NativeType("FT_Byte *")
+    public ByteBuffer string() { return nstring(address()); }
+    /** @return the value of the {@code string_len} field. */
+    @NativeType("FT_UInt")
+    public int string_len() { return nstring_len(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_SfntLangTag} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_SfntLangTag malloc() {
         return new FT_SfntLangTag(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_SfntLangTag} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_SfntLangTag} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_SfntLangTag calloc() {
         return new FT_SfntLangTag(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_SfntLangTag} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_SfntLangTag} instance allocated with {@link BufferUtils}. */
     public static FT_SfntLangTag create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_SfntLangTag(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_SfntLangTag} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_SfntLangTag} instance for the specified memory address. */
     public static FT_SfntLangTag create(long address) {
         return new FT_SfntLangTag(address, null);
     }
 
-    // -----------------------------------
-
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_SfntLangTag createSafe(long address) {
         return address == NULL ? null : new FT_SfntLangTag(address, null);
@@ -155,9 +146,7 @@ public class FT_SfntLangTag extends Struct<FT_SfntLangTag> implements NativeReso
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -201,53 +190,16 @@ public class FT_SfntLangTag extends Struct<FT_SfntLangTag> implements NativeReso
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #string() string}.
-     */
-    public static ByteBuffer nstring(long struct) {
-        return memByteBuffer(memGetAddress(struct + FT_SfntLangTag.STRING), nstring_len(struct));
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #string_len}.
-     */
-    public static int nstring_len(long struct) {
-        return UNSAFE.getInt(null, struct + FT_SfntLangTag.STRING_LEN);
-    }
-
-    @Override
-    protected FT_SfntLangTag create(long address, @Nullable ByteBuffer container) {
-        return new FT_SfntLangTag(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #string() string}. */
+    public static ByteBuffer nstring(long struct) { return memByteBuffer(memGetAddress(struct + FT_SfntLangTag.STRING), nstring_len(struct)); }
+    /** Unsafe version of {@link #string_len}. */
+    public static int nstring_len(long struct) { return UNSAFE.getInt(null, struct + FT_SfntLangTag.STRING_LEN); }
 
     // -----------------------------------
 
-    /**
-     * @return a {@link ByteBuffer} view of the data pointed to by the {@code string} field.
-     */
-    @NativeType("FT_Byte *")
-    public ByteBuffer string() {
-        return nstring(address());
-    }
-
-    /**
-     * @return the value of the {@code string_len} field.
-     */
-    @NativeType("FT_UInt")
-    public int string_len() {
-        return nstring_len(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_SfntLangTag} structs.
-     */
+    /** An array of {@link FT_SfntLangTag} structs. */
     public static class Buffer extends StructBuffer<FT_SfntLangTag, Buffer> implements NativeResource {
 
         private static final FT_SfntLangTag ELEMENT_FACTORY = FT_SfntLangTag.create(-1L);
@@ -283,21 +235,12 @@ public class FT_SfntLangTag extends Struct<FT_SfntLangTag> implements NativeReso
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link ByteBuffer} view of the data pointed to by the {@code string} field.
-         */
+        /** @return a {@link ByteBuffer} view of the data pointed to by the {@code string} field. */
         @NativeType("FT_Byte *")
-        public ByteBuffer string() {
-            return FT_SfntLangTag.nstring(address());
-        }
-
-        /**
-         * @return the value of the {@code string_len} field.
-         */
+        public ByteBuffer string() { return FT_SfntLangTag.nstring(address()); }
+        /** @return the value of the {@code string_len} field. */
         @NativeType("FT_UInt")
-        public int string_len() {
-            return FT_SfntLangTag.nstring_len(address());
-        }
+        public int string_len() { return FT_SfntLangTag.nstring_len(address()); }
 
     }
 

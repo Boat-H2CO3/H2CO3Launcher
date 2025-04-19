@@ -62,23 +62,20 @@ import java.awt.event.HierarchyListener;
  */
 public class AWTGLCanvas extends Canvas implements DrawableLWJGL, ComponentListener, HierarchyListener {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private static final AWTCanvasImplementation implementation;
-    /**
-     * The requested pixel format
-     */
-    private final PixelFormat pixel_format;
-    private final Object SYNC_LOCK = new Object();
-    /**
-     * The drawable to share context with
-     */
-    private final Drawable drawable;
-    /**
-     * The ContextAttribs to use when creating the context
-     */
-    private final ContextAttribs attribs;
-    private boolean update_context;
+	private static final AWTCanvasImplementation implementation;
+	private              boolean                 update_context;
+	private Object SYNC_LOCK = new Object();
+
+	/** The requested pixel format */
+	private final PixelFormat pixel_format;
+
+	/** The drawable to share context with */
+	private final Drawable drawable;
+
+	/** The ContextAttribs to use when creating the context */
+	private final ContextAttribs attribs;
 
 	/** Context handle */
 	private PeerInfo  peer_info;
@@ -99,10 +96,10 @@ public class AWTGLCanvas extends Canvas implements DrawableLWJGL, ComponentListe
 	}
 
 	static AWTCanvasImplementation createImplementation() {
-        switch (LWJGLUtil.getPlatform()) {
+		switch ( LWJGLUtil.getPlatform() ) {
 
-            default:
-                throw new IllegalStateException("Unsupported platform");
+			default:
+				throw new IllegalStateException("Unsupported platform");
 		}
 	}
 

@@ -4,41 +4,19 @@
  */
 package org.lwjgl.openal;
 
-import static org.lwjgl.openal.ALC10.ALC_EXTENSIONS;
-import static org.lwjgl.openal.ALC10.ALC_MAJOR_VERSION;
-import static org.lwjgl.openal.ALC10.ALC_MINOR_VERSION;
-import static org.lwjgl.system.APIUtil.apiFilterExtensions;
-import static org.lwjgl.system.APIUtil.apiLog;
-import static org.lwjgl.system.APIUtil.apiLogMissing;
-import static org.lwjgl.system.JNI.invokePP;
-import static org.lwjgl.system.JNI.invokePPP;
-import static org.lwjgl.system.JNI.invokePPV;
-import static org.lwjgl.system.JNI.invokePPZ;
-import static org.lwjgl.system.MemoryStack.stackPush;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memASCIISafe;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.Checks;
-import org.lwjgl.system.Configuration;
-import org.lwjgl.system.FunctionProviderLocal;
-import org.lwjgl.system.Library;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.Platform;
-import org.lwjgl.system.SharedLibrary;
-import org.lwjgl.system.ThreadLocalUtil;
+import javax.annotation.*;
+import java.nio.*;
+import java.util.*;
+import java.util.function.*;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.function.IntFunction;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.openal.ALC10.*;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * This class must be used before any OpenAL function is called. It has the following responsibilities:

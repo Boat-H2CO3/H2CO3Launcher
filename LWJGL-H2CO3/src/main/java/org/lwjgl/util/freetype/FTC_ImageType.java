@@ -5,23 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure used to model the type of images in a glyph cache.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FTC_ImageTypeRec {
  *     FTC_FaceID face_id;
@@ -33,31 +29,25 @@ import javax.annotation.Nullable;
 @NativeType("struct FTC_ImageTypeRec")
 public class FTC_ImageType extends Struct<FTC_ImageType> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            FACE_ID,
-            WIDTH,
-            HEIGHT,
-            FLAGS;
+        FACE_ID,
+        WIDTH,
+        HEIGHT,
+        FLAGS;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(4),
-                __member(4),
-                __member(4)
+            __member(POINTER_SIZE),
+            __member(4),
+            __member(4),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -73,6 +63,11 @@ public class FTC_ImageType extends Struct<FTC_ImageType> {
         super(address, container);
     }
 
+    @Override
+    protected FTC_ImageType create(long address, @Nullable ByteBuffer container) {
+        return new FTC_ImageType(address, container);
+    }
+
     /**
      * Creates a {@code FTC_ImageType} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -83,16 +78,30 @@ public class FTC_ImageType extends Struct<FTC_ImageType> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FTC_ImageType} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code face_id} field. */
+    @NativeType("FTC_FaceID")
+    public long face_id() { return nface_id(address()); }
+    /** @return the value of the {@code width} field. */
+    @NativeType("FT_UInt")
+    public int width() { return nwidth(address()); }
+    /** @return the value of the {@code height} field. */
+    @NativeType("FT_UInt")
+    public int height() { return nheight(address()); }
+    /** @return the value of the {@code flags} field. */
+    @NativeType("FT_Int32")
+    public int flags() { return nflags(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FTC_ImageType} instance for the specified memory address. */
     public static FTC_ImageType create(long address) {
         return new FTC_ImageType(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FTC_ImageType createSafe(long address) {
         return address == NULL ? null : new FTC_ImageType(address, null);
@@ -108,93 +117,26 @@ public class FTC_ImageType extends Struct<FTC_ImageType> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #face_id}.
-     */
-    public static long nface_id(long struct) {
-        return memGetAddress(struct + FTC_ImageType.FACE_ID);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #width}.
-     */
-    public static int nwidth(long struct) {
-        return UNSAFE.getInt(null, struct + FTC_ImageType.WIDTH);
-    }
+    /** Unsafe version of {@link #face_id}. */
+    public static long nface_id(long struct) { return memGetAddress(struct + FTC_ImageType.FACE_ID); }
+    /** Unsafe version of {@link #width}. */
+    public static int nwidth(long struct) { return UNSAFE.getInt(null, struct + FTC_ImageType.WIDTH); }
+    /** Unsafe version of {@link #height}. */
+    public static int nheight(long struct) { return UNSAFE.getInt(null, struct + FTC_ImageType.HEIGHT); }
+    /** Unsafe version of {@link #flags}. */
+    public static int nflags(long struct) { return UNSAFE.getInt(null, struct + FTC_ImageType.FLAGS); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #height}.
-     */
-    public static int nheight(long struct) {
-        return UNSAFE.getInt(null, struct + FTC_ImageType.HEIGHT);
-    }
-
-    /**
-     * Unsafe version of {@link #flags}.
-     */
-    public static int nflags(long struct) {
-        return UNSAFE.getInt(null, struct + FTC_ImageType.FLAGS);
-    }
-
-    @Override
-    protected FTC_ImageType create(long address, @Nullable ByteBuffer container) {
-        return new FTC_ImageType(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return the value of the {@code face_id} field.
-     */
-    @NativeType("FTC_FaceID")
-    public long face_id() {
-        return nface_id(address());
-    }
-
-    /**
-     * @return the value of the {@code width} field.
-     */
-    @NativeType("FT_UInt")
-    public int width() {
-        return nwidth(address());
-    }
-
-    /**
-     * @return the value of the {@code height} field.
-     */
-    @NativeType("FT_UInt")
-    public int height() {
-        return nheight(address());
-    }
-
-    /**
-     * @return the value of the {@code flags} field.
-     */
-    @NativeType("FT_Int32")
-    public int flags() {
-        return nflags(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FTC_ImageType} structs.
-     */
+    /** An array of {@link FTC_ImageType} structs. */
     public static class Buffer extends StructBuffer<FTC_ImageType, Buffer> {
 
         private static final FTC_ImageType ELEMENT_FACTORY = FTC_ImageType.create(-1L);
@@ -230,37 +172,18 @@ public class FTC_ImageType extends Struct<FTC_ImageType> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code face_id} field.
-         */
+        /** @return the value of the {@code face_id} field. */
         @NativeType("FTC_FaceID")
-        public long face_id() {
-            return FTC_ImageType.nface_id(address());
-        }
-
-        /**
-         * @return the value of the {@code width} field.
-         */
+        public long face_id() { return FTC_ImageType.nface_id(address()); }
+        /** @return the value of the {@code width} field. */
         @NativeType("FT_UInt")
-        public int width() {
-            return FTC_ImageType.nwidth(address());
-        }
-
-        /**
-         * @return the value of the {@code height} field.
-         */
+        public int width() { return FTC_ImageType.nwidth(address()); }
+        /** @return the value of the {@code height} field. */
         @NativeType("FT_UInt")
-        public int height() {
-            return FTC_ImageType.nheight(address());
-        }
-
-        /**
-         * @return the value of the {@code flags} field.
-         */
+        public int height() { return FTC_ImageType.nheight(address()); }
+        /** @return the value of the {@code flags} field. */
         @NativeType("FT_Int32")
-        public int flags() {
-            return FTC_ImageType.nflags(address());
-        }
+        public int flags() { return FTC_ImageType.nflags(address()); }
 
     }
 

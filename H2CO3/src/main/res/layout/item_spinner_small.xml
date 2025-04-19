@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/h2co3LauncherTextView"
+    style="?android:attr/spinnerItemStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:background="@android:color/transparent"
+    android:ellipsize="marquee"
+    android:padding="8dp"
+    android:singleLine="true"
+    android:textAlignment="inherit"
+    android:textColor="@android:color/darker_gray"
+    android:textSize="12sp"/>

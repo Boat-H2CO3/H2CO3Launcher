@@ -5,37 +5,32 @@
  */
 package org.lwjgl.openal;
 
-import static org.lwjgl.system.Checks.checkFunctions;
-import static org.lwjgl.system.Checks.reportMissing;
-
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.FunctionProviderLocal;
-import org.lwjgl.system.ThreadLocalUtil;
-
+import org.lwjgl.system.*;
 import java.util.Set;
+import org.lwjgl.*;
 import java.util.function.IntFunction;
 
-/**
- * Defines the capabilities of the OpenAL Context API.
- */
+import static org.lwjgl.system.Checks.*;
+
+/** Defines the capabilities of the OpenAL Context API. */
 public final class ALCCapabilities {
 
     // ALC10
     public final long
-            alcOpenDevice,
-            alcCloseDevice,
-            alcCreateContext,
-            alcMakeContextCurrent,
-            alcProcessContext,
-            alcSuspendContext,
-            alcDestroyContext,
-            alcGetCurrentContext,
-            alcGetContextsDevice,
-            alcIsExtensionPresent,
-            alcGetProcAddress,
-            alcGetEnumValue,
-            alcGetError,
-            alcGetString,
+        alcOpenDevice,
+        alcCloseDevice,
+        alcCreateContext,
+        alcMakeContextCurrent,
+        alcProcessContext,
+        alcSuspendContext,
+        alcDestroyContext,
+        alcGetCurrentContext,
+        alcGetContextsDevice,
+        alcIsExtensionPresent,
+        alcGetProcAddress,
+        alcGetEnumValue,
+        alcGetError,
+        alcGetString,
         alcGetIntegerv;
 
     // ALC11

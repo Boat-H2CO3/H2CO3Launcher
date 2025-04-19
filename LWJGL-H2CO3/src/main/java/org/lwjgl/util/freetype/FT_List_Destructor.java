@@ -5,15 +5,15 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
+import javax.annotation.*;
 
-import org.lwjgl.system.Callback;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * <h3>Type</h3>
- *
+ * 
  * <pre><code>
  * void (*{@link #invoke}) (
  *     FT_Memory memory,
@@ -23,14 +23,6 @@ import javax.annotation.Nullable;
  */
 public abstract class FT_List_Destructor extends Callback implements FT_List_DestructorI {
 
-    protected FT_List_Destructor() {
-        super(CIF);
-    }
-
-    FT_List_Destructor(long functionPointer) {
-        super(functionPointer);
-    }
-
     /**
      * Creates a {@code FT_List_Destructor} instance from the specified function pointer.
      *
@@ -39,25 +31,29 @@ public abstract class FT_List_Destructor extends Callback implements FT_List_Des
     public static FT_List_Destructor create(long functionPointer) {
         FT_List_DestructorI instance = Callback.get(functionPointer);
         return instance instanceof FT_List_Destructor
-                ? (FT_List_Destructor) instance
-                : new Container(functionPointer, instance);
+            ? (FT_List_Destructor)instance
+            : new Container(functionPointer, instance);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}. */
     @Nullable
     public static FT_List_Destructor createSafe(long functionPointer) {
         return functionPointer == NULL ? null : create(functionPointer);
     }
 
-    /**
-     * Creates a {@code FT_List_Destructor} instance that delegates to the specified {@code FT_List_DestructorI} instance.
-     */
+    /** Creates a {@code FT_List_Destructor} instance that delegates to the specified {@code FT_List_DestructorI} instance. */
     public static FT_List_Destructor create(FT_List_DestructorI instance) {
         return instance instanceof FT_List_Destructor
-                ? (FT_List_Destructor) instance
-                : new Container(instance.address(), instance);
+            ? (FT_List_Destructor)instance
+            : new Container(instance.address(), instance);
+    }
+
+    protected FT_List_Destructor() {
+        super(CIF);
+    }
+
+    FT_List_Destructor(long functionPointer) {
+        super(functionPointer);
     }
 
     private static final class Container extends FT_List_Destructor {

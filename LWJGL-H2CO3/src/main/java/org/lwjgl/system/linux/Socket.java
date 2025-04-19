@@ -5,7 +5,7 @@
  */
 package org.lwjgl.system.linux;
 
-import org.lwjgl.system.Library;
+import org.lwjgl.system.*;
 
 /** Native bindings to &lt;sys/socket.h&gt;. */
 public class Socket {

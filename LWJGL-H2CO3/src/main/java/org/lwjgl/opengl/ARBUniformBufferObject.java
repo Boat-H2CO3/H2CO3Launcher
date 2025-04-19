@@ -5,13 +5,13 @@
  */
 package org.lwjgl.opengl;
 
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.NativeType;
+import javax.annotation.*;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import java.nio.*;
 
-import javax.annotation.Nullable;
+import org.lwjgl.*;
+
+import org.lwjgl.system.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_uniform_buffer_object.txt">ARB_uniform_buffer_object</a> extension.

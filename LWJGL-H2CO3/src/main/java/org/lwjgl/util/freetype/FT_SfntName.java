@@ -5,27 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBuffer;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_SfntName {
  *     FT_UShort platform_id;
@@ -38,35 +30,29 @@ import javax.annotation.Nullable;
  */
 public class FT_SfntName extends Struct<FT_SfntName> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            PLATFORM_ID,
-            ENCODING_ID,
-            LANGUAGE_ID,
-            NAME_ID,
-            STRING,
-            STRING_LEN;
+        PLATFORM_ID,
+        ENCODING_ID,
+        LANGUAGE_ID,
+        NAME_ID,
+        STRING,
+        STRING_LEN;
 
     static {
         Layout layout = __struct(
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(2),
-                __member(POINTER_SIZE),
-                __member(4)
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(2),
+            __member(POINTER_SIZE),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -84,6 +70,11 @@ public class FT_SfntName extends Struct<FT_SfntName> implements NativeResource {
         super(address, container);
     }
 
+    @Override
+    protected FT_SfntName create(long address, @Nullable ByteBuffer container) {
+        return new FT_SfntName(address, container);
+    }
+
     /**
      * Creates a {@code FT_SfntName} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -94,38 +85,52 @@ public class FT_SfntName extends Struct<FT_SfntName> implements NativeResource {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_SfntName} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code platform_id} field. */
+    @NativeType("FT_UShort")
+    public short platform_id() { return nplatform_id(address()); }
+    /** @return the value of the {@code encoding_id} field. */
+    @NativeType("FT_UShort")
+    public short encoding_id() { return nencoding_id(address()); }
+    /** @return the value of the {@code language_id} field. */
+    @NativeType("FT_UShort")
+    public short language_id() { return nlanguage_id(address()); }
+    /** @return the value of the {@code name_id} field. */
+    @NativeType("FT_UShort")
+    public short name_id() { return nname_id(address()); }
+    /** @return a {@link ByteBuffer} view of the data pointed to by the {@code string} field. */
+    @NativeType("FT_Byte *")
+    public ByteBuffer string() { return nstring(address()); }
+    /** @return the value of the {@code string_len} field. */
+    @NativeType("FT_UInt")
+    public int string_len() { return nstring_len(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_SfntName} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_SfntName malloc() {
         return new FT_SfntName(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_SfntName} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_SfntName} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_SfntName calloc() {
         return new FT_SfntName(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_SfntName} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_SfntName} instance allocated with {@link BufferUtils}. */
     public static FT_SfntName create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_SfntName(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_SfntName} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_SfntName} instance for the specified memory address. */
     public static FT_SfntName create(long address) {
         return new FT_SfntName(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_SfntName createSafe(long address) {
         return address == NULL ? null : new FT_SfntName(address, null);
@@ -159,8 +164,6 @@ public class FT_SfntName extends Struct<FT_SfntName> implements NativeResource {
         return new Buffer(memAddress(container), container, -1, 0, capacity, capacity);
     }
 
-    // -----------------------------------
-
     /**
      * Create a {@link Buffer} instance at the specified memory.
      *
@@ -171,9 +174,7 @@ public class FT_SfntName extends Struct<FT_SfntName> implements NativeResource {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -217,113 +218,24 @@ public class FT_SfntName extends Struct<FT_SfntName> implements NativeResource {
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #platform_id}.
-     */
-    public static short nplatform_id(long struct) {
-        return UNSAFE.getShort(null, struct + FT_SfntName.PLATFORM_ID);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #encoding_id}.
-     */
-    public static short nencoding_id(long struct) {
-        return UNSAFE.getShort(null, struct + FT_SfntName.ENCODING_ID);
-    }
-
-    /**
-     * Unsafe version of {@link #language_id}.
-     */
-    public static short nlanguage_id(long struct) {
-        return UNSAFE.getShort(null, struct + FT_SfntName.LANGUAGE_ID);
-    }
-
-    /**
-     * Unsafe version of {@link #name_id}.
-     */
-    public static short nname_id(long struct) {
-        return UNSAFE.getShort(null, struct + FT_SfntName.NAME_ID);
-    }
-
-    /**
-     * Unsafe version of {@link #string() string}.
-     */
-    public static ByteBuffer nstring(long struct) {
-        return memByteBuffer(memGetAddress(struct + FT_SfntName.STRING), nstring_len(struct));
-    }
-
-    /**
-     * Unsafe version of {@link #string_len}.
-     */
-    public static int nstring_len(long struct) {
-        return UNSAFE.getInt(null, struct + FT_SfntName.STRING_LEN);
-    }
-
-    @Override
-    protected FT_SfntName create(long address, @Nullable ByteBuffer container) {
-        return new FT_SfntName(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #platform_id}. */
+    public static short nplatform_id(long struct) { return UNSAFE.getShort(null, struct + FT_SfntName.PLATFORM_ID); }
+    /** Unsafe version of {@link #encoding_id}. */
+    public static short nencoding_id(long struct) { return UNSAFE.getShort(null, struct + FT_SfntName.ENCODING_ID); }
+    /** Unsafe version of {@link #language_id}. */
+    public static short nlanguage_id(long struct) { return UNSAFE.getShort(null, struct + FT_SfntName.LANGUAGE_ID); }
+    /** Unsafe version of {@link #name_id}. */
+    public static short nname_id(long struct) { return UNSAFE.getShort(null, struct + FT_SfntName.NAME_ID); }
+    /** Unsafe version of {@link #string() string}. */
+    public static ByteBuffer nstring(long struct) { return memByteBuffer(memGetAddress(struct + FT_SfntName.STRING), nstring_len(struct)); }
+    /** Unsafe version of {@link #string_len}. */
+    public static int nstring_len(long struct) { return UNSAFE.getInt(null, struct + FT_SfntName.STRING_LEN); }
 
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code platform_id} field.
-     */
-    @NativeType("FT_UShort")
-    public short platform_id() {
-        return nplatform_id(address());
-    }
-
-    /**
-     * @return the value of the {@code encoding_id} field.
-     */
-    @NativeType("FT_UShort")
-    public short encoding_id() {
-        return nencoding_id(address());
-    }
-
-    /**
-     * @return the value of the {@code language_id} field.
-     */
-    @NativeType("FT_UShort")
-    public short language_id() {
-        return nlanguage_id(address());
-    }
-
-    /**
-     * @return the value of the {@code name_id} field.
-     */
-    @NativeType("FT_UShort")
-    public short name_id() {
-        return nname_id(address());
-    }
-
-    /**
-     * @return a {@link ByteBuffer} view of the data pointed to by the {@code string} field.
-     */
-    @NativeType("FT_Byte *")
-    public ByteBuffer string() {
-        return nstring(address());
-    }
-
-    /**
-     * @return the value of the {@code string_len} field.
-     */
-    @NativeType("FT_UInt")
-    public int string_len() {
-        return nstring_len(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_SfntName} structs.
-     */
+    /** An array of {@link FT_SfntName} structs. */
     public static class Buffer extends StructBuffer<FT_SfntName, Buffer> implements NativeResource {
 
         private static final FT_SfntName ELEMENT_FACTORY = FT_SfntName.create(-1L);
@@ -359,53 +271,24 @@ public class FT_SfntName extends Struct<FT_SfntName> implements NativeResource {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code platform_id} field.
-         */
+        /** @return the value of the {@code platform_id} field. */
         @NativeType("FT_UShort")
-        public short platform_id() {
-            return FT_SfntName.nplatform_id(address());
-        }
-
-        /**
-         * @return the value of the {@code encoding_id} field.
-         */
+        public short platform_id() { return FT_SfntName.nplatform_id(address()); }
+        /** @return the value of the {@code encoding_id} field. */
         @NativeType("FT_UShort")
-        public short encoding_id() {
-            return FT_SfntName.nencoding_id(address());
-        }
-
-        /**
-         * @return the value of the {@code language_id} field.
-         */
+        public short encoding_id() { return FT_SfntName.nencoding_id(address()); }
+        /** @return the value of the {@code language_id} field. */
         @NativeType("FT_UShort")
-        public short language_id() {
-            return FT_SfntName.nlanguage_id(address());
-        }
-
-        /**
-         * @return the value of the {@code name_id} field.
-         */
+        public short language_id() { return FT_SfntName.nlanguage_id(address()); }
+        /** @return the value of the {@code name_id} field. */
         @NativeType("FT_UShort")
-        public short name_id() {
-            return FT_SfntName.nname_id(address());
-        }
-
-        /**
-         * @return a {@link ByteBuffer} view of the data pointed to by the {@code string} field.
-         */
+        public short name_id() { return FT_SfntName.nname_id(address()); }
+        /** @return a {@link ByteBuffer} view of the data pointed to by the {@code string} field. */
         @NativeType("FT_Byte *")
-        public ByteBuffer string() {
-            return FT_SfntName.nstring(address());
-        }
-
-        /**
-         * @return the value of the {@code string_len} field.
-         */
+        public ByteBuffer string() { return FT_SfntName.nstring(address()); }
+        /** @return the value of the {@code string_len} field. */
         @NativeType("FT_UInt")
-        public int string_len() {
-            return FT_SfntName.nstring_len(address());
-        }
+        public int string_len() { return FT_SfntName.nstring_len(address()); }
 
     }
 

@@ -4,23 +4,9 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.opengl.GL41.GL_2_BYTES;
-import static org.lwjgl.opengl.GL41.GL_3_BYTES;
-import static org.lwjgl.opengl.GL41.GL_4_BYTES;
-import static org.lwjgl.opengl.GL41.GL_BYTE;
-import static org.lwjgl.opengl.GL41.GL_DOUBLE;
-import static org.lwjgl.opengl.GL41.GL_FIXED;
-import static org.lwjgl.opengl.GL41.GL_FLOAT;
-import static org.lwjgl.opengl.GL41.GL_HALF_FLOAT;
-import static org.lwjgl.opengl.GL41.GL_INT;
-import static org.lwjgl.opengl.GL41.GL_SHORT;
-import static org.lwjgl.opengl.GL41.GL_UNSIGNED_BYTE;
-import static org.lwjgl.opengl.GL41.GL_UNSIGNED_INT;
-import static org.lwjgl.opengl.GL41.GL_UNSIGNED_SHORT;
-import static org.lwjgl.opengl.GL41.glGetTexLevelParameteri;
-import static org.lwjgl.opengl.NVGPUShader5.GL_INT64_NV;
-import static org.lwjgl.opengl.NVGPUShader5.GL_UNSIGNED_INT64_NV;
-import static org.lwjgl.system.APIUtil.apiUnknownToken;
+import static org.lwjgl.opengl.GL41.*;
+import static org.lwjgl.opengl.NVGPUShader5.*;
+import static org.lwjgl.system.APIUtil.*;
 
 final class GLChecks {
 

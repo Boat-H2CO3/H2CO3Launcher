@@ -58,6 +58,14 @@ import javax.annotation.Nullable;
  */
 public class GLFW {
 
+    static {
+        try {
+            System.loadLibrary("glfw");
+        } catch (UnsatisfiedLinkError e) {
+            e.printStackTrace();
+        }
+    }
+
     public static final SharedLibrary GLFW = Library.loadNative(GLFW.class, "org.lwjgl.glfw", Configuration.GLFW_LIBRARY_NAME.get(Platform.mapLibraryNameBundled("glfw")), true);
 
     /** Contains the function pointers loaded from the glfw {@link SharedLibrary}. */

@@ -5,25 +5,20 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memCLongBuffer;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
+import javax.annotation.*;
 
-import org.lwjgl.CLongBuffer;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure to model a named instance in a TrueType GX or OpenType variation font.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Var_Named_Style {
  *     FT_Fixed * coords;
@@ -33,29 +28,23 @@ import javax.annotation.Nullable;
  */
 public class FT_Var_Named_Style extends Struct<FT_Var_Named_Style> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            COORDS,
-            STRID,
-            PSID;
+        COORDS,
+        STRID,
+        PSID;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(4),
-                __member(4)
+            __member(POINTER_SIZE),
+            __member(4),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -70,6 +59,11 @@ public class FT_Var_Named_Style extends Struct<FT_Var_Named_Style> {
         super(address, container);
     }
 
+    @Override
+    protected FT_Var_Named_Style create(long address, @Nullable ByteBuffer container) {
+        return new FT_Var_Named_Style(address, container);
+    }
+
     /**
      * Creates a {@code FT_Var_Named_Style} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -80,16 +74,31 @@ public class FT_Var_Named_Style extends Struct<FT_Var_Named_Style> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
     /**
-     * Returns a new {@code FT_Var_Named_Style} instance for the specified memory address.
+     * @return a {@link CLongBuffer} view of the data pointed to by the {@code coords} field.
+     *
+     * @param capacity the number of elements in the returned buffer
      */
+    @NativeType("FT_Fixed *")
+    public CLongBuffer coords(int capacity) { return ncoords(address(), capacity); }
+    /** @return the value of the {@code strid} field. */
+    @NativeType("FT_UInt")
+    public int strid() { return nstrid(address()); }
+    /** @return the value of the {@code psid} field. */
+    @NativeType("FT_UInt")
+    public int psid() { return npsid(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Var_Named_Style} instance for the specified memory address. */
     public static FT_Var_Named_Style create(long address) {
         return new FT_Var_Named_Style(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Var_Named_Style createSafe(long address) {
         return address == NULL ? null : new FT_Var_Named_Style(address, null);
@@ -105,79 +114,24 @@ public class FT_Var_Named_Style extends Struct<FT_Var_Named_Style> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #coords(int) coords}.
-     */
-    public static CLongBuffer ncoords(long struct, int capacity) {
-        return memCLongBuffer(memGetAddress(struct + FT_Var_Named_Style.COORDS), capacity);
-    }
+    // -----------------------------------
+
+    /** Unsafe version of {@link #coords(int) coords}. */
+    public static CLongBuffer ncoords(long struct, int capacity) { return memCLongBuffer(memGetAddress(struct + FT_Var_Named_Style.COORDS), capacity); }
+    /** Unsafe version of {@link #strid}. */
+    public static int nstrid(long struct) { return UNSAFE.getInt(null, struct + FT_Var_Named_Style.STRID); }
+    /** Unsafe version of {@link #psid}. */
+    public static int npsid(long struct) { return UNSAFE.getInt(null, struct + FT_Var_Named_Style.PSID); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #strid}.
-     */
-    public static int nstrid(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Var_Named_Style.STRID);
-    }
-
-    /**
-     * Unsafe version of {@link #psid}.
-     */
-    public static int npsid(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Var_Named_Style.PSID);
-    }
-
-    @Override
-    protected FT_Var_Named_Style create(long address, @Nullable ByteBuffer container) {
-        return new FT_Var_Named_Style(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @param capacity the number of elements in the returned buffer
-     * @return a {@link CLongBuffer} view of the data pointed to by the {@code coords} field.
-     */
-    @NativeType("FT_Fixed *")
-    public CLongBuffer coords(int capacity) {
-        return ncoords(address(), capacity);
-    }
-
-    /**
-     * @return the value of the {@code strid} field.
-     */
-    @NativeType("FT_UInt")
-    public int strid() {
-        return nstrid(address());
-    }
-
-    /**
-     * @return the value of the {@code psid} field.
-     */
-    @NativeType("FT_UInt")
-    public int psid() {
-        return npsid(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Var_Named_Style} structs.
-     */
+    /** An array of {@link FT_Var_Named_Style} structs. */
     public static class Buffer extends StructBuffer<FT_Var_Named_Style, Buffer> {
 
         private static final FT_Var_Named_Style ELEMENT_FACTORY = FT_Var_Named_Style.create(-1L);
@@ -214,29 +168,18 @@ public class FT_Var_Named_Style extends Struct<FT_Var_Named_Style> {
         }
 
         /**
-         * @param capacity the number of elements in the returned buffer
          * @return a {@link CLongBuffer} view of the data pointed to by the {@code coords} field.
+         *
+         * @param capacity the number of elements in the returned buffer
          */
         @NativeType("FT_Fixed *")
-        public CLongBuffer coords(int capacity) {
-            return FT_Var_Named_Style.ncoords(address(), capacity);
-        }
-
-        /**
-         * @return the value of the {@code strid} field.
-         */
+        public CLongBuffer coords(int capacity) { return FT_Var_Named_Style.ncoords(address(), capacity); }
+        /** @return the value of the {@code strid} field. */
         @NativeType("FT_UInt")
-        public int strid() {
-            return FT_Var_Named_Style.nstrid(address());
-        }
-
-        /**
-         * @return the value of the {@code psid} field.
-         */
+        public int strid() { return FT_Var_Named_Style.nstrid(address()); }
+        /** @return the value of the {@code psid} field. */
         @NativeType("FT_UInt")
-        public int psid() {
-            return FT_Var_Named_Style.npsid(address());
-        }
+        public int psid() { return FT_Var_Named_Style.npsid(address()); }
 
     }
 

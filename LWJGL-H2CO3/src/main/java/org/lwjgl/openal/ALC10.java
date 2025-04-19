@@ -1,7 +1,7 @@
 /*
- * //
- * // Created by cainiaohh on 2024-03-31.
- * //
+ * Copyright LWJGL. All rights reserved.
+ * License terms: https://www.lwjgl.org/license
+ * MACHINE GENERATED FILE, DO NOT EDIT
  */
 package org.lwjgl.openal;
 
@@ -76,7 +76,7 @@ public class ALC10 {
 
     static ALCcontext alcContext;
 
-    public static ALCcontext alcCreateContext(ALCdevice device, IntBuffer attrList) {
+    public static ALCcontext alcCreateContext(ALCdevice device, java.nio.IntBuffer attrList) {
         long alContextHandle = alcCreateContext(device.device, attrList);
         alcContext = new ALCcontext(alContextHandle);
         return alcContext;
@@ -86,7 +86,7 @@ public class ALC10 {
         return AL.alcDevice;
     }
 
-    public static void alcGetInteger(ALCdevice device, int pname, IntBuffer integerdata) {
+    public static void alcGetInteger(ALCdevice device, int pname, java.nio.IntBuffer integerdata) {
         int res = alcGetInteger(device.device, pname);
         integerdata.put(0, res);
     }
@@ -296,6 +296,19 @@ public class ALC10 {
     }
 
     /**
+     * Verify that a given extension is available for the current context and the device it
+     * is associated with.
+     * A <code>null</code> name argument returns <code>ALC_FALSE</code>, as do invalid and unsupported string
+     * tokens.
+     *
+     * @param extName name of extension to find
+     * @return true if extension is available, false if not
+     */
+    public static boolean alcIsExtensionPresent(ALCdevice device, String extName) {
+        return alcIsExtensionPresent(device.device, extName);
+    }
+
+    /**
      * Verifies that a given extension is available for the current context and the device it is associated with.
      * 
      * <p>Invalid and unsupported string tokens return ALC_FALSE. A {@code NULL} deviceHandle is acceptable. {@code extName} is not case sensitive – the implementation
@@ -429,19 +442,6 @@ public class ALC10 {
         } finally {
             stack.setPointer(stackPointer);
         }
-    }
-
-    /**
-     * Verify that a given extension is available for the current context and the device it
-     * is associated with.
-     * A <code>null</code> name argument returns <code>ALC_FALSE</code>, as do invalid and unsupported string
-     * tokens.
-     *
-     * @param extName name of extension to find
-     * @return true if extension is available, false if not
-     */
-    public static boolean alcIsExtensionPresent(ALCdevice device, String extName) {
-        return alcIsExtensionPresent(device.device, extName);
     }
 
     // --- [ alcGetError ] ---

@@ -5,31 +5,22 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A structure to be used with {@link FreeType#FT_Open_Face Open_Face} to indicate that the user wants to support incremental glyph loading.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Incremental_InterfaceRec {
  *     {@link FT_Incremental_Funcs FT_Incremental_FuncsRec} const * funcs;
@@ -39,27 +30,21 @@ import javax.annotation.Nullable;
 @NativeType("struct FT_Incremental_InterfaceRec")
 public class FT_Incremental_Interface extends Struct<FT_Incremental_Interface> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            FUNCS,
-            OBJECT;
+        FUNCS,
+        OBJECT;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE)
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -73,6 +58,11 @@ public class FT_Incremental_Interface extends Struct<FT_Incremental_Interface> i
         super(address, container);
     }
 
+    @Override
+    protected FT_Incremental_Interface create(long address, @Nullable ByteBuffer container) {
+        return new FT_Incremental_Interface(address, container);
+    }
+
     /**
      * Creates a {@code FT_Incremental_Interface} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -83,38 +73,68 @@ public class FT_Incremental_Interface extends Struct<FT_Incremental_Interface> i
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link FT_Incremental_Funcs} view of the struct pointed to by the {@code funcs} field. */
+    @NativeType("FT_Incremental_FuncsRec const *")
+    public FT_Incremental_Funcs funcs() { return nfuncs(address()); }
+    /** @return the value of the {@code object} field. */
+    @NativeType("FT_Incremental")
+    public long object() { return nobject(address()); }
+
+    /** Sets the address of the specified {@link FT_Incremental_Funcs} to the {@code funcs} field. */
+    public FT_Incremental_Interface funcs(@NativeType("FT_Incremental_FuncsRec const *") FT_Incremental_Funcs value) { nfuncs(address(), value); return this; }
+    /** Sets the specified value to the {@code object} field. */
+    public FT_Incremental_Interface object(@NativeType("FT_Incremental") long value) { nobject(address(), value); return this; }
+
+    /** Initializes this struct with the specified values. */
+    public FT_Incremental_Interface set(
+        FT_Incremental_Funcs funcs,
+        long object
+    ) {
+        funcs(funcs);
+        object(object);
+
+        return this;
+    }
+
     /**
-     * Returns a new {@code FT_Incremental_Interface} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
+     * Copies the specified struct data to this struct.
+     *
+     * @param src the source struct
+     *
+     * @return this struct
      */
+    public FT_Incremental_Interface set(FT_Incremental_Interface src) {
+        memCopy(src.address(), address(), SIZEOF);
+        return this;
+    }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Incremental_Interface} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_Incremental_Interface malloc() {
         return new FT_Incremental_Interface(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Incremental_Interface} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_Incremental_Interface} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_Incremental_Interface calloc() {
         return new FT_Incremental_Interface(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Incremental_Interface} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_Incremental_Interface} instance allocated with {@link BufferUtils}. */
     public static FT_Incremental_Interface create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_Incremental_Interface(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_Incremental_Interface} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_Incremental_Interface} instance for the specified memory address. */
     public static FT_Incremental_Interface create(long address) {
         return new FT_Incremental_Interface(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Incremental_Interface createSafe(long address) {
         return address == NULL ? null : new FT_Incremental_Interface(address, null);
@@ -148,8 +168,6 @@ public class FT_Incremental_Interface extends Struct<FT_Incremental_Interface> i
         return new Buffer(memAddress(container), container, -1, 0, capacity, capacity);
     }
 
-    // -----------------------------------
-
     /**
      * Create a {@link Buffer} instance at the specified memory.
      *
@@ -160,9 +178,7 @@ public class FT_Incremental_Interface extends Struct<FT_Incremental_Interface> i
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -206,33 +222,17 @@ public class FT_Incremental_Interface extends Struct<FT_Incremental_Interface> i
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #funcs}.
-     */
-    public static FT_Incremental_Funcs nfuncs(long struct) {
-        return FT_Incremental_Funcs.create(memGetAddress(struct + FT_Incremental_Interface.FUNCS));
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #object}.
-     */
-    public static long nobject(long struct) {
-        return memGetAddress(struct + FT_Incremental_Interface.OBJECT);
-    }
+    /** Unsafe version of {@link #funcs}. */
+    public static FT_Incremental_Funcs nfuncs(long struct) { return FT_Incremental_Funcs.create(memGetAddress(struct + FT_Incremental_Interface.FUNCS)); }
+    /** Unsafe version of {@link #object}. */
+    public static long nobject(long struct) { return memGetAddress(struct + FT_Incremental_Interface.OBJECT); }
 
-    /**
-     * Unsafe version of {@link #funcs(FT_Incremental_Funcs) funcs}.
-     */
-    public static void nfuncs(long struct, FT_Incremental_Funcs value) {
-        memPutAddress(struct + FT_Incremental_Interface.FUNCS, value.address());
-    }
-
-    /**
-     * Unsafe version of {@link #object(long) object}.
-     */
-    public static void nobject(long struct, long value) {
-        memPutAddress(struct + FT_Incremental_Interface.OBJECT, value);
-    }
+    /** Unsafe version of {@link #funcs(FT_Incremental_Funcs) funcs}. */
+    public static void nfuncs(long struct, FT_Incremental_Funcs value) { memPutAddress(struct + FT_Incremental_Interface.FUNCS, value.address()); }
+    /** Unsafe version of {@link #object(long) object}. */
+    public static void nobject(long struct, long value) { memPutAddress(struct + FT_Incremental_Interface.OBJECT, value); }
 
     /**
      * Validates pointer members that should not be {@code NULL}.
@@ -245,79 +245,9 @@ public class FT_Incremental_Interface extends Struct<FT_Incremental_Interface> i
         FT_Incremental_Funcs.validate(funcs);
     }
 
-    @Override
-    protected FT_Incremental_Interface create(long address, @Nullable ByteBuffer container) {
-        return new FT_Incremental_Interface(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    /**
-     * @return a {@link FT_Incremental_Funcs} view of the struct pointed to by the {@code funcs} field.
-     */
-    @NativeType("FT_Incremental_FuncsRec const *")
-    public FT_Incremental_Funcs funcs() {
-        return nfuncs(address());
-    }
-
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code object} field.
-     */
-    @NativeType("FT_Incremental")
-    public long object() {
-        return nobject(address());
-    }
-
-    /**
-     * Sets the address of the specified {@link FT_Incremental_Funcs} to the {@code funcs} field.
-     */
-    public FT_Incremental_Interface funcs(@NativeType("FT_Incremental_FuncsRec const *") FT_Incremental_Funcs value) {
-        nfuncs(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code object} field.
-     */
-    public FT_Incremental_Interface object(@NativeType("FT_Incremental") long value) {
-        nobject(address(), value);
-        return this;
-    }
-
-    /**
-     * Initializes this struct with the specified values.
-     */
-    public FT_Incremental_Interface set(
-            FT_Incremental_Funcs funcs,
-            long object
-    ) {
-        funcs(funcs);
-        object(object);
-
-        return this;
-    }
-
-    /**
-     * Copies the specified struct data to this struct.
-     *
-     * @param src the source struct
-     * @return this struct
-     */
-    public FT_Incremental_Interface set(FT_Incremental_Interface src) {
-        memCopy(src.address(), address(), SIZEOF);
-        return this;
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Incremental_Interface} structs.
-     */
+    /** An array of {@link FT_Incremental_Interface} structs. */
     public static class Buffer extends StructBuffer<FT_Incremental_Interface, Buffer> implements NativeResource {
 
         private static final FT_Incremental_Interface ELEMENT_FACTORY = FT_Incremental_Interface.create(-1L);
@@ -353,37 +283,17 @@ public class FT_Incremental_Interface extends Struct<FT_Incremental_Interface> i
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link FT_Incremental_Funcs} view of the struct pointed to by the {@code funcs} field.
-         */
+        /** @return a {@link FT_Incremental_Funcs} view of the struct pointed to by the {@code funcs} field. */
         @NativeType("FT_Incremental_FuncsRec const *")
-        public FT_Incremental_Funcs funcs() {
-            return FT_Incremental_Interface.nfuncs(address());
-        }
-
-        /**
-         * @return the value of the {@code object} field.
-         */
+        public FT_Incremental_Funcs funcs() { return FT_Incremental_Interface.nfuncs(address()); }
+        /** @return the value of the {@code object} field. */
         @NativeType("FT_Incremental")
-        public long object() {
-            return FT_Incremental_Interface.nobject(address());
-        }
+        public long object() { return FT_Incremental_Interface.nobject(address()); }
 
-        /**
-         * Sets the address of the specified {@link FT_Incremental_Funcs} to the {@code funcs} field.
-         */
-        public Buffer funcs(@NativeType("FT_Incremental_FuncsRec const *") FT_Incremental_Funcs value) {
-            FT_Incremental_Interface.nfuncs(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code object} field.
-         */
-        public Buffer object(@NativeType("FT_Incremental") long value) {
-            FT_Incremental_Interface.nobject(address(), value);
-            return this;
-        }
+        /** Sets the address of the specified {@link FT_Incremental_Funcs} to the {@code funcs} field. */
+        public Buffer funcs(@NativeType("FT_Incremental_FuncsRec const *") FT_Incremental_Funcs value) { FT_Incremental_Interface.nfuncs(address(), value); return this; }
+        /** Sets the specified value to the {@code object} field. */
+        public Buffer object(@NativeType("FT_Incremental") long value) { FT_Incremental_Interface.nobject(address(), value); return this; }
 
     }
 

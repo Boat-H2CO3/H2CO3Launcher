@@ -105,10 +105,10 @@ public class ARBShaderObjects {
         throw new UnsupportedOperationException();
     }
 
-    public static void glShaderSourceARB(int shader, ByteBuffer string) {
+    public static void glShaderSourceARB(int shader, java.nio.ByteBuffer string) {
         byte[] b = new byte[string.remaining()];
         string.get(b);
-        ARBShaderObjects.glShaderSourceARB(shader, new String(b));
+        org.lwjgl.opengl.ARBShaderObjects.glShaderSourceARB(shader, new String(b));
     }
 
     public static void glUniform1ARB(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value) {
@@ -263,7 +263,7 @@ public class ARBShaderObjects {
         MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
         try {
             long stringAddress = APIUtil.apiArrayi(stack, MemoryUtil::memUTF8, string);
-            nglShaderSourceARB(shaderObj, string.length, stringAddress, stringAddress - ((long) string.length << 2));
+            nglShaderSourceARB(shaderObj, string.length, stringAddress, stringAddress - (string.length << 2));
             APIUtil.apiArrayFree(stringAddress, string.length);
         } finally {
             stack.setPointer(stackPointer);

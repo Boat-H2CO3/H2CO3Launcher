@@ -5,32 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.memPutCLong;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A union type used to store either a long or a pointer. This is used to store a file descriptor or a {@code FILE*} in an input stream.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * union FT_StreamDesc {
  *     long value;
@@ -39,27 +28,21 @@ import javax.annotation.Nullable;
  */
 public class FT_StreamDesc extends Struct<FT_StreamDesc> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            VALUE,
-            POINTER;
+        VALUE,
+        POINTER;
 
     static {
         Layout layout = __union(
-                __member(CLONG_SIZE),
-                __member(POINTER_SIZE)
+            __member(CLONG_SIZE),
+            __member(POINTER_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -73,6 +56,11 @@ public class FT_StreamDesc extends Struct<FT_StreamDesc> implements NativeResour
         super(address, container);
     }
 
+    @Override
+    protected FT_StreamDesc create(long address, @Nullable ByteBuffer container) {
+        return new FT_StreamDesc(address, container);
+    }
+
     /**
      * Creates a {@code FT_StreamDesc} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -83,38 +71,56 @@ public class FT_StreamDesc extends Struct<FT_StreamDesc> implements NativeResour
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code value} field. */
+    public long value() { return nvalue(address()); }
+    /** @return the value of the {@code pointer} field. */
+    @NativeType("void *")
+    public long pointer() { return npointer(address()); }
+
+    /** Sets the specified value to the {@code value} field. */
+    public FT_StreamDesc value(long value) { nvalue(address(), value); return this; }
+    /** Sets the specified value to the {@code pointer} field. */
+    public FT_StreamDesc pointer(@NativeType("void *") long value) { npointer(address(), value); return this; }
+
     /**
-     * Returns a new {@code FT_StreamDesc} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
+     * Copies the specified struct data to this struct.
+     *
+     * @param src the source struct
+     *
+     * @return this struct
      */
+    public FT_StreamDesc set(FT_StreamDesc src) {
+        memCopy(src.address(), address(), SIZEOF);
+        return this;
+    }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_StreamDesc} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_StreamDesc malloc() {
         return new FT_StreamDesc(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_StreamDesc} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_StreamDesc} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_StreamDesc calloc() {
         return new FT_StreamDesc(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_StreamDesc} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_StreamDesc} instance allocated with {@link BufferUtils}. */
     public static FT_StreamDesc create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_StreamDesc(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_StreamDesc} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_StreamDesc} instance for the specified memory address. */
     public static FT_StreamDesc create(long address) {
         return new FT_StreamDesc(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_StreamDesc createSafe(long address) {
         return address == NULL ? null : new FT_StreamDesc(address, null);
@@ -138,8 +144,6 @@ public class FT_StreamDesc extends Struct<FT_StreamDesc> implements NativeResour
         return new Buffer(nmemCallocChecked(capacity, SIZEOF), capacity);
     }
 
-    // -----------------------------------
-
     /**
      * Returns a new {@link Buffer} instance allocated with {@link BufferUtils}.
      *
@@ -160,9 +164,7 @@ public class FT_StreamDesc extends Struct<FT_StreamDesc> implements NativeResour
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -206,93 +208,21 @@ public class FT_StreamDesc extends Struct<FT_StreamDesc> implements NativeResour
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #value}.
-     */
-    public static long nvalue(long struct) {
-        return memGetCLong(struct + FT_StreamDesc.VALUE);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #pointer}.
-     */
-    public static long npointer(long struct) {
-        return memGetAddress(struct + FT_StreamDesc.POINTER);
-    }
+    /** Unsafe version of {@link #value}. */
+    public static long nvalue(long struct) { return memGetCLong(struct + FT_StreamDesc.VALUE); }
+    /** Unsafe version of {@link #pointer}. */
+    public static long npointer(long struct) { return memGetAddress(struct + FT_StreamDesc.POINTER); }
 
-    /**
-     * Unsafe version of {@link #value(long) value}.
-     */
-    public static void nvalue(long struct, long value) {
-        memPutCLong(struct + FT_StreamDesc.VALUE, value);
-    }
-
-    /**
-     * Unsafe version of {@link #pointer(long) pointer}.
-     */
-    public static void npointer(long struct, long value) {
-        memPutAddress(struct + FT_StreamDesc.POINTER, value);
-    }
-
-    @Override
-    protected FT_StreamDesc create(long address, @Nullable ByteBuffer container) {
-        return new FT_StreamDesc(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    /**
-     * @return the value of the {@code value} field.
-     */
-    public long value() {
-        return nvalue(address());
-    }
+    /** Unsafe version of {@link #value(long) value}. */
+    public static void nvalue(long struct, long value) { memPutCLong(struct + FT_StreamDesc.VALUE, value); }
+    /** Unsafe version of {@link #pointer(long) pointer}. */
+    public static void npointer(long struct, long value) { memPutAddress(struct + FT_StreamDesc.POINTER, value); }
 
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code pointer} field.
-     */
-    @NativeType("void *")
-    public long pointer() {
-        return npointer(address());
-    }
-
-    /**
-     * Sets the specified value to the {@code value} field.
-     */
-    public FT_StreamDesc value(long value) {
-        nvalue(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code pointer} field.
-     */
-    public FT_StreamDesc pointer(@NativeType("void *") long value) {
-        npointer(address(), value);
-        return this;
-    }
-
-    /**
-     * Copies the specified struct data to this struct.
-     *
-     * @param src the source struct
-     * @return this struct
-     */
-    public FT_StreamDesc set(FT_StreamDesc src) {
-        memCopy(src.address(), address(), SIZEOF);
-        return this;
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_StreamDesc} structs.
-     */
+    /** An array of {@link FT_StreamDesc} structs. */
     public static class Buffer extends StructBuffer<FT_StreamDesc, Buffer> implements NativeResource {
 
         private static final FT_StreamDesc ELEMENT_FACTORY = FT_StreamDesc.create(-1L);
@@ -328,36 +258,16 @@ public class FT_StreamDesc extends Struct<FT_StreamDesc> implements NativeResour
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code value} field.
-         */
-        public long value() {
-            return FT_StreamDesc.nvalue(address());
-        }
-
-        /**
-         * @return the value of the {@code pointer} field.
-         */
+        /** @return the value of the {@code value} field. */
+        public long value() { return FT_StreamDesc.nvalue(address()); }
+        /** @return the value of the {@code pointer} field. */
         @NativeType("void *")
-        public long pointer() {
-            return FT_StreamDesc.npointer(address());
-        }
+        public long pointer() { return FT_StreamDesc.npointer(address()); }
 
-        /**
-         * Sets the specified value to the {@code value} field.
-         */
-        public Buffer value(long value) {
-            FT_StreamDesc.nvalue(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code pointer} field.
-         */
-        public Buffer pointer(@NativeType("void *") long value) {
-            FT_StreamDesc.npointer(address(), value);
-            return this;
-        }
+        /** Sets the specified value to the {@code value} field. */
+        public Buffer value(long value) { FT_StreamDesc.nvalue(address(), value); return this; }
+        /** Sets the specified value to the {@code pointer} field. */
+        public Buffer pointer(@NativeType("void *") long value) { FT_StreamDesc.npointer(address(), value); return this; }
 
     }
 

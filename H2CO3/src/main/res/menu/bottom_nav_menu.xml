@@ -3,31 +3,37 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_home"
+            android:id="@+id/navigation_main"
             android:checked="true"
             android:icon="@drawable/ic_menu_home"
-            android:title="@string/title_home" />
+            android:title="@string/app_name" />
 
         <item
-            android:id="@+id/navigation_directory"
+            android:id="@+id/navigation_manage"
             android:icon="@drawable/ic_directory"
-            android:title="@string/title_directory" />
+            android:title="@string/manage" />
 
         <item
             android:id="@+id/navigation_download"
             android:icon="@drawable/ic_launcher_install"
-            android:title="@string/title_download" />
+            android:title="@string/download" />
 
         <item
-            android:id="@+id/navigation_terminal"
+            android:id="@+id/navigation_controller"
             android:icon="@drawable/ic_terminal"
-            android:title="@string/title_terminal" />
+            android:title="@string/controller" />
 
         <item
-            android:id="@+id/navigation_manage"
+            android:id="@+id/navigation_setting"
             android:icon="@drawable/ic_menu_manager"
-            android:title="@string/title_manage" />
-
+            android:title="@string/setting" />
 
     </group>
+    <group
+        >
+    <item
+        android:id="@+id/navigation_back"
+        android:icon="@drawable/ic_launcher_back_arrow"
+        android:title="@string/button_back" />
+</group>
 </menu>

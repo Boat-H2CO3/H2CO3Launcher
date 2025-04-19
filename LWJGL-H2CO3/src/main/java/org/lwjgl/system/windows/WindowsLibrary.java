@@ -4,27 +4,15 @@
  */
 package org.lwjgl.system.windows;
 
-import static org.lwjgl.system.MemoryStack.stackPush;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAlloc;
-import static org.lwjgl.system.MemoryUtil.memFree;
-import static org.lwjgl.system.MemoryUtil.memRealloc;
-import static org.lwjgl.system.MemoryUtil.memUTF16;
-import static org.lwjgl.system.windows.WinBase.FreeLibrary;
-import static org.lwjgl.system.windows.WinBase.GetModuleFileName;
-import static org.lwjgl.system.windows.WinBase.GetModuleHandle;
-import static org.lwjgl.system.windows.WinBase.GetProcAddress;
-import static org.lwjgl.system.windows.WinBase.LoadLibrary;
-import static org.lwjgl.system.windows.WinBase.getLastError;
-import static org.lwjgl.system.windows.WindowsUtil.windowsThrowException;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.Library;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.SharedLibrary;
+import javax.annotation.*;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.windows.WinBase.*;
+import static org.lwjgl.system.windows.WindowsUtil.*;
 
 /** Implements a {@link SharedLibrary} on the Windows OS. */
 public class WindowsLibrary extends SharedLibrary.Default {

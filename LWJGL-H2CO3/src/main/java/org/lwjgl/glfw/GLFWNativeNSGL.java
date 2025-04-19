@@ -5,12 +5,17 @@
  */
 package org.lwjgl.glfw;
 
-import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.JNI.invokePP;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.NativeType;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+
+import javax.annotation.*;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.system.macosx.*;
+
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Native bindings to the GLFW library's NSGL native access functions. */
 public class GLFWNativeNSGL {

@@ -1,5 +1,5 @@
 <resources>
-    <!-- Base application theme. -->
+
     <style name="Theme.H2CO3.Material" parent="Theme.Material3.Dark.Rikka">
         <!-- Colors -->
         <item name="colorPrimary">@color/md_theme_primary</item>
@@ -31,18 +31,20 @@
     </style>
 
     <style name="Theme.H2CO3" parent="Theme.H2CO3.Styled">
+        <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="Theme.H2CO3.DynamicColors" parent="Theme.H2CO3.Styled.DynamicColors">
+        <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
@@ -50,10 +52,11 @@
         <item name="android:textCursorDrawable">@drawable/textfield_cursor</item>
         <item name="fontFamily">@font/josefin_sans</item>
         <item name="android:fontFamily">@font/josefin_sans</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="TabTextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="singleLine">true</item>
     </style>
 </resources>

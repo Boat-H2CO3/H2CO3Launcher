@@ -5,25 +5,15 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNTSafe;
-import static org.lwjgl.system.Checks.lengthSafe;
-import static org.lwjgl.system.Checks.remainingSafe;
-import static org.lwjgl.system.JNI.callP;
-import static org.lwjgl.system.JNI.callPI;
-import static org.lwjgl.system.JNI.callPPP;
-import static org.lwjgl.system.JNI.callPV;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/AMD/WGL_AMD_gpu_association.txt">WGL_AMD_gpu_association</a> extension.

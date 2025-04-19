@@ -5,40 +5,28 @@
  */
 package org.lwjgl.system.linux;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT1;
-import static org.lwjgl.system.Checks.checkNT1Safe;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
-import static org.lwjgl.system.MemoryUtil.memUTF8Safe;
+import javax.annotation.*;
 
-import org.lwjgl.system.Library;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeType;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
-/**
- * Native bindings to &lt;dlfcn.h&gt;.
- */
+/** Native bindings to &lt;dlfcn.h&gt;. */
 public class DynamicLinkLoader {
 
-    static {
-        Library.initialize();
-    }
+    static { Library.initialize(); }
 
     /** The {@code mode} argument to {@link #dlopen} contains one of the following. */
     public static final int
-            RTLD_LAZY = 0x1,
-            RTLD_NOW = 0x2,
-            RTLD_BINDING_MASK = 0x3,
-            RTLD_NOLOAD = 0x4,
-            RTLD_DEEPBIND = 0x8;
+        RTLD_LAZY         = 0x1,
+        RTLD_NOW          = 0x2,
+        RTLD_BINDING_MASK = 0x3,
+        RTLD_NOLOAD       = 0x4,
+        RTLD_DEEPBIND     = 0x8;
 
     /**
      * If the following bit is set in the {@code mode} argument to {@link #dlopen}, the symbols of the loaded object and its dependencies are made visible as

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="@string/color_picker_title"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <org.koishi.launcher.h2co3library.component.view.color.ColorPickerView
+        android:id="@+id/color_picker"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="6dp"
+        app:cpv_alphaChannelVisible="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/state"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="215dp"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title">
+
+        <View
+            android:id="@+id/init_color"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="@string/color_picker_arrow"
+            android:textSize="14sp"/>
+
+        <View
+            android:id="@+id/dest_color"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+        android:id="@+id/color_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="215dp"
+        android:layout_marginTop="15dp"
+        android:singleLine="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/state"/>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/color_picker_positive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="215dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/dialog_positive"
+        app:layout_constraintBottom_toTopOf="@id/color_picker_negative"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+        android:id="@+id/color_picker_negative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="215dp"
+        android:layout_marginBottom="6dp"
+        android:text="@string/dialog_negative"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

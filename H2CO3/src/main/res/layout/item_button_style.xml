@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="140dp"
+    android:layout_height="140dp">
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/bg_item"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherRadioButton
+            android:id="@+id/radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+            android:id="@+id/delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_delete_24"
+            android:tint="@android:color/darker_gray"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+</org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>

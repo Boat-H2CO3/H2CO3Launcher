@@ -5,39 +5,25 @@
  */
 package org.lwjgl.glfw;
 
-import static org.lwjgl.system.APIUtil.apiLog;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNT1;
-import static org.lwjgl.system.MemoryStack.stackGet;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.memUTF8;
-import static org.lwjgl.system.MemoryUtil.nmemFree;
+import javax.annotation.*;
+
+import java.nio.*;
+
+import org.lwjgl.*;
+
+import org.lwjgl.system.*;
+
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.vulkan.EXTMetalSurface.VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;
+import static org.lwjgl.vulkan.EXTMetalSurface.vkCreateMetalSurfaceEXT;
 import static org.lwjgl.vulkan.KHRAndroidSurface.VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
 import static org.lwjgl.vulkan.KHRAndroidSurface.vkCreateAndroidSurfaceKHR;
 
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.FunctionProvider;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Platform;
-import org.lwjgl.system.SharedLibrary;
-import org.lwjgl.vulkan.KHRSurface;
-import org.lwjgl.vulkan.VK;
-import org.lwjgl.vulkan.VK10;
-import org.lwjgl.vulkan.VkAllocationCallbacks;
-import org.lwjgl.vulkan.VkAndroidSurfaceCreateInfoKHR;
-import org.lwjgl.vulkan.VkInstance;
-import org.lwjgl.vulkan.VkInstanceCreateInfo;
-import org.lwjgl.vulkan.VkPhysicalDevice;
-
-import java.nio.ByteBuffer;
-import java.nio.LongBuffer;
-
-import javax.annotation.Nullable;
+import org.lwjgl.vulkan.*;
 
 /** Native bindings to the GLFW library's Vulkan functions. */
 public class GLFWVulkan {

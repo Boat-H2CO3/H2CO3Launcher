@@ -4,39 +4,22 @@
  */
 package org.lwjgl.system;
 
-import static org.lwjgl.system.APIUtil.DEBUG_STREAM;
-import static org.lwjgl.system.APIUtil.apiCreateLibrary;
-import static org.lwjgl.system.APIUtil.apiLog;
-import static org.lwjgl.system.APIUtil.apiLogMore;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.DEBUG;
+import org.lwjgl.*;
 
-import org.lwjgl.Version;
+import javax.annotation.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.net.*;
+import java.nio.channels.*;
+import java.nio.file.*;
+import java.security.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.jar.*;
+import java.util.regex.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
 
 /**
  * Initializes the LWJGL shared library and handles loading additional shared libraries.

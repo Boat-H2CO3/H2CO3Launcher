@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.koishi.launcher.h2co3library.component.view.H2CO3LauncherCheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/h2co3LauncherCheckedTextView"
+    style="?android:attr/spinnerDropDownItemStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:ellipsize="marquee"
+    android:padding="8dp"
+    android:singleLine="true"
+    android:textAlignment="inherit"
+    android:textSize="14sp"
+    app:auto_checked_text_background_tint="true"
+    app:auto_checked_text_tint="true"/>

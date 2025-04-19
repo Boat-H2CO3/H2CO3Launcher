@@ -5,22 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure representing a {@code ColorIndex} value of the {@code COLR} v1 extensions.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_ColorIndex {
  *     FT_UInt16 palette_index;
@@ -29,27 +26,21 @@ import javax.annotation.Nullable;
  */
 public class FT_ColorIndex extends Struct<FT_ColorIndex> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            PALETTE_INDEX,
-            ALPHA;
+        PALETTE_INDEX,
+        ALPHA;
 
     static {
         Layout layout = __struct(
-                __member(2),
-                __member(2)
+            __member(2),
+            __member(2)
         );
 
         SIZEOF = layout.getSize();
@@ -63,6 +54,11 @@ public class FT_ColorIndex extends Struct<FT_ColorIndex> {
         super(address, container);
     }
 
+    @Override
+    protected FT_ColorIndex create(long address, @Nullable ByteBuffer container) {
+        return new FT_ColorIndex(address, container);
+    }
+
     /**
      * Creates a {@code FT_ColorIndex} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -73,16 +69,24 @@ public class FT_ColorIndex extends Struct<FT_ColorIndex> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_ColorIndex} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code palette_index} field. */
+    @NativeType("FT_UInt16")
+    public short palette_index() { return npalette_index(address()); }
+    /** @return the value of the {@code alpha} field. */
+    @NativeType("FT_F2Dot14")
+    public short alpha() { return nalpha(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_ColorIndex} instance for the specified memory address. */
     public static FT_ColorIndex create(long address) {
         return new FT_ColorIndex(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_ColorIndex createSafe(long address) {
         return address == NULL ? null : new FT_ColorIndex(address, null);
@@ -98,9 +102,7 @@ public class FT_ColorIndex extends Struct<FT_ColorIndex> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -108,53 +110,14 @@ public class FT_ColorIndex extends Struct<FT_ColorIndex> {
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #palette_index}.
-     */
-    public static short npalette_index(long struct) {
-        return UNSAFE.getShort(null, struct + FT_ColorIndex.PALETTE_INDEX);
-    }
-
-    /**
-     * Unsafe version of {@link #alpha}.
-     */
-    public static short nalpha(long struct) {
-        return UNSAFE.getShort(null, struct + FT_ColorIndex.ALPHA);
-    }
-
-    @Override
-    protected FT_ColorIndex create(long address, @Nullable ByteBuffer container) {
-        return new FT_ColorIndex(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #palette_index}. */
+    public static short npalette_index(long struct) { return UNSAFE.getShort(null, struct + FT_ColorIndex.PALETTE_INDEX); }
+    /** Unsafe version of {@link #alpha}. */
+    public static short nalpha(long struct) { return UNSAFE.getShort(null, struct + FT_ColorIndex.ALPHA); }
 
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code palette_index} field.
-     */
-    @NativeType("FT_UInt16")
-    public short palette_index() {
-        return npalette_index(address());
-    }
-
-    /**
-     * @return the value of the {@code alpha} field.
-     */
-    @NativeType("FT_F2Dot14")
-    public short alpha() {
-        return nalpha(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_ColorIndex} structs.
-     */
+    /** An array of {@link FT_ColorIndex} structs. */
     public static class Buffer extends StructBuffer<FT_ColorIndex, Buffer> {
 
         private static final FT_ColorIndex ELEMENT_FACTORY = FT_ColorIndex.create(-1L);
@@ -190,21 +153,12 @@ public class FT_ColorIndex extends Struct<FT_ColorIndex> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code palette_index} field.
-         */
+        /** @return the value of the {@code palette_index} field. */
         @NativeType("FT_UInt16")
-        public short palette_index() {
-            return FT_ColorIndex.npalette_index(address());
-        }
-
-        /**
-         * @return the value of the {@code alpha} field.
-         */
+        public short palette_index() { return FT_ColorIndex.npalette_index(address()); }
+        /** @return the value of the {@code alpha} field. */
         @NativeType("FT_F2Dot14")
-        public short alpha() {
-            return FT_ColorIndex.nalpha(address());
-        }
+        public short alpha() { return FT_ColorIndex.nalpha(address()); }
 
     }
 

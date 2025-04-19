@@ -4,9 +4,9 @@
  */
 package org.lwjgl.system;
 
-import static org.lwjgl.system.MemoryStack.stackPush;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import static org.lwjgl.system.MemoryStack.*;
 
 /** A platform/device/context specific provider of native function addresses. */
 public interface FunctionProviderLocal extends FunctionProvider {

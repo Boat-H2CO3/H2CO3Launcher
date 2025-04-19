@@ -5,23 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure to model a TrueType 'post' table.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct TT_Postscript {
  *     FT_Fixed FormatType;
@@ -37,41 +33,35 @@ import javax.annotation.Nullable;
  */
 public class TT_Postscript extends Struct<TT_Postscript> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            FORMATTYPE,
-            ITALICANGLE,
-            UNDERLINEPOSITION,
-            UNDERLINETHICKNESS,
-            ISFIXEDPITCH,
-            MINMEMTYPE42,
-            MAXMEMTYPE42,
-            MINMEMTYPE1,
-            MAXMEMTYPE1;
+        FORMATTYPE,
+        ITALICANGLE,
+        UNDERLINEPOSITION,
+        UNDERLINETHICKNESS,
+        ISFIXEDPITCH,
+        MINMEMTYPE42,
+        MAXMEMTYPE42,
+        MINMEMTYPE1,
+        MAXMEMTYPE1;
 
     static {
         Layout layout = __struct(
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(2),
-                __member(2),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE)
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(2),
+            __member(2),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -92,6 +82,11 @@ public class TT_Postscript extends Struct<TT_Postscript> {
         super(address, container);
     }
 
+    @Override
+    protected TT_Postscript create(long address, @Nullable ByteBuffer container) {
+        return new TT_Postscript(address, container);
+    }
+
     /**
      * Creates a {@code TT_Postscript} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -102,16 +97,45 @@ public class TT_Postscript extends Struct<TT_Postscript> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code TT_Postscript} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code FormatType} field. */
+    @NativeType("FT_Fixed")
+    public long FormatType() { return nFormatType(address()); }
+    /** @return the value of the {@code italicAngle} field. */
+    @NativeType("FT_Fixed")
+    public long italicAngle() { return nitalicAngle(address()); }
+    /** @return the value of the {@code underlinePosition} field. */
+    @NativeType("FT_Short")
+    public short underlinePosition() { return nunderlinePosition(address()); }
+    /** @return the value of the {@code underlineThickness} field. */
+    @NativeType("FT_Short")
+    public short underlineThickness() { return nunderlineThickness(address()); }
+    /** @return the value of the {@code isFixedPitch} field. */
+    @NativeType("FT_ULong")
+    public long isFixedPitch() { return nisFixedPitch(address()); }
+    /** @return the value of the {@code minMemType42} field. */
+    @NativeType("FT_ULong")
+    public long minMemType42() { return nminMemType42(address()); }
+    /** @return the value of the {@code maxMemType42} field. */
+    @NativeType("FT_ULong")
+    public long maxMemType42() { return nmaxMemType42(address()); }
+    /** @return the value of the {@code minMemType1} field. */
+    @NativeType("FT_ULong")
+    public long minMemType1() { return nminMemType1(address()); }
+    /** @return the value of the {@code maxMemType1} field. */
+    @NativeType("FT_ULong")
+    public long maxMemType1() { return nmaxMemType1(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code TT_Postscript} instance for the specified memory address. */
     public static TT_Postscript create(long address) {
         return new TT_Postscript(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static TT_Postscript createSafe(long address) {
         return address == NULL ? null : new TT_Postscript(address, null);
@@ -127,168 +151,36 @@ public class TT_Postscript extends Struct<TT_Postscript> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #FormatType}.
-     */
-    public static long nFormatType(long struct) {
-        return memGetCLong(struct + TT_Postscript.FORMATTYPE);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #italicAngle}.
-     */
-    public static long nitalicAngle(long struct) {
-        return memGetCLong(struct + TT_Postscript.ITALICANGLE);
-    }
-
-    /**
-     * Unsafe version of {@link #underlinePosition}.
-     */
-    public static short nunderlinePosition(long struct) {
-        return UNSAFE.getShort(null, struct + TT_Postscript.UNDERLINEPOSITION);
-    }
-
-    /**
-     * Unsafe version of {@link #underlineThickness}.
-     */
-    public static short nunderlineThickness(long struct) {
-        return UNSAFE.getShort(null, struct + TT_Postscript.UNDERLINETHICKNESS);
-    }
-
-    /**
-     * Unsafe version of {@link #isFixedPitch}.
-     */
-    public static long nisFixedPitch(long struct) {
-        return memGetCLong(struct + TT_Postscript.ISFIXEDPITCH);
-    }
-
-    /**
-     * Unsafe version of {@link #minMemType42}.
-     */
-    public static long nminMemType42(long struct) {
-        return memGetCLong(struct + TT_Postscript.MINMEMTYPE42);
-    }
-
-    /**
-     * Unsafe version of {@link #maxMemType42}.
-     */
-    public static long nmaxMemType42(long struct) {
-        return memGetCLong(struct + TT_Postscript.MAXMEMTYPE42);
-    }
+    /** Unsafe version of {@link #FormatType}. */
+    public static long nFormatType(long struct) { return memGetCLong(struct + TT_Postscript.FORMATTYPE); }
+    /** Unsafe version of {@link #italicAngle}. */
+    public static long nitalicAngle(long struct) { return memGetCLong(struct + TT_Postscript.ITALICANGLE); }
+    /** Unsafe version of {@link #underlinePosition}. */
+    public static short nunderlinePosition(long struct) { return UNSAFE.getShort(null, struct + TT_Postscript.UNDERLINEPOSITION); }
+    /** Unsafe version of {@link #underlineThickness}. */
+    public static short nunderlineThickness(long struct) { return UNSAFE.getShort(null, struct + TT_Postscript.UNDERLINETHICKNESS); }
+    /** Unsafe version of {@link #isFixedPitch}. */
+    public static long nisFixedPitch(long struct) { return memGetCLong(struct + TT_Postscript.ISFIXEDPITCH); }
+    /** Unsafe version of {@link #minMemType42}. */
+    public static long nminMemType42(long struct) { return memGetCLong(struct + TT_Postscript.MINMEMTYPE42); }
+    /** Unsafe version of {@link #maxMemType42}. */
+    public static long nmaxMemType42(long struct) { return memGetCLong(struct + TT_Postscript.MAXMEMTYPE42); }
+    /** Unsafe version of {@link #minMemType1}. */
+    public static long nminMemType1(long struct) { return memGetCLong(struct + TT_Postscript.MINMEMTYPE1); }
+    /** Unsafe version of {@link #maxMemType1}. */
+    public static long nmaxMemType1(long struct) { return memGetCLong(struct + TT_Postscript.MAXMEMTYPE1); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #minMemType1}.
-     */
-    public static long nminMemType1(long struct) {
-        return memGetCLong(struct + TT_Postscript.MINMEMTYPE1);
-    }
-
-    /**
-     * Unsafe version of {@link #maxMemType1}.
-     */
-    public static long nmaxMemType1(long struct) {
-        return memGetCLong(struct + TT_Postscript.MAXMEMTYPE1);
-    }
-
-    @Override
-    protected TT_Postscript create(long address, @Nullable ByteBuffer container) {
-        return new TT_Postscript(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return the value of the {@code FormatType} field.
-     */
-    @NativeType("FT_Fixed")
-    public long FormatType() {
-        return nFormatType(address());
-    }
-
-    /**
-     * @return the value of the {@code italicAngle} field.
-     */
-    @NativeType("FT_Fixed")
-    public long italicAngle() {
-        return nitalicAngle(address());
-    }
-
-    /**
-     * @return the value of the {@code underlinePosition} field.
-     */
-    @NativeType("FT_Short")
-    public short underlinePosition() {
-        return nunderlinePosition(address());
-    }
-
-    /**
-     * @return the value of the {@code underlineThickness} field.
-     */
-    @NativeType("FT_Short")
-    public short underlineThickness() {
-        return nunderlineThickness(address());
-    }
-
-    /**
-     * @return the value of the {@code isFixedPitch} field.
-     */
-    @NativeType("FT_ULong")
-    public long isFixedPitch() {
-        return nisFixedPitch(address());
-    }
-
-    /**
-     * @return the value of the {@code minMemType42} field.
-     */
-    @NativeType("FT_ULong")
-    public long minMemType42() {
-        return nminMemType42(address());
-    }
-
-    /**
-     * @return the value of the {@code maxMemType42} field.
-     */
-    @NativeType("FT_ULong")
-    public long maxMemType42() {
-        return nmaxMemType42(address());
-    }
-
-    /**
-     * @return the value of the {@code minMemType1} field.
-     */
-    @NativeType("FT_ULong")
-    public long minMemType1() {
-        return nminMemType1(address());
-    }
-
-    /**
-     * @return the value of the {@code maxMemType1} field.
-     */
-    @NativeType("FT_ULong")
-    public long maxMemType1() {
-        return nmaxMemType1(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link TT_Postscript} structs.
-     */
+    /** An array of {@link TT_Postscript} structs. */
     public static class Buffer extends StructBuffer<TT_Postscript, Buffer> {
 
         private static final TT_Postscript ELEMENT_FACTORY = TT_Postscript.create(-1L);
@@ -324,77 +216,33 @@ public class TT_Postscript extends Struct<TT_Postscript> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code FormatType} field.
-         */
+        /** @return the value of the {@code FormatType} field. */
         @NativeType("FT_Fixed")
-        public long FormatType() {
-            return TT_Postscript.nFormatType(address());
-        }
-
-        /**
-         * @return the value of the {@code italicAngle} field.
-         */
+        public long FormatType() { return TT_Postscript.nFormatType(address()); }
+        /** @return the value of the {@code italicAngle} field. */
         @NativeType("FT_Fixed")
-        public long italicAngle() {
-            return TT_Postscript.nitalicAngle(address());
-        }
-
-        /**
-         * @return the value of the {@code underlinePosition} field.
-         */
+        public long italicAngle() { return TT_Postscript.nitalicAngle(address()); }
+        /** @return the value of the {@code underlinePosition} field. */
         @NativeType("FT_Short")
-        public short underlinePosition() {
-            return TT_Postscript.nunderlinePosition(address());
-        }
-
-        /**
-         * @return the value of the {@code underlineThickness} field.
-         */
+        public short underlinePosition() { return TT_Postscript.nunderlinePosition(address()); }
+        /** @return the value of the {@code underlineThickness} field. */
         @NativeType("FT_Short")
-        public short underlineThickness() {
-            return TT_Postscript.nunderlineThickness(address());
-        }
-
-        /**
-         * @return the value of the {@code isFixedPitch} field.
-         */
+        public short underlineThickness() { return TT_Postscript.nunderlineThickness(address()); }
+        /** @return the value of the {@code isFixedPitch} field. */
         @NativeType("FT_ULong")
-        public long isFixedPitch() {
-            return TT_Postscript.nisFixedPitch(address());
-        }
-
-        /**
-         * @return the value of the {@code minMemType42} field.
-         */
+        public long isFixedPitch() { return TT_Postscript.nisFixedPitch(address()); }
+        /** @return the value of the {@code minMemType42} field. */
         @NativeType("FT_ULong")
-        public long minMemType42() {
-            return TT_Postscript.nminMemType42(address());
-        }
-
-        /**
-         * @return the value of the {@code maxMemType42} field.
-         */
+        public long minMemType42() { return TT_Postscript.nminMemType42(address()); }
+        /** @return the value of the {@code maxMemType42} field. */
         @NativeType("FT_ULong")
-        public long maxMemType42() {
-            return TT_Postscript.nmaxMemType42(address());
-        }
-
-        /**
-         * @return the value of the {@code minMemType1} field.
-         */
+        public long maxMemType42() { return TT_Postscript.nmaxMemType42(address()); }
+        /** @return the value of the {@code minMemType1} field. */
         @NativeType("FT_ULong")
-        public long minMemType1() {
-            return TT_Postscript.nminMemType1(address());
-        }
-
-        /**
-         * @return the value of the {@code maxMemType1} field.
-         */
+        public long minMemType1() { return TT_Postscript.nminMemType1(address()); }
+        /** @return the value of the {@code maxMemType1} field. */
         @NativeType("FT_ULong")
-        public long maxMemType1() {
-            return TT_Postscript.nmaxMemType1(address());
-        }
+        public long maxMemType1() { return TT_Postscript.nmaxMemType1(address()); }
 
     }
 

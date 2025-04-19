@@ -34,46 +34,46 @@ package org.lwjgl.opengl;
 import org.lwjgl.Sys;
 
 /**
- * A highly accurate sync method that continually adapts to the system
- * it runs on to provide reliable results.
- *
- * @author Riven
- * @author kappaOne
- */
+* A highly accurate sync method that continually adapts to the system 
+* it runs on to provide reliable results.
+*
+* @author Riven
+* @author kappaOne
+*/
 class Sync {
 
-    /** number of nano seconds in a second */
-    private static final long NANOS_IN_SECOND = 1000L * 1000L * 1000L;
+	/** number of nano seconds in a second */
+	private static final long NANOS_IN_SECOND = 1000L * 1000L * 1000L;
 
-    /** The time to sleep/yield until the next frame */
-    private static long nextFrame = 0;
-
-    /** whether the initialisation code has run */
-    private static boolean initialised = false;
-
-    /** for calculating the averages the previous sleep/yield times are stored */
-    private static final RunningAvg sleepDurations = new RunningAvg(10);
-    private static final RunningAvg yieldDurations = new RunningAvg(10);
-
-
-    /**
-     * An accurate sync method that will attempt to run at a constant frame rate.
-     * It should be called once every frame.
-     *
-     * @param fps - the desired frame rate, in frames per second
-     */
-    public static void sync(int fps) {
-        if (fps <= 0) return;
-        if (!initialised) initialise();
-
-        try {
-            // sleep until the average sleep time is greater than the time remaining till nextFrame
-            for (long t0 = getTime(), t1; (nextFrame - t0) > sleepDurations.avg(); t0 = t1) {
-                Thread.sleep(1);
-                sleepDurations.add((t1 = getTime()) - t0); // update average sleep time
-            }
-
-            // slowly dampen sleep average if too high to avoid yielding too much
+	/** The time to sleep/yield until the next frame */
+	private static long nextFrame = 0;
+	
+	/** whether the initialisation code has run */
+	private static boolean initialised = false;
+	
+	/** for calculating the averages the previous sleep/yield times are stored */
+	private static RunningAvg sleepDurations = new RunningAvg(10);
+	private static RunningAvg yieldDurations = new RunningAvg(10);
+	
+	
+	/**
+	 * An accurate sync method that will attempt to run at a constant frame rate.
+	 * It should be called once every frame.
+	 * 
+	 * @param fps - the desired frame rate, in frames per second
+	 */
+	public static void sync(int fps) {
+		if (fps <= 0) return;
+		if (!initialised) initialise();
+		
+		try {
+			// sleep until the average sleep time is greater than the time remaining till nextFrame
+			for (long t0 = getTime(), t1; (nextFrame - t0) > sleepDurations.avg(); t0 = t1) {
+				Thread.sleep(1);
+				sleepDurations.add((t1 = getTime()) - t0); // update average sleep time
+			}
+	
+			// slowly dampen sleep average if too high to avoid yielding too much
 			sleepDurations.dampenForLowResTicker();
 	
 			// yield until the average yield time is greater than the time remaining till nextFrame

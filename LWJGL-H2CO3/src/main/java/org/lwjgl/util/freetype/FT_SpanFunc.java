@@ -5,15 +5,15 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
+import javax.annotation.*;
 
-import org.lwjgl.system.Callback;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * <h3>Type</h3>
- *
+ * 
  * <pre><code>
  * void (*{@link #invoke}) (
  *     int y,
@@ -24,14 +24,6 @@ import javax.annotation.Nullable;
  */
 public abstract class FT_SpanFunc extends Callback implements FT_SpanFuncI {
 
-    protected FT_SpanFunc() {
-        super(CIF);
-    }
-
-    FT_SpanFunc(long functionPointer) {
-        super(functionPointer);
-    }
-
     /**
      * Creates a {@code FT_SpanFunc} instance from the specified function pointer.
      *
@@ -40,25 +32,29 @@ public abstract class FT_SpanFunc extends Callback implements FT_SpanFuncI {
     public static FT_SpanFunc create(long functionPointer) {
         FT_SpanFuncI instance = Callback.get(functionPointer);
         return instance instanceof FT_SpanFunc
-                ? (FT_SpanFunc) instance
-                : new Container(functionPointer, instance);
+            ? (FT_SpanFunc)instance
+            : new Container(functionPointer, instance);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}. */
     @Nullable
     public static FT_SpanFunc createSafe(long functionPointer) {
         return functionPointer == NULL ? null : create(functionPointer);
     }
 
-    /**
-     * Creates a {@code FT_SpanFunc} instance that delegates to the specified {@code FT_SpanFuncI} instance.
-     */
+    /** Creates a {@code FT_SpanFunc} instance that delegates to the specified {@code FT_SpanFuncI} instance. */
     public static FT_SpanFunc create(FT_SpanFuncI instance) {
         return instance instanceof FT_SpanFunc
-                ? (FT_SpanFunc) instance
-                : new Container(instance.address(), instance);
+            ? (FT_SpanFunc)instance
+            : new Container(instance.address(), instance);
+    }
+
+    protected FT_SpanFunc() {
+        super(CIF);
+    }
+
+    FT_SpanFunc(long functionPointer) {
+        super(functionPointer);
     }
 
     private static final class Container extends FT_SpanFunc {

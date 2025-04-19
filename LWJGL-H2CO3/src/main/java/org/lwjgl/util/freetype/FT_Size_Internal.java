@@ -5,21 +5,17 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Size_Internal {
  *     void * module_data;
@@ -29,29 +25,23 @@ import javax.annotation.Nullable;
  */
 public class FT_Size_Internal extends Struct<FT_Size_Internal> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            MODULE_DATA,
-            AUTOHINT_MODE,
-            AUTOHINT_METRICS;
+        MODULE_DATA,
+        AUTOHINT_MODE,
+        AUTOHINT_METRICS;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(4),
-                __member(FT_Size_Metrics.SIZEOF, FT_Size_Metrics.ALIGNOF)
+            __member(POINTER_SIZE),
+            __member(4),
+            __member(FT_Size_Metrics.SIZEOF, FT_Size_Metrics.ALIGNOF)
         );
 
         SIZEOF = layout.getSize();
@@ -66,6 +56,11 @@ public class FT_Size_Internal extends Struct<FT_Size_Internal> {
         super(address, container);
     }
 
+    @Override
+    protected FT_Size_Internal create(long address, @Nullable ByteBuffer container) {
+        return new FT_Size_Internal(address, container);
+    }
+
     /**
      * Creates a {@code FT_Size_Internal} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -76,16 +71,26 @@ public class FT_Size_Internal extends Struct<FT_Size_Internal> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_Size_Internal} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code module_data} field. */
+    @NativeType("void *")
+    public long module_data() { return nmodule_data(address()); }
+    /** @return the value of the {@code autohint_mode} field. */
+    @NativeType("FT_Render_Mode")
+    public int autohint_mode() { return nautohint_mode(address()); }
+    /** @return a {@link FT_Size_Metrics} view of the {@code autohint_metrics} field. */
+    public FT_Size_Metrics autohint_metrics() { return nautohint_metrics(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Size_Internal} instance for the specified memory address. */
     public static FT_Size_Internal create(long address) {
         return new FT_Size_Internal(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Size_Internal createSafe(long address) {
         return address == NULL ? null : new FT_Size_Internal(address, null);
@@ -101,77 +106,24 @@ public class FT_Size_Internal extends Struct<FT_Size_Internal> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #module_data}.
-     */
-    public static long nmodule_data(long struct) {
-        return memGetAddress(struct + FT_Size_Internal.MODULE_DATA);
-    }
+    // -----------------------------------
+
+    /** Unsafe version of {@link #module_data}. */
+    public static long nmodule_data(long struct) { return memGetAddress(struct + FT_Size_Internal.MODULE_DATA); }
+    /** Unsafe version of {@link #autohint_mode}. */
+    public static int nautohint_mode(long struct) { return UNSAFE.getInt(null, struct + FT_Size_Internal.AUTOHINT_MODE); }
+    /** Unsafe version of {@link #autohint_metrics}. */
+    public static FT_Size_Metrics nautohint_metrics(long struct) { return FT_Size_Metrics.create(struct + FT_Size_Internal.AUTOHINT_METRICS); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #autohint_mode}.
-     */
-    public static int nautohint_mode(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Size_Internal.AUTOHINT_MODE);
-    }
-
-    /**
-     * Unsafe version of {@link #autohint_metrics}.
-     */
-    public static FT_Size_Metrics nautohint_metrics(long struct) {
-        return FT_Size_Metrics.create(struct + FT_Size_Internal.AUTOHINT_METRICS);
-    }
-
-    @Override
-    protected FT_Size_Internal create(long address, @Nullable ByteBuffer container) {
-        return new FT_Size_Internal(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return the value of the {@code module_data} field.
-     */
-    @NativeType("void *")
-    public long module_data() {
-        return nmodule_data(address());
-    }
-
-    /**
-     * @return the value of the {@code autohint_mode} field.
-     */
-    @NativeType("FT_Render_Mode")
-    public int autohint_mode() {
-        return nautohint_mode(address());
-    }
-
-    /**
-     * @return a {@link FT_Size_Metrics} view of the {@code autohint_metrics} field.
-     */
-    public FT_Size_Metrics autohint_metrics() {
-        return nautohint_metrics(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Size_Internal} structs.
-     */
+    /** An array of {@link FT_Size_Internal} structs. */
     public static class Buffer extends StructBuffer<FT_Size_Internal, Buffer> {
 
         private static final FT_Size_Internal ELEMENT_FACTORY = FT_Size_Internal.create(-1L);
@@ -207,28 +159,14 @@ public class FT_Size_Internal extends Struct<FT_Size_Internal> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code module_data} field.
-         */
+        /** @return the value of the {@code module_data} field. */
         @NativeType("void *")
-        public long module_data() {
-            return FT_Size_Internal.nmodule_data(address());
-        }
-
-        /**
-         * @return the value of the {@code autohint_mode} field.
-         */
+        public long module_data() { return FT_Size_Internal.nmodule_data(address()); }
+        /** @return the value of the {@code autohint_mode} field. */
         @NativeType("FT_Render_Mode")
-        public int autohint_mode() {
-            return FT_Size_Internal.nautohint_mode(address());
-        }
-
-        /**
-         * @return a {@link FT_Size_Metrics} view of the {@code autohint_metrics} field.
-         */
-        public FT_Size_Metrics autohint_metrics() {
-            return FT_Size_Internal.nautohint_metrics(address());
-        }
+        public int autohint_mode() { return FT_Size_Internal.nautohint_mode(address()); }
+        /** @return a {@link FT_Size_Metrics} view of the {@code autohint_metrics} field. */
+        public FT_Size_Metrics autohint_metrics() { return FT_Size_Internal.nautohint_metrics(address()); }
 
     }
 

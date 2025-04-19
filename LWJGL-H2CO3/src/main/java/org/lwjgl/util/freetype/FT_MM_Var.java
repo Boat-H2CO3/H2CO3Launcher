@@ -5,28 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A structure to model the axes and space of an Adobe MM, TrueType GX, or OpenType variation font.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_MM_Var {
  *     FT_UInt num_axis;
@@ -38,33 +31,27 @@ import javax.annotation.Nullable;
  */
 public class FT_MM_Var extends Struct<FT_MM_Var> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            NUM_AXIS,
-            NUM_DESIGNS,
-            NUM_NAMEDSTYLES,
-            AXIS,
-            NAMEDSTYLE;
+        NUM_AXIS,
+        NUM_DESIGNS,
+        NUM_NAMEDSTYLES,
+        AXIS,
+        NAMEDSTYLE;
 
     static {
         Layout layout = __struct(
-                __member(4),
-                __member(4),
-                __member(4),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE)
+            __member(4),
+            __member(4),
+            __member(4),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE)
         );
 
         SIZEOF = layout.getSize();
@@ -81,6 +68,11 @@ public class FT_MM_Var extends Struct<FT_MM_Var> implements NativeResource {
         super(address, container);
     }
 
+    @Override
+    protected FT_MM_Var create(long address, @Nullable ByteBuffer container) {
+        return new FT_MM_Var(address, container);
+    }
+
     /**
      * Creates a {@code FT_MM_Var} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -91,38 +83,49 @@ public class FT_MM_Var extends Struct<FT_MM_Var> implements NativeResource {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_MM_Var} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return the value of the {@code num_axis} field. */
+    @NativeType("FT_UInt")
+    public int num_axis() { return nnum_axis(address()); }
+    /** @return the value of the {@code num_designs} field. */
+    @NativeType("FT_UInt")
+    public int num_designs() { return nnum_designs(address()); }
+    /** @return the value of the {@code num_namedstyles} field. */
+    @NativeType("FT_UInt")
+    public int num_namedstyles() { return nnum_namedstyles(address()); }
+    /** @return a {@link FT_Var_Axis.Buffer} view of the struct array pointed to by the {@code axis} field. */
+    @NativeType("FT_Var_Axis *")
+    public FT_Var_Axis.Buffer axis() { return naxis(address()); }
+    /** @return a {@link FT_Var_Named_Style.Buffer} view of the struct array pointed to by the {@code namedstyle} field. */
+    @NativeType("FT_Var_Named_Style *")
+    public FT_Var_Named_Style.Buffer namedstyle() { return nnamedstyle(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_MM_Var} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_MM_Var malloc() {
         return new FT_MM_Var(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_MM_Var} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_MM_Var} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_MM_Var calloc() {
         return new FT_MM_Var(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_MM_Var} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_MM_Var} instance allocated with {@link BufferUtils}. */
     public static FT_MM_Var create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_MM_Var(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_MM_Var} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_MM_Var} instance for the specified memory address. */
     public static FT_MM_Var create(long address) {
         return new FT_MM_Var(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_MM_Var createSafe(long address) {
         return address == NULL ? null : new FT_MM_Var(address, null);
@@ -146,8 +149,6 @@ public class FT_MM_Var extends Struct<FT_MM_Var> implements NativeResource {
         return new Buffer(nmemCallocChecked(capacity, SIZEOF), capacity);
     }
 
-    // -----------------------------------
-
     /**
      * Returns a new {@link Buffer} instance allocated with {@link BufferUtils}.
      *
@@ -168,9 +169,7 @@ public class FT_MM_Var extends Struct<FT_MM_Var> implements NativeResource {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -214,98 +213,22 @@ public class FT_MM_Var extends Struct<FT_MM_Var> implements NativeResource {
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #num_axis}.
-     */
-    public static int nnum_axis(long struct) {
-        return UNSAFE.getInt(null, struct + FT_MM_Var.NUM_AXIS);
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #num_designs}.
-     */
-    public static int nnum_designs(long struct) {
-        return UNSAFE.getInt(null, struct + FT_MM_Var.NUM_DESIGNS);
-    }
-
-    /**
-     * Unsafe version of {@link #num_namedstyles}.
-     */
-    public static int nnum_namedstyles(long struct) {
-        return UNSAFE.getInt(null, struct + FT_MM_Var.NUM_NAMEDSTYLES);
-    }
-
-    /**
-     * Unsafe version of {@link #axis}.
-     */
-    public static FT_Var_Axis.Buffer naxis(long struct) {
-        return FT_Var_Axis.create(memGetAddress(struct + FT_MM_Var.AXIS), nnum_axis(struct));
-    }
-
-    /**
-     * Unsafe version of {@link #namedstyle}.
-     */
-    public static FT_Var_Named_Style.Buffer nnamedstyle(long struct) {
-        return FT_Var_Named_Style.create(memGetAddress(struct + FT_MM_Var.NAMEDSTYLE), nnum_namedstyles(struct));
-    }
-
-    @Override
-    protected FT_MM_Var create(long address, @Nullable ByteBuffer container) {
-        return new FT_MM_Var(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
+    /** Unsafe version of {@link #num_axis}. */
+    public static int nnum_axis(long struct) { return UNSAFE.getInt(null, struct + FT_MM_Var.NUM_AXIS); }
+    /** Unsafe version of {@link #num_designs}. */
+    public static int nnum_designs(long struct) { return UNSAFE.getInt(null, struct + FT_MM_Var.NUM_DESIGNS); }
+    /** Unsafe version of {@link #num_namedstyles}. */
+    public static int nnum_namedstyles(long struct) { return UNSAFE.getInt(null, struct + FT_MM_Var.NUM_NAMEDSTYLES); }
+    /** Unsafe version of {@link #axis}. */
+    public static FT_Var_Axis.Buffer naxis(long struct) { return FT_Var_Axis.create(memGetAddress(struct + FT_MM_Var.AXIS), nnum_axis(struct)); }
+    /** Unsafe version of {@link #namedstyle}. */
+    public static FT_Var_Named_Style.Buffer nnamedstyle(long struct) { return FT_Var_Named_Style.create(memGetAddress(struct + FT_MM_Var.NAMEDSTYLE), nnum_namedstyles(struct)); }
 
     // -----------------------------------
 
-    /**
-     * @return the value of the {@code num_axis} field.
-     */
-    @NativeType("FT_UInt")
-    public int num_axis() {
-        return nnum_axis(address());
-    }
-
-    /**
-     * @return the value of the {@code num_designs} field.
-     */
-    @NativeType("FT_UInt")
-    public int num_designs() {
-        return nnum_designs(address());
-    }
-
-    /**
-     * @return the value of the {@code num_namedstyles} field.
-     */
-    @NativeType("FT_UInt")
-    public int num_namedstyles() {
-        return nnum_namedstyles(address());
-    }
-
-    /**
-     * @return a {@link FT_Var_Axis.Buffer} view of the struct array pointed to by the {@code axis} field.
-     */
-    @NativeType("FT_Var_Axis *")
-    public FT_Var_Axis.Buffer axis() {
-        return naxis(address());
-    }
-
-    /**
-     * @return a {@link FT_Var_Named_Style.Buffer} view of the struct array pointed to by the {@code namedstyle} field.
-     */
-    @NativeType("FT_Var_Named_Style *")
-    public FT_Var_Named_Style.Buffer namedstyle() {
-        return nnamedstyle(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_MM_Var} structs.
-     */
+    /** An array of {@link FT_MM_Var} structs. */
     public static class Buffer extends StructBuffer<FT_MM_Var, Buffer> implements NativeResource {
 
         private static final FT_MM_Var ELEMENT_FACTORY = FT_MM_Var.create(-1L);
@@ -341,45 +264,21 @@ public class FT_MM_Var extends Struct<FT_MM_Var> implements NativeResource {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return the value of the {@code num_axis} field.
-         */
+        /** @return the value of the {@code num_axis} field. */
         @NativeType("FT_UInt")
-        public int num_axis() {
-            return FT_MM_Var.nnum_axis(address());
-        }
-
-        /**
-         * @return the value of the {@code num_designs} field.
-         */
+        public int num_axis() { return FT_MM_Var.nnum_axis(address()); }
+        /** @return the value of the {@code num_designs} field. */
         @NativeType("FT_UInt")
-        public int num_designs() {
-            return FT_MM_Var.nnum_designs(address());
-        }
-
-        /**
-         * @return the value of the {@code num_namedstyles} field.
-         */
+        public int num_designs() { return FT_MM_Var.nnum_designs(address()); }
+        /** @return the value of the {@code num_namedstyles} field. */
         @NativeType("FT_UInt")
-        public int num_namedstyles() {
-            return FT_MM_Var.nnum_namedstyles(address());
-        }
-
-        /**
-         * @return a {@link FT_Var_Axis.Buffer} view of the struct array pointed to by the {@code axis} field.
-         */
+        public int num_namedstyles() { return FT_MM_Var.nnum_namedstyles(address()); }
+        /** @return a {@link FT_Var_Axis.Buffer} view of the struct array pointed to by the {@code axis} field. */
         @NativeType("FT_Var_Axis *")
-        public FT_Var_Axis.Buffer axis() {
-            return FT_MM_Var.naxis(address());
-        }
-
-        /**
-         * @return a {@link FT_Var_Named_Style.Buffer} view of the struct array pointed to by the {@code namedstyle} field.
-         */
+        public FT_Var_Axis.Buffer axis() { return FT_MM_Var.naxis(address()); }
+        /** @return a {@link FT_Var_Named_Style.Buffer} view of the struct array pointed to by the {@code namedstyle} field. */
         @NativeType("FT_Var_Named_Style *")
-        public FT_Var_Named_Style.Buffer namedstyle() {
-            return FT_MM_Var.nnamedstyle(address());
-        }
+        public FT_Var_Named_Style.Buffer namedstyle() { return FT_MM_Var.nnamedstyle(address()); }
 
     }
 

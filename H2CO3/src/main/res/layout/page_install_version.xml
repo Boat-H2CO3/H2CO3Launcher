@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ui_bg_color"
+    android:orientation="vertical"
+    android:paddingStart="10dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="10dp">
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_container_white"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="2dp"
+        app:auto_linear_background_tint="true">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherCheckBox
+            android:id="@+id/release"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/version_game_release"
+            app:auto_hint_tint="true" />
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherCheckBox
+            android:id="@+id/snapshot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:text="@string/version_game_snapshot"
+            app:auto_hint_tint="true" />
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherCheckBox
+            android:id="@+id/old"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:text="@string/version_game_old"
+            app:auto_hint_tint="true" />
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText
+            android:id="@+id/search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:hint="@string/search"
+            android:imeOptions="flagNoFullscreen"
+            android:singleLine="true"
+            app:auto_edit_tint="true" />
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+            android:id="@+id/refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_refresh_24"
+            app:auto_tint="true" />
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp" />
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+            android:id="@+id/failed_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_baseline_refresh_24"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

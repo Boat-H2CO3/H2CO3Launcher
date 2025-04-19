@@ -5,12 +5,10 @@
  */
 package org.lwjgl.openal;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.JNI.invokeP;
-import static org.lwjgl.system.JNI.invokePZ;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.NativeType;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
 
 /**
  * Native bindings to the <a href="https://openal-soft.org/openal-extensions/EXT_thread_local_context.txt">EXT_thread_local_context</a> extension.

@@ -5,29 +5,18 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkNTSafe;
-import static org.lwjgl.system.JNI.callNV;
-import static org.lwjgl.system.JNI.callP;
-import static org.lwjgl.system.JNI.callPPI;
-import static org.lwjgl.system.JNI.callPPNP;
-import static org.lwjgl.system.JNI.callPPP;
-import static org.lwjgl.system.JNI.callPPPI;
-import static org.lwjgl.system.JNI.callPPPNV;
-import static org.lwjgl.system.JNI.callPPPP;
-import static org.lwjgl.system.JNI.callPPV;
-import static org.lwjgl.system.JNI.callV;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.linux.XVisualInfo;
+import java.nio.*;
 
-import java.nio.IntBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.JNI.*;
+import static org.lwjgl.system.MemoryUtil.*;
+
+import org.lwjgl.system.linux.*;
 
 /** Native bindings to GLX. */
 public class GLX {

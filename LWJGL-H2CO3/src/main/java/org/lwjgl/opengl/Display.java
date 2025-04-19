@@ -823,7 +823,7 @@ public class Display {
     }
 
     public static DisplayMode[] getAvailableDisplayModes() throws LWJGLException {
-        GLFWVidMode.Buffer modes = GLFW.glfwGetVideoModes(GLFW.glfwGetPrimaryMonitor());
+        GLFWVidMode.Buffer modes = GLFW.glfwGetVideoModes(org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor());
 
         DisplayMode[] displayModes = new DisplayMode[modes.capacity()];
 

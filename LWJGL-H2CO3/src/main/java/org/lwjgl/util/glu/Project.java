@@ -87,10 +87,10 @@ public class Project extends Util {
 	private static void __gluMultMatrixVecf(FloatBuffer m, float[] in, float[] out) {
 		for (int i = 0; i < 4; i++) {
 			out[i] =
-                    in[0] * m.get(m.position() + i)
-                            + in[1] * m.get(m.position() + 4 + i)
-                            + in[2] * m.get(m.position() + 2 * 4 + i)
-                            + in[3] * m.get(m.position() + 3 * 4 + i);
+				in[0] * m.get(m.position() + 0*4 + i)
+					+ in[1] * m.get(m.position() + 1*4 + i)
+					+ in[2] * m.get(m.position() + 2*4 + i)
+					+ in[3] * m.get(m.position() + 3*4 + i);
 
 		}
 	}
@@ -180,9 +180,9 @@ public class Project extends Util {
 	private static void __gluMultMatricesf(FloatBuffer a, FloatBuffer b, FloatBuffer r) {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
-                r.put(r.position() + i * 4 + j,
-                        a.get(a.position() + i * 4) * b.get(b.position() + j) + a.get(a.position() + i * 4 + 1) * b.get(b.position() + 4 + j) + a.get(a.position() + i * 4 + 2) * b.get(b.position() + 2 * 4 + j) + a.get(a.position() + i * 4 + 3) * b.get(b.position() + 3 * 4 + j));
-            }
+				r.put(r.position() + i*4 + j,
+					a.get(a.position() + i*4 + 0) * b.get(b.position() + 0*4 + j) + a.get(a.position() + i*4 + 1) * b.get(b.position() + 1*4 + j) + a.get(a.position() + i*4 + 2) * b.get(b.position() + 2*4 + j) + a.get(a.position() + i*4 + 3) * b.get(b.position() + 3*4 + j));
+			}
 		}
 	}
 
@@ -195,29 +195,29 @@ public class Project extends Util {
 	 * @param zFar
 	 */
 	public static void gluPerspective(float fovy, float aspect, float zNear, float zFar) {
-        float sine, cotangent, deltaZ;
-        float radians = fovy / 2 * GLU.PI / 180;
+		float sine, cotangent, deltaZ;
+		float radians = fovy / 2 * GLU.PI / 180;
 
-        deltaZ = zFar - zNear;
-        sine = (float) Math.sin(radians);
+		deltaZ = zFar - zNear;
+		sine = (float) Math.sin(radians);
 
-        if ((deltaZ == 0) || (sine == 0) || (aspect == 0)) {
-            return;
-        }
+		if ((deltaZ == 0) || (sine == 0) || (aspect == 0)) {
+			return;
+		}
 
-        cotangent = (float) Math.cos(radians) / sine;
+		cotangent = (float) Math.cos(radians) / sine;
 
-        __gluMakeIdentityf(matrix);
+		__gluMakeIdentityf(matrix);
 
-        matrix.put(0, cotangent / aspect);
-        matrix.put(4 + 1, cotangent);
-        matrix.put(2 * 4 + 2, -(zFar + zNear) / deltaZ);
-        matrix.put(2 * 4 + 3, -1);
-        matrix.put(3 * 4 + 2, -2 * zNear * zFar / deltaZ);
-        matrix.put(3 * 4 + 3, 0);
+		matrix.put(0 * 4 + 0, cotangent / aspect);
+		matrix.put(1 * 4 + 1, cotangent);
+		matrix.put(2 * 4 + 2, - (zFar + zNear) / deltaZ);
+		matrix.put(2 * 4 + 3, -1);
+		matrix.put(3 * 4 + 2, -2 * zNear * zFar / deltaZ);
+		matrix.put(3 * 4 + 3, 0);
 
-        glMultMatrix(matrix);
-    }
+		glMultMatrix(matrix);
+	}
 
 	/**
 	 * Method gluLookAt
@@ -246,39 +246,39 @@ public class Project extends Util {
 		float[] side = Project.side;
 		float[] up = Project.up;
 
-        forward[0] = centerx - eyex;
-        forward[1] = centery - eyey;
-        forward[2] = centerz - eyez;
+		forward[0] = centerx - eyex;
+		forward[1] = centery - eyey;
+		forward[2] = centerz - eyez;
 
-        up[0] = upx;
-        up[1] = upy;
-        up[2] = upz;
+		up[0] = upx;
+		up[1] = upy;
+		up[2] = upz;
 
-        normalize(forward);
+		normalize(forward);
 
-        /* Side = forward x up */
-        cross(forward, up, side);
-        normalize(side);
+		/* Side = forward x up */
+		cross(forward, up, side);
+		normalize(side);
 
-        /* Recompute up as: up = side x forward */
-        cross(side, forward, up);
+		/* Recompute up as: up = side x forward */
+		cross(side, forward, up);
 
-        __gluMakeIdentityf(matrix);
-        matrix.put(0, side[0]);
-        matrix.put(4, side[1]);
-        matrix.put(2 * 4, side[2]);
+		__gluMakeIdentityf(matrix);
+		matrix.put(0 * 4 + 0, side[0]);
+		matrix.put(1 * 4 + 0, side[1]);
+		matrix.put(2 * 4 + 0, side[2]);
 
-        matrix.put(1, up[0]);
-        matrix.put(4 + 1, up[1]);
-        matrix.put(2 * 4 + 1, up[2]);
+		matrix.put(0 * 4 + 1, up[0]);
+		matrix.put(1 * 4 + 1, up[1]);
+		matrix.put(2 * 4 + 1, up[2]);
 
-        matrix.put(2, -forward[0]);
-        matrix.put(4 + 2, -forward[1]);
-        matrix.put(2 * 4 + 2, -forward[2]);
+		matrix.put(0 * 4 + 2, -forward[0]);
+		matrix.put(1 * 4 + 2, -forward[1]);
+		matrix.put(2 * 4 + 2, -forward[2]);
 
-        glMultMatrix(matrix);
-        glTranslatef(-eyex, -eyey, -eyez);
-    }
+		glMultMatrix(matrix);
+		glTranslatef(-eyex, -eyey, -eyez);
+	}
 
 	/**
 	 * Method gluProject
@@ -312,22 +312,22 @@ public class Project extends Util {
 		__gluMultMatrixVecf(projMatrix, out, in);
 
 		if (in[3] == 0.0)
-            return false;
+			return false;
 
-        in[3] = (1.0f / in[3]) * 0.5f;
+		in[3] = (1.0f / in[3]) * 0.5f;
 
-        // Map x, y and z to range 0-1
-        in[0] = in[0] * in[3] + 0.5f;
-        in[1] = in[1] * in[3] + 0.5f;
-        in[2] = in[2] * in[3] + 0.5f;
+		// Map x, y and z to range 0-1
+		in[0] = in[0] * in[3] + 0.5f;
+		in[1] = in[1] * in[3] + 0.5f;
+		in[2] = in[2] * in[3] + 0.5f;
 
-        // Map x,y to viewport
-        win_pos.put(0, in[0] * viewport.get(viewport.position() + 2) + viewport.get(viewport.position()));
-        win_pos.put(1, in[1] * viewport.get(viewport.position() + 3) + viewport.get(viewport.position() + 1));
-        win_pos.put(2, in[2]);
+		// Map x,y to viewport
+		win_pos.put(0, in[0] * viewport.get(viewport.position() + 2) + viewport.get(viewport.position() + 0));
+		win_pos.put(1, in[1] * viewport.get(viewport.position() + 3) + viewport.get(viewport.position() + 1));
+		win_pos.put(2, in[2]);
 
-        return true;
-    }
+		return true;
+	}
 
 	/**
 	 * Method gluUnproject
@@ -353,36 +353,36 @@ public class Project extends Util {
 
 		__gluMultMatricesf(modelMatrix, projMatrix, finalMatrix);
 
-        if (!__gluInvertMatrixf(finalMatrix, finalMatrix))
-            return false;
+		if (!__gluInvertMatrixf(finalMatrix, finalMatrix))
+			return false;
 
-        in[0] = winx;
-        in[1] = winy;
-        in[2] = winz;
-        in[3] = 1.0f;
+		in[0] = winx;
+		in[1] = winy;
+		in[2] = winz;
+		in[3] = 1.0f;
 
-        // Map x and y from window coordinates
-        in[0] = (in[0] - viewport.get(viewport.position())) / viewport.get(viewport.position() + 2);
-        in[1] = (in[1] - viewport.get(viewport.position() + 1)) / viewport.get(viewport.position() + 3);
+		// Map x and y from window coordinates
+		in[0] = (in[0] - viewport.get(viewport.position() + 0)) / viewport.get(viewport.position() + 2);
+		in[1] = (in[1] - viewport.get(viewport.position() + 1)) / viewport.get(viewport.position() + 3);
 
-        // Map to range -1 to 1
-        in[0] = in[0] * 2 - 1;
-        in[1] = in[1] * 2 - 1;
-        in[2] = in[2] * 2 - 1;
+		// Map to range -1 to 1
+		in[0] = in[0] * 2 - 1;
+		in[1] = in[1] * 2 - 1;
+		in[2] = in[2] * 2 - 1;
 
-        __gluMultMatrixVecf(finalMatrix, in, out);
+		__gluMultMatrixVecf(finalMatrix, in, out);
 
-        if (out[3] == 0.0)
-            return false;
+		if (out[3] == 0.0)
+			return false;
 
-        out[3] = 1.0f / out[3];
+		out[3] = 1.0f / out[3];
 
-        obj_pos.put(obj_pos.position(), out[0] * out[3]);
-        obj_pos.put(obj_pos.position() + 1, out[1] * out[3]);
-        obj_pos.put(obj_pos.position() + 2, out[2] * out[3]);
+		obj_pos.put(obj_pos.position() + 0, out[0] * out[3]);
+		obj_pos.put(obj_pos.position() + 1, out[1] * out[3]);
+		obj_pos.put(obj_pos.position() + 2, out[2] * out[3]);
 
-        return true;
-    }
+		return true;
+	}
 
 	/**
 	 * Method gluPickMatrix
@@ -404,10 +404,10 @@ public class Project extends Util {
 		}
 
 		/* Translate and scale the picked region to the entire window */
-        glTranslatef(
-                (viewport.get(viewport.position() + 2) - 2 * (x - viewport.get(viewport.position()))) / deltaX,
-                (viewport.get(viewport.position() + 3) - 2 * (y - viewport.get(viewport.position() + 1))) / deltaY,
-                0);
-        glScalef(viewport.get(viewport.position() + 2) / deltaX, viewport.get(viewport.position() + 3) / deltaY, 1.0f);
+		glTranslatef(
+			(viewport.get(viewport.position() + 2) - 2 * (x - viewport.get(viewport.position() + 0))) / deltaX,
+			(viewport.get(viewport.position() + 3) - 2 * (y - viewport.get(viewport.position() + 1))) / deltaY,
+			0);
+		glScalef(viewport.get(viewport.position() + 2) / deltaX, viewport.get(viewport.position() + 3) / deltaY, 1.0f);
 	}
 }

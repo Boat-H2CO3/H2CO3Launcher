@@ -5,35 +5,18 @@
  */
 package org.lwjgl.system.jni;
 
-import static org.lwjgl.system.Checks.CHECKS;
-import static org.lwjgl.system.Checks.check;
-import static org.lwjgl.system.Checks.checkSafe;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
-import static org.lwjgl.system.MemoryUtil.memByteBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memDoubleBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memFloatBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memIntBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memLongBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memShortBufferSafe;
+import javax.annotation.*;
 
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.Library;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
+import java.nio.*;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
+import org.lwjgl.*;
 
-import javax.annotation.Nullable;
+import org.lwjgl.system.*;
+
+import static org.lwjgl.system.Checks.*;
+import static org.lwjgl.system.MemoryUtil.*;
+
+import java.lang.reflect.*;
 
 /**
  * Bindings to the Java Native Interface (JNI).

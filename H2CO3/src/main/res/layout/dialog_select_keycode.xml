@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+            android:id="@+id/parent_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/edit_button_event_keycodes_keyboard"
+                android:textSize="11sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <include
+                layout="@layout/view_keyboard"
+                android:layout_width="600dp"
+                android:layout_height="168dp"
+                android:layout_marginTop="10dp"/>
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                android:id="@+id/mouse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/edit_button_event_keycodes_mouse"
+                    android:textSize="11sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <org.koishi.launcher.h2co3.control.view.KeycodeView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/keycode_view_normal"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:text="Left"
+                        android:textAllCaps="false"
+                        android:textSize="8sp"
+                        app:keycode="1000"
+                        tools:ignore="HardcodedText,SmallSp"/>
+
+                    <org.koishi.launcher.h2co3.control.view.KeycodeView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/keycode_view_normal"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:text="Right"
+                        android:textAllCaps="false"
+                        android:textSize="8sp"
+                        app:keycode="1002"
+                        tools:ignore="HardcodedText,SmallSp"/>
+
+                    <org.koishi.launcher.h2co3.control.view.KeycodeView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/keycode_view_normal"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:text="Mid"
+                        android:textAllCaps="false"
+                        android:textSize="8sp"
+                        app:keycode="1001"
+                        tools:ignore="HardcodedText,SmallSp"/>
+
+                    <org.koishi.launcher.h2co3.control.view.KeycodeView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/keycode_view_normal"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:text="↑"
+                        android:textAllCaps="false"
+                        android:textSize="8sp"
+                        app:keycode="1003"
+                        tools:ignore="HardcodedText,SmallSp"/>
+
+                    <org.koishi.launcher.h2co3.control.view.KeycodeView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/keycode_view_normal"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:text="↓"
+                        android:textAllCaps="false"
+                        android:textSize="8sp"
+                        app:keycode="1004"
+                        tools:ignore="HardcodedText,SmallSp"/>
+
+                </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+            </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+        </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+    </ScrollView>
+
+    <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
+            android:id="@+id/positive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_positive"/>
+
+    </org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>
+
+</org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout>

@@ -4,67 +4,16 @@
  */
 package org.lwjgl.opengl;
 
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_CATEGORY_API_ERROR_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_CATEGORY_APPLICATION_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_CATEGORY_DEPRECATION_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_CATEGORY_OTHER_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_CATEGORY_PERFORMANCE_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_CATEGORY_SHADER_COMPILER_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_CATEGORY_UNDEFINED_BEHAVIOR_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_CATEGORY_WINDOW_SYSTEM_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_SEVERITY_HIGH_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_SEVERITY_LOW_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.GL_DEBUG_SEVERITY_MEDIUM_AMD;
-import static org.lwjgl.opengl.AMDDebugOutput.glDebugMessageCallbackAMD;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_SEVERITY_HIGH_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_SEVERITY_LOW_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_SEVERITY_MEDIUM_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_SOURCE_API_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_SOURCE_APPLICATION_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_SOURCE_OTHER_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_SOURCE_SHADER_COMPILER_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_SOURCE_THIRD_PARTY_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_SOURCE_WINDOW_SYSTEM_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_TYPE_ERROR_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_TYPE_OTHER_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_TYPE_PERFORMANCE_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_TYPE_PORTABILITY_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB;
-import static org.lwjgl.opengl.ARBDebugOutput.glDebugMessageCallbackARB;
-import static org.lwjgl.opengl.GL43C.GL_CONTEXT_FLAGS;
-import static org.lwjgl.opengl.GL43C.GL_CONTEXT_FLAG_DEBUG_BIT;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_OUTPUT;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_SEVERITY_HIGH;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_SEVERITY_LOW;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_SEVERITY_MEDIUM;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_SEVERITY_NOTIFICATION;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_SOURCE_API;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_SOURCE_APPLICATION;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_SOURCE_OTHER;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_SOURCE_SHADER_COMPILER;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_SOURCE_THIRD_PARTY;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_SOURCE_WINDOW_SYSTEM;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_TYPE_ERROR;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_TYPE_MARKER;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_TYPE_OTHER;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_TYPE_PERFORMANCE;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_TYPE_PORTABILITY;
-import static org.lwjgl.opengl.GL43C.GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR;
-import static org.lwjgl.opengl.GL43C.glDebugMessageCallback;
-import static org.lwjgl.opengl.GL43C.glEnable;
-import static org.lwjgl.opengl.GL43C.glGetInteger;
-import static org.lwjgl.system.APIUtil.apiLog;
-import static org.lwjgl.system.APIUtil.apiUnknownToken;
-import static org.lwjgl.system.MemoryUtil.NULL;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.APIUtil;
-import org.lwjgl.system.Callback;
+import javax.annotation.*;
+import java.io.*;
 
-import java.io.PrintStream;
-
-import javax.annotation.Nullable;
+import static org.lwjgl.opengl.AMDDebugOutput.*;
+import static org.lwjgl.opengl.ARBDebugOutput.*;
+import static org.lwjgl.opengl.GL43C.*;
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** OpenGL utilities. */
 public final class GLUtil {

@@ -5,26 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBufferNT1;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
-import static org.lwjgl.system.MemoryUtil.memUTF8;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure to model a given axis in design space for Multiple Masters, TrueType GX, and OpenType variation fonts.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Var_Axis {
  *     FT_String * name;
@@ -37,35 +30,29 @@ import javax.annotation.Nullable;
  */
 public class FT_Var_Axis extends Struct<FT_Var_Axis> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            NAME,
-            MINIMUM,
-            DEF,
-            MAXIMUM,
-            TAG,
-            STRID;
+        NAME,
+        MINIMUM,
+        DEF,
+        MAXIMUM,
+        TAG,
+        STRID;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(CLONG_SIZE),
-                __member(4)
+            __member(POINTER_SIZE),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(CLONG_SIZE),
+            __member(4)
         );
 
         SIZEOF = layout.getSize();
@@ -83,6 +70,11 @@ public class FT_Var_Axis extends Struct<FT_Var_Axis> {
         super(address, container);
     }
 
+    @Override
+    protected FT_Var_Axis create(long address, @Nullable ByteBuffer container) {
+        return new FT_Var_Axis(address, container);
+    }
+
     /**
      * Creates a {@code FT_Var_Axis} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -93,16 +85,39 @@ public class FT_Var_Axis extends Struct<FT_Var_Axis> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code FT_Var_Axis} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code name} field. */
+    @NativeType("FT_String *")
+    public ByteBuffer name() { return nname(address()); }
+    /** @return the null-terminated string pointed to by the {@code name} field. */
+    @NativeType("FT_String *")
+    public String nameString() { return nnameString(address()); }
+    /** @return the value of the {@code minimum} field. */
+    @NativeType("FT_Fixed")
+    public long minimum() { return nminimum(address()); }
+    /** @return the value of the {@code def} field. */
+    @NativeType("FT_Fixed")
+    public long def() { return ndef(address()); }
+    /** @return the value of the {@code maximum} field. */
+    @NativeType("FT_Fixed")
+    public long maximum() { return nmaximum(address()); }
+    /** @return the value of the {@code tag} field. */
+    @NativeType("FT_ULong")
+    public long tag() { return ntag(address()); }
+    /** @return the value of the {@code strid} field. */
+    @NativeType("FT_UInt")
+    public int strid() { return nstrid(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Var_Axis} instance for the specified memory address. */
     public static FT_Var_Axis create(long address) {
         return new FT_Var_Axis(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Var_Axis createSafe(long address) {
         return address == NULL ? null : new FT_Var_Axis(address, null);
@@ -118,138 +133,32 @@ public class FT_Var_Axis extends Struct<FT_Var_Axis> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #name}.
-     */
-    public static ByteBuffer nname(long struct) {
-        return memByteBufferNT1(memGetAddress(struct + FT_Var_Axis.NAME));
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #nameString}.
-     */
-    public static String nnameString(long struct) {
-        return memUTF8(memGetAddress(struct + FT_Var_Axis.NAME));
-    }
-
-    /**
-     * Unsafe version of {@link #minimum}.
-     */
-    public static long nminimum(long struct) {
-        return memGetCLong(struct + FT_Var_Axis.MINIMUM);
-    }
-
-    /**
-     * Unsafe version of {@link #def}.
-     */
-    public static long ndef(long struct) {
-        return memGetCLong(struct + FT_Var_Axis.DEF);
-    }
-
-    /**
-     * Unsafe version of {@link #maximum}.
-     */
-    public static long nmaximum(long struct) {
-        return memGetCLong(struct + FT_Var_Axis.MAXIMUM);
-    }
+    /** Unsafe version of {@link #name}. */
+    public static ByteBuffer nname(long struct) { return memByteBufferNT1(memGetAddress(struct + FT_Var_Axis.NAME)); }
+    /** Unsafe version of {@link #nameString}. */
+    public static String nnameString(long struct) { return memUTF8(memGetAddress(struct + FT_Var_Axis.NAME)); }
+    /** Unsafe version of {@link #minimum}. */
+    public static long nminimum(long struct) { return memGetCLong(struct + FT_Var_Axis.MINIMUM); }
+    /** Unsafe version of {@link #def}. */
+    public static long ndef(long struct) { return memGetCLong(struct + FT_Var_Axis.DEF); }
+    /** Unsafe version of {@link #maximum}. */
+    public static long nmaximum(long struct) { return memGetCLong(struct + FT_Var_Axis.MAXIMUM); }
+    /** Unsafe version of {@link #tag}. */
+    public static long ntag(long struct) { return memGetCLong(struct + FT_Var_Axis.TAG); }
+    /** Unsafe version of {@link #strid}. */
+    public static int nstrid(long struct) { return UNSAFE.getInt(null, struct + FT_Var_Axis.STRID); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #tag}.
-     */
-    public static long ntag(long struct) {
-        return memGetCLong(struct + FT_Var_Axis.TAG);
-    }
-
-    /**
-     * Unsafe version of {@link #strid}.
-     */
-    public static int nstrid(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Var_Axis.STRID);
-    }
-
-    @Override
-    protected FT_Var_Axis create(long address, @Nullable ByteBuffer container) {
-        return new FT_Var_Axis(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code name} field.
-     */
-    @NativeType("FT_String *")
-    public ByteBuffer name() {
-        return nname(address());
-    }
-
-    /**
-     * @return the null-terminated string pointed to by the {@code name} field.
-     */
-    @NativeType("FT_String *")
-    public String nameString() {
-        return nnameString(address());
-    }
-
-    /**
-     * @return the value of the {@code minimum} field.
-     */
-    @NativeType("FT_Fixed")
-    public long minimum() {
-        return nminimum(address());
-    }
-
-    /**
-     * @return the value of the {@code def} field.
-     */
-    @NativeType("FT_Fixed")
-    public long def() {
-        return ndef(address());
-    }
-
-    /**
-     * @return the value of the {@code maximum} field.
-     */
-    @NativeType("FT_Fixed")
-    public long maximum() {
-        return nmaximum(address());
-    }
-
-    /**
-     * @return the value of the {@code tag} field.
-     */
-    @NativeType("FT_ULong")
-    public long tag() {
-        return ntag(address());
-    }
-
-    /**
-     * @return the value of the {@code strid} field.
-     */
-    @NativeType("FT_UInt")
-    public int strid() {
-        return nstrid(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Var_Axis} structs.
-     */
+    /** An array of {@link FT_Var_Axis} structs. */
     public static class Buffer extends StructBuffer<FT_Var_Axis, Buffer> {
 
         private static final FT_Var_Axis ELEMENT_FACTORY = FT_Var_Axis.create(-1L);
@@ -285,61 +194,27 @@ public class FT_Var_Axis extends Struct<FT_Var_Axis> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code name} field.
-         */
+        /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code name} field. */
         @NativeType("FT_String *")
-        public ByteBuffer name() {
-            return FT_Var_Axis.nname(address());
-        }
-
-        /**
-         * @return the null-terminated string pointed to by the {@code name} field.
-         */
+        public ByteBuffer name() { return FT_Var_Axis.nname(address()); }
+        /** @return the null-terminated string pointed to by the {@code name} field. */
         @NativeType("FT_String *")
-        public String nameString() {
-            return FT_Var_Axis.nnameString(address());
-        }
-
-        /**
-         * @return the value of the {@code minimum} field.
-         */
+        public String nameString() { return FT_Var_Axis.nnameString(address()); }
+        /** @return the value of the {@code minimum} field. */
         @NativeType("FT_Fixed")
-        public long minimum() {
-            return FT_Var_Axis.nminimum(address());
-        }
-
-        /**
-         * @return the value of the {@code def} field.
-         */
+        public long minimum() { return FT_Var_Axis.nminimum(address()); }
+        /** @return the value of the {@code def} field. */
         @NativeType("FT_Fixed")
-        public long def() {
-            return FT_Var_Axis.ndef(address());
-        }
-
-        /**
-         * @return the value of the {@code maximum} field.
-         */
+        public long def() { return FT_Var_Axis.ndef(address()); }
+        /** @return the value of the {@code maximum} field. */
         @NativeType("FT_Fixed")
-        public long maximum() {
-            return FT_Var_Axis.nmaximum(address());
-        }
-
-        /**
-         * @return the value of the {@code tag} field.
-         */
+        public long maximum() { return FT_Var_Axis.nmaximum(address()); }
+        /** @return the value of the {@code tag} field. */
         @NativeType("FT_ULong")
-        public long tag() {
-            return FT_Var_Axis.ntag(address());
-        }
-
-        /**
-         * @return the value of the {@code strid} field.
-         */
+        public long tag() { return FT_Var_Axis.ntag(address()); }
+        /** @return the value of the {@code strid} field. */
         @NativeType("FT_UInt")
-        public int strid() {
-            return FT_Var_Axis.nstrid(address());
-        }
+        public int strid() { return FT_Var_Axis.nstrid(address()); }
 
     }
 

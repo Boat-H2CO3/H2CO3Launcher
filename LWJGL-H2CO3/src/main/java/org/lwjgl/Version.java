@@ -4,15 +4,11 @@
  */
 package org.lwjgl;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.Objects;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-
-import javax.annotation.Nullable;
+import javax.annotation.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.jar.*;
 
 /** This class can be used to query the LWJGL version. */
 public final class Version {

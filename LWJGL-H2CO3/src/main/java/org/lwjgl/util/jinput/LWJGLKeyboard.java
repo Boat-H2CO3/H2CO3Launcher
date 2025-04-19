@@ -106,9 +106,9 @@ final class LWJGLKeyboard extends Keyboard {
 		private float value;
 
 		Key(Component.Identifier.Key key_id, int lwjgl_key) {
-            super(key_id.getName(), key_id);
-            this.lwjgl_key = lwjgl_key;
-        }
+			super(key_id.getName(), key_id);
+			this.lwjgl_key = lwjgl_key;
+		}
 
 		public void update() {
 			this.value = org.lwjgl.input.Keyboard.isKeyDown(lwjgl_key) ? 1 : 0;

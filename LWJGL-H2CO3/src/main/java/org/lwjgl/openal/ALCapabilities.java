@@ -5,37 +5,33 @@
  */
 package org.lwjgl.openal;
 
-import static org.lwjgl.system.Checks.checkFunctions;
-import static org.lwjgl.system.Checks.reportMissing;
-
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.FunctionProvider;
-import org.lwjgl.system.ThreadLocalUtil;
-
+import org.lwjgl.system.*;
 import java.util.Set;
+import org.lwjgl.*;
 import java.util.function.IntFunction;
 
-/**
- * Defines the capabilities of an OpenAL context.
- */
+import static org.lwjgl.system.APIUtil.*;
+import static org.lwjgl.system.Checks.*;
+
+/** Defines the capabilities of an OpenAL context. */
 public final class ALCapabilities {
 
     // AL10
     public final long
-            alGetError,
-            alEnable,
-            alDisable,
-            alIsEnabled,
-            alGetBoolean,
-            alGetInteger,
-            alGetFloat,
-            alGetDouble,
-            alGetBooleanv,
-            alGetIntegerv,
-            alGetFloatv,
-            alGetDoublev,
-            alGetString,
-            alDistanceModel,
+        alGetError,
+        alEnable,
+        alDisable,
+        alIsEnabled,
+        alGetBoolean,
+        alGetInteger,
+        alGetFloat,
+        alGetDouble,
+        alGetBooleanv,
+        alGetIntegerv,
+        alGetFloatv,
+        alGetDoublev,
+        alGetString,
+        alDistanceModel,
         alDopplerFactor,
         alDopplerVelocity,
         alListenerf,

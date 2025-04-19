@@ -5,26 +5,19 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memByteBufferNT1;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memGetCLong;
-import static org.lwjgl.system.MemoryUtil.memUTF8;
+import javax.annotation.*;
 
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * A structure used to model a Type~1 or Type~2 FontInfo dictionary. Note that for Multiple Master fonts, each instance has its own FontInfo dictionary.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct PS_FontInfoRec {
  *     FT_String * version;
@@ -41,41 +34,35 @@ import javax.annotation.Nullable;
 @NativeType("struct PS_FontInfoRec")
 public class PS_FontInfo extends Struct<PS_FontInfo> {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            VERSION,
-            NOTICE,
-            FULL_NAME,
-            FAMILY_NAME,
-            WEIGHT,
-            ITALIC_ANGLE,
-            IS_FIXED_PITCH,
-            UNDERLINE_POSITION,
-            UNDERLINE_THICKNESS;
+        VERSION,
+        NOTICE,
+        FULL_NAME,
+        FAMILY_NAME,
+        WEIGHT,
+        ITALIC_ANGLE,
+        IS_FIXED_PITCH,
+        UNDERLINE_POSITION,
+        UNDERLINE_THICKNESS;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(CLONG_SIZE),
-                __member(1),
-                __member(2),
-                __member(2)
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(CLONG_SIZE),
+            __member(1),
+            __member(2),
+            __member(2)
         );
 
         SIZEOF = layout.getSize();
@@ -96,6 +83,11 @@ public class PS_FontInfo extends Struct<PS_FontInfo> {
         super(address, container);
     }
 
+    @Override
+    protected PS_FontInfo create(long address, @Nullable ByteBuffer container) {
+        return new PS_FontInfo(address, container);
+    }
+
     /**
      * Creates a {@code PS_FontInfo} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -106,16 +98,60 @@ public class PS_FontInfo extends Struct<PS_FontInfo> {
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
-    /**
-     * Returns a new {@code PS_FontInfo} instance for the specified memory address.
-     */
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code version} field. */
+    @NativeType("FT_String *")
+    public ByteBuffer version() { return nversion(address()); }
+    /** @return the null-terminated string pointed to by the {@code version} field. */
+    @NativeType("FT_String *")
+    public String versionString() { return nversionString(address()); }
+    /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code notice} field. */
+    @NativeType("FT_String *")
+    public ByteBuffer notice() { return nnotice(address()); }
+    /** @return the null-terminated string pointed to by the {@code notice} field. */
+    @NativeType("FT_String *")
+    public String noticeString() { return nnoticeString(address()); }
+    /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code full_name} field. */
+    @NativeType("FT_String *")
+    public ByteBuffer full_name() { return nfull_name(address()); }
+    /** @return the null-terminated string pointed to by the {@code full_name} field. */
+    @NativeType("FT_String *")
+    public String full_nameString() { return nfull_nameString(address()); }
+    /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code family_name} field. */
+    @NativeType("FT_String *")
+    public ByteBuffer family_name() { return nfamily_name(address()); }
+    /** @return the null-terminated string pointed to by the {@code family_name} field. */
+    @NativeType("FT_String *")
+    public String family_nameString() { return nfamily_nameString(address()); }
+    /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code weight} field. */
+    @NativeType("FT_String *")
+    public ByteBuffer weight() { return nweight(address()); }
+    /** @return the null-terminated string pointed to by the {@code weight} field. */
+    @NativeType("FT_String *")
+    public String weightString() { return nweightString(address()); }
+    /** @return the value of the {@code italic_angle} field. */
+    @NativeType("FT_Long")
+    public long italic_angle() { return nitalic_angle(address()); }
+    /** @return the value of the {@code is_fixed_pitch} field. */
+    @NativeType("FT_Bool")
+    public boolean is_fixed_pitch() { return nis_fixed_pitch(address()); }
+    /** @return the value of the {@code underline_position} field. */
+    @NativeType("FT_Short")
+    public short underline_position() { return nunderline_position(address()); }
+    /** @return the value of the {@code underline_thickness} field. */
+    @NativeType("FT_UShort")
+    public short underline_thickness() { return nunderline_thickness(address()); }
+
+    // -----------------------------------
+
+    /** Returns a new {@code PS_FontInfo} instance for the specified memory address. */
     public static PS_FontInfo create(long address) {
         return new PS_FontInfo(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static PS_FontInfo createSafe(long address) {
         return address == NULL ? null : new PS_FontInfo(address, null);
@@ -131,243 +167,46 @@ public class PS_FontInfo extends Struct<PS_FontInfo> {
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
     }
 
-    /**
-     * Unsafe version of {@link #version}.
-     */
-    public static ByteBuffer nversion(long struct) {
-        return memByteBufferNT1(memGetAddress(struct + PS_FontInfo.VERSION));
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #versionString}.
-     */
-    public static String nversionString(long struct) {
-        return memUTF8(memGetAddress(struct + PS_FontInfo.VERSION));
-    }
-
-    /**
-     * Unsafe version of {@link #notice}.
-     */
-    public static ByteBuffer nnotice(long struct) {
-        return memByteBufferNT1(memGetAddress(struct + PS_FontInfo.NOTICE));
-    }
-
-    /**
-     * Unsafe version of {@link #noticeString}.
-     */
-    public static String nnoticeString(long struct) {
-        return memUTF8(memGetAddress(struct + PS_FontInfo.NOTICE));
-    }
-
-    /**
-     * Unsafe version of {@link #full_name}.
-     */
-    public static ByteBuffer nfull_name(long struct) {
-        return memByteBufferNT1(memGetAddress(struct + PS_FontInfo.FULL_NAME));
-    }
-
-    /**
-     * Unsafe version of {@link #full_nameString}.
-     */
-    public static String nfull_nameString(long struct) {
-        return memUTF8(memGetAddress(struct + PS_FontInfo.FULL_NAME));
-    }
-
-    /**
-     * Unsafe version of {@link #family_name}.
-     */
-    public static ByteBuffer nfamily_name(long struct) {
-        return memByteBufferNT1(memGetAddress(struct + PS_FontInfo.FAMILY_NAME));
-    }
-
-    /**
-     * Unsafe version of {@link #family_nameString}.
-     */
-    public static String nfamily_nameString(long struct) {
-        return memUTF8(memGetAddress(struct + PS_FontInfo.FAMILY_NAME));
-    }
-
-    /**
-     * Unsafe version of {@link #weight}.
-     */
-    public static ByteBuffer nweight(long struct) {
-        return memByteBufferNT1(memGetAddress(struct + PS_FontInfo.WEIGHT));
-    }
-
-    /**
-     * Unsafe version of {@link #weightString}.
-     */
-    public static String nweightString(long struct) {
-        return memUTF8(memGetAddress(struct + PS_FontInfo.WEIGHT));
-    }
-
-    /**
-     * Unsafe version of {@link #italic_angle}.
-     */
-    public static long nitalic_angle(long struct) {
-        return memGetCLong(struct + PS_FontInfo.ITALIC_ANGLE);
-    }
-
-    /**
-     * Unsafe version of {@link #is_fixed_pitch}.
-     */
-    public static boolean nis_fixed_pitch(long struct) {
-        return UNSAFE.getByte(null, struct + PS_FontInfo.IS_FIXED_PITCH) != 0;
-    }
+    /** Unsafe version of {@link #version}. */
+    public static ByteBuffer nversion(long struct) { return memByteBufferNT1(memGetAddress(struct + PS_FontInfo.VERSION)); }
+    /** Unsafe version of {@link #versionString}. */
+    public static String nversionString(long struct) { return memUTF8(memGetAddress(struct + PS_FontInfo.VERSION)); }
+    /** Unsafe version of {@link #notice}. */
+    public static ByteBuffer nnotice(long struct) { return memByteBufferNT1(memGetAddress(struct + PS_FontInfo.NOTICE)); }
+    /** Unsafe version of {@link #noticeString}. */
+    public static String nnoticeString(long struct) { return memUTF8(memGetAddress(struct + PS_FontInfo.NOTICE)); }
+    /** Unsafe version of {@link #full_name}. */
+    public static ByteBuffer nfull_name(long struct) { return memByteBufferNT1(memGetAddress(struct + PS_FontInfo.FULL_NAME)); }
+    /** Unsafe version of {@link #full_nameString}. */
+    public static String nfull_nameString(long struct) { return memUTF8(memGetAddress(struct + PS_FontInfo.FULL_NAME)); }
+    /** Unsafe version of {@link #family_name}. */
+    public static ByteBuffer nfamily_name(long struct) { return memByteBufferNT1(memGetAddress(struct + PS_FontInfo.FAMILY_NAME)); }
+    /** Unsafe version of {@link #family_nameString}. */
+    public static String nfamily_nameString(long struct) { return memUTF8(memGetAddress(struct + PS_FontInfo.FAMILY_NAME)); }
+    /** Unsafe version of {@link #weight}. */
+    public static ByteBuffer nweight(long struct) { return memByteBufferNT1(memGetAddress(struct + PS_FontInfo.WEIGHT)); }
+    /** Unsafe version of {@link #weightString}. */
+    public static String nweightString(long struct) { return memUTF8(memGetAddress(struct + PS_FontInfo.WEIGHT)); }
+    /** Unsafe version of {@link #italic_angle}. */
+    public static long nitalic_angle(long struct) { return memGetCLong(struct + PS_FontInfo.ITALIC_ANGLE); }
+    /** Unsafe version of {@link #is_fixed_pitch}. */
+    public static boolean nis_fixed_pitch(long struct) { return UNSAFE.getByte(null, struct + PS_FontInfo.IS_FIXED_PITCH) != 0; }
+    /** Unsafe version of {@link #underline_position}. */
+    public static short nunderline_position(long struct) { return UNSAFE.getShort(null, struct + PS_FontInfo.UNDERLINE_POSITION); }
+    /** Unsafe version of {@link #underline_thickness}. */
+    public static short nunderline_thickness(long struct) { return UNSAFE.getShort(null, struct + PS_FontInfo.UNDERLINE_THICKNESS); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #underline_position}.
-     */
-    public static short nunderline_position(long struct) {
-        return UNSAFE.getShort(null, struct + PS_FontInfo.UNDERLINE_POSITION);
-    }
-
-    /**
-     * Unsafe version of {@link #underline_thickness}.
-     */
-    public static short nunderline_thickness(long struct) {
-        return UNSAFE.getShort(null, struct + PS_FontInfo.UNDERLINE_THICKNESS);
-    }
-
-    @Override
-    protected PS_FontInfo create(long address, @Nullable ByteBuffer container) {
-        return new PS_FontInfo(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    // -----------------------------------
-
-    /**
-     * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code version} field.
-     */
-    @NativeType("FT_String *")
-    public ByteBuffer version() {
-        return nversion(address());
-    }
-
-    /**
-     * @return the null-terminated string pointed to by the {@code version} field.
-     */
-    @NativeType("FT_String *")
-    public String versionString() {
-        return nversionString(address());
-    }
-
-    /**
-     * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code notice} field.
-     */
-    @NativeType("FT_String *")
-    public ByteBuffer notice() {
-        return nnotice(address());
-    }
-
-    /**
-     * @return the null-terminated string pointed to by the {@code notice} field.
-     */
-    @NativeType("FT_String *")
-    public String noticeString() {
-        return nnoticeString(address());
-    }
-
-    /**
-     * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code full_name} field.
-     */
-    @NativeType("FT_String *")
-    public ByteBuffer full_name() {
-        return nfull_name(address());
-    }
-
-    /**
-     * @return the null-terminated string pointed to by the {@code full_name} field.
-     */
-    @NativeType("FT_String *")
-    public String full_nameString() {
-        return nfull_nameString(address());
-    }
-
-    /**
-     * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code family_name} field.
-     */
-    @NativeType("FT_String *")
-    public ByteBuffer family_name() {
-        return nfamily_name(address());
-    }
-
-    /**
-     * @return the null-terminated string pointed to by the {@code family_name} field.
-     */
-    @NativeType("FT_String *")
-    public String family_nameString() {
-        return nfamily_nameString(address());
-    }
-
-    /**
-     * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code weight} field.
-     */
-    @NativeType("FT_String *")
-    public ByteBuffer weight() {
-        return nweight(address());
-    }
-
-    /**
-     * @return the null-terminated string pointed to by the {@code weight} field.
-     */
-    @NativeType("FT_String *")
-    public String weightString() {
-        return nweightString(address());
-    }
-
-    /**
-     * @return the value of the {@code italic_angle} field.
-     */
-    @NativeType("FT_Long")
-    public long italic_angle() {
-        return nitalic_angle(address());
-    }
-
-    /**
-     * @return the value of the {@code is_fixed_pitch} field.
-     */
-    @NativeType("FT_Bool")
-    public boolean is_fixed_pitch() {
-        return nis_fixed_pitch(address());
-    }
-
-    /**
-     * @return the value of the {@code underline_position} field.
-     */
-    @NativeType("FT_Short")
-    public short underline_position() {
-        return nunderline_position(address());
-    }
-
-    /**
-     * @return the value of the {@code underline_thickness} field.
-     */
-    @NativeType("FT_UShort")
-    public short underline_thickness() {
-        return nunderline_thickness(address());
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link PS_FontInfo} structs.
-     */
+    /** An array of {@link PS_FontInfo} structs. */
     public static class Buffer extends StructBuffer<PS_FontInfo, Buffer> {
 
         private static final PS_FontInfo ELEMENT_FACTORY = PS_FontInfo.create(-1L);
@@ -403,117 +242,48 @@ public class PS_FontInfo extends Struct<PS_FontInfo> {
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code version} field.
-         */
+        /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code version} field. */
         @NativeType("FT_String *")
-        public ByteBuffer version() {
-            return PS_FontInfo.nversion(address());
-        }
-
-        /**
-         * @return the null-terminated string pointed to by the {@code version} field.
-         */
+        public ByteBuffer version() { return PS_FontInfo.nversion(address()); }
+        /** @return the null-terminated string pointed to by the {@code version} field. */
         @NativeType("FT_String *")
-        public String versionString() {
-            return PS_FontInfo.nversionString(address());
-        }
-
-        /**
-         * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code notice} field.
-         */
+        public String versionString() { return PS_FontInfo.nversionString(address()); }
+        /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code notice} field. */
         @NativeType("FT_String *")
-        public ByteBuffer notice() {
-            return PS_FontInfo.nnotice(address());
-        }
-
-        /**
-         * @return the null-terminated string pointed to by the {@code notice} field.
-         */
+        public ByteBuffer notice() { return PS_FontInfo.nnotice(address()); }
+        /** @return the null-terminated string pointed to by the {@code notice} field. */
         @NativeType("FT_String *")
-        public String noticeString() {
-            return PS_FontInfo.nnoticeString(address());
-        }
-
-        /**
-         * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code full_name} field.
-         */
+        public String noticeString() { return PS_FontInfo.nnoticeString(address()); }
+        /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code full_name} field. */
         @NativeType("FT_String *")
-        public ByteBuffer full_name() {
-            return PS_FontInfo.nfull_name(address());
-        }
-
-        /**
-         * @return the null-terminated string pointed to by the {@code full_name} field.
-         */
+        public ByteBuffer full_name() { return PS_FontInfo.nfull_name(address()); }
+        /** @return the null-terminated string pointed to by the {@code full_name} field. */
         @NativeType("FT_String *")
-        public String full_nameString() {
-            return PS_FontInfo.nfull_nameString(address());
-        }
-
-        /**
-         * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code family_name} field.
-         */
+        public String full_nameString() { return PS_FontInfo.nfull_nameString(address()); }
+        /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code family_name} field. */
         @NativeType("FT_String *")
-        public ByteBuffer family_name() {
-            return PS_FontInfo.nfamily_name(address());
-        }
-
-        /**
-         * @return the null-terminated string pointed to by the {@code family_name} field.
-         */
+        public ByteBuffer family_name() { return PS_FontInfo.nfamily_name(address()); }
+        /** @return the null-terminated string pointed to by the {@code family_name} field. */
         @NativeType("FT_String *")
-        public String family_nameString() {
-            return PS_FontInfo.nfamily_nameString(address());
-        }
-
-        /**
-         * @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code weight} field.
-         */
+        public String family_nameString() { return PS_FontInfo.nfamily_nameString(address()); }
+        /** @return a {@link ByteBuffer} view of the null-terminated string pointed to by the {@code weight} field. */
         @NativeType("FT_String *")
-        public ByteBuffer weight() {
-            return PS_FontInfo.nweight(address());
-        }
-
-        /**
-         * @return the null-terminated string pointed to by the {@code weight} field.
-         */
+        public ByteBuffer weight() { return PS_FontInfo.nweight(address()); }
+        /** @return the null-terminated string pointed to by the {@code weight} field. */
         @NativeType("FT_String *")
-        public String weightString() {
-            return PS_FontInfo.nweightString(address());
-        }
-
-        /**
-         * @return the value of the {@code italic_angle} field.
-         */
+        public String weightString() { return PS_FontInfo.nweightString(address()); }
+        /** @return the value of the {@code italic_angle} field. */
         @NativeType("FT_Long")
-        public long italic_angle() {
-            return PS_FontInfo.nitalic_angle(address());
-        }
-
-        /**
-         * @return the value of the {@code is_fixed_pitch} field.
-         */
+        public long italic_angle() { return PS_FontInfo.nitalic_angle(address()); }
+        /** @return the value of the {@code is_fixed_pitch} field. */
         @NativeType("FT_Bool")
-        public boolean is_fixed_pitch() {
-            return PS_FontInfo.nis_fixed_pitch(address());
-        }
-
-        /**
-         * @return the value of the {@code underline_position} field.
-         */
+        public boolean is_fixed_pitch() { return PS_FontInfo.nis_fixed_pitch(address()); }
+        /** @return the value of the {@code underline_position} field. */
         @NativeType("FT_Short")
-        public short underline_position() {
-            return PS_FontInfo.nunderline_position(address());
-        }
-
-        /**
-         * @return the value of the {@code underline_thickness} field.
-         */
+        public short underline_position() { return PS_FontInfo.nunderline_position(address()); }
+        /** @return the value of the {@code underline_thickness} field. */
         @NativeType("FT_UShort")
-        public short underline_thickness() {
-            return PS_FontInfo.nunderline_thickness(address());
-        }
+        public short underline_thickness() { return PS_FontInfo.nunderline_thickness(address()); }
 
     }
 

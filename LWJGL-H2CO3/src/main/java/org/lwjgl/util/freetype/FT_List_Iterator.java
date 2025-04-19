@@ -5,15 +5,15 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
+import javax.annotation.*;
 
-import org.lwjgl.system.Callback;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * <h3>Type</h3>
- *
+ * 
  * <pre><code>
  * FT_Error (*{@link #invoke}) (
  *     FT_ListNode node,
@@ -21,14 +21,6 @@ import javax.annotation.Nullable;
  * )</code></pre>
  */
 public abstract class FT_List_Iterator extends Callback implements FT_List_IteratorI {
-
-    protected FT_List_Iterator() {
-        super(CIF);
-    }
-
-    FT_List_Iterator(long functionPointer) {
-        super(functionPointer);
-    }
 
     /**
      * Creates a {@code FT_List_Iterator} instance from the specified function pointer.
@@ -38,25 +30,29 @@ public abstract class FT_List_Iterator extends Callback implements FT_List_Itera
     public static FT_List_Iterator create(long functionPointer) {
         FT_List_IteratorI instance = Callback.get(functionPointer);
         return instance instanceof FT_List_Iterator
-                ? (FT_List_Iterator) instance
-                : new Container(functionPointer, instance);
+            ? (FT_List_Iterator)instance
+            : new Container(functionPointer, instance);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code functionPointer} is {@code NULL}. */
     @Nullable
     public static FT_List_Iterator createSafe(long functionPointer) {
         return functionPointer == NULL ? null : create(functionPointer);
     }
 
-    /**
-     * Creates a {@code FT_List_Iterator} instance that delegates to the specified {@code FT_List_IteratorI} instance.
-     */
+    /** Creates a {@code FT_List_Iterator} instance that delegates to the specified {@code FT_List_IteratorI} instance. */
     public static FT_List_Iterator create(FT_List_IteratorI instance) {
         return instance instanceof FT_List_Iterator
-                ? (FT_List_Iterator) instance
-                : new Container(instance.address(), instance);
+            ? (FT_List_Iterator)instance
+            : new Container(instance.address(), instance);
+    }
+
+    protected FT_List_Iterator() {
+        super(CIF);
+    }
+
+    FT_List_Iterator(long functionPointer) {
+        super(functionPointer);
     }
 
     private static final class Container extends FT_List_Iterator {

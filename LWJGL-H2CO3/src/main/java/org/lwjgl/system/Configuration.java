@@ -4,16 +4,11 @@
  */
 package org.lwjgl.system;
 
-import org.lwjgl.system.MemoryUtil.MemoryAllocationReport;
-import org.lwjgl.system.MemoryUtil.MemoryAllocator;
+import org.lwjgl.system.MemoryUtil.*;
 
-import java.io.File;
-import java.io.PrintStream;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
+import javax.annotation.*;
+import java.io.*;
+import java.util.function.*;
 
 /**
  * This class can be used to programmatically set the LWJGL runtime configuration. It is an alternative to using system properties.

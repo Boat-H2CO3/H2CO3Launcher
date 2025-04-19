@@ -5,12 +5,9 @@
  */
 package org.lwjgl.nanovg;
 
-import static org.lwjgl.system.MemoryUtil.MemoryAllocator;
-import static org.lwjgl.system.MemoryUtil.getAllocator;
+import org.lwjgl.system.*;
 
-import org.lwjgl.system.Configuration;
-import org.lwjgl.system.Library;
-import org.lwjgl.system.Platform;
+import static org.lwjgl.system.MemoryUtil.*;
 
 /** Initializes the nanovg shared library. */
 final class LibNanoVG {

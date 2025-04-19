@@ -5,12 +5,11 @@
  */
 package org.lwjgl.opengl;
 
-import org.lwjgl.system.NativeType;
+import javax.annotation.*;
 
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
+import java.nio.*;
 
-import javax.annotation.Nullable;
+import org.lwjgl.system.*;
 
 /**
  * Native bindings to the <a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_sync.txt">ARB_sync</a> extension.

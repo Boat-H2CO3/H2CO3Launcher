@@ -33,7 +33,7 @@ package org.lwjgl.opengl;
 
 public class GLContext {
 
-    private static final ThreadLocal<ContextCapabilities> contextCapabilities = new ThreadLocal<>();
+	private static ThreadLocal<ContextCapabilities> contextCapabilities = new ThreadLocal<>();
 
 	public static GLContext createFromCurrent() {
 		return new GLContext();

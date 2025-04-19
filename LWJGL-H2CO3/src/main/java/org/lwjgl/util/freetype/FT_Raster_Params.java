@@ -5,32 +5,21 @@
  */
 package org.lwjgl.util.freetype;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.system.MemoryUtil.memAddress;
-import static org.lwjgl.system.MemoryUtil.memAddressSafe;
-import static org.lwjgl.system.MemoryUtil.memByteBufferSafe;
-import static org.lwjgl.system.MemoryUtil.memCopy;
-import static org.lwjgl.system.MemoryUtil.memGetAddress;
-import static org.lwjgl.system.MemoryUtil.memPutAddress;
-import static org.lwjgl.system.MemoryUtil.nmemAllocChecked;
-import static org.lwjgl.system.MemoryUtil.nmemCallocChecked;
+import javax.annotation.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.NativeResource;
-import org.lwjgl.system.NativeType;
-import org.lwjgl.system.Struct;
-import org.lwjgl.system.StructBuffer;
+import java.nio.*;
 
-import java.nio.ByteBuffer;
+import org.lwjgl.*;
+import org.lwjgl.system.*;
 
-import javax.annotation.Nullable;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * A structure to hold the parameters used by a raster's render function, passed as an argument to {@link FreeType#FT_Outline_Render Outline_Render}.
- *
+ * 
  * <h3>Layout</h3>
- *
+ * 
  * <pre><code>
  * struct FT_Raster_Params {
  *     {@link FT_Bitmap FT_Bitmap} const * target;
@@ -46,41 +35,35 @@ import javax.annotation.Nullable;
  */
 public class FT_Raster_Params extends Struct<FT_Raster_Params> implements NativeResource {
 
-    /**
-     * The struct size in bytes.
-     */
+    /** The struct size in bytes. */
     public static final int SIZEOF;
 
-    /**
-     * The struct alignment in bytes.
-     */
+    /** The struct alignment in bytes. */
     public static final int ALIGNOF;
 
-    /**
-     * The struct member offsets.
-     */
+    /** The struct member offsets. */
     public static final int
-            TARGET,
-            SOURCE,
-            FLAGS,
-            GRAY_SPANS,
-            BLACK_SPANS,
-            BIT_TEST,
-            BIT_SET,
-            USER,
-            CLIP_BOX;
+        TARGET,
+        SOURCE,
+        FLAGS,
+        GRAY_SPANS,
+        BLACK_SPANS,
+        BIT_TEST,
+        BIT_SET,
+        USER,
+        CLIP_BOX;
 
     static {
         Layout layout = __struct(
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(4),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(POINTER_SIZE),
-                __member(FT_BBox.SIZEOF, FT_BBox.ALIGNOF)
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(4),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(POINTER_SIZE),
+            __member(FT_BBox.SIZEOF, FT_BBox.ALIGNOF)
         );
 
         SIZEOF = layout.getSize();
@@ -101,6 +84,11 @@ public class FT_Raster_Params extends Struct<FT_Raster_Params> implements Native
         super(address, container);
     }
 
+    @Override
+    protected FT_Raster_Params create(long address, @Nullable ByteBuffer container) {
+        return new FT_Raster_Params(address, container);
+    }
+
     /**
      * Creates a {@code FT_Raster_Params} instance at the current position of the specified {@link ByteBuffer} container. Changes to the buffer's content will be
      * visible to the struct instance and vice versa.
@@ -111,38 +99,102 @@ public class FT_Raster_Params extends Struct<FT_Raster_Params> implements Native
         super(memAddress(container), __checkContainer(container, SIZEOF));
     }
 
+    @Override
+    public int sizeof() { return SIZEOF; }
+
+    /** @return a {@link FT_Bitmap} view of the struct pointed to by the {@code target} field. */
+    @Nullable
+    @NativeType("FT_Bitmap const *")
+    public FT_Bitmap target() { return ntarget(address()); }
     /**
-     * Returns a new {@code FT_Raster_Params} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed.
+     * @return a {@link ByteBuffer} view of the data pointed to by the {@code source} field.
+     *
+     * @param capacity the number of elements in the returned buffer
      */
+    @Nullable
+    @NativeType("void const *")
+    public ByteBuffer source(int capacity) { return nsource(address(), capacity); }
+    /** @return the value of the {@code flags} field. */
+    public int flags() { return nflags(address()); }
+    /** @return the value of the {@code gray_spans} field. */
+    @Nullable
+    public FT_SpanFunc gray_spans() { return ngray_spans(address()); }
+    /** @return the value of the {@code user} field. */
+    @NativeType("void *")
+    public long user() { return nuser(address()); }
+    /** @return a {@link FT_BBox} view of the {@code clip_box} field. */
+    public FT_BBox clip_box() { return nclip_box(address()); }
+
+    /** Sets the address of the specified {@link FT_Bitmap} to the {@code target} field. */
+    public FT_Raster_Params target(@Nullable @NativeType("FT_Bitmap const *") FT_Bitmap value) { ntarget(address(), value); return this; }
+    /** Sets the address of the specified {@link ByteBuffer} to the {@code source} field. */
+    public FT_Raster_Params source(@Nullable @NativeType("void const *") ByteBuffer value) { nsource(address(), value); return this; }
+    /** Sets the specified value to the {@code flags} field. */
+    public FT_Raster_Params flags(int value) { nflags(address(), value); return this; }
+    /** Sets the specified value to the {@code gray_spans} field. */
+    public FT_Raster_Params gray_spans(@Nullable @NativeType("FT_SpanFunc") FT_SpanFuncI value) { ngray_spans(address(), value); return this; }
+    /** Sets the specified value to the {@code user} field. */
+    public FT_Raster_Params user(@NativeType("void *") long value) { nuser(address(), value); return this; }
+    /** Copies the specified {@link FT_BBox} to the {@code clip_box} field. */
+    public FT_Raster_Params clip_box(FT_BBox value) { nclip_box(address(), value); return this; }
+    /** Passes the {@code clip_box} field to the specified {@link java.util.function.Consumer Consumer}. */
+    public FT_Raster_Params clip_box(java.util.function.Consumer<FT_BBox> consumer) { consumer.accept(clip_box()); return this; }
+
+    /** Initializes this struct with the specified values. */
+    public FT_Raster_Params set(
+        @Nullable FT_Bitmap target,
+        @Nullable ByteBuffer source,
+        int flags,
+        @Nullable FT_SpanFuncI gray_spans,
+        long user,
+        FT_BBox clip_box
+    ) {
+        target(target);
+        source(source);
+        flags(flags);
+        gray_spans(gray_spans);
+        user(user);
+        clip_box(clip_box);
+
+        return this;
+    }
+
+    /**
+     * Copies the specified struct data to this struct.
+     *
+     * @param src the source struct
+     *
+     * @return this struct
+     */
+    public FT_Raster_Params set(FT_Raster_Params src) {
+        memCopy(src.address(), address(), SIZEOF);
+        return this;
+    }
+
+    // -----------------------------------
+
+    /** Returns a new {@code FT_Raster_Params} instance allocated with {@link MemoryUtil#memAlloc memAlloc}. The instance must be explicitly freed. */
     public static FT_Raster_Params malloc() {
         return new FT_Raster_Params(nmemAllocChecked(SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Raster_Params} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed.
-     */
+    /** Returns a new {@code FT_Raster_Params} instance allocated with {@link MemoryUtil#memCalloc memCalloc}. The instance must be explicitly freed. */
     public static FT_Raster_Params calloc() {
         return new FT_Raster_Params(nmemCallocChecked(1, SIZEOF), null);
     }
 
-    /**
-     * Returns a new {@code FT_Raster_Params} instance allocated with {@link BufferUtils}.
-     */
+    /** Returns a new {@code FT_Raster_Params} instance allocated with {@link BufferUtils}. */
     public static FT_Raster_Params create() {
         ByteBuffer container = BufferUtils.createByteBuffer(SIZEOF);
         return new FT_Raster_Params(memAddress(container), container);
     }
 
-    /**
-     * Returns a new {@code FT_Raster_Params} instance for the specified memory address.
-     */
+    /** Returns a new {@code FT_Raster_Params} instance for the specified memory address. */
     public static FT_Raster_Params create(long address) {
         return new FT_Raster_Params(address, null);
     }
 
-    /**
-     * Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static FT_Raster_Params createSafe(long address) {
         return address == NULL ? null : new FT_Raster_Params(address, null);
@@ -186,9 +238,7 @@ public class FT_Raster_Params extends Struct<FT_Raster_Params> implements Native
         return new Buffer(address, capacity);
     }
 
-    /**
-     * Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}.
-     */
+    /** Like {@link #create(long, int) create}, but returns {@code null} if {@code address} is {@code NULL}. */
     @Nullable
     public static Buffer createSafe(long address, int capacity) {
         return address == NULL ? null : new Buffer(address, capacity);
@@ -232,274 +282,43 @@ public class FT_Raster_Params extends Struct<FT_Raster_Params> implements Native
         return new Buffer(stack.ncalloc(ALIGNOF, capacity, SIZEOF), capacity);
     }
 
-    /**
-     * Unsafe version of {@link #target}.
-     */
-    @Nullable
-    public static FT_Bitmap ntarget(long struct) {
-        return FT_Bitmap.createSafe(memGetAddress(struct + FT_Raster_Params.TARGET));
-    }
+    // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #source(int) source}.
-     */
-    @Nullable
-    public static ByteBuffer nsource(long struct, int capacity) {
-        return memByteBufferSafe(memGetAddress(struct + FT_Raster_Params.SOURCE), capacity);
-    }
+    /** Unsafe version of {@link #target}. */
+    @Nullable public static FT_Bitmap ntarget(long struct) { return FT_Bitmap.createSafe(memGetAddress(struct + FT_Raster_Params.TARGET)); }
+    /** Unsafe version of {@link #source(int) source}. */
+    @Nullable public static ByteBuffer nsource(long struct, int capacity) { return memByteBufferSafe(memGetAddress(struct + FT_Raster_Params.SOURCE), capacity); }
+    /** Unsafe version of {@link #flags}. */
+    public static int nflags(long struct) { return UNSAFE.getInt(null, struct + FT_Raster_Params.FLAGS); }
+    /** Unsafe version of {@link #gray_spans}. */
+    @Nullable public static FT_SpanFunc ngray_spans(long struct) { return FT_SpanFunc.createSafe(memGetAddress(struct + FT_Raster_Params.GRAY_SPANS)); }
+    @Nullable public static FT_SpanFunc nblack_spans(long struct) { return FT_SpanFunc.createSafe(memGetAddress(struct + FT_Raster_Params.BLACK_SPANS)); }
+    public static long nbit_test(long struct) { return memGetAddress(struct + FT_Raster_Params.BIT_TEST); }
+    public static long nbit_set(long struct) { return memGetAddress(struct + FT_Raster_Params.BIT_SET); }
+    /** Unsafe version of {@link #user}. */
+    public static long nuser(long struct) { return memGetAddress(struct + FT_Raster_Params.USER); }
+    /** Unsafe version of {@link #clip_box}. */
+    public static FT_BBox nclip_box(long struct) { return FT_BBox.create(struct + FT_Raster_Params.CLIP_BOX); }
 
-    /**
-     * Unsafe version of {@link #flags}.
-     */
-    public static int nflags(long struct) {
-        return UNSAFE.getInt(null, struct + FT_Raster_Params.FLAGS);
-    }
+    /** Unsafe version of {@link #target(FT_Bitmap) target}. */
+    public static void ntarget(long struct, @Nullable FT_Bitmap value) { memPutAddress(struct + FT_Raster_Params.TARGET, memAddressSafe(value)); }
+    /** Unsafe version of {@link #source(ByteBuffer) source}. */
+    public static void nsource(long struct, @Nullable ByteBuffer value) { memPutAddress(struct + FT_Raster_Params.SOURCE, memAddressSafe(value)); }
+    /** Unsafe version of {@link #flags(int) flags}. */
+    public static void nflags(long struct, int value) { UNSAFE.putInt(null, struct + FT_Raster_Params.FLAGS, value); }
+    /** Unsafe version of {@link #gray_spans(FT_SpanFuncI) gray_spans}. */
+    public static void ngray_spans(long struct, @Nullable FT_SpanFuncI value) { memPutAddress(struct + FT_Raster_Params.GRAY_SPANS, memAddressSafe(value)); }
+    public static void nblack_spans(long struct, @Nullable FT_SpanFuncI value) { memPutAddress(struct + FT_Raster_Params.BLACK_SPANS, memAddressSafe(value)); }
+    public static void nbit_test(long struct, long value) { memPutAddress(struct + FT_Raster_Params.BIT_TEST, value); }
+    public static void nbit_set(long struct, long value) { memPutAddress(struct + FT_Raster_Params.BIT_SET, value); }
+    /** Unsafe version of {@link #user(long) user}. */
+    public static void nuser(long struct, long value) { memPutAddress(struct + FT_Raster_Params.USER, value); }
+    /** Unsafe version of {@link #clip_box(FT_BBox) clip_box}. */
+    public static void nclip_box(long struct, FT_BBox value) { memCopy(value.address(), struct + FT_Raster_Params.CLIP_BOX, FT_BBox.SIZEOF); }
 
     // -----------------------------------
 
-    /**
-     * Unsafe version of {@link #gray_spans}.
-     */
-    @Nullable
-    public static FT_SpanFunc ngray_spans(long struct) {
-        return FT_SpanFunc.createSafe(memGetAddress(struct + FT_Raster_Params.GRAY_SPANS));
-    }
-
-    @Nullable
-    public static FT_SpanFunc nblack_spans(long struct) {
-        return FT_SpanFunc.createSafe(memGetAddress(struct + FT_Raster_Params.BLACK_SPANS));
-    }
-
-    public static long nbit_test(long struct) {
-        return memGetAddress(struct + FT_Raster_Params.BIT_TEST);
-    }
-
-    public static long nbit_set(long struct) {
-        return memGetAddress(struct + FT_Raster_Params.BIT_SET);
-    }
-
-    /**
-     * Unsafe version of {@link #user}.
-     */
-    public static long nuser(long struct) {
-        return memGetAddress(struct + FT_Raster_Params.USER);
-    }
-
-    /**
-     * Unsafe version of {@link #clip_box}.
-     */
-    public static FT_BBox nclip_box(long struct) {
-        return FT_BBox.create(struct + FT_Raster_Params.CLIP_BOX);
-    }
-
-    /**
-     * Unsafe version of {@link #target(FT_Bitmap) target}.
-     */
-    public static void ntarget(long struct, @Nullable FT_Bitmap value) {
-        memPutAddress(struct + FT_Raster_Params.TARGET, memAddressSafe(value));
-    }
-
-    /**
-     * Unsafe version of {@link #source(ByteBuffer) source}.
-     */
-    public static void nsource(long struct, @Nullable ByteBuffer value) {
-        memPutAddress(struct + FT_Raster_Params.SOURCE, memAddressSafe(value));
-    }
-
-    /**
-     * Unsafe version of {@link #flags(int) flags}.
-     */
-    public static void nflags(long struct, int value) {
-        UNSAFE.putInt(null, struct + FT_Raster_Params.FLAGS, value);
-    }
-
-    /**
-     * Unsafe version of {@link #gray_spans(FT_SpanFuncI) gray_spans}.
-     */
-    public static void ngray_spans(long struct, @Nullable FT_SpanFuncI value) {
-        memPutAddress(struct + FT_Raster_Params.GRAY_SPANS, memAddressSafe(value));
-    }
-
-    public static void nblack_spans(long struct, @Nullable FT_SpanFuncI value) {
-        memPutAddress(struct + FT_Raster_Params.BLACK_SPANS, memAddressSafe(value));
-    }
-
-    public static void nbit_test(long struct, long value) {
-        memPutAddress(struct + FT_Raster_Params.BIT_TEST, value);
-    }
-
-    public static void nbit_set(long struct, long value) {
-        memPutAddress(struct + FT_Raster_Params.BIT_SET, value);
-    }
-
-    /**
-     * Unsafe version of {@link #user(long) user}.
-     */
-    public static void nuser(long struct, long value) {
-        memPutAddress(struct + FT_Raster_Params.USER, value);
-    }
-
-    // -----------------------------------
-
-    /**
-     * Unsafe version of {@link #clip_box(FT_BBox) clip_box}.
-     */
-    public static void nclip_box(long struct, FT_BBox value) {
-        memCopy(value.address(), struct + FT_Raster_Params.CLIP_BOX, FT_BBox.SIZEOF);
-    }
-
-    @Override
-    protected FT_Raster_Params create(long address, @Nullable ByteBuffer container) {
-        return new FT_Raster_Params(address, container);
-    }
-
-    @Override
-    public int sizeof() {
-        return SIZEOF;
-    }
-
-    /**
-     * @return a {@link FT_Bitmap} view of the struct pointed to by the {@code target} field.
-     */
-    @Nullable
-    @NativeType("FT_Bitmap const *")
-    public FT_Bitmap target() {
-        return ntarget(address());
-    }
-
-    /**
-     * @param capacity the number of elements in the returned buffer
-     * @return a {@link ByteBuffer} view of the data pointed to by the {@code source} field.
-     */
-    @Nullable
-    @NativeType("void const *")
-    public ByteBuffer source(int capacity) {
-        return nsource(address(), capacity);
-    }
-
-    /**
-     * @return the value of the {@code flags} field.
-     */
-    public int flags() {
-        return nflags(address());
-    }
-
-    /**
-     * @return the value of the {@code gray_spans} field.
-     */
-    @Nullable
-    public FT_SpanFunc gray_spans() {
-        return ngray_spans(address());
-    }
-
-    /**
-     * @return the value of the {@code user} field.
-     */
-    @NativeType("void *")
-    public long user() {
-        return nuser(address());
-    }
-
-    /**
-     * @return a {@link FT_BBox} view of the {@code clip_box} field.
-     */
-    public FT_BBox clip_box() {
-        return nclip_box(address());
-    }
-
-    /**
-     * Sets the address of the specified {@link FT_Bitmap} to the {@code target} field.
-     */
-    public FT_Raster_Params target(@Nullable @NativeType("FT_Bitmap const *") FT_Bitmap value) {
-        ntarget(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the address of the specified {@link ByteBuffer} to the {@code source} field.
-     */
-    public FT_Raster_Params source(@Nullable @NativeType("void const *") ByteBuffer value) {
-        nsource(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code flags} field.
-     */
-    public FT_Raster_Params flags(int value) {
-        nflags(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code gray_spans} field.
-     */
-    public FT_Raster_Params gray_spans(@Nullable @NativeType("FT_SpanFunc") FT_SpanFuncI value) {
-        ngray_spans(address(), value);
-        return this;
-    }
-
-    /**
-     * Sets the specified value to the {@code user} field.
-     */
-    public FT_Raster_Params user(@NativeType("void *") long value) {
-        nuser(address(), value);
-        return this;
-    }
-
-    /**
-     * Copies the specified {@link FT_BBox} to the {@code clip_box} field.
-     */
-    public FT_Raster_Params clip_box(FT_BBox value) {
-        nclip_box(address(), value);
-        return this;
-    }
-
-    /**
-     * Passes the {@code clip_box} field to the specified {@link java.util.function.Consumer Consumer}.
-     */
-    public FT_Raster_Params clip_box(java.util.function.Consumer<FT_BBox> consumer) {
-        consumer.accept(clip_box());
-        return this;
-    }
-
-    /**
-     * Initializes this struct with the specified values.
-     */
-    public FT_Raster_Params set(
-            @Nullable FT_Bitmap target,
-            @Nullable ByteBuffer source,
-            int flags,
-            @Nullable FT_SpanFuncI gray_spans,
-            long user,
-            FT_BBox clip_box
-    ) {
-        target(target);
-        source(source);
-        flags(flags);
-        gray_spans(gray_spans);
-        user(user);
-        clip_box(clip_box);
-
-        return this;
-    }
-
-    /**
-     * Copies the specified struct data to this struct.
-     *
-     * @param src the source struct
-     * @return this struct
-     */
-    public FT_Raster_Params set(FT_Raster_Params src) {
-        memCopy(src.address(), address(), SIZEOF);
-        return this;
-    }
-
-    // -----------------------------------
-
-    /**
-     * An array of {@link FT_Raster_Params} structs.
-     */
+    /** An array of {@link FT_Raster_Params} structs. */
     public static class Buffer extends StructBuffer<FT_Raster_Params, Buffer> implements NativeResource {
 
         private static final FT_Raster_Params ELEMENT_FACTORY = FT_Raster_Params.create(-1L);
@@ -535,110 +354,43 @@ public class FT_Raster_Params extends Struct<FT_Raster_Params> implements Native
             return ELEMENT_FACTORY;
         }
 
-        /**
-         * @return a {@link FT_Bitmap} view of the struct pointed to by the {@code target} field.
-         */
+        /** @return a {@link FT_Bitmap} view of the struct pointed to by the {@code target} field. */
         @Nullable
         @NativeType("FT_Bitmap const *")
-        public FT_Bitmap target() {
-            return FT_Raster_Params.ntarget(address());
-        }
-
+        public FT_Bitmap target() { return FT_Raster_Params.ntarget(address()); }
         /**
-         * @param capacity the number of elements in the returned buffer
          * @return a {@link ByteBuffer} view of the data pointed to by the {@code source} field.
+         *
+         * @param capacity the number of elements in the returned buffer
          */
         @Nullable
         @NativeType("void const *")
-        public ByteBuffer source(int capacity) {
-            return FT_Raster_Params.nsource(address(), capacity);
-        }
-
-        /**
-         * @return the value of the {@code flags} field.
-         */
-        public int flags() {
-            return FT_Raster_Params.nflags(address());
-        }
-
-        /**
-         * @return the value of the {@code gray_spans} field.
-         */
+        public ByteBuffer source(int capacity) { return FT_Raster_Params.nsource(address(), capacity); }
+        /** @return the value of the {@code flags} field. */
+        public int flags() { return FT_Raster_Params.nflags(address()); }
+        /** @return the value of the {@code gray_spans} field. */
         @Nullable
-        public FT_SpanFunc gray_spans() {
-            return FT_Raster_Params.ngray_spans(address());
-        }
-
-        /**
-         * @return the value of the {@code user} field.
-         */
+        public FT_SpanFunc gray_spans() { return FT_Raster_Params.ngray_spans(address()); }
+        /** @return the value of the {@code user} field. */
         @NativeType("void *")
-        public long user() {
-            return FT_Raster_Params.nuser(address());
-        }
+        public long user() { return FT_Raster_Params.nuser(address()); }
+        /** @return a {@link FT_BBox} view of the {@code clip_box} field. */
+        public FT_BBox clip_box() { return FT_Raster_Params.nclip_box(address()); }
 
-        /**
-         * @return a {@link FT_BBox} view of the {@code clip_box} field.
-         */
-        public FT_BBox clip_box() {
-            return FT_Raster_Params.nclip_box(address());
-        }
-
-        /**
-         * Sets the address of the specified {@link FT_Bitmap} to the {@code target} field.
-         */
-        public Buffer target(@Nullable @NativeType("FT_Bitmap const *") FT_Bitmap value) {
-            FT_Raster_Params.ntarget(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the address of the specified {@link ByteBuffer} to the {@code source} field.
-         */
-        public Buffer source(@Nullable @NativeType("void const *") ByteBuffer value) {
-            FT_Raster_Params.nsource(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code flags} field.
-         */
-        public Buffer flags(int value) {
-            FT_Raster_Params.nflags(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code gray_spans} field.
-         */
-        public Buffer gray_spans(@Nullable @NativeType("FT_SpanFunc") FT_SpanFuncI value) {
-            FT_Raster_Params.ngray_spans(address(), value);
-            return this;
-        }
-
-        /**
-         * Sets the specified value to the {@code user} field.
-         */
-        public Buffer user(@NativeType("void *") long value) {
-            FT_Raster_Params.nuser(address(), value);
-            return this;
-        }
-
-        /**
-         * Copies the specified {@link FT_BBox} to the {@code clip_box} field.
-         */
-        public Buffer clip_box(FT_BBox value) {
-            FT_Raster_Params.nclip_box(address(), value);
-            return this;
-        }
-
-        /**
-         * Passes the {@code clip_box} field to the specified {@link java.util.function.Consumer Consumer}.
-         */
-        public Buffer clip_box(java.util.function.Consumer<FT_BBox> consumer) {
-            consumer.accept(clip_box());
-            return this;
-        }
+        /** Sets the address of the specified {@link FT_Bitmap} to the {@code target} field. */
+        public Buffer target(@Nullable @NativeType("FT_Bitmap const *") FT_Bitmap value) { FT_Raster_Params.ntarget(address(), value); return this; }
+        /** Sets the address of the specified {@link ByteBuffer} to the {@code source} field. */
+        public Buffer source(@Nullable @NativeType("void const *") ByteBuffer value) { FT_Raster_Params.nsource(address(), value); return this; }
+        /** Sets the specified value to the {@code flags} field. */
+        public Buffer flags(int value) { FT_Raster_Params.nflags(address(), value); return this; }
+        /** Sets the specified value to the {@code gray_spans} field. */
+        public Buffer gray_spans(@Nullable @NativeType("FT_SpanFunc") FT_SpanFuncI value) { FT_Raster_Params.ngray_spans(address(), value); return this; }
+        /** Sets the specified value to the {@code user} field. */
+        public Buffer user(@NativeType("void *") long value) { FT_Raster_Params.nuser(address(), value); return this; }
+        /** Copies the specified {@link FT_BBox} to the {@code clip_box} field. */
+        public Buffer clip_box(FT_BBox value) { FT_Raster_Params.nclip_box(address(), value); return this; }
+        /** Passes the {@code clip_box} field to the specified {@link java.util.function.Consumer Consumer}. */
+        public Buffer clip_box(java.util.function.Consumer<FT_BBox> consumer) { consumer.accept(clip_box()); return this; }
 
     }
 
