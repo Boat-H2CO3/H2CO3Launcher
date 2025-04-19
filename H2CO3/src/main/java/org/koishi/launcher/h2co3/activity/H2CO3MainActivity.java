@@ -11,7 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigationrail.NavigationRailView;
 
 import org.jetbrains.annotations.NotNull;
 import org.koishi.launcher.h2co3.R;
@@ -28,7 +29,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.logging.Level;
 
-public class H2CO3MainActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class H2CO3MainActivity extends BaseActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener {
     private static WeakReference<H2CO3MainActivity> instance;
     public UIManager uiManager;
     public MaterialToolbar toolbar;
@@ -36,7 +37,7 @@ public class H2CO3MainActivity extends BaseActivity implements View.OnClickListe
     private UIManager _uiManager = null;
     // UI Components
     private H2CO3LauncherUILayout uiLayout;
-    private NavigationView navigationView;
+    private NavigationRailView navigationView;
 
     public static H2CO3MainActivity getInstance() {
         return instance.get();
@@ -53,8 +54,8 @@ public class H2CO3MainActivity extends BaseActivity implements View.OnClickListe
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nav);
         toolbar.inflateMenu(R.menu.home_toolbar);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.navigation_main);
+        navigationView.setOnItemSelectedListener(this);
+        navigationView.setSelectedItemId(R.id.navigation_main);
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
 

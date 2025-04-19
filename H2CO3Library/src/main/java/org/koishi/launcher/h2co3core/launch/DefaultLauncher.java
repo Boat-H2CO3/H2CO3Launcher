@@ -300,7 +300,7 @@ public class DefaultLauncher extends Launcher {
             res.add(pkg + "/" + pkg + "=ALL-UNNAMED");
         }
 
-        res.add("mio.Wrapper");
+        res.add("h2co3.Wrapper");
         res.add(version.getMainClass());
 
         res.addAll(Arguments.parseStringArguments(version.getMinecraftArguments().map(StringUtils::tokenize).orElseGet(ArrayList::new), configuration));

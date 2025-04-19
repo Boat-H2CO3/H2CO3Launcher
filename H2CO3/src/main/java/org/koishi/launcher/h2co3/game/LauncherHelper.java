@@ -213,10 +213,10 @@ public final class LauncherHelper {
                     return null;
                 })
                 .thenComposeAsync(() -> {
-                    try (InputStream input = LauncherHelper.class.getResourceAsStream("/assets/game/MioLaunchWrapper.jar")) {
+                    try (InputStream input = LauncherHelper.class.getResourceAsStream("/assets/game/H2CO3LaunchWrapper.jar")) {
                         Files.copy(input, new File(H2CO3LauncherTools.LAUNCH_WRAPPER).toPath(), StandardCopyOption.REPLACE_EXISTING);
                     } catch (IOException e) {
-                        Logging.LOG.log(Level.WARNING, "Unable to unpack MioLaunchWrapper.jar", e);
+                        Logging.LOG.log(Level.WARNING, "Unable to unpack H2CO3LaunchWrapper.jar", e);
                     }
                     return null;
                 })

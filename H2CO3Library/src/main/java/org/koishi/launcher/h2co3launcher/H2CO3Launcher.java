@@ -420,7 +420,7 @@ public class H2CO3Launcher {
         boolean isToken = false;
         for (String arg : args) {
             if (javaArgs)
-                javaArgs = !arg.equals("mio.Wrapper");
+                javaArgs = !arg.equals("h2co3.Wrapper");
             String title = task.equals("Minecraft") ? javaArgs ? "Java" : task : task;
             String prefix = title + " argument: ";
             if (task.equals("Minecraft") && !javaArgs && mainClass < 2) {
