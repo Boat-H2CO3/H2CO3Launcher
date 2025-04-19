@@ -346,7 +346,7 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
         dialog.show();
     }
 
-    private void showVersionDialog() {
+    public void showVersionDialog() {
         AlertDialog dialog = versionDialogBuilder.create();
         showDialog(dialog, versionDialogView);
     }
@@ -383,7 +383,8 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
 
                 StringBuilder libraries = new StringBuilder(game);
                 LibraryAnalyzer analyzer = LibraryAnalyzer.analyze(
-                        Profiles.getSelectedProfile().getRepository().getResolvedPreservingPatchesVersion(version)
+                        Profiles.getSelectedProfile().getRepository().getResolvedPreservingPatchesVersion(version),
+                        Profiles.getSelectedProfile().getRepository().getGameVersion(version).orElse(null)
                 );
 
                 for (LibraryAnalyzer.LibraryMark mark : analyzer) {
@@ -409,10 +410,12 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
                 });
             });
         } else {
-            versionProgress.setVisibility(View.GONE);
-            versionName.setText(getActivity().getString(R.string.version_no_version));
-            versionHint.setText(getActivity().getString(R.string.version_manage));
-            icon.setBackground(AppCompatResources.getDrawable(getActivity(), R.drawable.img_grass));
+            getActivity().runOnUiThread(() -> {
+                versionProgress.setVisibility(View.GONE);
+                versionName.setText(getActivity().getString(R.string.version_no_version));
+                versionHint.setText(getActivity().getString(R.string.version_manage));
+                icon.setBackground(AppCompatResources.getDrawable(getActivity(), R.drawable.img_grass));
+            });
         }
     }
 

@@ -18,13 +18,6 @@
 package org.koishi.launcher.h2co3core.auth.microsoft;
 
 import static org.koishi.launcher.h2co3core.util.Logging.LOG;
-
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.logging.Level;
-
 import static java.util.Objects.requireNonNull;
 
 import org.koishi.launcher.h2co3core.auth.AuthInfo;
@@ -37,6 +30,12 @@ import org.koishi.launcher.h2co3core.auth.yggdrasil.TextureType;
 import org.koishi.launcher.h2co3core.auth.yggdrasil.YggdrasilService;
 import org.koishi.launcher.h2co3core.fakefx.beans.binding.ObjectBinding;
 import org.koishi.launcher.h2co3core.util.fakefx.BindingMapping;
+
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.logging.Level;
 
 public class MicrosoftAccount extends OAuthAccount {
 
@@ -89,16 +88,20 @@ public class MicrosoftAccount extends OAuthAccount {
 
     @Override
     public AuthInfo logIn() throws AuthenticationException {
-        if (!authenticated || !service.validate(session.getNotAfter(), session.getTokenType(), session.getAccessToken())) {
-            MicrosoftSession acquiredSession = service.refresh(session);
-            if (!Objects.equals(acquiredSession.getProfile().getId(), session.getProfile().getId())) {
-                throw new ServerResponseMalformedException("Selected profile changed");
+        if (!authenticated || System.currentTimeMillis() > session.getNotAfter()) {
+            if (service.validate(session.getNotAfter(), session.getTokenType(), session.getAccessToken())) {
+                authenticated = true;
+            } else {
+                MicrosoftSession acquiredSession = service.refresh(session);
+                if (!Objects.equals(acquiredSession.getProfile().getId(), session.getProfile().getId())) {
+                    throw new ServerResponseMalformedException("Selected profile changed");
+                }
+
+                session = acquiredSession;
+
+                authenticated = true;
+                invalidate();
             }
-
-            session = acquiredSession;
-
-            authenticated = true;
-            invalidate();
         }
 
         return session.toAuthInfo();

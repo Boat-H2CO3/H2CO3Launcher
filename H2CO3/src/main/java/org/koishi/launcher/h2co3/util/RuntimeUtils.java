@@ -26,6 +26,11 @@ public class RuntimeUtils {
 
     public static boolean isLatest(String targetDir, String srcDir) throws IOException {
         File targetFile = new File(targetDir + "/version");
+        try (InputStream stream = RuntimeUtils.class.getResourceAsStream(srcDir + "/version")) {
+            if (stream == null) {
+                return true;
+            }
+        }
         Logging.LOG.info("Checking version of " + targetDir + " with " + srcDir);
         long version = Long.parseLong(IOUtils.readFullyAsString(RuntimeUtils.class.getResourceAsStream(srcDir + "/version")));
         Logging.LOG.info("Version of " + targetDir + " is " + version);

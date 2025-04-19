@@ -119,16 +119,6 @@
             app:ripple="true" />
 
         <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
-            android:id="@+id/show_incompatible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:singleLine="true"
-            android:text="@string/view_incompatible"
-            android:visibility="gone"
-            app:ripple="true" />
-
-        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -27,6 +27,7 @@ import android.os.Build;
 import com.google.gson.GsonBuilder;
 
 import org.koishi.launcher.h2co3core.auth.AuthInfo;
+import org.koishi.launcher.h2co3core.download.LibraryAnalyzer;
 import org.koishi.launcher.h2co3core.game.Argument;
 import org.koishi.launcher.h2co3core.game.Arguments;
 import org.koishi.launcher.h2co3core.game.GameRepository;
@@ -158,8 +159,14 @@ public class DefaultLauncher extends Launcher {
                 LOG.log(Level.WARNING, "Bad file encoding", ex);
             }
         }
-        res.addDefault("-Dsun.stdout.encoding=", encoding.name());
-        res.addDefault("-Dsun.stderr.encoding=", encoding.name());
+
+        if (options.getJava().getVersion() < 19) {
+            res.addDefault("-Dsun.stdout.encoding=", encoding.name());
+            res.addDefault("-Dsun.stderr.encoding=", encoding.name());
+        } else {
+            res.addDefault("-Dstdout.encoding=", encoding.name());
+            res.addDefault("-Dstderr.encoding=", encoding.name());
+        }
 
         // Fix RCE vulnerability of log4j2
         res.addDefault("-Djava.rmi.server.useCodebaseOnly=", "true");
@@ -196,6 +203,8 @@ public class DefaultLauncher extends Launcher {
         if (Architecture.is32BitsDevice()) {
             res.addDefault("-Xss", "1m");
         }
+
+        res.addDefault("-XX:ActiveProcessorCount=", String.valueOf(Runtime.getRuntime().availableProcessors()));
 
         res.addDefault("-Dfml.ignoreInvalidMinecraftCertificates=", "true");
         res.addDefault("-Dfml.ignorePatchDiscrepancies=", "true");
@@ -350,7 +359,7 @@ public class DefaultLauncher extends Launcher {
                         return it.getId().equals(versionTypeId);
                     })
                     .findFirst();
-            return mapInfo.map(it -> it.getArgument().getArgument(version)).orElse(null);
+            return mapInfo.map(it -> it.getArgument().getArgument(version, repository.getGameVersion(version).orElse(null))).orElse(null);
         } catch (IOException e) {
             LOG.log(Level.WARNING, "Failed to get game map", e);
             return null;
@@ -452,6 +461,8 @@ public class DefaultLauncher extends Launcher {
 
         String[] finalArgs = rawCommandLine.toArray(new String[0]);
 
+        LibraryAnalyzer analyzer = LibraryAnalyzer.analyze(version, repository.getGameVersion(version).orElse(null));
+
         H2CO3LauncherConfig.Renderer renderer = options.getRenderer();
         H2CO3LauncherConfig config = new H2CO3LauncherConfig(
                 context,
@@ -463,6 +474,14 @@ public class DefaultLauncher extends Launcher {
         );
         config.setUseVKDriverSystem(options.isVKDriverSystem());
         config.setPojavBigCore(options.isPojavBigCore());
+        config.setInstalledModLoaders(new H2CO3LauncherConfig.InstalledModLoaders(
+                analyzer.has(LibraryAnalyzer.LibraryType.FORGE),
+                analyzer.has(LibraryAnalyzer.LibraryType.NEO_FORGE),
+                analyzer.has(LibraryAnalyzer.LibraryType.OPTIFINE),
+                analyzer.has(LibraryAnalyzer.LibraryType.LITELOADER),
+                analyzer.has(LibraryAnalyzer.LibraryType.FABRIC),
+                analyzer.has(LibraryAnalyzer.LibraryType.QUILT)
+        ));
         return H2CO3Launcher.launchMinecraft(config);
     }
 

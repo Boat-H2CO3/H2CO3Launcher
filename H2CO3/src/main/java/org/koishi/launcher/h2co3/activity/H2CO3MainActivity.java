@@ -1,74 +1,32 @@
 package org.koishi.launcher.h2co3.activity;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 import org.koishi.launcher.h2co3.R;
-import org.koishi.launcher.h2co3.game.JarExecutorHelper;
-import org.koishi.launcher.h2co3.game.TexturesLoader;
-import org.koishi.launcher.h2co3.setting.Accounts;
 import org.koishi.launcher.h2co3.setting.ConfigHolder;
-import org.koishi.launcher.h2co3.setting.Controllers;
 import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3.setting.Profiles;
 import org.koishi.launcher.h2co3.ui.UIManager;
-import org.koishi.launcher.h2co3.ui.version.Versions;
 import org.koishi.launcher.h2co3.upgrade.UpdateChecker;
-import org.koishi.launcher.h2co3.util.AndroidUtils;
-import org.koishi.launcher.h2co3.util.WeakListenerHolder;
-import org.koishi.launcher.h2co3core.auth.Account;
-import org.koishi.launcher.h2co3core.auth.authlibinjector.AuthlibInjectorAccount;
-import org.koishi.launcher.h2co3core.auth.authlibinjector.AuthlibInjectorServer;
-import org.koishi.launcher.h2co3core.auth.yggdrasil.TextureModel;
-import org.koishi.launcher.h2co3core.download.LibraryAnalyzer;
-import org.koishi.launcher.h2co3core.event.Event;
-import org.koishi.launcher.h2co3core.fakefx.beans.binding.Bindings;
-import org.koishi.launcher.h2co3core.fakefx.beans.property.ObjectProperty;
-import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleObjectProperty;
-import org.koishi.launcher.h2co3core.fakefx.beans.value.ObservableValue;
-import org.koishi.launcher.h2co3core.mod.RemoteMod;
-import org.koishi.launcher.h2co3core.mod.RemoteModRepository;
-import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.util.Logging;
-import org.koishi.launcher.h2co3core.util.fakefx.BindingMapping;
-import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
-import org.koishi.launcher.h2co3launcher.plugins.DriverPlugin;
-import org.koishi.launcher.h2co3launcher.plugins.RendererPlugin;
 import org.koishi.launcher.h2co3library.component.BaseActivity;
-import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
-import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText;
-import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView;
-import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
-import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherUILayout;
-import org.koishi.launcher.h2co3library.util.ConvertUtils;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.logging.Level;
-import java.util.stream.Stream;
 
 public class H2CO3MainActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     private static WeakReference<H2CO3MainActivity> instance;
@@ -212,9 +170,19 @@ public class H2CO3MainActivity extends BaseActivity implements View.OnClickListe
             }
         } else if (menuItem.getItemId() == R.id.navigation_manage) {
             if (uiManager.getCurrentUI() != uiManager.getManageUI()) {
-                toolbar.setTitle(getString(R.string.manage));
-                uiManager.switchUI(uiManager.getMultiplayerUI());
-                _menuItem = R.id.navigation_manage;
+                Profile selectedProfile = Profiles.getSelectedProfile();
+                String version = selectedProfile.getSelectedVersion();
+                if (version == null) {
+                    toolbar.setTitle(getString(R.string.download));
+                    uiManager.switchUI(uiManager.getDownloadUI());
+                    _menuItem = R.id.navigation_download;
+                    setNavigationItemChecked(_menuItem);
+                } else {
+                    toolbar.setTitle(getString(R.string.manage));
+                    uiManager.getManageUI().setVersion(version, selectedProfile);
+                    uiManager.switchUI(uiManager.getManageUI());
+                    _menuItem = R.id.navigation_manage;
+                }
             }
         }else if (menuItem.getItemId() == R.id.navigation_download) {
             if (uiManager.getCurrentUI() != uiManager.getDownloadUI()) {

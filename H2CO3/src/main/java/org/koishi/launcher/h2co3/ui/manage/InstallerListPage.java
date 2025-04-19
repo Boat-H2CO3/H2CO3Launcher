@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
 import org.koishi.launcher.h2co3.R;
@@ -24,7 +23,6 @@ import org.koishi.launcher.h2co3.ui.download.InstallerVersionPage;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
 import org.koishi.launcher.h2co3.util.RequestCodes;
 import org.koishi.launcher.h2co3.util.TaskCancellationAction;
-import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3core.download.LibraryAnalyzer;
 import org.koishi.launcher.h2co3core.download.RemoteVersion;
 import org.koishi.launcher.h2co3core.event.Event;
@@ -33,6 +31,7 @@ import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.task.Task;
 import org.koishi.launcher.h2co3core.task.TaskExecutor;
 import org.koishi.launcher.h2co3core.task.TaskListener;
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3library.browser.FileBrowser;
 import org.koishi.launcher.h2co3library.browser.options.LibMode;
 import org.koishi.launcher.h2co3library.browser.options.SelectionMode;
@@ -86,7 +85,7 @@ public class InstallerListPage extends H2CO3LauncherCommonPage implements Manage
         CompletableFuture.supplyAsync(() -> {
             gameVersion = profile.getRepository().getGameVersion(version).orElse(null);
 
-            return LibraryAnalyzer.analyze(profile.getRepository().getResolvedPreservingPatchesVersion(versionId));
+            return LibraryAnalyzer.analyze(profile.getRepository().getResolvedPreservingPatchesVersion(versionId), gameVersion);
         }).thenAcceptAsync(analyzer -> {
             Function<String, Runnable> removeAction = libraryId -> () -> profile.getDependency().removeLibraryAsync(version, libraryId)
                     .thenComposeAsync(profile.getRepository()::saveAsync)
@@ -104,15 +103,16 @@ public class InstallerListPage extends H2CO3LauncherCommonPage implements Manage
             // Conventional libraries: game, fabric, quilt, forge, neoforge, liteloader, optifine
             for (InstallerItem installerItem : group.getLibraries()) {
                 String libraryId = installerItem.getLibraryId();
+                String libraryVersion = analyzer.getVersion(libraryId).orElse(null);
+                boolean libraryConfigurable = libraryVersion != null && analyzer.getLibraryStatus(libraryId) == LibraryAnalyzer.LibraryMark.LibraryStatus.CLEAR;
 
                 // Skip fabric-api and quilt-api
                 if (libraryId.contains("fabric-api") || libraryId.contains("quilt-api")) {
                     continue;
                 }
 
-                String libraryVersion = analyzer.getVersion(libraryId).orElse(null);
                 installerItem.libraryVersion.set(libraryVersion);
-                installerItem.upgradable.set(libraryVersion != null);
+                installerItem.upgradable.set(libraryConfigurable);
                 installerItem.installable.set(true);
                 installerItem.action.set(() -> {
                     InstallerVersionPage page = new InstallerVersionPage(getContext(), PageManager.PAGE_ID_TEMP, getParent(), R.layout.page_install_version, gameVersion, libraryId, remoteVersion -> {

@@ -18,6 +18,7 @@
 package org.koishi.launcher.h2co3core.download.game;
 
 import org.koishi.launcher.h2co3core.download.AbstractDependencyManager;
+import org.koishi.launcher.h2co3core.download.LibraryAnalyzer;
 import org.koishi.launcher.h2co3core.game.GameRepository;
 import org.koishi.launcher.h2co3core.game.Library;
 import org.koishi.launcher.h2co3core.game.Version;
@@ -25,10 +26,15 @@ import org.koishi.launcher.h2co3core.task.FileDownloadTask;
 import org.koishi.launcher.h2co3core.task.Task;
 import org.koishi.launcher.h2co3core.util.LibFilter;
 import org.koishi.launcher.h2co3core.util.Logging;
+import org.koishi.launcher.h2co3core.util.io.CompressingUtils;
 import org.koishi.launcher.h2co3core.util.io.FileUtils;
+import org.koishi.launcher.h2co3core.util.versioning.GameVersionNumber;
+import org.koishi.launcher.h2co3core.util.versioning.VersionNumber;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,20 +81,23 @@ public final class GameLibrariesTask extends Task<Void> {
         File file = gameRepository.getLibraryFile(version, library);
         Path jar = file.toPath();
         if (!file.isFile()) return true;
+
+        if (!integrityCheck) {
+            return false;
+        }
         try {
-            if (integrityCheck && !library.getDownload().validateChecksum(jar, true)) return true;
-            if (integrityCheck &&
-                    library.getChecksums() != null && !library.getChecksums().isEmpty() &&
-                    !LibraryDownloadTask.checksumValid(file, library.getChecksums())) return true;
-            if (integrityCheck) {
-                String ext = FileUtils.getExtension(file);
-                if (ext.equals("jar")) {
-                    try {
-                        FileDownloadTask.ZIP_INTEGRITY_CHECK_HANDLER.checkIntegrity(jar, jar);
-                    } catch (IOException ignored) {
-                        // the Jar file is malformed, so re-download it.
-                        return true;
-                    }
+            if (!library.getDownload().validateChecksum(jar, true)) {
+                return true;
+            }
+            if (library.getChecksums() != null && !library.getChecksums().isEmpty() && !LibraryDownloadTask.checksumValid(file, library.getChecksums())) {
+                return true;
+            }
+            if (FileUtils.getExtension(file).equals("jar")) {
+                try {
+                    FileDownloadTask.ZIP_INTEGRITY_CHECK_HANDLER.checkIntegrity(jar, jar);
+                } catch (IOException ignored) {
+                    // the Jar file is malformed, so re-download it.
+                    return true;
                 }
             }
         } catch (IOException e) {
@@ -99,21 +108,31 @@ public final class GameLibrariesTask extends Task<Void> {
     }
 
     @Override
-    public List<Task<?>> getDependencies() {
-        return dependencies;
-    }
-
-    @Override
-    public void execute() {
-        libraries.stream().filter(Library::appliesToCurrentEnvironment).forEach(library -> {
-            File file = dependencyManager.getGameRepository().getLibraryFile(version, library);
-            if (shouldDownloadLibrary(dependencyManager.getGameRepository(), version, library, integrityCheck)) {
-                if (library.hasDownloadURL() || !"optifine".equals(library.getGroupId()))
-                    dependencies.add(new LibraryDownloadTask(dependencyManager, file, library));
+    public void execute() throws IOException {
+        GameRepository gameRepository = dependencyManager.getGameRepository();
+        for (Library library : libraries) {
+            if (!library.appliesToCurrentEnvironment()) {
+                continue;
+            }
+            File file = gameRepository.getLibraryFile(version, library);
+            if ("optifine".equals(library.getGroupId()) && file.exists() && GameVersionNumber.asGameVersion(gameRepository.getGameVersion(version)).compareTo("1.20.4") == 0) {
+                String forgeVersion = LibraryAnalyzer.analyze(version, "1.20.4")
+                        .getVersion(LibraryAnalyzer.LibraryType.FORGE)
+                        .orElse(null);
+                if (forgeVersion != null && LibraryAnalyzer.FORGE_OPTIFINE_BROKEN_RANGE.contains(VersionNumber.asVersion(forgeVersion))) {
+                    try (FileSystem fs2 = CompressingUtils.createWritableZipFileSystem(file.toPath())) {
+                        Files.deleteIfExists(fs2.getPath("/META-INF/mods.toml"));
+                    } catch (IOException e) {
+                        throw new IOException("Cannot fix optifine", e);
+                    }
+                }
+            }
+            if (shouldDownloadLibrary(gameRepository, version, library, integrityCheck) && (library.hasDownloadURL() || !"optifine".equals(library.getGroupId()))) {
+                dependencies.add(new LibraryDownloadTask(dependencyManager, file, library));
             } else {
                 dependencyManager.getCacheRepository().tryCacheLibrary(library, file.toPath());
             }
-        });
+        }
     }
 
 }

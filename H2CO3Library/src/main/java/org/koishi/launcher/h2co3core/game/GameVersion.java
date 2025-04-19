@@ -20,12 +20,12 @@ package org.koishi.launcher.h2co3core.game;
 import static org.koishi.launcher.h2co3core.util.Logging.LOG;
 
 import com.google.gson.JsonParseException;
-import org.koishi.launcher.h2co3core.util.gson.JsonUtils;
 
 import org.jenkinsci.constant_pool_scanner.ConstantPool;
 import org.jenkinsci.constant_pool_scanner.ConstantPoolScanner;
 import org.jenkinsci.constant_pool_scanner.ConstantType;
 import org.jenkinsci.constant_pool_scanner.StringConstant;
+import org.koishi.launcher.h2co3core.util.gson.JsonUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -104,8 +104,13 @@ public final class GameVersion {
             if (minecraft != null) {
                 try (InputStream is = gameJar.getInputStream(minecraft)) {
                     Optional<String> result = getVersionOfClassMinecraft(is);
-                    if (result.isPresent())
+                    if (result.isPresent()) {
+                        String version = result.get();
+                        if (version.startsWith("Beta ")) {
+                            result = Optional.of("b" + version.substring("Beta ".length()));
+                        }
                         return result;
+                    }
                 }
             }
 

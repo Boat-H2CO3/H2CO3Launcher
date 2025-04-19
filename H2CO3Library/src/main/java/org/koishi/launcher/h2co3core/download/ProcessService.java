@@ -8,12 +8,12 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig;
-import org.koishi.launcher.h2co3launcher.H2CO3Launcher;
-import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
-import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridgeCallback;
 import org.koishi.launcher.h2co3core.util.Logging;
 import org.koishi.launcher.h2co3core.util.io.FileUtils;
+import org.koishi.launcher.h2co3launcher.H2CO3Launcher;
+import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig;
+import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
+import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridgeCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class ProcessService extends Service {
                 command
         );
         startProcess(config);
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
     public void startProcess(H2CO3LauncherConfig config) {

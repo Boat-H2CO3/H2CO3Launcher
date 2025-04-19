@@ -5,6 +5,7 @@ import static org.koishi.launcher.h2co3core.util.Lang.tryCast;
 import android.content.Context;
 
 import com.google.android.material.tabs.TabLayout;
+
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.activity.H2CO3MainActivity;
 import org.koishi.launcher.h2co3.setting.Profile;
@@ -61,6 +62,7 @@ public class ManageUI extends H2CO3LauncherMultiPageUI implements TabLayout.OnTa
                     if (isShowing()) {
                         H2CO3MainActivity.getInstance().cleanItemChecked();
                         H2CO3MainActivity.getInstance().setNavigationItemChecked(R.id.navigation_main);
+                        H2CO3MainActivity.getInstance().uiManager.switchUI(H2CO3MainActivity.getInstance().uiManager.getMainUI());
                     }
                 });
                 return;

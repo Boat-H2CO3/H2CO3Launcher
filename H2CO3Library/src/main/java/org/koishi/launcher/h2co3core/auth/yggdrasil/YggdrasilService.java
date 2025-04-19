@@ -21,10 +21,13 @@ import static org.koishi.launcher.h2co3core.util.Lang.mapOf;
 import static org.koishi.launcher.h2co3core.util.Lang.threadPool;
 import static org.koishi.launcher.h2co3core.util.Logging.LOG;
 import static org.koishi.launcher.h2co3core.util.Pair.pair;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Collections.unmodifiableList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
+
 import org.koishi.launcher.h2co3core.auth.AuthenticationException;
 import org.koishi.launcher.h2co3core.auth.ServerDisconnectException;
 import org.koishi.launcher.h2co3core.auth.ServerResponseMalformedException;
@@ -42,20 +45,22 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.unmodifiableList;
-
 public class YggdrasilService {
 
-    public static final YggdrasilService MOJANG = new YggdrasilService(new MojangYggdrasilProvider());
     public static final String PROFILE_URL = "https://aka.ms/MinecraftMigration";
     public static final String MIGRATION_FAQ_URL = "https://help.minecraft.net/articles/360050865492";
-    public static final String PURCHASE_URL = "https://www.microsoft.com/store/productId/9NXP44L49SHJ";
+    public static final String PURCHASE_URL = "https://www.microsoft.com/store/productid/9nxp44l49shj";
     private static final ThreadPoolExecutor POOL = threadPool("YggdrasilProfileProperties", true, 2, 10, TimeUnit.SECONDS);
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(UUID.class, UUIDTypeAdapter.INSTANCE)

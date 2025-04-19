@@ -33,12 +33,18 @@ import org.koishi.launcher.h2co3core.util.Logging;
 import org.koishi.launcher.h2co3core.util.io.FileUtils;
 import org.koishi.launcher.h2co3core.util.io.IOUtils;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Objects;
 import java.util.logging.Level;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 @SuppressLint("DiscouragedApi")
 public class AndroidUtils {
@@ -115,7 +121,7 @@ public class AndroidUtils {
             if (SDK_INT >= Build.VERSION_CODES.P) {
                 WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
                 DisplayCutout cutout;
-                if (SDK_INT >= Build.VERSION_CODES.S) {
+                if (SDK_INT >= Build.VERSION_CODES.R) {
                     cutout = wm.getCurrentWindowMetrics().getWindowInsets().getDisplayCutout();
                 } else {
                     cutout = context.getWindow().getDecorView().getRootWindowInsets().getDisplayCutout();
@@ -238,6 +244,80 @@ public class AndroidUtils {
         EGL14.eglTerminate(eglDisplay);
         Logging.LOG.log(Level.SEVERE, "CheckVendor: Running on Adreno GPU:" + isAdreno);
         return isAdreno;
+    }
+
+    public static String getElfArchFromSo(String filePath) {
+        try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
+            byte[] magic = new byte[4];
+            file.readFully(magic);
+            if (magic[0] != 0x7F || magic[1] != 'E' || magic[2] != 'L' || magic[3] != 'F') {
+                return "";
+            }
+            file.seek(0x05);
+            int eiData = file.readByte() & 0xFF;
+            if (eiData != 1 && eiData != 2) {
+                return "";
+            }
+            file.seek(0x12);
+            byte[] eMachineBytes = new byte[2];
+            file.readFully(eMachineBytes);
+            ByteBuffer buffer = ByteBuffer.wrap(eMachineBytes);
+            buffer.order(eiData == 1 ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN);
+            int eMachine = buffer.getShort() & 0xFFFF;
+            switch (eMachine) {
+                case 0x03: return "x86";
+                case 0x3E: return "x86_64";
+                case 0x28: return "ARM";
+                case 0xB7: return "AArch64";
+                case 0x08: return "MIPS";
+                case 0xF3: return "RISC-V";
+                case 0x2A: return "SuperH";
+                case 0x32: return "IA-64";
+                default: return "";
+            }
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
+    public static String getElfArchFromZip(File zipFile, String elfEntryPath) {
+        String arch = "";
+        try (ZipFile zip = new ZipFile(zipFile)) {
+            ZipEntry entry = zip.getEntry(elfEntryPath);
+            if (entry == null || entry.isDirectory()) {
+                return arch;
+            }
+            try (InputStream stream = zip.getInputStream(entry);
+                 DataInputStream dataStream = new DataInputStream(stream)) {
+                byte[] magic = new byte[4];
+                dataStream.readFully(magic);
+                if (!(magic[0] == 0x7F && magic[1] == 'E' && magic[2] == 'L' && magic[3] == 'F')) {
+                    return arch;
+                }
+                byte[] eIdentRest = new byte[12];
+                dataStream.readFully(eIdentRest);
+                int eiData = eIdentRest[1] & 0xFF;
+                dataStream.skipBytes(2);
+                byte[] machineBytes = new byte[2];
+                dataStream.readFully(machineBytes);
+                ByteOrder byteOrder = (eiData == 1) ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN;
+                int machineType = ByteBuffer.wrap(machineBytes).order(byteOrder).getShort() & 0xFFFF;
+                switch (machineType) {
+                    case 0x03: arch = "x86"; break;
+                    case 0x3E: arch = "x86_64"; break;
+                    case 0x28: arch = "ARM"; break;
+                    case 0xB7: arch = "AArch64"; break;
+                    case 0x08: arch = "MIPS"; break;
+                    case 0xF3: arch = "RISC-V"; break;
+                    case 0x2A: arch = "SPARC"; break;
+                    case 0x18: arch = "ARM64"; break;
+                    default: arch = ""; break;
+                }
+            }
+        } catch (IOException e) {
+
+        }
+        return arch;
     }
 
 }

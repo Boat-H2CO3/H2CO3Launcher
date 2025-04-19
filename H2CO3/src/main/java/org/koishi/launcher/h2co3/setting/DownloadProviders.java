@@ -40,7 +40,6 @@ import org.koishi.launcher.h2co3core.task.FetchTask;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.io.ResponseCodeException;
 
-import javax.net.ssl.SSLHandshakeException;
 import java.io.FileNotFoundException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
@@ -51,6 +50,8 @@ import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.net.ssl.SSLHandshakeException;
 
 public final class DownloadProviders {
     public static final Map<String, DownloadProvider> providersById;
@@ -101,6 +102,10 @@ public final class DownloadProviders {
             currentDownloadProvider = Optional.ofNullable(providersById.get(versionListSource))
                     .orElse(providersById.get(DEFAULT_PROVIDER_ID));
         });
+
+        if (!rawProviders.containsKey(config().getDownloadType())) {
+            config().setDownloadType(DEFAULT_RAW_PROVIDER_ID);
+        }
 
         FXUtils.onChangeAndOperate(config().downloadTypeProperty(), downloadType -> {
             if (!rawProviders.containsKey(downloadType)) {

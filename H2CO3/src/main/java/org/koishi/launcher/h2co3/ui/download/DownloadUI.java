@@ -5,6 +5,7 @@ import static org.koishi.launcher.h2co3core.util.Lang.tryCast;
 import android.content.Context;
 
 import com.google.android.material.tabs.TabLayout;
+
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3.setting.Profiles;
@@ -113,6 +114,9 @@ public class DownloadUI extends H2CO3LauncherMultiPageUI implements TabLayout.On
                     break;
                 case 4:
                     pageManager.switchPage(DownloadPageManager.PAGE_ID_DOWNLOAD_WORLD);
+                    break;
+                case 5:
+                    pageManager.switchPage(DownloadPageManager.PAGE_ID_DOWNLOAD_SHADER_PACK);
                     break;
                 default:
                     pageManager.switchPage(DownloadPageManager.PAGE_ID_DOWNLOAD_GAME);

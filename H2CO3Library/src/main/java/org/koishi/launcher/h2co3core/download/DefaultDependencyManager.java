@@ -104,7 +104,7 @@ public class DefaultDependencyManager extends AbstractDependencyManager {
             Version original = repository.getVersion(version.getId());
             Version resolved = original.resolvePreservingPatches(repository);
 
-            LibraryAnalyzer analyzer = LibraryAnalyzer.analyze(resolved);
+            LibraryAnalyzer analyzer = LibraryAnalyzer.analyze(resolved, gameVersion);
             for (LibraryAnalyzer.LibraryType type : LibraryAnalyzer.LibraryType.values()) {
                 if (!analyzer.has(type))
                     continue;
@@ -214,7 +214,9 @@ public class DefaultDependencyManager extends AbstractDependencyManager {
             throw new IllegalArgumentException("removeLibraryWithoutSavingAsync requires non-resolved version");
         Version independentVersion = version.resolvePreservingPatches(repository);
 
-        return Task.supplyAsync(() -> LibraryAnalyzer.analyze(independentVersion).removeLibrary(libraryId).build());
+        String gameVersion = repository.getGameVersion(independentVersion).orElse(null);
+
+        return Task.supplyAsync(() -> LibraryAnalyzer.analyze(independentVersion, gameVersion).removeLibrary(libraryId).build());
     }
 
     public static class UnsupportedLibraryInstallerException extends Exception {

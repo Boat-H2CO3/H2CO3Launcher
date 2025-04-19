@@ -31,8 +31,6 @@ import org.koishi.launcher.h2co3.control.data.ControlButtonData;
 import org.koishi.launcher.h2co3.control.data.ControlViewGroup;
 import org.koishi.launcher.h2co3.control.data.CustomControl;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
-import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
-import org.koishi.launcher.h2co3launcher.keycodes.H2CO3LauncherKeycodes;
 import org.koishi.launcher.h2co3core.fakefx.beans.InvalidationListener;
 import org.koishi.launcher.h2co3core.fakefx.beans.binding.Bindings;
 import org.koishi.launcher.h2co3core.fakefx.beans.property.BooleanProperty;
@@ -42,7 +40,11 @@ import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleBooleanProperty
 import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleObjectProperty;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.util.StringUtils;
+import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
+import org.koishi.launcher.h2co3launcher.keycodes.H2CO3LauncherKeycodes;
+import org.koishi.launcher.h2co3launcher.keycodes.LwjglKeycodeMap;
 import org.koishi.launcher.h2co3library.util.ConvertUtils;
+import org.lwjgl.glfw.CallbackBridge;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -60,7 +62,6 @@ public class ControlButton extends AppCompatButton implements CustomView {
     private final BooleanProperty parentVisibilityProperty = new SimpleBooleanProperty(this, "parentVisibility", true);
     private final ObjectProperty<ControlButtonData> dataProperty = new SimpleObjectProperty<>(this, "data", new ControlButtonData(UUID.randomUUID().toString()));
     private final Handler handler = new Handler();
-    private final Handler autoClickHandler = new Handler();
     private InvalidationListener notifyListener;
     private InvalidationListener dataChangeListener;
     private InvalidationListener boundaryListener;
@@ -85,8 +86,6 @@ public class ControlButton extends AppCompatButton implements CustomView {
     private long firstClickTime;
     private boolean doubleClickEvent = false;
     private boolean keycodeOutputting = false;
-    private boolean autoClick = false;
-    private ButtonEventData.Event autoClickEvent;
     public ControlButton(@NonNull Context context, GameMenu gameMenu, ViewListener listener) {
         super(context);
         this.menu = gameMenu;
@@ -560,31 +559,36 @@ public class ControlButton extends AppCompatButton implements CustomView {
         }
     }
 
+    private final Handler autoClickHandler = new Handler();
+    private boolean autoClick = false;
+    private ButtonEventData.Event autoClickEvent;
+
     private void handleKeyEvent(ButtonEventData.Event event, boolean press) {
+        if (!press && !keycodeOutputting) {
+            return;
+        }
+        if (event.outputKeycodesList().isEmpty()) {
+            return;
+        }
+        for (int keycode : event.outputKeycodesList()) {
+            keycodeOutputting = press;
+            menu.getInput().sendKeyEvent(keycode, press);
+            if (!H2CO3LauncherBridge.BACKEND_IS_H2CO3) {
+                int code = LwjglKeycodeMap.convertKeycode(keycode);
+                if (code >= 0) {
+                    CallbackBridge.setModifiers(code, press);
+                }
+            }
+        }
+    }
+
+    private void handleAutoKeyEvent(ButtonEventData.Event event, boolean press) {
         if (!press && !keycodeOutputting) {
             return;
         }
         for (int keycode : event.outputKeycodesList()) {
             keycodeOutputting = press;
             menu.getInput().sendKeyEvent(keycode, press);
-        }
-    }
-
-    private void handleAutoClick(ButtonEventData.Event event, boolean enable) {
-        autoClick = enable;
-        if (enable) {
-            autoClickEvent = event;
-            autoClickHandler.post(autoClickRunnable);
-        }
-    }
-
-    private void cancelTickEvent(ButtonEventData.Event event) {
-        if (event.isAutoKeep()) {
-            if (event.isAutoClick()) {
-                handleAutoClick(event, false);
-            } else {
-                handleKeyEvent(event, false);
-            }
         }
     }    private final Runnable autoClickRunnable = new Runnable() {
         @Override
@@ -597,6 +601,26 @@ public class ControlButton extends AppCompatButton implements CustomView {
             }
         }
     };
+
+    private void cancelTickEvent(ButtonEventData.Event event) {
+        if (event.isAutoKeep()) {
+            if (event.isAutoClick()) {
+                handleAutoClick(event, false);
+            } else {
+                handleKeyEvent(event, false);
+            }
+        }
+    }
+
+    private void handleAutoClick(ButtonEventData.Event event, boolean enable) {
+        autoClick = enable;
+        if (enable) {
+            autoClickEvent = event;
+            autoClickHandler.post(autoClickRunnable);
+        }
+    }
+
+
 
     /**
      * Handle event

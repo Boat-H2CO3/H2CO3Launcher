@@ -4,6 +4,8 @@ import static org.koishi.launcher.h2co3launcher.utils.Architecture.ARCH_X86;
 import static org.koishi.launcher.h2co3launcher.utils.Architecture.is64BitsDevice;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.system.Os;
 import android.util.ArrayMap;
@@ -32,6 +34,8 @@ import java.util.Map;
 
 public class H2CO3Launcher {
 
+    private static int H2CO3_VERSION_CODE = -1;
+
     private static void log(H2CO3LauncherBridge bridge, String log) {
         bridge.getCallback().onLog(log + "\n");
     }
@@ -40,13 +44,22 @@ public class H2CO3Launcher {
         log(bridge, "==================== " + task + " ====================");
     }
 
-    private static void logStartInfo(H2CO3LauncherBridge bridge, String task) {
+    private static void logStartInfo(H2CO3LauncherConfig config, H2CO3LauncherBridge bridge, String task) {
         printTaskTitle(bridge, "Start " + task);
         log(bridge, "Device: " + DeviceName.getDeviceName());
         log(bridge, "Architecture: " + Architecture.archAsString(Architecture.getDeviceArchitecture()));
         log(bridge, "CPU: " + getSocName());
         log(bridge, "Android SDK: " + Build.VERSION.SDK_INT);
         log(bridge, "Language: " + Locale.getDefault());
+
+        PackageManager pm = config.getContext().getPackageManager();
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(config.getContext().getPackageName(), 0);
+            H2CO3_VERSION_CODE = packageInfo.versionCode;
+            log(bridge, "H2CO3 Version Code: " + H2CO3_VERSION_CODE);
+        } catch (PackageManager.NameNotFoundException e) {
+            log(bridge, "H2CO3 Version Code: Can't get current version code, exception = " + e.getMessage());
+        }
     }
 
     private static void logModList(H2CO3LauncherBridge bridge) {
@@ -164,12 +177,15 @@ public class H2CO3Launcher {
         String[] args = new String[argList.size()];
         for (int i = 0; i < argList.size(); i++) {
             String a = argList.get(i).replace("${natives_directory}", getLibraryPath(config.getContext(), config.getJavaPath(), config.getRenderer() == H2CO3LauncherConfig.Renderer.RENDERER_CUSTOM ? RendererPlugin.getSelected().getPath() : null));
-            args[i] = config.getRenderer() == null ? a : a.replace("${gl_lib_name}", config.getRenderer() == H2CO3LauncherConfig.Renderer.RENDERER_CUSTOM ? RendererPlugin.getSelected().getGlName() : config.getRenderer().getGlLibName());
+            args[i] = config.getRenderer() == null ? a : a.replace("${gl_lib_name}", config.getRenderer() == H2CO3LauncherConfig.Renderer.RENDERER_CUSTOM ? RendererPlugin.getSelected().getPath() + "/" + RendererPlugin.getSelected().getGlName() : config.getRenderer().getGlLibName());
         }
         return args;
     }
 
     private static void addCommonEnv(H2CO3LauncherConfig config, HashMap<String, String> envMap) {
+        if (H2CO3_VERSION_CODE != -1) {
+            envMap.put("H2CO3_VERSION_CODE", H2CO3_VERSION_CODE + "");
+        }
         envMap.put("HOME", config.getLogDir());
         envMap.put("JAVA_HOME", config.getJavaPath());
         envMap.put("H2CO3LAUNCHER_NATIVEDIR", config.getContext().getApplicationInfo().nativeLibraryDir);
@@ -192,6 +208,30 @@ public class H2CO3Launcher {
         }
     }
 
+    private static void addModLoaderEnv(H2CO3LauncherConfig config, HashMap<String, String> envMap) {
+        if (config.getInstalledModLoaders() == null)
+            return;
+
+        if (config.getInstalledModLoaders().isInstallForge()) {
+            envMap.put("INST_FORGE", "1");
+        }
+        if (config.getInstalledModLoaders().isInstallNeoForge()) {
+            envMap.put("INST_NEOFORGE", "1");
+        }
+        if (config.getInstalledModLoaders().isInstallLiteLoader()) {
+            envMap.put("INST_LITELOADER", "1");
+        }
+        if (config.getInstalledModLoaders().isInstallFabric()) {
+            envMap.put("INST_FABRIC", "1");
+        }
+        if (config.getInstalledModLoaders().isInstallOptiFine()) {
+            envMap.put("INST_OPTIFINE", "1");
+        }
+        if (config.getInstalledModLoaders().isInstallQuilt()) {
+            envMap.put("INST_QUILT", "1");
+        }
+    }
+
     private static void addRendererEnv(H2CO3LauncherConfig config, HashMap<String, String> envMap) {
         H2CO3LauncherConfig.Renderer renderer = config.getRenderer() == null ? H2CO3LauncherConfig.Renderer.RENDERER_GL4ES : config.getRenderer();
         if (renderer == H2CO3LauncherConfig.Renderer.RENDERER_CUSTOM) {
@@ -211,10 +251,12 @@ public class H2CO3Launcher {
             }
             envList.forEach(env -> {
                 String[] split = env.split("=");
-                if (split[0].equals("DLOPEN")){
+                if (split[0].equals("DLOPEN") || split.length < 2) {
                     return;
                 }
                 if (split[0].equals("LIB_MESA_NAME")) {
+                    envMap.put(split[0], RendererPlugin.getSelected().getPath() + "/" + split[1]);
+                } else if (split[0].equals("MESA_LIBRARY")) {
                     envMap.put(split[0], RendererPlugin.getSelected().getPath() + "/" + split[1]);
                 } else {
                     envMap.put(split[0], split[1]);
@@ -408,7 +450,7 @@ public class H2CO3Launcher {
         bridge.setLogPath(config.getLogDir() + "/latest_game.log");
         Thread gameThread = new Thread(() -> {
             try {
-                logStartInfo(bridge, "Minecraft");
+                logStartInfo(config, bridge, "Minecraft");
                 logModList(bridge);
 
                 // env
@@ -445,7 +487,7 @@ public class H2CO3Launcher {
         Thread javaGUIThread = new Thread(() -> {
             try {
 
-                logStartInfo(bridge, "Jar Executor");
+                logStartInfo(config, bridge, "Jar Executor");
 
                 // env
                 setEnv(config, bridge, true);
@@ -480,7 +522,7 @@ public class H2CO3Launcher {
         Thread apiInstallerThread = new Thread(() -> {
             try {
 
-                logStartInfo(bridge, "API Installer");
+                logStartInfo(config, bridge, "API Installer");
 
                 // env
                 setEnv(config, bridge, false);
@@ -513,7 +555,7 @@ public class H2CO3Launcher {
             reader.close();
         } catch (Exception ignore) {
         }
-        return  (name == null || name.trim().isEmpty()) ? Build.HARDWARE : name;
+        return (name == null || name.trim().isEmpty()) ? Build.HARDWARE : name;
     }
 
 }

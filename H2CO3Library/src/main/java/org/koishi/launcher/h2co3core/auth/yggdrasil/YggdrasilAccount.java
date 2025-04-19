@@ -18,11 +18,6 @@
 package org.koishi.launcher.h2co3core.auth.yggdrasil;
 
 import static org.koishi.launcher.h2co3core.util.Logging.LOG;
-
-import java.nio.file.Path;
-import java.util.*;
-import java.util.logging.Level;
-
 import static java.util.Objects.requireNonNull;
 
 import org.koishi.launcher.h2co3core.auth.AuthInfo;
@@ -37,7 +32,14 @@ import org.koishi.launcher.h2co3core.fakefx.beans.binding.ObjectBinding;
 import org.koishi.launcher.h2co3core.util.fakefx.BindingMapping;
 import org.koishi.launcher.h2co3core.util.gson.UUIDTypeAdapter;
 
-public class YggdrasilAccount extends ClassicAccount {
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.logging.Level;
+
+public abstract class YggdrasilAccount extends ClassicAccount {
 
     protected final YggdrasilService service;
     protected final UUID characterUUID;

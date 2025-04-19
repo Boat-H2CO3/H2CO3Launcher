@@ -19,21 +19,7 @@ package org.koishi.launcher.h2co3core.auth.authlibinjector;
 
 import static org.koishi.launcher.h2co3core.util.Lang.tryCast;
 import static org.koishi.launcher.h2co3core.util.Logging.LOG;
-import static org.koishi.launcher.h2co3core.util.io.IOUtils.readFullyAsByteArray;
-import static org.koishi.launcher.h2co3core.util.io.IOUtils.readFullyWithoutClosing;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptyMap;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.logging.Level;
-
-import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,12 +30,24 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.annotations.JsonAdapter;
+
+import org.jetbrains.annotations.Nullable;
 import org.koishi.launcher.h2co3core.auth.yggdrasil.YggdrasilService;
 import org.koishi.launcher.h2co3core.fakefx.beans.InvalidationListener;
 import org.koishi.launcher.h2co3core.fakefx.beans.Observable;
 import org.koishi.launcher.h2co3core.util.fakefx.ObservableHelper;
 import org.koishi.launcher.h2co3core.util.io.HttpRequest;
 import org.koishi.launcher.h2co3core.util.io.IOUtils;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.logging.Level;
 
 @JsonAdapter(AuthlibInjectorServer.Deserializer.class)
 public class AuthlibInjectorServer implements Observable {
@@ -76,6 +74,7 @@ public class AuthlibInjectorServer implements Observable {
         try {
             url = addHttpsIfMissing(url);
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestProperty("Accept-Language", Locale.getDefault().toLanguageTag());
 
             String ali = conn.getHeaderField("x-authlib-injector-api-location");
             if (ali != null) {
@@ -84,6 +83,7 @@ public class AuthlibInjectorServer implements Observable {
                     conn.disconnect();
                     url = absoluteAli.toString();
                     conn = (HttpURLConnection) absoluteAli.openConnection();
+                    conn.setRequestProperty("Accept-Language", Locale.getDefault().toLanguageTag());
                 }
             }
 

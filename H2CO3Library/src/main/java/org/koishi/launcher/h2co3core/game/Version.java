@@ -18,6 +18,8 @@
 package org.koishi.launcher.h2co3core.game;
 
 import com.google.gson.JsonParseException;
+
+import org.jetbrains.annotations.Nullable;
 import org.koishi.launcher.h2co3core.util.Constants;
 import org.koishi.launcher.h2co3core.util.Lang;
 import org.koishi.launcher.h2co3core.util.Logging;
@@ -25,8 +27,6 @@ import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.ToStringBuilder;
 import org.koishi.launcher.h2co3core.util.gson.JsonMap;
 import org.koishi.launcher.h2co3core.util.gson.Validation;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 
 public class Version implements Comparable<Version>, Validation {
 
-    private final String id;
+    private String id;
     private final String version;
     private final Integer priority;
     private final String minecraftArguments;
@@ -373,7 +373,10 @@ public class Version implements Comparable<Version>, Validation {
             }
         }
 
-        if (patches != null && !patches.isEmpty()) {
+        if (patches == null) {
+            // This is a version from external launcher.NO need to resolve the patches.
+            return thisVersion;
+        } else if (!patches.isEmpty()) {
             // Assume patches themselves do not have patches recursively.
             List<Version> sortedPatches = patches.stream()
                     .sorted(Comparator.comparing(Version::getPriority))
@@ -491,4 +494,7 @@ public class Version implements Comparable<Version>, Validation {
             }
     }
 
+    public void _setId(String id) {
+        this.id = id;
+    }
 }

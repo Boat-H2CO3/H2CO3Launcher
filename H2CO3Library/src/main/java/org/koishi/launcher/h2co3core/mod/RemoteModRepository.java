@@ -73,7 +73,8 @@ public interface RemoteModRepository {
         MODPACK,
         RESOURCE_PACK,
         WORLD,
-        CUSTOMIZATION
+        CUSTOMIZATION,
+        SHADER_PACK
     }
 
     enum SortType {

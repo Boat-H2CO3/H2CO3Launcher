@@ -11,6 +11,10 @@
 #include <android/log.h>
 #include <jni.h>
 
+#include "h2co3_launcher_internal.h"
+
+extern void installLwjglDlopenHook(JavaVM* vm);
+
 int (*vtest_main) (int argc, char** argv);
 void (*vtest_swap_buffers) (void);
 
@@ -193,8 +197,8 @@ GLFWbool _glfwInitOSMesa(void)
     _glfw.osmesa.handle = _glfw_dlopen(lib_name);
 
     const char *renderer = getenv("LIBGL_STRING");
-    
-    if (strcmp(renderer, "Zink") == 0)
+
+    if (!strcmp(renderer, "Zink") || !strcmp(renderer, "custom_gallium"))
         load_vulkan();
 
     if (!_glfw.osmesa.handle)
@@ -468,8 +472,23 @@ GLFWAPI OSMesaContext glfwGetOSMesaContext(GLFWwindow* handle)
     return window->context.osmesa.handle;
 }
 
+void* maybe_load_vulkan() {
+    // We use the env var because
+    // 1. it's easier to do that
+    // 2. it won't break if something will try to load vulkan and osmesa simultaneously
+    if(getenv("VULKAN_PTR") == NULL) load_vulkan();
+    return (void*) strtoul(getenv("VULKAN_PTR"), NULL, 0x10);
+}
+
 JNIEXPORT jlong JNICALL
 Java_org_lwjgl_vulkan_VK_getVulkanDriverHandle(JNIEnv *env, jclass thiz) {
     if (getenv("VULKAN_PTR") == NULL) load_vulkan();
     return strtoul(getenv("VULKAN_PTR"), NULL, 0x10);
+}
+
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+    if (h2co3Launcher->android_jvm != vm) {
+        installLwjglDlopenHook(vm);
+    }
+    return JNI_VERSION_1_2;
 }

@@ -15,8 +15,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.LinearLayoutCompat;
 
+import org.jetbrains.annotations.NotNull;
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.activity.H2CO3MainActivity;
+import org.koishi.launcher.h2co3.game.H2CO3LauncherGameRepository;
 import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3.ui.PageManager;
 import org.koishi.launcher.h2co3.ui.TaskDialog;
@@ -34,6 +36,7 @@ import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleBooleanProperty
 import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleListProperty;
 import org.koishi.launcher.h2co3core.fakefx.collections.FXCollections;
 import org.koishi.launcher.h2co3core.fakefx.collections.ObservableList;
+import org.koishi.launcher.h2co3core.game.Version;
 import org.koishi.launcher.h2co3core.mod.LocalModFile;
 import org.koishi.launcher.h2co3core.mod.ModManager;
 import org.koishi.launcher.h2co3core.mod.RemoteMod;
@@ -52,8 +55,6 @@ import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherUILayout;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -188,7 +189,9 @@ public class ModListPage extends H2CO3LauncherCommonPage implements ManageUI.Ver
         adapter.selectedItemsProperty().clear();
         cancelSearch();
 
-        libraryAnalyzer = LibraryAnalyzer.analyze(profile.getRepository().getResolvedPreservingPatchesVersion(version));
+        H2CO3LauncherGameRepository repository = profile.getRepository();
+        Version resolved = repository.getResolvedPreservingPatchesVersion(versionId);
+        libraryAnalyzer = LibraryAnalyzer.analyze(resolved, repository.getGameVersion(resolved).orElse(null));
         setModded(libraryAnalyzer.hasModLoader());
         loadMods(profile.getRepository().getModManager(version));
     }

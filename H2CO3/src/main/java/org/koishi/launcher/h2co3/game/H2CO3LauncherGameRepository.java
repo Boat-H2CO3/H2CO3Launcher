@@ -26,12 +26,13 @@ import android.graphics.drawable.Drawable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
+
+import org.jetbrains.annotations.Nullable;
 import org.koishi.launcher.h2co3.H2CO3LauncherApplication;
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3.setting.VersionSetting;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
-import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3core.download.LibraryAnalyzer;
 import org.koishi.launcher.h2co3core.event.Event;
 import org.koishi.launcher.h2co3core.event.EventManager;
@@ -51,15 +52,21 @@ import org.koishi.launcher.h2co3core.util.io.FileUtils;
 import org.koishi.launcher.h2co3core.util.platform.MemoryUtils;
 import org.koishi.launcher.h2co3core.util.platform.OperatingSystem;
 import org.koishi.launcher.h2co3core.util.versioning.VersionNumber;
-
-import org.jetbrains.annotations.Nullable;
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
@@ -302,17 +309,17 @@ public class H2CO3LauncherGameRepository extends DefaultGameRepository {
         File iconFile = getVersionIconFile(id);
         if (iconFile.exists())
             return BitmapDrawable.createFromPath(iconFile.getAbsolutePath());
-        else if (LibraryAnalyzer.analyze(version).has(LibraryAnalyzer.LibraryType.FORGE))
+        else if (LibraryAnalyzer.analyze(version, null).has(LibraryAnalyzer.LibraryType.FORGE))
             return H2CO3LauncherTools.CONTEXT.getDrawable(R.drawable.img_forge);
-        else if (LibraryAnalyzer.analyze(version).has(LibraryAnalyzer.LibraryType.NEO_FORGE))
+        else if (LibraryAnalyzer.analyze(version, null).has(LibraryAnalyzer.LibraryType.NEO_FORGE))
             return H2CO3LauncherTools.CONTEXT.getDrawable(R.drawable.img_neoforge);
-        else if (LibraryAnalyzer.analyze(version).has(LibraryAnalyzer.LibraryType.LITELOADER))
+        else if (LibraryAnalyzer.analyze(version, null).has(LibraryAnalyzer.LibraryType.LITELOADER))
             return H2CO3LauncherTools.CONTEXT.getDrawable(R.drawable.img_chicken);
-        else if (LibraryAnalyzer.analyze(version).has(LibraryAnalyzer.LibraryType.OPTIFINE))
+        else if (LibraryAnalyzer.analyze(version, null).has(LibraryAnalyzer.LibraryType.OPTIFINE))
             return H2CO3LauncherTools.CONTEXT.getDrawable(R.drawable.img_optifine);
-        else if (LibraryAnalyzer.analyze(version).has(LibraryAnalyzer.LibraryType.FABRIC))
+        else if (LibraryAnalyzer.analyze(version, null).has(LibraryAnalyzer.LibraryType.FABRIC))
             return H2CO3LauncherTools.CONTEXT.getDrawable(R.drawable.img_fabric);
-        else if (LibraryAnalyzer.analyze(version).has(LibraryAnalyzer.LibraryType.QUILT))
+        else if (LibraryAnalyzer.analyze(version, null).has(LibraryAnalyzer.LibraryType.QUILT))
             return H2CO3LauncherTools.CONTEXT.getDrawable(R.drawable.img_quilt);
         else
             return H2CO3LauncherTools.CONTEXT.getDrawable(R.drawable.img_grass);

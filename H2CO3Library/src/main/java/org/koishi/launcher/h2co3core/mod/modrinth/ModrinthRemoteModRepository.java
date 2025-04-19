@@ -22,6 +22,8 @@ import static org.koishi.launcher.h2co3core.util.Pair.pair;
 
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+
+import org.jetbrains.annotations.Nullable;
 import org.koishi.launcher.h2co3core.mod.LocalModFile;
 import org.koishi.launcher.h2co3core.mod.ModLoaderType;
 import org.koishi.launcher.h2co3core.mod.RemoteMod;
@@ -35,12 +37,16 @@ import org.koishi.launcher.h2co3core.util.io.HttpRequest;
 import org.koishi.launcher.h2co3core.util.io.NetworkUtils;
 import org.koishi.launcher.h2co3core.util.io.ResponseCodeException;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,6 +54,7 @@ public final class ModrinthRemoteModRepository implements RemoteModRepository {
     public static final ModrinthRemoteModRepository MODS = new ModrinthRemoteModRepository("mod");
     public static final ModrinthRemoteModRepository MODPACKS = new ModrinthRemoteModRepository("modpack");
     public static final ModrinthRemoteModRepository RESOURCE_PACKS = new ModrinthRemoteModRepository("resourcepack");
+    public static final ModrinthRemoteModRepository SHADER_PACKS = new ModrinthRemoteModRepository("shader");
 
     private static final String PREFIX = "https://api.modrinth.com";
 

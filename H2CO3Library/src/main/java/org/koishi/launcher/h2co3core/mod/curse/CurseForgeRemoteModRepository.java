@@ -21,24 +21,30 @@ import static org.koishi.launcher.h2co3core.util.Lang.mapOf;
 import static org.koishi.launcher.h2co3core.util.Pair.pair;
 
 import com.google.gson.reflect.TypeToken;
-import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
-import org.koishi.launcher.h2co3library.R;
+
+import org.jetbrains.annotations.Nullable;
 import org.koishi.launcher.h2co3core.mod.LocalModFile;
 import org.koishi.launcher.h2co3core.mod.RemoteMod;
 import org.koishi.launcher.h2co3core.mod.RemoteModRepository;
 import org.koishi.launcher.h2co3core.util.MurmurHash2;
-import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.Pair;
+import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.io.HttpRequest;
-
-import org.jetbrains.annotations.Nullable;
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
+import org.koishi.launcher.h2co3library.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public final class CurseForgeRemoteModRepository implements RemoteModRepository {
@@ -53,14 +59,16 @@ public final class CurseForgeRemoteModRepository implements RemoteModRepository 
     public static final int SECTION_UNKNOWN1 = 4944;
     public static final int SECTION_UNKNOWN2 = 4979;
     public static final int SECTION_UNKNOWN3 = 4984;
+    public static final int SECTION_SHADER_PACK = 6552;
     public static final CurseForgeRemoteModRepository MODS = new CurseForgeRemoteModRepository(RemoteModRepository.Type.MOD, SECTION_MOD);
     public static final CurseForgeRemoteModRepository MODPACKS = new CurseForgeRemoteModRepository(RemoteModRepository.Type.MODPACK, SECTION_MODPACK);
     public static final CurseForgeRemoteModRepository RESOURCE_PACKS = new CurseForgeRemoteModRepository(RemoteModRepository.Type.RESOURCE_PACK, SECTION_RESOURCE_PACK);
     public static final CurseForgeRemoteModRepository WORLDS = new CurseForgeRemoteModRepository(RemoteModRepository.Type.WORLD, SECTION_WORLD);
     public static final CurseForgeRemoteModRepository CUSTOMIZATIONS = new CurseForgeRemoteModRepository(RemoteModRepository.Type.CUSTOMIZATION, SECTION_CUSTOMIZATION);
+    public static final CurseForgeRemoteModRepository SHADER_PACKS = new CurseForgeRemoteModRepository(Type.SHADER_PACK, SECTION_SHADER_PACK);
     private static final String PREFIX = "https://api.curseforge.com";
     private static final String apiKey = H2CO3LauncherTools.CONTEXT.getString(R.string.curse_api_key);
-    private static final int WORD_PERFECT_MATCH_WEIGHT = 50;
+    private static final int WORD_PERFECT_MATCH_WEIGHT = 5;
     private final Type type;
     private final int section;
     public CurseForgeRemoteModRepository(Type type, int section) {
@@ -129,9 +137,8 @@ public final class CurseForgeRemoteModRepository implements RemoteModRepository 
                 .header("X-API-KEY", apiKey)
                 .getJson(new TypeToken<Response<List<CurseAddon>>>() {
                 }.getType());
-        Stream<RemoteMod> res = response.getData().stream().map(CurseAddon::toMod);
-        if (sortType != SortType.NAME || searchFilter.isEmpty()) {
-            return new SearchResult(res, calculateTotalPages(response, pageSize));
+        if (searchFilter.isEmpty()) {
+            return new SearchResult(response.getData().stream().map(CurseAddon::toMod), calculateTotalPages(response, pageSize));
         }
 
         String lowerCaseSearchFilter = searchFilter.toLowerCase();
@@ -142,7 +149,7 @@ public final class CurseForgeRemoteModRepository implements RemoteModRepository 
 
         StringUtils.LevCalculator levCalculator = new StringUtils.LevCalculator();
 
-        return new SearchResult(res.map(remoteMod -> {
+        return new SearchResult(response.getData().stream().map(CurseAddon::toMod).map(remoteMod -> {
             String lowerCaseResult = remoteMod.getTitle().toLowerCase();
             int diff = levCalculator.calc(lowerCaseSearchFilter, lowerCaseResult);
 
@@ -153,7 +160,7 @@ public final class CurseForgeRemoteModRepository implements RemoteModRepository 
             }
 
             return pair(remoteMod, diff);
-        }).sorted(Comparator.comparingInt(Pair::getValue)).map(Pair::getKey), res, calculateTotalPages(response, pageSize));
+        }).sorted(Comparator.comparingInt(Pair::getValue)).map(Pair::getKey), response.getData().stream().map(CurseAddon::toMod), calculateTotalPages(response, pageSize));
     }
 
     @Override

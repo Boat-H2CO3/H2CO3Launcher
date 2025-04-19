@@ -50,6 +50,7 @@ import org.koishi.launcher.h2co3core.download.game.LibraryDownloadException;
 import org.koishi.launcher.h2co3core.game.JavaVersion;
 import org.koishi.launcher.h2co3core.game.LaunchOptions;
 import org.koishi.launcher.h2co3core.game.Version;
+import org.koishi.launcher.h2co3core.mod.LocalModFile;
 import org.koishi.launcher.h2co3core.mod.ModpackCompletionException;
 import org.koishi.launcher.h2co3core.mod.ModpackConfiguration;
 import org.koishi.launcher.h2co3core.mod.ModpackProvider;
@@ -212,48 +213,49 @@ public final class LauncherHelper {
                     return null;
                 })
                 .thenComposeAsync(() -> {
-                    try (InputStream input = LauncherHelper.class.getResourceAsStream("/assets/game/H2CO3LaunchWrapper.jar")) {
+                    try (InputStream input = LauncherHelper.class.getResourceAsStream("/assets/game/MioLaunchWrapper.jar")) {
                         Files.copy(input, new File(H2CO3LauncherTools.LAUNCH_WRAPPER).toPath(), StandardCopyOption.REPLACE_EXISTING);
                     } catch (IOException e) {
-                        Logging.LOG.log(Level.WARNING, "Unable to unpack H2CO3LaunchWrapper.jar", e);
+                        Logging.LOG.log(Level.WARNING, "Unable to unpack MioLaunchWrapper.jar", e);
                     }
                     return null;
                 })
                 .thenComposeAsync(() -> gameVersion.map(s -> new GameVerificationFixTask(dependencyManager, s, version.get())).orElse(null))
                 .thenComposeAsync(() -> logIn(context, account).withStage("launch.state.logging_in"))
                 .thenComposeAsync(authInfo -> Task.supplyAsync(() -> {
-                    LaunchOptions launchOptions = repository.getLaunchOptions(selectedVersion, javaVersionRef.get(), profile.getGameDir(), javaAgents);
-                    H2CO3LauncherGameLauncher launcher = new H2CO3LauncherGameLauncher(
-                            context,
-                            repository,
-                            version.get(),
-                            authInfo,
-                            launchOptions
-                    );
-                    version.get().getLibraries().forEach(library -> {
-                        if (library.getName().startsWith("net.java.dev.jna:jna:")) {
-                            launcher.setJnaVersion(library.getVersion());
-                        }
-                    });
-                    return launcher;
-                }).thenComposeAsync(launcher -> { // launcher is prev task's result
-                    return Task.supplyAsync(launcher::launch);
-                }).thenAcceptAsync(h2co3LauncherBridge -> Schedulers.androidUIThread().execute(() -> {
-                    CallbackBridge.nativeSetUseInputStackQueue(version.get().getArguments().isPresent());
-                    Intent intent = new Intent(context, JVMActivity.class);
-                    h2co3LauncherBridge.setScaleFactor(repository.getVersionSetting(selectedVersion).getScaleFactor());
-                    h2co3LauncherBridge.setController(repository.getVersionSetting(selectedVersion).getController());
-                    h2co3LauncherBridge.setGameDir(repository.getRunDirectory(selectedVersion).getAbsolutePath());
-                    h2co3LauncherBridge.setRenderer(repository.getVersionSetting(selectedVersion).getRenderer().toString());
-                    h2co3LauncherBridge.setJava(Integer.toString(javaVersionRef.get().getVersion()));
-                    checkMod(h2co3LauncherBridge);
-                    JVMActivity.setH2CO3LauncherBridge(h2co3LauncherBridge, MenuType.GAME);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("controller", repository.getVersionSetting(selectedVersion).getController());
-                    intent.putExtras(bundle);
-                    LOG.log(Level.INFO, "Start JVMActivity!");
-                    context.startActivity(intent);
-                })).withStage("launch.state.waiting_launching"))
+                            LaunchOptions launchOptions = repository.getLaunchOptions(selectedVersion, javaVersionRef.get(), profile.getGameDir(), javaAgents);
+                            H2CO3LauncherGameLauncher launcher = new H2CO3LauncherGameLauncher(
+                                    context,
+                                    repository,
+                                    version.get(),
+                                    authInfo,
+                                    launchOptions
+                            );
+                            version.get().getLibraries().forEach(library -> {
+                                if (library.getName().startsWith("net.java.dev.jna:jna:")) {
+                                    launcher.setJnaVersion(library.getVersion());
+                                }
+                            });
+                            return launcher;
+                        }).thenComposeAsync(launcher -> { // launcher is prev task's result
+                            return Task.supplyAsync(launcher::launch);
+                        }).thenComposeAsync(this::checkMod)
+                        .thenAcceptAsync(h2CO3LauncherBridge -> Schedulers.androidUIThread().execute(() -> {
+                            CallbackBridge.nativeSetUseInputStackQueue(version.get().getArguments().isPresent());
+                            Intent intent = new Intent(context, JVMActivity.class);
+                            h2CO3LauncherBridge.setScaleFactor(repository.getVersionSetting(selectedVersion).getScaleFactor());
+                            h2CO3LauncherBridge.setController(repository.getVersionSetting(selectedVersion).getController());
+                            h2CO3LauncherBridge.setGameDir(repository.getRunDirectory(selectedVersion).getAbsolutePath());
+                            h2CO3LauncherBridge.setRenderer(repository.getVersionSetting(selectedVersion).getRenderer().toString());
+                            h2CO3LauncherBridge.setJava(Integer.toString(javaVersionRef.get().getVersion()));
+                            JVMActivity.setH2CO3LauncherBridge(h2CO3LauncherBridge, MenuType.GAME);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("controller", repository.getVersionSetting(selectedVersion).getController());
+                            intent.putExtras(bundle);
+                            LOG.log(Level.INFO, "Start JVMActivity!");
+                            context.startActivity(intent);
+                        }))
+                        .withStage("launch.state.waiting_launching"))
                 .withStagesHint(Lang.immutableListOf(
                         "launch.state.java",
                         "launch.state.dependencies",
@@ -319,6 +321,8 @@ public final class LauncherHelper {
                                     message = getLocalizedText(context, "download_failed", url, responseCode);
                             } else if (ex instanceof AccessDeniedException) {
                                 message = getLocalizedText(context, "exception_access_denied", ((AccessDeniedException) ex).getFile());
+                            } else if (ex instanceof ModCheckException) {
+                                message = ((ModCheckException) ex).getReason();
                             } else {
                                 message = StringUtils.getStackTrace(ex);
                             }
@@ -338,28 +342,54 @@ public final class LauncherHelper {
         executor.start();
     }
 
-    private void checkMod(H2CO3LauncherBridge bridge) {
-        try {
-            StringBuilder sb = new StringBuilder();
-            Profiles.getSelectedProfile().getRepository().getModManager(Profiles.getSelectedVersion()).getMods().forEach(mod -> {
-                if (!mod.isActive()) {
-                    return;
+    private Task<H2CO3LauncherBridge> checkMod(H2CO3LauncherBridge bridge) {
+        return Task.composeAsync(() -> {
+            try {
+                StringBuilder modCheckerInfo = new StringBuilder();
+                StringBuilder modSummary = new StringBuilder();
+                ModChecker modChecker = new ModChecker(context);
+                int count = 0;
+                for (LocalModFile mod : Profiles.getSelectedProfile().getRepository().getModManager(Profiles.getSelectedVersion()).getMods()) {
+                    if (!mod.isActive()) {
+                        continue;
+                    }
+                    modSummary.append(mod.getFileName());
+                    modSummary.append(" | ");
+                    modSummary.append(mod.getId());
+                    modSummary.append(" | ");
+                    modSummary.append(mod.getVersion());
+                    modSummary.append(" | ");
+                    modSummary.append(mod.getModLoaderType());
+                    modSummary.append("\n");
+                    if (mod.getId().equals("touchcontroller")) {
+                        bridge.setHasTouchController(true);
+                    }
+                    try {
+                        modChecker.check(mod);
+                    } catch (ModCheckException e) {
+                        count++;
+                        modCheckerInfo.append(count).append(".").append(e.getReason()).append("\n\n");
+                    }
                 }
-                sb.append(mod.getFileName());
-                sb.append(" | ");
-                sb.append(mod.getId());
-                sb.append(" | ");
-                sb.append(mod.getVersion());
-                sb.append(" | ");
-                sb.append(mod.getModLoaderType());
-                sb.append("\n");
-                if (mod.getId().equals("touchcontroller")) {
-                    bridge.setHasTouchController(true);
+                bridge.setModSummary(modSummary.toString());
+                if (!modCheckerInfo.toString().trim().isEmpty()) {
+                    CompletableFuture<Task<H2CO3LauncherBridge>> future = new CompletableFuture<>();
+                    Schedulers.androidUIThread().execute(() -> {
+                        H2CO3LauncherAlertDialog.Builder builder = new H2CO3LauncherAlertDialog.Builder(context);
+                        builder.setCancelable(false);
+                        builder.setMessage(modCheckerInfo.toString());
+                        builder.setPositiveButton(context.getString(R.string.button_cancel), () -> future.completeExceptionally(new CancellationException()));
+                        builder.setNegativeButton(context.getString(R.string.mod_check_continue), () -> future.complete(Task.completed(bridge)));
+                        builder.create().show();
+                    });
+                    return Task.fromCompletableFuture(future).thenComposeAsync(task -> task);
                 }
-            });
-            bridge.setModSummary(sb.toString());
-        } catch (Throwable ignore) {
-        }
+                return Task.completed(bridge);
+            } catch (Throwable e) {
+                LOG.log(Level.WARNING, "CheckMod() failed", e);
+                return Task.completed(bridge);
+            }
+        });
     }
 
     static class SkipLoginDialog extends H2CO3LauncherDialog implements View.OnClickListener {

@@ -1,7 +1,6 @@
 package org.koishi.launcher.h2co3.ui.download;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.ListView;
 
@@ -9,21 +8,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+
+import org.jetbrains.annotations.Nullable;
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3.setting.Profiles;
 import org.koishi.launcher.h2co3.ui.PageManager;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
 import org.koishi.launcher.h2co3.util.ModTranslations;
+import org.koishi.launcher.h2co3core.download.LibraryAnalyzer;
 import org.koishi.launcher.h2co3core.mod.LocalModFile;
+import org.koishi.launcher.h2co3core.mod.ModLoaderType;
 import org.koishi.launcher.h2co3core.mod.RemoteMod;
 import org.koishi.launcher.h2co3core.mod.RemoteModRepository;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.task.Task;
+import org.koishi.launcher.h2co3core.util.LocaleUtils;
 import org.koishi.launcher.h2co3core.util.SimpleMultimap;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.versioning.VersionNumber;
-
 import org.koishi.launcher.h2co3library.component.ui.H2CO3LauncherTempPage;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton;
@@ -32,9 +35,6 @@ import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherUILayout;
-import org.koishi.launcher.h2co3core.util.LocaleUtils;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +42,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,6 +72,8 @@ public class RemoteModInfoPage extends H2CO3LauncherTempPage implements View.OnC
     private H2CO3LauncherTextView screenshotNoResult;
     private RecyclerView screenshotView;
     private H2CO3LauncherEditText search;
+
+    private String recommendedVersion;
 
     public RemoteModInfoPage(Context context, int id, H2CO3LauncherUILayout parent, int resId, DownloadPage page, RemoteMod addon, Profile.ProfileVersion version, @Nullable RemoteModVersionPage.DownloadCallback callback) {
         super(context, id, parent, resId);
@@ -133,10 +136,15 @@ public class RemoteModInfoPage extends H2CO3LauncherTempPage implements View.OnC
     }
 
     private void loadGameVersions() {
-        ModGameVersionAdapter adapter = new ModGameVersionAdapter(getContext(), versions.keys().stream()
+        List<String> list = versions.keys().stream()
                 .sorted(Collections.reverseOrder(VersionNumber::compare))
                 .filter(it -> it.contains(Optional.ofNullable(search.getStringValue()).orElse("")))
-                .collect(Collectors.toList()), v -> {
+                .collect(Collectors.toList());
+        if (list.contains(recommendedVersion)) {
+            list.remove(recommendedVersion);
+            list.add(0, recommendedVersion);
+        }
+        ModGameVersionAdapter adapter = new ModGameVersionAdapter(getContext(), list, v -> {
             RemoteModVersionPage page = new RemoteModVersionPage(getContext(), PageManager.PAGE_ID_TEMP, getParent(), R.layout.page_download_addon_version, new ArrayList<>(versions.get(v)), version, callback, RemoteModInfoPage.this.page);
             DownloadPageManager.getInstance().showTempPage(page);
         });
@@ -188,12 +196,15 @@ public class RemoteModInfoPage extends H2CO3LauncherTempPage implements View.OnC
                 return remoteName.contains(localName);
             }).collect(Collectors.toList());
             for (LocalModFile localModFile : modFiles) {
-                Optional<RemoteMod.Version> remoteVersion = repository.getRemoteVersionByLocalFile(localModFile, localModFile.getFile());
-                if (remoteVersion.isPresent()) {
-                    String modId = remoteVersion.get().getModid();
-                    if (addon.getModID().equals(modId)) {
-                        return remoteVersion.get();
+                try {
+                    Optional<RemoteMod.Version> remoteVersion = repository.getRemoteVersionByLocalFile(localModFile, localModFile.getFile());
+                    if (remoteVersion.isPresent()) {
+                        String modId = remoteVersion.get().getModid();
+                        if (addon.getModID().equals(modId)) {
+                            return remoteVersion.get();
+                        }
                     }
+                } catch (Throwable ignore) {
                 }
             }
             return null;
@@ -216,6 +227,24 @@ public class RemoteModInfoPage extends H2CO3LauncherTempPage implements View.OnC
         for (String gameVersion : classifiedVersions.keys()) {
             List<RemoteMod.Version> versionList = classifiedVersions.get(gameVersion);
             versionList.sort(Comparator.comparing(RemoteMod.Version::getDatePublished).reversed());
+        }
+        Profile profile = Profiles.getSelectedProfile();
+        if (profile.getSelectedVersion() != null) {
+            LibraryAnalyzer analyzer = LibraryAnalyzer.analyze(profile.getRepository().getResolvedPreservingPatchesVersion(profile.getSelectedVersion()), profile.getSelectedVersion());
+            Set<ModLoaderType> modLoaders = analyzer.getModLoaders();
+            String mcv = analyzer.getVersion(LibraryAnalyzer.LibraryType.MINECRAFT).orElse("");
+
+            if (classifiedVersions.keys().contains(mcv)) {
+                classifiedVersions.get(mcv).stream().filter(v -> {
+                    for (ModLoaderType loader : v.getLoaders()) {
+                        if (modLoaders.contains(loader)) {
+                            recommendedVersion = getContext().getString(R.string.recommend_version) + ": " + mcv + " " + loader.name();
+                            return true;
+                        }
+                    }
+                    return false;
+                }).forEach(v -> classifiedVersions.put(recommendedVersion, v));
+            }
         }
         return classifiedVersions;
     }

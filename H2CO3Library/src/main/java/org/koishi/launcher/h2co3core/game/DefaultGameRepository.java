@@ -21,9 +21,18 @@ import static org.koishi.launcher.h2co3core.util.Logging.LOG;
 
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+
+import org.jetbrains.annotations.Nullable;
 import org.koishi.launcher.h2co3core.download.MaintainTask;
 import org.koishi.launcher.h2co3core.download.game.VersionJsonSaveTask;
-import org.koishi.launcher.h2co3core.event.*;
+import org.koishi.launcher.h2co3core.event.Event;
+import org.koishi.launcher.h2co3core.event.EventBus;
+import org.koishi.launcher.h2co3core.event.GameJsonParseFailedEvent;
+import org.koishi.launcher.h2co3core.event.LoadedOneVersionEvent;
+import org.koishi.launcher.h2co3core.event.RefreshedVersionsEvent;
+import org.koishi.launcher.h2co3core.event.RefreshingVersionsEvent;
+import org.koishi.launcher.h2co3core.event.RemoveVersionEvent;
+import org.koishi.launcher.h2co3core.event.RenameVersionEvent;
 import org.koishi.launcher.h2co3core.game.tlauncher.TLauncherVersion;
 import org.koishi.launcher.h2co3core.mod.ModManager;
 import org.koishi.launcher.h2co3core.mod.ModpackConfiguration;
@@ -33,14 +42,18 @@ import org.koishi.launcher.h2co3core.util.ToStringBuilder;
 import org.koishi.launcher.h2co3core.util.gson.JsonUtils;
 import org.koishi.launcher.h2co3core.util.io.FileUtils;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.stream.Stream;
@@ -310,33 +323,7 @@ public class DefaultGameRepository implements GameRepository {
                 }
 
                 if (!id.equals(version.getId())) {
-                    try {
-                        String from = id;
-                        String to = version.getId();
-                        Path fromDir = getVersionRoot(from).toPath();
-                        Path toDir = getVersionRoot(to).toPath();
-                        Files.move(fromDir, toDir);
-
-                        Path fromJson = toDir.resolve(from + ".json");
-                        Path fromJar = toDir.resolve(from + ".jar");
-                        Path toJson = toDir.resolve(to + ".json");
-                        Path toJar = toDir.resolve(to + ".jar");
-
-                        try {
-                            Files.move(fromJson, toJson);
-                            if (Files.exists(fromJar))
-                                Files.move(fromJar, toJar);
-                        } catch (IOException e) {
-                            // recovery
-                            Lang.ignoringException(() -> Files.move(toJson, fromJson));
-                            Lang.ignoringException(() -> Files.move(toJar, fromJar));
-                            Lang.ignoringException(() -> Files.move(toDir, fromDir));
-                            throw e;
-                        }
-                    } catch (IOException e) {
-                        LOG.log(Level.WARNING, "Ignoring version " + version.getId() + " because version id does not match folder name " + id + ", and we cannot correct it.", e);
-                        return Stream.empty();
-                    }
+                    version._setId(id);
                 }
 
                 return Stream.of(version);

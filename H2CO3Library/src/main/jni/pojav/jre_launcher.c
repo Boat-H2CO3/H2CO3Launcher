@@ -33,7 +33,7 @@
 // Boardwalk: missing include
 #include <string.h>
 
-#include "include/h2co3_launcher_internal.h"
+#include "h2co3_launcher/include/h2co3_launcher_internal.h"
 
 
 // Uncomment to try redirect signal handling to JVM

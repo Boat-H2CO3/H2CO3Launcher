@@ -4,11 +4,8 @@ import static org.koishi.launcher.h2co3core.util.Lang.mapOf;
 import static org.koishi.launcher.h2co3core.util.Pair.pair;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.ListView;
-
-import androidx.appcompat.app.AppCompatDialog;
 
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.setting.Profile;
@@ -33,7 +30,6 @@ import org.koishi.launcher.h2co3core.util.io.FileUtils;
 import org.koishi.launcher.h2co3library.component.H2CO3LauncherCheckBoxTreeAdapter;
 import org.koishi.launcher.h2co3library.component.H2CO3LauncherCheckBoxTreeItem;
 import org.koishi.launcher.h2co3library.component.dialog.H2CO3LauncherAlertDialog;
-
 import org.koishi.launcher.h2co3library.component.ui.H2CO3LauncherTempPage;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
@@ -307,7 +303,8 @@ public class ModpackFileSelectionPage extends H2CO3LauncherTempPage implements V
                                 /* overrideJavaArgs */ true,
                                 /* overrideConsole */ true,
                                 /* overrideCommands */ true,
-                                /* overrideWindow */ true
+                                /* overrideWindow */ true,
+                                /* iconKey */ null // TODO
                         ), modpackFile);
             }
 

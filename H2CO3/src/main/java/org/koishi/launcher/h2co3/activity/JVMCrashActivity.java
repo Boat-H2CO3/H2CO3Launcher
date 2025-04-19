@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -23,15 +22,14 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 
 import org.koishi.launcher.h2co3.R;
-import org.koishi.launcher.h2co3.activity.SplashActivity;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
-import org.koishi.launcher.h2co3core.util.Pair;
-import org.koishi.launcher.h2co3launcher.utils.Architecture;
 import org.koishi.launcher.h2co3core.game.CrashReportAnalyzer;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.util.Lang;
+import org.koishi.launcher.h2co3core.util.Pair;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.io.FileUtils;
+import org.koishi.launcher.h2co3launcher.utils.Architecture;
 import org.koishi.launcher.h2co3library.component.BaseActivity;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
@@ -186,10 +184,63 @@ public class JVMCrashActivity extends BaseActivity implements View.OnClickListen
                     keywords);
         }).whenCompleteAsync((pair, exception) -> {
             setLoading(false);
+
             if (exception != null) {
-                handleAnalysisError(exception);
+                LOG.log(Level.WARNING, "Failed to analyze crash report", exception);
+
+                hint.setText(getString(R.string.game_crash_reason_unknown));
             } else {
-                handleAnalysisResult(pair);
+                Set<CrashReportAnalyzer.Result> results = pair.getKey();
+                Set<String> keywords = pair.getValue();
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                boolean hasMultipleRules = results.stream().map(CrashReportAnalyzer.Result::getRule).distinct().count() > 1;
+                if (hasMultipleRules) {
+                    stringBuilder.append(getString(R.string.game_crash_reason_multiple));
+                    LOG.log(Level.INFO, "Multiple reasons detected");
+                }
+
+                for (CrashReportAnalyzer.Result result : results) {
+                    switch (result.getRule()) {
+                        case MOD_RESOLUTION_CONFLICT:
+                        case MOD_RESOLUTION_MISSING:
+                        case MOD_RESOLUTION_COLLECTION:
+                            stringBuilder.append(AndroidUtils.getLocalizedText(this, "game_crash_reason_" + result.getRule().name().toLowerCase(Locale.ROOT),
+                                    translateFabricModId(result.getMatcher().group("sourcemod")),
+                                    parseFabricModId(result.getMatcher().group("destmod")),
+                                    parseFabricModId(result.getMatcher().group("destmod"))));
+                            break;
+                        case MOD_RESOLUTION_MISSING_MINECRAFT:
+                            stringBuilder.append(AndroidUtils.getLocalizedText(this, "game_crash_reason_" + result.getRule().name().toLowerCase(Locale.ROOT),
+                                    translateFabricModId(result.getMatcher().group("mod")),
+                                    result.getMatcher().group("version")));
+                            break;
+                        case TWILIGHT_FOREST_OPTIFINE:
+                        case PERFORMANT_FOREST_OPTIFINE:
+                        case JADE_FOREST_OPTIFINE:
+                            stringBuilder.append(AndroidUtils.getLocalizedText(this, "game_crash_reason_mod", "OptiFine"));
+                            break;
+                        default:
+                            stringBuilder.append(AndroidUtils.getLocalizedText(this, "game_crash_reason_" + result.getRule().name().toLowerCase(Locale.ROOT).replaceAll("\\.", "_"),
+                                    Arrays.stream(result.getRule().getGroupNames()).map(groupName -> result.getMatcher().group(groupName))
+                                            .toArray()));
+                            break;
+                    }
+                    stringBuilder.append("\n\n");
+                    LOG.log(Level.INFO, "Crash cause: " + result.getRule());
+                }
+                if (results.isEmpty()) {
+                    if (!keywords.isEmpty()) {
+                        hint.setText(AndroidUtils.getLocalizedText(this, "game_crash_reason_stacktrace", String.join(", ", keywords)));
+                        LOG.log(Level.INFO, "Crash reason unknown, but some log keywords have been found: " + String.join(", ", keywords));
+                    } else {
+                        hint.setText(getString(R.string.game_crash_reason_unknown));
+                        LOG.log(Level.INFO, "Crash reason unknown");
+                    }
+                } else {
+                    hint.setText(stringBuilder.toString());
+                }
             }
         }, Schedulers.androidUIThread()).exceptionally(Lang::handleUncaughtException);
     }

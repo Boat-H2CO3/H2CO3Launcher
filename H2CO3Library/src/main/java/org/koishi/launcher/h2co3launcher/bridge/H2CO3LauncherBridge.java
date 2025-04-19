@@ -181,7 +181,7 @@ public class H2CO3LauncherBridge implements Serializable {
 
     public native void setenv(String key, String value);
 
-    public native int dlopen(String path);
+    public native long dlopen(String path);
 
     public native void setLdLibraryPath(String path);
 
@@ -291,7 +291,7 @@ public class H2CO3LauncherBridge implements Serializable {
         if (BACKEND_IS_H2CO3) {
             pushEvent(System.nanoTime(), press ? KeyPress : KeyRelease, keyCode, keyChar);
         } else {
-            CallbackBridge.sendKeycode(keyCode, (char) keyChar, 0, 0, press);
+            CallbackBridge.sendKeycode(keyCode, (char) keyChar, 0, CallbackBridge.getCurrentMods(), press);
         }
     }
 

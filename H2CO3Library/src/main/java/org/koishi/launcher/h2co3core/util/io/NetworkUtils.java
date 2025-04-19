@@ -21,17 +21,31 @@ import static org.koishi.launcher.h2co3core.util.Pair.pair;
 import static org.koishi.launcher.h2co3core.util.StringUtils.removeSurrounding;
 import static org.koishi.launcher.h2co3core.util.StringUtils.substringAfter;
 import static org.koishi.launcher.h2co3core.util.StringUtils.substringAfterLast;
-
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.Map.Entry;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import org.koishi.launcher.h2co3core.util.Pair;
 import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3library.R;
-import org.koishi.launcher.h2co3core.util.Pair;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
 
 public final class NetworkUtils {
     public static final String PARAMETER_SEPARATOR = "&";
@@ -104,7 +118,7 @@ public final class NetworkUtils {
         connection.setUseCaches(false);
         connection.setConnectTimeout(TIME_OUT);
         connection.setReadTimeout(TIME_OUT);
-        connection.setRequestProperty("Accept-Language", Locale.getDefault().toString());
+        connection.setRequestProperty("Accept-Language", Locale.getDefault().toLanguageTag());
         return connection;
     }
 

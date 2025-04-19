@@ -1,6 +1,8 @@
 package org.koishi.launcher.h2co3.ui.download;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
@@ -13,6 +15,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.game.H2CO3LauncherGameRepository;
+import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3.setting.Profiles;
 import org.koishi.launcher.h2co3.ui.InstallerItem;
 import org.koishi.launcher.h2co3.ui.PageManager;
@@ -43,8 +46,10 @@ import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherEditText;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherUILayout;
 
+import java.io.File;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -61,6 +66,7 @@ public class InstallersPage extends H2CO3LauncherTempPage implements View.OnClic
     private H2CO3LauncherEditText editText;
     private H2CO3LauncherImageButton install;
     private AlertDialog taskListPaneAlert;
+    private boolean nameManuallyModified = false;
 
     public InstallersPage(Context context, int id, H2CO3LauncherUILayout parent, int resId, final String gameVersion) {
         super(context, id, parent, resId);
@@ -149,6 +155,21 @@ public class InstallersPage extends H2CO3LauncherTempPage implements View.OnClic
 
         editText = findViewById(R.id.edit);
         install = findViewById(R.id.install);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String autoGenName = generateVersionName();
+                if (!s.toString().equals(autoGenName)) {
+                    nameManuallyModified = true;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
         editText.setText(gameVersion);
         install.setOnClickListener(this);
 
@@ -174,6 +195,7 @@ public class InstallersPage extends H2CO3LauncherTempPage implements View.OnClic
                 if (library.incompatibleLibraryName.get() == null) {
                     InstallerVersionPage page = new InstallerVersionPage(getContext(), PageManager.PAGE_ID_TEMP, getParent(), R.layout.page_install_version, gameVersion, libraryId, remoteVersion -> {
                         map.put(libraryId, remoteVersion);
+                        refreshVersionName();
                         DownloadPageManager.getInstance().dismissCurrentTempPage();
                     });
                     DownloadPageManager.getInstance().showTempPage(page);
@@ -181,6 +203,7 @@ public class InstallersPage extends H2CO3LauncherTempPage implements View.OnClic
             });
             library.removeAction.set(() -> {
                 map.remove(libraryId);
+                refreshVersionName();
                 reload();
             });
         }
@@ -221,7 +244,16 @@ public class InstallersPage extends H2CO3LauncherTempPage implements View.OnClic
                 }
 
                 Task<Void> task = builder.buildAsync().whenComplete(any -> Profiles.getSelectedProfile().getRepository().refreshVersions())
-                        .thenRunAsync(Schedulers.androidUIThread(), () -> Profiles.getSelectedProfile().setSelectedVersion(name));
+                        .thenRunAsync(Schedulers.androidUIThread(), () -> {
+                            Profile profile = Profiles.getSelectedProfile();
+                            profile.setSelectedVersion(name);
+                            if (!map.isEmpty()) {
+                                if (map.containsKey(LibraryAnalyzer.LibraryType.OPTIFINE.getPatchId()) && map.size() == 1) {
+                                    return;
+                                }
+                                new File(profile.getRepository().getRunDirectory(profile.getSelectedVersion()), "mods").mkdirs();
+                            }
+                        });
 
                 TaskDialog taskListPane = new TaskDialog(getContext(), new TaskCancellationAction(TaskDialog::dismissDialog));
                 taskListPaneAlert = taskListPane.create();
@@ -248,6 +280,42 @@ public class InstallersPage extends H2CO3LauncherTempPage implements View.OnClic
                     executor.start();
                 });
             }
+        }
+    }
+
+    private String generateVersionName() {
+        StringBuilder nameBuilder = new StringBuilder(gameVersion);
+        Arrays.stream(LibraryAnalyzer.LibraryType.values())
+                .filter(libraryType -> map.containsKey(libraryType.getPatchId()))
+                .map(this::getLoaderName)
+                .filter(name -> !Objects.isNull(name))
+                .forEach(name -> nameBuilder.append("-").append(name));
+        return nameBuilder.toString();
+    }
+
+    private void refreshVersionName() {
+        if (nameManuallyModified) {
+            return;
+        }
+        editText.setText(generateVersionName());
+    }
+
+    private String getLoaderName(LibraryAnalyzer.LibraryType libraryType) {
+        switch (libraryType) {
+            case FORGE:
+                return getContext().getString(R.string.install_installer_forge);
+            case NEO_FORGE:
+                return getContext().getString(R.string.install_installer_neoforge);
+            case FABRIC:
+                return getContext().getString(R.string.install_installer_fabric);
+            case LITELOADER:
+                return getContext().getString(R.string.install_installer_liteloader);
+            case QUILT:
+                return getContext().getString(R.string.install_installer_quilt);
+            case OPTIFINE:
+                return getContext().getString(R.string.install_installer_optifine);
+            default:
+                return null;
         }
     }
 

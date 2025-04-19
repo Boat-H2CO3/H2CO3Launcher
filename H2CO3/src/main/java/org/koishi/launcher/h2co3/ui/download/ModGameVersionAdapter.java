@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3library.component.H2CO3LauncherAdapter;
-
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
 import org.koishi.launcher.h2co3library.util.ConvertUtils;
@@ -56,7 +55,7 @@ public class ModGameVersionAdapter extends H2CO3LauncherAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
         viewHolder.parent.setOnClickListener(v -> callback.onSelect(list.get(i)));
-        viewHolder.version.setText("Minecraft " + list.get(i));
+        viewHolder.version.setText((list.get(i).contains(getContext().getString(R.string.recommend_version)) ? "" : "Minecraft ") + list.get(i));
         return view;
     }
 

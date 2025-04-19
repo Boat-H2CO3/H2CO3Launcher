@@ -17,22 +17,32 @@
  */
 package org.koishi.launcher.h2co3core.util.io;
 
-import java.io.*;
-import java.lang.reflect.Method;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import org.koishi.launcher.h2co3core.util.Lang;
+import org.koishi.launcher.h2co3core.util.StringUtils;
+import org.koishi.launcher.h2co3core.util.function.ExceptionalConsumer;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-import org.koishi.launcher.h2co3core.util.Lang;
-import org.koishi.launcher.h2co3core.util.StringUtils;
-import org.koishi.launcher.h2co3core.util.function.ExceptionalConsumer;
 
 public final class FileUtils {
 
@@ -371,7 +381,7 @@ public final class FileUtils {
         if (destFile.exists() && !destFile.canWrite())
             throw new IOException("Destination '" + destFile + "' exists but is read-only");
 
-        Files.copy(srcFile.toPath(), destFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(srcFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
     public static void copyFile(Path srcFile, Path destFile)

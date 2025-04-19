@@ -156,7 +156,7 @@ JNIEXPORT void JNICALL Java_org_koishi_launcher_h2co3launcher_bridge_H2CO3Launch
     (*env)->ReleaseStringUTFChars(env, str2, value);
 }
 
-JNIEXPORT jint JNICALL Java_org_koishi_launcher_h2co3launcher_bridge_H2CO3LauncherBridge_dlopen(JNIEnv* env, jobject jobject, jstring str) {
+JNIEXPORT jlong JNICALL Java_org_koishi_launcher_h2co3launcher_bridge_H2CO3LauncherBridge_dlopen(JNIEnv* env, jobject jobject, jstring str) {
     dlerror();
 
     int ret = 0;
@@ -169,9 +169,7 @@ JNIEXPORT jint JNICALL Java_org_koishi_launcher_h2co3launcher_bridge_H2CO3Launch
     char * error = dlerror();
     H2CO3LAUNCHER_LOG("DLOPEN: loading %s (error = %s)", lib_name, error);
 
-    if (handle == NULL) {
-        ret = -1;
-    }
+    return (jlong) handle;
 
     (*env)->ReleaseStringUTFChars(env, str, lib_name);
     return ret;

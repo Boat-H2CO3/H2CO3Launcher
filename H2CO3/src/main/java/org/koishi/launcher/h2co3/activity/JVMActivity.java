@@ -101,6 +101,7 @@ public class JVMActivity extends BaseActivity implements TextureView.SurfaceText
         int width = menuType == MenuType.GAME ? (int) ((i + ((GameMenu) menu).getMenuSetting().getCursorOffset()) * h2co3LauncherBridge.getScaleFactor()) : H2CO3LauncherBridge.DEFAULT_WIDTH;
         int height = menuType == MenuType.GAME ? (int) (i1 * h2co3LauncherBridge.getScaleFactor()) : H2CO3LauncherBridge.DEFAULT_HEIGHT;
         if (menuType == MenuType.GAME) {
+            menu.getInput().initExternalController(textureView);
             GameOption gameOption = new GameOption(Objects.requireNonNull(menu.getBridge()).getGameDir());
             gameOption.set("fullscreen", "false");
             gameOption.set("overrideWidth", String.valueOf(width));

@@ -120,11 +120,15 @@ static void releaseMonitor(_GLFWwindow* window)
     _glfwInputMonitorWindow(window->monitor, NULL);
 }
 
-// Process the specified H2CO3Launcher event
+static _GLFWwindow* mWindow;
+// Process the specified H2CO3 event
 //
 static void processEvent(H2CO3LauncherEvent *event)
 {
-    _GLFWwindow* window = _glfw.h2co3Launcher.eventCurrent;
+    if (mWindow == NULL) {
+        mWindow = _glfw.h2co3Launcher.eventCurrent;
+    }
+    _GLFWwindow* window = mWindow;
 
     switch (event->type)
     {
@@ -345,9 +349,10 @@ int _glfwPlatformCreateWindow(_GLFWwindow* window,
         else if (ctxconfig->source == GLFW_OSMESA_CONTEXT_API)
         {
             const char *renderer = getenv("LIBGL_STRING");
-            if (strcmp(renderer, "Zink") == 0 ||
-               strcmp(renderer, "Freedreno") == 0 ||
-               strcmp(renderer, "VirGLRenderer") == 0)
+            if (!strcmp(renderer, "Zink") ||
+                !strcmp(renderer, "Freedreno") ||
+                !strcmp(renderer, "VirGLRenderer") ||
+                !strcmp(renderer, "custom_gallium"))
             {
                 if (!_glfwInitEGL())
                     return GLFW_FALSE;

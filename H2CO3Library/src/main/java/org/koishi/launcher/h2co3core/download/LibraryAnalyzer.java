@@ -19,14 +19,30 @@ package org.koishi.launcher.h2co3core.download;
 
 import static org.koishi.launcher.h2co3core.util.Pair.pair;
 
-import org.koishi.launcher.h2co3core.game.*;
-import org.koishi.launcher.h2co3core.mod.ModLoaderType;
-import org.koishi.launcher.h2co3core.util.Pair;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.koishi.launcher.h2co3core.game.Argument;
+import org.koishi.launcher.h2co3core.game.Arguments;
+import org.koishi.launcher.h2co3core.game.Library;
+import org.koishi.launcher.h2co3core.game.StringArgument;
+import org.koishi.launcher.h2co3core.game.Version;
+import org.koishi.launcher.h2co3core.game.VersionProvider;
+import org.koishi.launcher.h2co3core.mod.ModLoaderType;
+import org.koishi.launcher.h2co3core.util.Lang;
+import org.koishi.launcher.h2co3core.util.Pair;
+import org.koishi.launcher.h2co3core.util.versioning.VersionNumber;
+import org.koishi.launcher.h2co3core.util.versioning.VersionRange;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -46,6 +62,16 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
             "optifine.OptiFineForgeTweaker"
     };
     public static final String LITELOADER_TWEAKER = "com.mumfrey.liteloader.launch.LiteLoaderTweaker";
+    public static final String FORGE_BOOTSTRAP_MAIN = "net.minecraftforge.bootstrap.ForgeBootstrap";
+    public static final Set<String> FORGE_OPTIFINE_MAIN = new HashSet<>(Lang.immutableListOf(
+            LibraryAnalyzer.VANILLA_MAIN,
+            LibraryAnalyzer.LAUNCH_WRAPPER_MAIN,
+            LibraryAnalyzer.MOD_LAUNCHER_MAIN,
+            LibraryAnalyzer.BOOTSTRAP_LAUNCHER_MAIN,
+            LibraryAnalyzer.FORGE_BOOTSTRAP_MAIN
+    ));
+    public static final VersionRange<VersionNumber> FORGE_OPTIFINE_BROKEN_RANGE = VersionNumber.between("48.0.0", "49.0.50");
+
     private final Map<String, Pair<Library, String>> libraries;
     private Version version;
 
@@ -54,11 +80,15 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
         this.libraries = libraries;
     }
 
-    public static LibraryAnalyzer analyze(Version version) {
+    public static LibraryAnalyzer analyze(Version version, String gameVersion) {
         if (version.getInheritsFrom() != null)
             throw new IllegalArgumentException("LibraryAnalyzer can only analyze independent game version");
 
         Map<String, Pair<Library, String>> libraries = new HashMap<>();
+
+        if (gameVersion != null) {
+            libraries.put(LibraryType.MINECRAFT.getPatchId(), pair(null, gameVersion));
+        }
 
         List<Library> rawLibraries = version.resolve(null).getLibraries();
         for (Library library : rawLibraries) {
@@ -82,6 +112,7 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
         Version resolvedVersion = version.resolve(provider);
         String mainClass = resolvedVersion.getMainClass();
         return mainClass != null && (LAUNCH_WRAPPER_MAIN.equals(mainClass)
+                || mainClass.startsWith("net.minecraftforge")
                 || mainClass.startsWith("net.fabricmc")
                 || mainClass.startsWith("org.quiltmc")
                 || mainClass.startsWith("cpw.mods"));
@@ -99,6 +130,15 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
         return Optional.ofNullable(libraries.get(type.getPatchId())).map(Pair::getKey);
     }
 
+    /**
+     * If a library is provided in $.patches, it's structure is so clear that we can do any operation.
+     * Otherwise, we must guess how are these libraries mixed.
+     * Maybe a guessing implementation will be provided in the future. But by now, we simply set it to JUST_EXISTED.
+     */
+    public LibraryMark.LibraryStatus getLibraryStatus(String type) {
+        return version.hasPatch(type) ? LibraryMark.LibraryStatus.CLEAR : LibraryMark.LibraryStatus.JUST_EXISTED;
+    }
+
     @NotNull
     @Override
     public Iterator<LibraryMark> iterator() {
@@ -113,7 +153,7 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
             @Override
             public LibraryMark next() {
                 Map.Entry<String, Pair<Library, String>> entry = impl.next();
-                return new LibraryMark(entry.getKey(), entry.getValue().getValue());
+                return new LibraryMark(entry.getKey(), entry.getValue().getValue(), getLibraryStatus(entry.getKey()));
             }
         };
     }
@@ -133,13 +173,9 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
     }
 
     public boolean hasModLauncher() {
-        final String modLauncher = "cpw.mods.modlauncher.Launcher";
-        return modLauncher.equals(version.getMainClass()) || version.getPatches().stream().anyMatch(patch -> modLauncher.equals(patch.getMainClass()));
-    }
-
-    public boolean hasBootstrapLauncher() {
-        final String bootstrapLauncher = "cpw.mods.bootstraplauncher.BootstrapLauncher";
-        return bootstrapLauncher.equals(version.getMainClass()) || version.getPatches().stream().anyMatch(patch -> bootstrapLauncher.equals(patch.getMainClass()));
+        return LibraryAnalyzer.MOD_LAUNCHER_MAIN.equals(version.getMainClass()) || version.getPatches().stream().anyMatch(
+                patch -> LibraryAnalyzer.MOD_LAUNCHER_MAIN.equals(patch.getMainClass())
+        );
     }
 
     private Version removingMatchedLibrary(Version version, String libraryId) {
@@ -194,7 +230,7 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
             private final Pattern FORGE_VERSION_MATCHER = Pattern.compile("^([0-9.]+)-(?<forge>[0-9.]+)(-([0-9.]+))?$");
 
             @Override
-            public String patchVersion(Version gameVersion, String libraryVersion) {
+            protected String patchVersion(Version gameVersion, String libraryVersion) {
                 Matcher matcher = FORGE_VERSION_MATCHER.matcher(libraryVersion);
                 if (matcher.find()) {
                     return matcher.group("forge");
@@ -203,7 +239,7 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
             }
 
             @Override
-            public boolean matchLibrary(Library library, List<Library> libraries) {
+            protected boolean matchLibrary(Library library, List<Library> libraries) {
                 for (Library l : libraries) {
                     if (NEO_FORGE.matchLibrary(l, libraries)) {
                         return false;
@@ -216,7 +252,7 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
             private final Pattern NEO_FORGE_VERSION_MATCHER = Pattern.compile("^([0-9.]+)-(?<forge>[0-9.]+)(-([0-9.]+))?$");
 
             @Override
-            public String patchVersion(Version gameVersion, String libraryVersion) {
+            protected String patchVersion(Version gameVersion, String libraryVersion) {
                 Matcher matcher = NEO_FORGE_VERSION_MATCHER.matcher(libraryVersion);
                 if (matcher.find()) {
                     return matcher.group("forge");
@@ -299,22 +335,32 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
             return modLoaderType;
         }
 
-        public boolean matchLibrary(Library library, List<Library> libraries) {
+        protected boolean matchLibrary(Library library, List<Library> libraries) {
             return group.matcher(library.getGroupId()).matches() && artifact.matcher(library.getArtifactId()).matches();
         }
 
-        public String patchVersion(Version gameVersion, String libraryVersion) {
+        protected String patchVersion(Version gameVersion, String libraryVersion) {
             return libraryVersion;
         }
     }
 
-    public static class LibraryMark {
+    public final static class LibraryMark {
+        /**
+         * If this version is installed by HMCL, instead of external process,
+         * which means $.patches contains this library, structureClear is true.
+         */
+        private final LibraryStatus status;
+
         private final String libraryId;
         private final String libraryVersion;
-
-        public LibraryMark(@NotNull String libraryId, @Nullable String libraryVersion) {
+        private LibraryMark(@NotNull String libraryId, @Nullable String libraryVersion, LibraryStatus status) {
             this.libraryId = libraryId;
             this.libraryVersion = libraryVersion;
+            this.status = status;
+        }
+
+        public LibraryStatus getStatus() {
+            return status;
         }
 
         @NotNull
@@ -325,6 +371,15 @@ public final class LibraryAnalyzer implements Iterable<LibraryAnalyzer.LibraryMa
         @Nullable
         public String getLibraryVersion() {
             return libraryVersion;
+        }
+
+        /**
+         * If a library is provided in $.patches, it's structure is so clear that we can do any operation.
+         * Otherwise, we must guess how are these libraries mixed.
+         * Maybe a guessing implementation will be provided in the future. But by now, we simply set it to JUST_EXISTED.
+         */
+        public enum LibraryStatus {
+            CLEAR, UNSURE, JUST_EXISTED
         }
     }
 }

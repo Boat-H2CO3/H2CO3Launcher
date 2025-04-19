@@ -14,71 +14,66 @@ public class H2CO3LauncherApplication extends Application implements Application
     private static WeakReference<Activity> currentActivity;
 
     public static Activity getCurrentActivity() {
-        if (currentActivity != null) {
-            return currentActivity.get();
-        }
-        return null;
+        return currentActivity != null ? currentActivity.get() : null;
     }
 
     @Override
     public void onCreate() {
-        // enabledStrictMode();
         super.onCreate();
         this.registerActivityLifecycleCallbacks(this);
-//        PerfUtil.install();
+        enableStrictMode();
     }
 
-    private void enabledStrictMode() {
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectNetwork()
-                .detectCustomSlowCalls()
-                .detectDiskReads()
-                .detectDiskWrites()
+    private void enableStrictMode() {
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectAll()
                 .penaltyLog()
                 .build());
 
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects()
-                .detectLeakedClosableObjects()
-                .detectActivityLeaks()
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
                 .detectAll()
                 .penaltyLog()
                 .build());
     }
 
     @Override
-    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle bundle) {
-        currentActivity = new WeakReference<>(activity);
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        updateCurrentActivity(activity);
     }
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
-        currentActivity = new WeakReference<>(activity);
+        updateCurrentActivity(activity);
     }
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-
+        // No-op
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-
+        // No-op
     }
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-
+        // No-op
     }
 
     @Override
-    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle bundle) {
-
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+        // No-op
     }
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
         if (currentActivity != null && currentActivity.get() == activity) {
-            currentActivity = null;
+            currentActivity.clear();
         }
+    }
+
+    private void updateCurrentActivity(Activity activity) {
+        currentActivity = new WeakReference<>(activity);
     }
 }

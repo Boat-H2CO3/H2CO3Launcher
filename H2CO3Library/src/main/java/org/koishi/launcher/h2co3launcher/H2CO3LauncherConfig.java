@@ -14,8 +14,11 @@ public class H2CO3LauncherConfig implements Serializable {
     private final String workingDir;
     private final Renderer renderer;
     private final String[] args;
+
     private boolean useVKDriverSystem = false;
     private boolean pojavBigCore = false;
+    private InstalledModLoaders installedModLoaders = null;
+
     public H2CO3LauncherConfig(Context context, String logDir, String javaPath, String workingDir, Renderer renderer, String[] args) {
         this.context = context;
         this.logDir = logDir;
@@ -65,6 +68,14 @@ public class H2CO3LauncherConfig implements Serializable {
         this.pojavBigCore = pojavBigCore;
     }
 
+    public InstalledModLoaders getInstalledModLoaders() {
+        return installedModLoaders;
+    }
+
+    public void setInstalledModLoaders(InstalledModLoaders installedModLoaders) {
+        this.installedModLoaders = installedModLoaders;
+    }
+
     public enum Renderer implements Serializable {
         RENDERER_GL4ES("Holy-GL4ES:libgl4es_114.so:libEGL.so"),
         RENDERER_VIRGL("VirGLRenderer:libOSMesa_81.so:libEGL.so"),
@@ -105,6 +116,48 @@ public class H2CO3LauncherConfig implements Serializable {
         @Override
         public String toString() {
             return glInfo.split(":")[0];
+        }
+    }
+
+    public static class InstalledModLoaders {
+        private final boolean installForge;
+        private final boolean installNeoForge;
+        private final boolean installOptiFine;
+        private final boolean installLiteLoader;
+        private final boolean installFabric;
+        private final boolean installQuilt;
+
+        public InstalledModLoaders(boolean installForge, boolean installNeoForge, boolean installOptiFine, boolean installLiteLoader, boolean installFabric, boolean installQuilt) {
+            this.installForge = installForge;
+            this.installNeoForge = installNeoForge;
+            this.installOptiFine = installOptiFine;
+            this.installLiteLoader = installLiteLoader;
+            this.installFabric = installFabric;
+            this.installQuilt = installQuilt;
+        }
+
+        public boolean isInstallForge() {
+            return installForge;
+        }
+
+        public boolean isInstallNeoForge() {
+            return installNeoForge;
+        }
+
+        public boolean isInstallOptiFine() {
+            return installOptiFine;
+        }
+
+        public boolean isInstallLiteLoader() {
+            return installLiteLoader;
+        }
+
+        public boolean isInstallFabric() {
+            return installFabric;
+        }
+
+        public boolean isInstallQuilt() {
+            return installQuilt;
         }
     }
 

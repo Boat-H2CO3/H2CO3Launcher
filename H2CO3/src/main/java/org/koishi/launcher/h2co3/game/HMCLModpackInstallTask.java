@@ -19,6 +19,7 @@ package org.koishi.launcher.h2co3.game;
 
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+
 import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3core.download.DefaultDependencyManager;
 import org.koishi.launcher.h2co3core.download.LibraryAnalyzer;
@@ -94,7 +95,7 @@ public final class HMCLModpackInstallTask extends Task<Void> {
     public void execute() throws Exception {
         String json = CompressingUtils.readTextZipEntry(zipFile, "minecraft/pack.json");
         Version originalVersion = JsonUtils.GSON.fromJson(json, Version.class).setId(name).setJar(null);
-        LibraryAnalyzer analyzer = LibraryAnalyzer.analyze(originalVersion);
+        LibraryAnalyzer analyzer = LibraryAnalyzer.analyze(originalVersion, null);
         Task<Version> libraryTask = Task.supplyAsync(() -> originalVersion);
         // reinstall libraries
         // libraries of Forge and OptiFine should be obtained by installation.

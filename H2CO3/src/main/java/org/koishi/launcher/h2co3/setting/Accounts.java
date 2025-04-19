@@ -24,28 +24,14 @@ import static org.koishi.launcher.h2co3core.util.Lang.immutableListOf;
 import static org.koishi.launcher.h2co3core.util.Lang.mapOf;
 import static org.koishi.launcher.h2co3core.util.Logging.LOG;
 import static org.koishi.launcher.h2co3core.util.Pair.pair;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.logging.Level;
-
 import static java.util.stream.Collectors.toList;
 
 import android.content.Context;
 
 import com.google.gson.reflect.TypeToken;
+
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.game.OAuthServer;
-import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3core.auth.Account;
 import org.koishi.launcher.h2co3core.auth.AccountFactory;
 import org.koishi.launcher.h2co3core.auth.AuthenticationException;
@@ -68,8 +54,6 @@ import org.koishi.launcher.h2co3core.auth.microsoft.MicrosoftService;
 import org.koishi.launcher.h2co3core.auth.offline.OfflineAccount;
 import org.koishi.launcher.h2co3core.auth.offline.OfflineAccountFactory;
 import org.koishi.launcher.h2co3core.auth.yggdrasil.RemoteAuthenticationException;
-import org.koishi.launcher.h2co3core.auth.yggdrasil.YggdrasilAccount;
-import org.koishi.launcher.h2co3core.auth.yggdrasil.YggdrasilAccountFactory;
 import org.koishi.launcher.h2co3core.fakefx.beans.InvalidationListener;
 import org.koishi.launcher.h2co3core.fakefx.beans.Observable;
 import org.koishi.launcher.h2co3core.fakefx.beans.property.ObjectProperty;
@@ -81,19 +65,31 @@ import org.koishi.launcher.h2co3core.util.InvocationDispatcher;
 import org.koishi.launcher.h2co3core.util.Lang;
 import org.koishi.launcher.h2co3core.util.io.FileUtils;
 import org.koishi.launcher.h2co3core.util.skin.InvalidSkinException;
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.logging.Level;
 
 public final class Accounts {
     public static final OAuthServer.Factory OAUTH_CALLBACK = new OAuthServer.Factory();
-    public static final YggdrasilAccountFactory FACTORY_MOJANG = YggdrasilAccountFactory.MOJANG;
     public static final MicrosoftAccountFactory FACTORY_MICROSOFT = new MicrosoftAccountFactory(new MicrosoftService(OAUTH_CALLBACK));
     private static final AuthlibInjectorArtifactProvider AUTHLIB_INJECTOR_DOWNLOADER = createAuthlibInjectorArtifactProvider();
     public static final OfflineAccountFactory FACTORY_OFFLINE = new OfflineAccountFactory(AUTHLIB_INJECTOR_DOWNLOADER);
     public static final AuthlibInjectorAccountFactory FACTORY_AUTHLIB_INJECTOR = new AuthlibInjectorAccountFactory(AUTHLIB_INJECTOR_DOWNLOADER, Accounts::getOrCreateAuthlibInjectorServer);
-    public static final List<AccountFactory<?>> FACTORIES = immutableListOf(FACTORY_OFFLINE, FACTORY_MOJANG, FACTORY_MICROSOFT, FACTORY_AUTHLIB_INJECTOR);
+    public static final List<AccountFactory<?>> FACTORIES = immutableListOf(FACTORY_OFFLINE, FACTORY_MICROSOFT, FACTORY_AUTHLIB_INJECTOR);
     // ==== Login type name ===
     private static final Map<AccountFactory<?>, Integer> unlocalizedLoginTypeNames = mapOf(
             pair(Accounts.FACTORY_OFFLINE, R.string.account_methods_offline),
-            pair(Accounts.FACTORY_MOJANG, R.string.account_methods_yggdrasil),
             pair(Accounts.FACTORY_AUTHLIB_INJECTOR, R.string.account_methods_authlib_injector),
             pair(Accounts.FACTORY_MICROSOFT, R.string.account_methods_microsoft));
     // ==== login type / account factory mapping ====
@@ -111,7 +107,6 @@ public final class Accounts {
 
     static {
         type2factory.put("offline", FACTORY_OFFLINE);
-        type2factory.put("yggdrasil", FACTORY_MOJANG);
         type2factory.put("authlibInjector", FACTORY_AUTHLIB_INJECTOR);
         type2factory.put("microsoft", FACTORY_MICROSOFT);
 
@@ -157,8 +152,6 @@ public final class Accounts {
             return FACTORY_OFFLINE;
         else if (account instanceof AuthlibInjectorAccount)
             return FACTORY_AUTHLIB_INJECTOR;
-        else if (account instanceof YggdrasilAccount)
-            return FACTORY_MOJANG;
         else if (account instanceof MicrosoftAccount)
             return FACTORY_MICROSOFT;
         else

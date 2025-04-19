@@ -34,6 +34,7 @@ import java.util.Objects;
 public final class VersionNumber implements Comparable<VersionNumber> {
 
     private static final int MAX_LONGITEM_LENGTH = 18;
+    public static final VersionNumber ZERO = asVersion("0");
     private final String value;
     private final ListItem items;
     private final String canonical;
@@ -160,6 +161,18 @@ public final class VersionNumber implements Comparable<VersionNumber> {
         } while (cont);
 
         return true;
+    }
+
+    public static VersionRange<VersionNumber> between(String minimum, String maximum) {
+        return VersionRange.between(asVersion(minimum), asVersion(maximum));
+    }
+
+    public static VersionRange<VersionNumber> atLeast(String minimum) {
+        return VersionRange.atLeast(asVersion(minimum));
+    }
+
+    public static VersionRange<VersionNumber> atMost(String maximum) {
+        return VersionRange.atMost(asVersion(maximum));
     }
 
     private static Item parseItem(String buf) {

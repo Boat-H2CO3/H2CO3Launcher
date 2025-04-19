@@ -4,15 +4,14 @@ import static org.koishi.launcher.h2co3core.util.LocaleUtils.formatDateTime;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.koishi.launcher.h2co3.util.AnimUtil;
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
+import org.koishi.launcher.h2co3.util.AnimUtil;
 import org.koishi.launcher.h2co3core.download.RemoteVersion;
 import org.koishi.launcher.h2co3core.download.fabric.FabricAPIRemoteVersion;
 import org.koishi.launcher.h2co3core.download.fabric.FabricRemoteVersion;
@@ -24,7 +23,6 @@ import org.koishi.launcher.h2co3core.download.optifine.OptiFineRemoteVersion;
 import org.koishi.launcher.h2co3core.download.quilt.QuiltAPIRemoteVersion;
 import org.koishi.launcher.h2co3core.download.quilt.QuiltRemoteVersion;
 import org.koishi.launcher.h2co3library.component.H2CO3LauncherAdapter;
-
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout;
@@ -42,6 +40,7 @@ public class RemoteVersionListAdapter extends H2CO3LauncherAdapter {
         super(context);
         this.list = list;
         this.listener = listener;
+
     }
 
     @Override

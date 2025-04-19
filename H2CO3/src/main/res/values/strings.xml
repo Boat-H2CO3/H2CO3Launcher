@@ -992,7 +992,6 @@
     <string name="edit">Edit</string>
     <string name="modpack_download_warn_title">Notice</string>
     <string name="modpack_download_warn_msg">Before installation, you should understand that most modpacks are designed for PC, so there is a high probability that you will encounter crashes or other issues when trying to launch. This is often not a problem that can be solved at the launcher level. Therefore, you need to understand the relevant knowledge and try to solve the problem yourself or seek help from others (do not ask the launcher developer!).</string>
-    <string name="view_incompatible">View incompatible mods</string>
     <string name="guide_theme2">If you find the color of the text on the right side is not clear, you can click here, then click \"Launcher Settings\", and select \"Theme 2\"</string>
     <string name="joystick_l">Left joystick</string>
     <string name="gamepad_dpad">DPAD</string>
@@ -1011,4 +1010,14 @@
     <string name="app_version">1.0</string>
     <string name="splash_storage_permission">Storage permission</string>
     <string name="storage_permission_description">Allows software to read and write to internal storage.</string>
+
+    <string name="shaderpack">ShaderPack</string>
+    <string name="recommend_version">Recommend version</string>
+
+    <string name="mod_check_continue">Continue</string>
+    <string name="mod_check_physics">Physics mod (%s) currently in use has not been patched(replace libPhysXJniBindings_64.so form x86_64 to arm64), it will cause crash.</string>
+    <string name="mod_check_mcef">MCEF mod (%s) cannot work on Android. It is usually used as a dependency of WebDisplays/In-game Browser.</string>
+    <string name="mod_check_valkyrienskies">Valkyrien Skies/Valkyrien Warfare mod (%s) cannot work directly in single player mode. You must use a server, otherwise it will crash the game</string>
+    <string name="mod_check_yes_steve_model">Yes Steve Model mod (%s) 2.2.2+ cannot work on Android.</string>
+    <string name="mod_check_imblocker">IMBlocker (%s) is not for Android. It must make the game crash.</string>
 </resources>
