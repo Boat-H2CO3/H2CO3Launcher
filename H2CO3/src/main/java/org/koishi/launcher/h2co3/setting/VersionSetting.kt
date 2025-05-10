@@ -43,6 +43,7 @@ import org.koishi.launcher.h2co3core.game.Version
 import org.koishi.launcher.h2co3core.task.Schedulers
 import org.koishi.launcher.h2co3core.task.Task
 import org.koishi.launcher.h2co3core.util.Lang
+import org.koishi.launcher.h2co3core.util.java.JavaManager
 import org.koishi.launcher.h2co3core.util.platform.MemoryUtils
 import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig
 import org.koishi.launcher.h2co3launcher.plugins.RendererPlugin
@@ -72,7 +73,7 @@ class VersionSetting : Cloneable {
 
     // java
     val javaProperty: StringProperty =
-        SimpleStringProperty(this, "java", JavaVersion.JAVA_AUTO.versionName)
+        SimpleStringProperty(this, "java", "auto")
     var java: String
         get() = javaProperty.get()
         set(java) {
@@ -252,21 +253,14 @@ class VersionSetting : Cloneable {
         }
 
     // launcher settings
-    fun getJavaVersion(version: Version?): Task<JavaVersion> {
+    fun getJavaVersion(version: Version): Task<JavaVersion> {
         return Task.runAsync(Schedulers.androidUIThread()) {
-            if (java != JavaVersion.JAVA_AUTO.versionName &&
-                java != JavaVersion.JAVA_8.versionName &&
-                java != JavaVersion.JAVA_11.versionName &&
-                java != JavaVersion.JAVA_17.versionName &&
-                java != JavaVersion.JAVA_21.versionName
-            ) {
-                java = JavaVersion.JAVA_AUTO.versionName
-            }
+            java = JavaManager.getJavaFromVersionName(java).name
         }.thenSupplyAsync {
-            if (java == JavaVersion.JAVA_AUTO.versionName) {
+            if (java == JavaVersion.JAVA_AUTO.name) {
                 return@thenSupplyAsync JavaVersion.getSuitableJavaVersion(version)
             } else {
-                return@thenSupplyAsync JavaVersion.getJavaFromVersionName(java)
+                return@thenSupplyAsync JavaManager.getJavaFromVersionName(java)
             }
         }
     }
@@ -386,7 +380,7 @@ class VersionSetting : Cloneable {
                 vs.isAutoMemory = json["autoMemory"]?.asBoolean ?: true
                 vs.permSize = json["permSize"]?.asString ?: ""
                 vs.serverIp = json["serverIp"]?.asString ?: ""
-                vs.java = json["java"]?.asString ?: JavaVersion.JAVA_AUTO.versionName
+                vs.java = json["java"]?.asString ?: "auto"
                 vs.scaleFactor = json["scaleFactor"]?.asDouble ?: 1.0
                 vs.isNotCheckGame = json["notCheckGame"]?.asBoolean ?: false
                 vs.isNotCheckJVM = json["notCheckJVM"]?.asBoolean ?: false

@@ -76,6 +76,7 @@ dependencies {
     implementation 'dev.rikka.rikkax.lifecycle:lifecycle-resource-livedata:1.0.1'
     implementation 'dev.rikka.rikkax.lifecycle:lifecycle-shared-viewmodel:1.0.1'
     implementation 'dev.rikka.rikkax.lifecycle:lifecycle-viewmodel-lazy:2.0.0'
+    implementation("net.fornwall:jelf:0.9.0")
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'

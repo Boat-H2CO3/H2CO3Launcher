@@ -17,6 +17,8 @@ import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherButton;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
 import org.koishi.launcher.h2co3library.util.ConvertUtils;
 
+import java.io.IOException;
+
 public class H2CO3LauncherAlertDialog extends H2CO3LauncherDialog implements View.OnClickListener {
 
     private String titleString;
@@ -80,13 +82,21 @@ public class H2CO3LauncherAlertDialog extends H2CO3LauncherDialog implements Vie
     public void onClick(View view) {
         if (view == positive) {
             if (positiveListener != null) {
-                positiveListener.onClick();
+                try {
+                    positiveListener.onClick();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
             dismiss();
         }
         if (view == negative) {
             if (negativeListener != null) {
-                negativeListener.onClick();
+                try {
+                    negativeListener.onClick();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
             dismiss();
         }
@@ -148,7 +158,7 @@ public class H2CO3LauncherAlertDialog extends H2CO3LauncherDialog implements Vie
     }
 
     public interface ButtonListener {
-        void onClick();
+        void onClick() throws IOException;
     }
 
     public static class Builder {

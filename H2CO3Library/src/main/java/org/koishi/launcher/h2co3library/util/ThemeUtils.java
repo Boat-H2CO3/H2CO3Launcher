@@ -53,14 +53,4 @@ public class ThemeUtils {
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
-
-    public void registerEvent(View view, Runnable runnable) {
-        runnables.put(view, runnable);
-        handler.post(runnable);
-    }
-
-    public void unregisterEvent(View view) {
-        runnables.remove(view);
-    }
-
 }

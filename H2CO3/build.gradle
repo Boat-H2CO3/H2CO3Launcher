@@ -82,6 +82,7 @@ dependencies {
     implementation 'com.github.getActivity:XXPermissions:21.2'
     implementation 'androidx.navigation:navigation-fragment:2.8.0'
     implementation 'androidx.navigation:navigation-ui:2.8.0'
+    implementation("net.fornwall:jelf:0.9.0")
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'

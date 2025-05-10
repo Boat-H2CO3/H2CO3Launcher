@@ -215,10 +215,7 @@ public class DefaultLauncher extends Launcher {
         // res.addDefault("-Dorg.lwjgl.util.DebugFunctions=", "true");
 
         // H2CO3Launcher specific args
-        JavaVersion javaVersion = options.getJava().isAuto() ? JavaVersion.getSuitableJavaVersion(version) : options.getJava();
-        if (javaVersion.getVersion() == JavaVersion.JAVA_VERSION_11 || javaVersion.getVersion() == JavaVersion.JAVA_VERSION_17 || javaVersion.getVersion() == JavaVersion.JAVA_VERSION_21) {
-            res.addDefault("-Dext.net.resolvPath=", javaVersion.getJavaPath(version) + "/resolv.conf");
-        }
+        res.addDefault("-Dext.net.resolvPath=", H2CO3LauncherTools.JAVA_PATH + "/resolv.conf");
 
         res.addDefault("-Djava.io.tmpdir=", H2CO3LauncherTools.CACHE_DIR);
         res.addDefault("-Dos.name=", "Linux");
@@ -294,6 +291,7 @@ public class DefaultLauncher extends Launcher {
             res.add("-javaagent:" + javaAgent);
         }
 
+        JavaVersion javaVersion = options.getJava().isAuto() ? JavaVersion.getSuitableJavaVersion(version) : options.getJava();
         if (javaVersion.getVersion() != JavaVersion.JAVA_VERSION_8) {
             res.add("--add-exports");
             String pkg = version.getMainClass().substring(0, version.getMainClass().lastIndexOf("."));

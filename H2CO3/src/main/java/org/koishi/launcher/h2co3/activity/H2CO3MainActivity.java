@@ -130,6 +130,67 @@ public class H2CO3MainActivity extends BaseActivity implements View.OnClickListe
         return true;
     }
 
+    public void setNavigationItemChecked(int itemId) {
+        Menu menu = navigationView.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setChecked(menu.getItem(i).getItemId() == itemId);
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem menuItem) {
+        if (menuItem.isChecked()) {
+            return true;
+        }
+
+        if (menuItem.getItemId() != R.id.navigation_back) {
+            _menuItem = menuItem.getItemId();
+        }
+
+        setNavigationItemChecked(menuItem.getItemId());
+
+        if (menuItem.getItemId() == R.id.navigation_main) {
+            if (uiManager.getCurrentUI() != uiManager.getMainUI()) {
+                toolbar.setTitle(getString(R.string.app_name));
+                uiManager.switchUI(uiManager.getMainUI());
+            }
+        } else if (menuItem.getItemId() == R.id.navigation_manage) {
+            if (uiManager.getCurrentUI() != uiManager.getManageUI()) {
+                Profile selectedProfile = Profiles.getSelectedProfile();
+                String version = selectedProfile.getSelectedVersion();
+                if (version == null) {
+                    toolbar.setTitle(getString(R.string.download));
+                    uiManager.switchUI(uiManager.getDownloadUI());
+                    _menuItem = R.id.navigation_download;
+                    setNavigationItemChecked(_menuItem);
+                } else {
+                    toolbar.setTitle(getString(R.string.manage));
+                    uiManager.getManageUI().setVersion(version, selectedProfile);
+                    uiManager.switchUI(uiManager.getManageUI());
+                }
+            }
+        } else if (menuItem.getItemId() == R.id.navigation_download) {
+            if (uiManager.getCurrentUI() != uiManager.getDownloadUI()) {
+                toolbar.setTitle(getString(R.string.download));
+                uiManager.switchUI(uiManager.getDownloadUI());
+            }
+        } else if (menuItem.getItemId() == R.id.navigation_controller) {
+            if (uiManager.getCurrentUI() != uiManager.getControllerUI()) {
+                toolbar.setTitle(getString(R.string.controller));
+                uiManager.switchUI(uiManager.getControllerUI());
+            }
+        } else if (menuItem.getItemId() == R.id.navigation_setting) {
+            if (uiManager.getCurrentUI() != uiManager.getSettingUI()) {
+                toolbar.setTitle(getString(R.string.setting));
+                uiManager.switchUI(uiManager.getSettingUI());
+            }
+        } else if (menuItem.getItemId() == R.id.navigation_back) {
+            uiManager.onBackPressed();
+            setNavigationItemChecked(_menuItem);
+        }
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_item_home) {
@@ -146,68 +207,6 @@ public class H2CO3MainActivity extends BaseActivity implements View.OnClickListe
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void setNavigationItemChecked(int itemId) {
-        Menu menu = navigationView.getMenu();
-        for (int i = 0; i < menu.size(); i++) {
-            menu.getItem(i).setChecked(menu.getItem(i).getItemId() == itemId);
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem menuItem) {
-        if (menuItem.isChecked()) {
-            return true;
-        }
-
-        setNavigationItemChecked(menuItem.getItemId());
-
-        if (menuItem.getItemId() == R.id.navigation_main) {
-            if (uiManager.getCurrentUI() != uiManager.getMainUI()) {
-                toolbar.setTitle(getString(R.string.app_name));
-                uiManager.switchUI(uiManager.getMainUI());
-                _menuItem = R.id.navigation_main;
-            }
-        } else if (menuItem.getItemId() == R.id.navigation_manage) {
-            if (uiManager.getCurrentUI() != uiManager.getManageUI()) {
-                Profile selectedProfile = Profiles.getSelectedProfile();
-                String version = selectedProfile.getSelectedVersion();
-                if (version == null) {
-                    toolbar.setTitle(getString(R.string.download));
-                    uiManager.switchUI(uiManager.getDownloadUI());
-                    _menuItem = R.id.navigation_download;
-                    setNavigationItemChecked(_menuItem);
-                } else {
-                    toolbar.setTitle(getString(R.string.manage));
-                    uiManager.getManageUI().setVersion(version, selectedProfile);
-                    uiManager.switchUI(uiManager.getManageUI());
-                    _menuItem = R.id.navigation_manage;
-                }
-            }
-        }else if (menuItem.getItemId() == R.id.navigation_download) {
-            if (uiManager.getCurrentUI() != uiManager.getDownloadUI()) {
-                toolbar.setTitle(getString(R.string.download));
-                uiManager.switchUI(uiManager.getDownloadUI());
-                _menuItem = R.id.navigation_download;
-            }
-        } else if (menuItem.getItemId() == R.id.navigation_controller) {
-            if (uiManager.getCurrentUI() != uiManager.getControllerUI()) {
-                toolbar.setTitle(getString(R.string.controller));
-                uiManager.switchUI(uiManager.getControllerUI());
-                _menuItem = R.id.navigation_controller;
-            }
-        } else if (menuItem.getItemId() == R.id.navigation_setting) {
-            if (uiManager.getCurrentUI() != uiManager.getSettingUI()) {
-                toolbar.setTitle(getString(R.string.setting));
-                uiManager.switchUI(uiManager.getSettingUI());
-                _menuItem = R.id.navigation_setting;
-            }
-        } else if (menuItem.getItemId() == R.id.navigation_back) {
-            uiManager.onBackPressed();
-            setNavigationItemChecked(_menuItem);
-        }
-        return true;
     }
 
     public void cleanItemChecked(){
