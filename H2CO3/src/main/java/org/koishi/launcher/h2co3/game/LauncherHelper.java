@@ -330,7 +330,7 @@ public final class LauncherHelper {
                             } else if (ex instanceof AccessDeniedException) {
                                 message = getLocalizedText(context, "exception_access_denied", ((AccessDeniedException) ex).getFile());
                             } else if (ex instanceof ModCheckException) {
-                                message = ((ModCheckException) ex).getReason();
+                                message = ex.getMessage();
                             } else {
                                 message = StringUtils.getStackTrace(ex);
                             }
@@ -373,10 +373,10 @@ public final class LauncherHelper {
                         bridge.setHasTouchController(true);
                     }
                     try {
-                        modChecker.check(mod);
+                        modChecker.check(bridge, mod);
                     } catch (ModCheckException e) {
                         count++;
-                        modCheckerInfo.append(count).append(".").append(e.getReason()).append("\n\n");
+                        modCheckerInfo.append(count).append(".").append(e.getMessage()).append("\n\n");
                     }
                 }
                 bridge.setModSummary(modSummary.toString());
