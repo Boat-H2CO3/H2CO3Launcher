@@ -151,11 +151,32 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"/>
 
-                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSpinner
-                            android:id="@+id/edit_java"
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                            android:id="@+id/java"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"/>
+                            android:layout_gravity="center"
+                            app:auto_text_tint="true"/>
+
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+                            android:id="@+id/edit_java"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="5dp"
+                            android:src="@drawable/ic_baseline_settings_24"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:auto_tint="true"
+                            app:no_padding="true"/>
+
+                        <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageButton
+                            android:id="@+id/install_java"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="5dp"
+                            android:src="@drawable/ic_baseline_download_24"
+                            app:auto_tint="true"
+                            app:no_padding="true"/>
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 

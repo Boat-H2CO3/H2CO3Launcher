@@ -12,6 +12,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Point;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -22,10 +23,13 @@ import android.opengl.EGLDisplay;
 import android.opengl.GLES20;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.view.DisplayCutout;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.widget.Toast;
+
+import net.fornwall.jelf.ElfFile;
 
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.activity.WebActivity;
@@ -43,6 +47,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Objects;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -100,6 +105,29 @@ public class AndroidUtils {
         Point point = new Point();
         wm.getDefaultDisplay().getRealSize(point);
         return point.y;
+    }
+
+    public static boolean checkElfIsAndroid(File file) throws IOException {
+        ElfFile elfFile = ElfFile.from(file);
+        boolean isAndroid = true;
+        for (String library : elfFile.getDynamicSection().getNeededLibraries()) {
+            if (Pattern.matches("lib[^.]+\\.so\\.\\d+", library)) {
+                isAndroid = false;
+                break;
+            }
+        }
+        return isAndroid;
+    }
+
+    public static String getFileName(Context context, Uri uri) {
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        if(cursor == null) return uri.getLastPathSegment();
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        if(columnIndex == -1) return uri.getLastPathSegment();
+        String fileName = cursor.getString(columnIndex);
+        cursor.close();
+        return fileName;
     }
 
     public static int getScreenWidth(Activity context) {

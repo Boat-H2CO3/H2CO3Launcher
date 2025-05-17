@@ -574,6 +574,7 @@
     <string name="menu_settings_soft_keyboard_adjust">DisableSoftKeyboardAutoAdjust</string>
     <string name="menu_settings_item_bar_scale">ItemBarScale</string>
     <string name="menu_settings_show_log">Show Log</string>
+    <string name="menu_settings_performance_mode">Sustained Performance Mode</string>
 
     <string name="message_cancelled">Operation was cancelled</string>
     <string name="message_copy">Copy successfully!</string>
@@ -1010,6 +1011,7 @@
     <string name="app_version">1.0</string>
     <string name="splash_storage_permission">Storage permission</string>
     <string name="storage_permission_description">Allows software to read and write to internal storage.</string>
+    <string name="message_install_java">You can get Java through the following ways.</string>
 
     <string name="shaderpack">ShaderPack</string>
     <string name="recommend_version">Recommend version</string>
@@ -1020,4 +1022,9 @@
     <string name="mod_check_valkyrienskies">Valkyrien Skies/Valkyrien Warfare mod (%s) cannot work directly in single player mode. You must use a server, otherwise it will crash the game</string>
     <string name="mod_check_yes_steve_model">Yes Steve Model mod (%s) 2.2.2+ cannot work on Android.</string>
     <string name="mod_check_imblocker">IMBlocker (%s) is not for Android. It must make the game crash.</string>
+
+    <string name="internal">Internal</string>
+    <string name="import_java">Import Java</string>
+    <string name="import_java_wrong_file">Only supports importing the tar.xz file.</string>
+    <string name="import_java_error">It has been detected that the Java you imported may not be intended for use on the current device. Launching with it may cause the program to crash. Do you wish to continue with the import?</string>
 </resources>

@@ -5,12 +5,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AlertDialog;
 
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.control.SelectControllerDialog;
+import org.koishi.launcher.h2co3.dialog.JavaManageDialog;
 import org.koishi.launcher.h2co3.game.H2CO3LauncherGameRepository;
 import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3.setting.VersionSetting;
@@ -28,7 +28,6 @@ import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleBooleanProperty
 import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleIntegerProperty;
 import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleStringProperty;
 import org.koishi.launcher.h2co3core.fakefx.beans.property.StringProperty;
-import org.koishi.launcher.h2co3core.game.JavaVersion;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.task.Task;
 import org.koishi.launcher.h2co3core.util.Lang;
@@ -50,7 +49,6 @@ import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherImageView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherLinearLayout;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherProgressBar;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSeekBar;
-import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSpinner;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView;
 import org.koishi.launcher.h2co3library.component.view.H2CO3LauncherUILayout;
@@ -88,7 +86,7 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
     private H2CO3LauncherSwitch pojavBigCoreSwitch;
     private H2CO3LauncherSwitch noGameCheckSwitch;
     private H2CO3LauncherSwitch noJVMCheckSwitch;
-    private H2CO3LauncherSpinner<String> javaSpinner;
+    private H2CO3LauncherImageButton javaButton;
     private H2CO3LauncherImageButton editIconButton;
     private H2CO3LauncherImageButton deleteIconButton;
     private H2CO3LauncherImageButton controllerButton;
@@ -96,8 +94,10 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
     private H2CO3LauncherImageButton rendererInstallButton;
     private H2CO3LauncherImageButton driverButton;
     private H2CO3LauncherImageButton driverInstallButton;
+    private H2CO3LauncherImageButton javaInstallButton;
     private H2CO3LauncherTextView rendererText;
     private H2CO3LauncherTextView driverText;
+    private H2CO3LauncherTextView javaText;
 
     public VersionSettingPage(Context context, int id, H2CO3LauncherUILayout parent, int resId, boolean globalSetting) {
         super(context, id, parent, resId);
@@ -109,6 +109,8 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
     private void create() {
         H2CO3LauncherLinearLayout settingTypeLayout = findViewById(R.id.special_setting_layout);
         H2CO3LauncherLinearLayout settingLayout = findViewById(R.id.setting_layout);
+
+        javaInstallButton = findViewById(R.id.install_java);
 
         txtJVMArgs = findViewById(R.id.edit_jvm_args);
         txtGameArgs = findViewById(R.id.edit_minecraft_args);
@@ -133,32 +135,12 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
 
         isolateWorkingDirSwitch.disableProperty().bind(modpack);
 
-        javaSpinner = findViewById(R.id.edit_java);
-
         H2CO3LauncherTextView scaleFactorText = findViewById(R.id.scale_factor_text);
 
         scaleFactorSeekbar.addProgressListener();
         scaleFactorText.stringProperty().bind(Bindings.createStringBinding(() -> (int) (lastVersionSetting.getScaleFactor() * 100) + " %", scaleFactorSeekbar.percentProgressProperty()));
 
-        // add spinner data
-        ArrayList<String> javaVersionDataList = new ArrayList<>();
-        javaVersionDataList.add(JavaVersion.JAVA_AUTO.getVersionName());
-        javaVersionDataList.add(JavaVersion.JAVA_8.getVersionName());
-        javaVersionDataList.add(JavaVersion.JAVA_11.getVersionName());
-        javaVersionDataList.add(JavaVersion.JAVA_17.getVersionName());
-        javaVersionDataList.add(JavaVersion.JAVA_21.getVersionName());
-        javaSpinner.setDataList(javaVersionDataList);
-
-        // add spinner text
-        ArrayList<String> javaVersionList = new ArrayList<>();
-        javaVersionList.add(getContext().getString(R.string.settings_game_java_version_auto));
-        javaVersionList.add("JRE 8");
-        javaVersionList.add("JRE 11");
-        javaVersionList.add("JRE 17");
-        javaVersionList.add("JRE 21");
-        ArrayAdapter<String> javaAdapter = new ArrayAdapter<>(getContext(), R.layout.item_spinner_auto_tint, javaVersionList);
-        javaAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
-        javaSpinner.setAdapter(javaAdapter);
+        javaButton = findViewById(R.id.edit_java);
 
         editIconButton = findViewById(R.id.edit_icon);
         deleteIconButton = findViewById(R.id.delete_icon);
@@ -168,6 +150,7 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
         driverButton = findViewById(R.id.edit_driver);
         driverInstallButton = findViewById(R.id.install_driver);
 
+        javaButton.setOnClickListener(this);
         editIconButton.setOnClickListener(this);
         deleteIconButton.setOnClickListener(this);
         controllerButton.setOnClickListener(this);
@@ -175,9 +158,11 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
         rendererInstallButton.setOnClickListener(this);
         driverButton.setOnClickListener(this);
         driverInstallButton.setOnClickListener(this);
+        javaInstallButton.setOnClickListener(this);
 
         rendererText = findViewById(R.id.renderer);
         driverText = findViewById(R.id.driver);
+        javaText = findViewById(R.id.java);
 
         H2CO3LauncherProgressBar memoryBar = findViewById(R.id.memory_bar);
 
@@ -305,7 +290,6 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
             FXUtils.unbindBoolean(noJVMCheckSwitch, lastVersionSetting.getNotCheckJVMProperty());
             FXUtils.unbindBoolean(beGestureSwitch, lastVersionSetting.getBeGestureProperty());
             FXUtils.unbindBoolean(vulkanDriverSystemSwitch, lastVersionSetting.getVkDriverSystemProperty());
-            FXUtils.unbindSelection(javaSpinner, lastVersionSetting.getJavaProperty());
             scaleFactorSeekbar.percentProgressProperty().unbindBidirectional(lastVersionSetting.getScaleFactorProperty());
             maxMemory.unbindBidirectional(lastVersionSetting.getMaxMemoryProperty());
 
@@ -327,7 +311,7 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
         FXUtils.bindBoolean(noJVMCheckSwitch, versionSetting.getNotCheckJVMProperty());
         FXUtils.bindBoolean(beGestureSwitch, versionSetting.getBeGestureProperty());
         FXUtils.bindBoolean(vulkanDriverSystemSwitch, versionSetting.getVkDriverSystemProperty());
-        FXUtils.bindSelection(javaSpinner, versionSetting.getJavaProperty());
+        javaText.setText(versionSetting.getJava().equals("Auto") ? getContext().getString(R.string.settings_game_java_version_auto) : versionSetting.getJava());
         scaleFactorSeekbar.percentProgressProperty().bindBidirectional(versionSetting.getScaleFactorProperty());
         maxMemory.bindBidirectional(versionSetting.getMaxMemoryProperty());
         H2CO3LauncherConfig.Renderer renderer = versionSetting.getRenderer();
@@ -430,6 +414,16 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
             SelectControllerDialog dialog = new SelectControllerDialog(getContext(), lastVersionSetting.getController(), controller -> lastVersionSetting.setController(controller.getId()));
             dialog.show();
         }
+        if (view == javaButton) {
+            new JavaManageDialog(getContext(), java -> {
+                lastVersionSetting.setJava(java);
+                if (java.equals("Auto")) {
+                    javaText.setText(R.string.settings_game_java_version_auto);
+                } else {
+                    javaText.setText(java);
+                }
+            }).createDialog();
+        }
         if (view == rendererButton) {
             int[] pos = new int[2];
             view.getLocationInWindow(pos);
@@ -441,6 +435,23 @@ public class VersionSettingPage extends H2CO3LauncherCommonPage implements Manag
                 y = 0;
             }
             RendererUtil.openRendererMenu(getContext(), view, pos[0], y, ConvertUtils.dip2px(getContext(), 200), windowHeight - y, globalSetting, name -> rendererText.setText(name));
+        }
+        if (view == javaInstallButton) {
+            new AlertDialog.Builder(getContext())
+                    .setTitle(R.string.message_install_java)
+                    .setItems(new String[]{"Github", getContext().getString(R.string.update_netdisk)}, (d, w) -> {
+                        String url = switch (w) {
+                            case 0 ->
+                                    "https://github.com/FCL-Team/FoldCraftLauncher/releases/tag/java";
+                            case 1 -> "https://pan.quark.cn/s/d1c9894545f9";
+                            default -> null;
+                        };
+                        if (url != null) {
+                            AndroidUtils.openLink(getContext(), url);
+                        }
+                    })
+                    .create()
+                    .show();
         }
         if (view == driverButton) {
             RendererUtil.openDriverMenu(getContext(), view, globalSetting, name -> driverText.setText(name));

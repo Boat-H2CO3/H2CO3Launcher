@@ -410,10 +410,10 @@ public class MainUI extends H2CO3LauncherCommonUI implements View.OnClickListene
                 });
             });
         } else {
-            getActivity().runOnUiThread(() -> {
-                versionProgress.setVisibility(View.GONE);
+            Schedulers.androidUIThread().execute(() -> {
                 versionName.setText(getActivity().getString(R.string.version_no_version));
                 versionHint.setText(getActivity().getString(R.string.version_manage));
+                versionProgress.setVisibility(View.GONE);
                 icon.setBackground(AppCompatResources.getDrawable(getActivity(), R.drawable.img_grass));
             });
         }

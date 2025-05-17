@@ -28,7 +28,7 @@ body:
         - label: I have tried switching renderer.我已经尝试过切换渲染器。
         - label: I have tried switching launcher backend.我已经尝试过切换启动器后端。
   - type: input
-    id: fcl-version
+    id: h2co3launcher-version
     attributes:
       label: Launcher Version / 启动器版本
       description: |
@@ -107,14 +107,14 @@ body:
         If there is a game crash report, please upload it(file) below.
         如果有游戏崩溃报告，请在下面上传(文件)。
   - type: textarea
-    id: fcl-crash-report
+    id: h2co3launcher-crash-report
     attributes:
       label: Launcher Crash Report / 启动器崩溃报告
       description: |
         If there is a launcher crash report, please upload it(file) below.
         如果有启动器崩溃报告，请在下面上传(文件)。
   - type: textarea
-    id: fcl-logs
+    id: h2co3launcher-logs
     attributes:
       label: Launcher Log File / 启动器日志文件
       description: |

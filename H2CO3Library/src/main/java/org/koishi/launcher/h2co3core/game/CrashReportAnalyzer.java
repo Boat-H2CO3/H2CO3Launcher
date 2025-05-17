@@ -39,7 +39,7 @@ public final class CrashReportAnalyzer {
             "mods", "mod", "impl", "org", "com", "cn", "cc", "jp", // title
             "core", "config", "registries", "lib", "ruby", "mc", "codec", "recipe", "channel", "embedded", "done", "net", "netty", "network", "load", "github", "handler", "content", "feature", // misc
             "file", "machine", "shader", "general", "helper", "init", "library", "api", "integration", "engine", "preload", "preinit",
-            "fcl", "tungsten", // fcl
+            "h2co3launcher", "cnhnull", // h2co3launcher
             "fml", "minecraftforge", "forge", "cpw", "modlauncher", "launchwrapper", "objectweb", "asm", "event", "eventhandler", "handshake", "modapi", "kcauldron", // forge
             "fabricmc", "loader", "game", "knot", "launch", "mixin" // fabric
     ));

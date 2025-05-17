@@ -11,14 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
 import org.koishi.launcher.h2co3core.fakefx.beans.property.ObjectProperty;
 import org.koishi.launcher.h2co3core.fakefx.beans.property.ObjectPropertyBase;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.util.skin.InvalidSkinException;
 import org.koishi.launcher.h2co3core.util.skin.NormalizedSkin;
 import org.koishi.launcher.h2co3library.util.ConvertUtils;
-
-import org.jetbrains.annotations.NotNull;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -105,7 +104,7 @@ public class SkinRenderer implements GLSurfaceView.Renderer {
         gl10.glPushMatrix();
         gl10.glBindTexture(GL10.GL_TEXTURE_2D, modelTextureData[0]);
         this.skinModel.drawBodyModel(gl10, slim);
-        if (cape != null && cape.getWidth() == 64 && cape.getHeight() == 32) {
+        if (cape != null /*&& cape.getWidth() == 64 && cape.getHeight() == 32*/) {
             gl10.glBindTexture(GL10.GL_TEXTURE_2D, modelTextureData[1]);
             this.skinModel.drawCapeModel(gl10);
         }

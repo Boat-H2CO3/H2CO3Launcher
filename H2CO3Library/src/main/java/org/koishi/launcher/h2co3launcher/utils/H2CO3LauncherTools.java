@@ -3,16 +3,9 @@ package org.koishi.launcher.h2co3launcher.utils;
 import android.content.Context;
 import android.os.Environment;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.koishi.launcher.h2co3core.message.H2CO3MessageManager;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 public class H2CO3LauncherTools {
 
@@ -28,6 +21,7 @@ public class H2CO3LauncherTools {
     public static String JAVA_11_PATH;
     public static String JAVA_17_PATH;
     public static String JAVA_21_PATH;
+    public static String JAVA_PATH;
     public static String JNA_PATH;
     public static String LWJGL_DIR;
     public static String CACIOCAVALLO_8_DIR;
@@ -62,6 +56,7 @@ public class H2CO3LauncherTools {
         JAVA_11_PATH = RUNTIME_DIR + "/java/jre11";
         JAVA_17_PATH = RUNTIME_DIR + "/java/jre17";
         JAVA_21_PATH = RUNTIME_DIR + "/java/jre21";
+        JAVA_PATH = RUNTIME_DIR + "/java";
         JNA_PATH = RUNTIME_DIR + "/jna";
         LWJGL_DIR = RUNTIME_DIR + "/lwjgl";
         CACIOCAVALLO_8_DIR = RUNTIME_DIR + "/caciocavallo";
@@ -75,8 +70,8 @@ public class H2CO3LauncherTools {
         PRIVATE_COMMON_DIR = context.getExternalFilesDir(".minecraft").getAbsolutePath();
 
         AUTHLIB_INJECTOR_PATH = PLUGIN_DIR + "/authlib-injector.jar";
-        LIB_FIXER_PATH = PLUGIN_DIR + "/LibFixer.jar";
-        LAUNCH_WRAPPER = PLUGIN_DIR + "/LaunchWrapper.jar";
+        LIB_FIXER_PATH = PLUGIN_DIR + "/MioLibFixer.jar";
+        LAUNCH_WRAPPER = PLUGIN_DIR + "/MioLaunchWrapper.jar";
 
         H2CO3_SETTING_DIR = "/org.koishi.launcher.h2co3/settings";
         H2CO3_CONFIG_NAME = "H2CO3Config.json";
@@ -98,6 +93,14 @@ public class H2CO3LauncherTools {
         init(PRIVATE_COMMON_DIR);
         init(SHARED_COMMON_DIR);
         init(H2CO3_SETTING_DIR);
+
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),  "/H2CO3Launcher/.nomedia");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (Exception ignore) {
+            }
+        }
     }
 
     private static boolean init(String path) {

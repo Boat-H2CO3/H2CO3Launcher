@@ -20,6 +20,9 @@ import org.koishi.launcher.h2co3.util.RuntimeUtils;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.util.LocaleUtils;
 import org.koishi.launcher.h2co3core.util.io.FileUtils;
+import org.koishi.launcher.h2co3core.util.java.JavaManager;
+import org.koishi.launcher.h2co3launcher.plugins.DriverPlugin;
+import org.koishi.launcher.h2co3launcher.plugins.RendererPlugin;
 import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3library.component.H2CO3LauncherFragment;
 
@@ -93,6 +96,19 @@ public class InstallFragment extends H2CO3LauncherFragment implements View.OnCli
             java17 = RuntimeUtils.isLatest(H2CO3LauncherTools.JAVA_17_PATH, "/assets/runtime/java/jre17");
             java21 = RuntimeUtils.isLatest(H2CO3LauncherTools.JAVA_21_PATH, "/assets/runtime/java/jre21");
             jna = RuntimeUtils.isLatest(H2CO3LauncherTools.JNA_PATH, "/assets/runtime/jna");
+            if (!new File(H2CO3LauncherTools.JAVA_PATH, "resolv.conf").exists()) {
+                if (!LocaleUtils.getSystemLocale().getDisplayName().equals(Locale.CHINA.getDisplayName())) {
+                    FileUtils.writeText(
+                            new File(H2CO3LauncherTools.JAVA_PATH + "/resolv.conf"),
+                            "nameserver 1.1.1.1\nnameserver 1.0.0.1"
+                    );
+                } else {
+                    FileUtils.writeText(
+                            new File(H2CO3LauncherTools.JAVA_PATH + "/resolv.conf"),
+                            "nameserver 8.8.8.8\nnameserver 8.8.4.4"
+                    );
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -132,6 +148,9 @@ public class InstallFragment extends H2CO3LauncherFragment implements View.OnCli
 
         if (!hasEnteredLauncher) {
             hasEnteredLauncher = true;
+            RendererPlugin.init(requireContext());
+            DriverPlugin.init(requireContext());
+            JavaManager.init();
             Intent intent = new Intent(requireActivity(), H2CO3MainActivity.class);
             startActivity(intent);
             requireActivity().finish();
@@ -240,11 +259,6 @@ public class InstallFragment extends H2CO3LauncherFragment implements View.OnCli
                 new Thread(() -> {
                     try {
                         RuntimeUtils.installJava(requireContext(), H2CO3LauncherTools.JAVA_11_PATH, "runtime/java/jre11");
-                        if (!LocaleUtils.getSystemLocale().getDisplayName().equals(Locale.CHINA.getDisplayName())) {
-                            FileUtils.writeText(new File(H2CO3LauncherTools.JAVA_11_PATH + "/resolv.conf"), "nameserver 1.1.1.1\nnameserver 1.0.0.1");
-                        } else {
-                            FileUtils.writeText(new File(H2CO3LauncherTools.JAVA_11_PATH + "/resolv.conf"), "nameserver 8.8.8.8\nnameserver 8.8.4.4");
-                        }
                         java11 = true;
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -263,11 +277,6 @@ public class InstallFragment extends H2CO3LauncherFragment implements View.OnCli
                 new Thread(() -> {
                     try {
                         RuntimeUtils.installJava(requireContext(), H2CO3LauncherTools.JAVA_17_PATH, "runtime/java/jre17");
-                        if (!LocaleUtils.getSystemLocale().getDisplayName().equals(Locale.CHINA.getDisplayName())) {
-                            FileUtils.writeText(new File(H2CO3LauncherTools.JAVA_17_PATH + "/resolv.conf"), "nameserver 1.1.1.1\nnameserver 1.0.0.1");
-                        } else {
-                            FileUtils.writeText(new File(H2CO3LauncherTools.JAVA_17_PATH + "/resolv.conf"), "nameserver 8.8.8.8\nnameserver 8.8.4.4");
-                        }
                         java17 = true;
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -286,11 +295,6 @@ public class InstallFragment extends H2CO3LauncherFragment implements View.OnCli
                 new Thread(() -> {
                     try {
                         RuntimeUtils.installJava(requireContext(), H2CO3LauncherTools.JAVA_21_PATH, "runtime/java/jre21");
-                        if (!LocaleUtils.getSystemLocale().getDisplayName().equals(Locale.CHINA.getDisplayName())) {
-                            FileUtils.writeText(new File(H2CO3LauncherTools.JAVA_21_PATH + "/resolv.conf"), "nameserver 1.1.1.1\nnameserver 1.0.0.1");
-                        } else {
-                            FileUtils.writeText(new File(H2CO3LauncherTools.JAVA_21_PATH + "/resolv.conf"), "nameserver 8.8.8.8\nnameserver 8.8.4.4");
-                        }
                         java21 = true;
                     } catch (IOException e) {
                         e.printStackTrace();

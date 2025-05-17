@@ -540,6 +540,7 @@
     <string name="menu_settings_soft_keyboard_adjust">禁用软键盘自适应</string>
     <string name="menu_settings_item_bar_scale">物品栏缩放</string>
     <string name="menu_settings_show_log">显示日志</string>
+    <string name="menu_settings_performance_mode">持续性能模式</string>
 
     <string name="message_cancelled">操作已取消</string>
     <string name="message_copy">复制成功！</string>
@@ -961,6 +962,7 @@
     <string name="message_install_plugin">你可以通过以下方式获取插件。</string>
     <string name="splash_storage_permission">Storage permission</string>
     <string name="storage_permission_description">Allows software to read and write to internal storage.</string>
+    <string name="message_install_java">你可以通过以下方式获取Java。</string>
 
     <string name="shaderpack">光影</string>
     <string name="recommend_version">推荐的版本</string>
@@ -971,4 +973,9 @@
     <string name="mod_check_valkyrienskies">瓦尔基里天空/瓦尔基里战争（%s）无法直接在单人模式下运行。你必须使用服务器运行（可以使用Termux），否则游戏会崩溃。</string>
     <string name="mod_check_yes_steve_model">是，史蒂夫模型（%s）2.2.2+无法在安卓系统上运行。</string>
     <string name="mod_check_imblocker">输入法冲突修复 (%s) 不适用于安卓。它会使游戏在启动阶段崩溃。</string>
+
+    <string name="internal">启动器内部的</string>
+    <string name="import_java">导入Java</string>
+    <string name="import_java_wrong_file">仅支持导入tar.xz文件。</string>
+    <string name="import_java_error">检测到你导入的Java可能不是给当前设备使用的，使用它启动可能会造成程序崩溃，是否继续导入?</string>
 </resources>

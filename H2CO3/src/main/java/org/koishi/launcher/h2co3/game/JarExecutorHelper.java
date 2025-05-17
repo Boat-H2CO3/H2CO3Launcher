@@ -15,11 +15,12 @@ import org.koishi.launcher.h2co3.setting.Profile;
 import org.koishi.launcher.h2co3.setting.Profiles;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
 import org.koishi.launcher.h2co3.util.RequestCodes;
+import org.koishi.launcher.h2co3core.game.JavaVersion;
+import org.koishi.launcher.h2co3core.util.io.IOUtils;
+import org.koishi.launcher.h2co3core.util.java.JavaManager;
 import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig;
 import org.koishi.launcher.h2co3launcher.bridge.H2CO3LauncherBridge;
 import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
-import org.koishi.launcher.h2co3core.game.JavaVersion;
-import org.koishi.launcher.h2co3core.util.io.IOUtils;
 import org.koishi.launcher.h2co3library.browser.FileBrowser;
 import org.koishi.launcher.h2co3library.browser.options.LibMode;
 import org.koishi.launcher.h2co3library.browser.options.SelectionMode;
@@ -90,8 +91,8 @@ public class JarExecutorHelper {
         Profile profile = Profiles.getSelectedProfile();
         if (profile != null) {
             String java = profile.getGlobal().getJava();
-            if (!java.equals(JavaVersion.JAVA_AUTO.getVersionName())) {
-                javaVersion = JavaVersion.getJavaFromVersionName(java).getVersion();
+            if (!java.equals(JavaVersion.JAVA_AUTO.getName())) {
+                javaVersion = JavaManager.getJavaFromVersionName(java).getVersion();
             }
         }
         return javaVersion;
