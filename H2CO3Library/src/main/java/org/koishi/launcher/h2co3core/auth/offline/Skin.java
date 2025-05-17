@@ -22,6 +22,8 @@ import static org.koishi.launcher.h2co3core.util.Lang.tryCast;
 import static org.koishi.launcher.h2co3core.util.Pair.pair;
 
 import com.google.gson.annotations.SerializedName;
+
+import org.jetbrains.annotations.Nullable;
 import org.koishi.launcher.h2co3core.auth.yggdrasil.TextureModel;
 import org.koishi.launcher.h2co3core.task.FetchTask;
 import org.koishi.launcher.h2co3core.task.GetTask;
@@ -29,8 +31,6 @@ import org.koishi.launcher.h2co3core.task.Task;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.gson.JsonUtils;
 import org.koishi.launcher.h2co3core.util.io.FileUtils;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -160,7 +160,7 @@ public class Skin {
                 });
             case LITTLE_SKIN:
             case CUSTOM_SKIN_LOADER_API:
-                String realCslApi = type == Type.LITTLE_SKIN ? "https://littleskin.cn" : StringUtils.removeSuffix(cslApi, "/");
+                String realCslApi = type == Type.LITTLE_SKIN ? "https://littleskin.cn/csl" : StringUtils.removeSuffix(cslApi, "/");
                 return Task.composeAsync(() -> new GetTask(new URL(String.format("%s/%s.json", realCslApi, username))))
                         .thenComposeAsync(json -> {
                             SkinJson result = JsonUtils.GSON.fromJson(json, SkinJson.class);

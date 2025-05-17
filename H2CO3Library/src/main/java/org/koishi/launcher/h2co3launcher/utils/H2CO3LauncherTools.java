@@ -93,6 +93,14 @@ public class H2CO3LauncherTools {
         init(PRIVATE_COMMON_DIR);
         init(SHARED_COMMON_DIR);
         init(H2CO3_SETTING_DIR);
+
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),  "/H2CO3Launcher/.nomedia");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (Exception ignore) {
+            }
+        }
     }
 
     private static boolean init(String path) {

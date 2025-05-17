@@ -339,6 +339,7 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
         H2CO3LauncherSwitch disableBEGestureSwitch = findViewById(R.id.switch_be_gesture);
         H2CO3LauncherSwitch gyroSwitch = findViewById(R.id.switch_gyro);
         H2CO3LauncherSwitch showLogSwitch = findViewById(R.id.switch_show_log);
+        H2CO3LauncherSwitch performanceModeSwitch = findViewById(R.id.switch_performance);
 
         H2CO3LauncherSpinner<GestureMode> gestureModeSpinner = findViewById(R.id.gesture_mode_spinner);
         H2CO3LauncherSpinner<MouseMoveMode> mouseMoveModeSpinner = findViewById(R.id.mouse_mode_spinner);
@@ -380,6 +381,10 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
             if (!isHideAllViews()) {
                 ((DrawerLayout) getLayout()).setDrawerLockMode(menuSetting.isHideMenuView() ? DrawerLayout.LOCK_MODE_UNLOCKED : DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
+        });
+
+        performanceModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            activity.getWindow().setSustainedPerformanceMode(isChecked);
         });
 
         showFps.setOnCheckedChangeListener((buttonView, isChecked) -> {

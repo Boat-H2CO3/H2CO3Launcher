@@ -628,6 +628,26 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/switch_gyro" />
 
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:singleLine="true"
+                android:text="@string/menu_settings_performance_mode"
+                android:textSize="12sp"
+                app:auto_text_tint="true"
+                app:layout_constraintBottom_toBottomOf="@id/switch_performance"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/switch_performance" />
+
+            <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch
+                android:id="@+id/switch_performance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_debug" />
+
             <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherSwitch
                 android:id="@+id/switch_gyro"
                 android:layout_width="wrap_content"
