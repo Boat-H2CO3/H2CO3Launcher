@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="H2CO3 [buildLwjgl]" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration name="Boat_H2CO3 [buildLwjgl]" default="false" factoryName="Gradle" type="GradleRunConfiguration">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="D:\DEV\StudioProjects\H2CO3Launcher\LWJGL-H2CO3" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$" />
       <option name="externalSystemIdString" value="GRADLE" />
       <option name="scriptParameters" value="" />
       <option name="taskDescriptions">

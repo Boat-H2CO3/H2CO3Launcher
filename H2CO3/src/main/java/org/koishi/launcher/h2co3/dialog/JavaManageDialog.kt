@@ -34,7 +34,6 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.concurrent.CompletableFuture
-import java.util.stream.Collectors
 
 class JavaManageDialog(context: Context, onSelected: OnSelectedListener) :
     H2CO3CustomViewDialog(context) {
@@ -202,10 +201,18 @@ class JavaManageDialog(context: Context, onSelected: OnSelectedListener) :
 
     private fun refresh() {
         versionList.clear()
-        versionList.addAll(
-            javaList.stream()
-                .filter { javaVersion: JavaVersion -> !javaVersion.isAuto }
-                .collect(Collectors.toList()))
+        versionList.addAll(javaList.filter { !it.isAuto }
+            .sortedWith(Comparator { v1, v2 ->
+                val parts1 = v1.versionName.split('.').map { it.toIntOrNull() ?: 0 }
+                val parts2 = v2.versionName.split('.').map { it.toIntOrNull() ?: 0 }
+                val maxLength = maxOf(parts1.size, parts2.size)
+                for (i in 0 until maxLength) {
+                    val p1 = parts1.getOrElse(i) { 0 }
+                    val p2 = parts2.getOrElse(i) { 0 }
+                    if (p1 != p2) return@Comparator p1.compareTo(p2)
+                }
+                0
+            }))
     }
 
     interface OnSelectedListener {

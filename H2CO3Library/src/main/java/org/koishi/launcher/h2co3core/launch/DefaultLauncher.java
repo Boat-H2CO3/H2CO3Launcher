@@ -210,9 +210,9 @@ public class DefaultLauncher extends Launcher {
         res.addDefault("-Dfml.ignorePatchDiscrepancies=", "true");
 
         // LWJGL debug mode
-        // res.addDefault("-Dorg.lwjgl.util.Debug=", "true");
-        // res.addDefault("-Dorg.lwjgl.util.DebugLoader=", "true");
-        // res.addDefault("-Dorg.lwjgl.util.DebugFunctions=", "true");
+         res.addDefault("-Dorg.lwjgl.util.Debug=", "true");
+         res.addDefault("-Dorg.lwjgl.util.DebugLoader=", "true");
+         res.addDefault("-Dorg.lwjgl.util.DebugFunctions=", "true");
 
         // H2CO3Launcher specific args
         res.addDefault("-Dext.net.resolvPath=", H2CO3LauncherTools.JAVA_PATH + "/resolv.conf");
@@ -298,7 +298,7 @@ public class DefaultLauncher extends Launcher {
             res.add(pkg + "/" + pkg + "=ALL-UNNAMED");
         }
 
-        res.add("h2co3.Wrapper");
+        res.add("mio.Wrapper");
         res.add(version.getMainClass());
 
         res.addAll(Arguments.parseStringArguments(version.getMinecraftArguments().map(StringUtils::tokenize).orElseGet(ArrayList::new), configuration));

@@ -38,12 +38,7 @@ import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleIntegerProperty
 import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleObjectProperty
 import org.koishi.launcher.h2co3core.fakefx.beans.property.SimpleStringProperty
 import org.koishi.launcher.h2co3core.fakefx.beans.property.StringProperty
-import org.koishi.launcher.h2co3core.game.JavaVersion
-import org.koishi.launcher.h2co3core.game.Version
-import org.koishi.launcher.h2co3core.task.Schedulers
-import org.koishi.launcher.h2co3core.task.Task
 import org.koishi.launcher.h2co3core.util.Lang
-import org.koishi.launcher.h2co3core.util.java.JavaManager
 import org.koishi.launcher.h2co3core.util.platform.MemoryUtils
 import org.koishi.launcher.h2co3launcher.H2CO3LauncherConfig
 import org.koishi.launcher.h2co3launcher.plugins.RendererPlugin
@@ -251,19 +246,6 @@ class VersionSetting : Cloneable {
         set(pojavBigCore) {
             pojavBigCoreProperty.set(pojavBigCore)
         }
-
-    // launcher settings
-    fun getJavaVersion(version: Version): Task<JavaVersion> {
-        return Task.runAsync(Schedulers.androidUIThread()) {
-            java = JavaManager.getJavaFromVersionName(java).name
-        }.thenSupplyAsync {
-            if (java == JavaVersion.JAVA_AUTO.name) {
-                return@thenSupplyAsync JavaVersion.getSuitableJavaVersion(version)
-            } else {
-                return@thenSupplyAsync JavaManager.getJavaFromVersionName(java)
-            }
-        }
-    }
 
     fun checkController() {
         Controllers.addCallback {

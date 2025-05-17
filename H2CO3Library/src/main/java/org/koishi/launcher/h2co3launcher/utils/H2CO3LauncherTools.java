@@ -70,8 +70,8 @@ public class H2CO3LauncherTools {
         PRIVATE_COMMON_DIR = context.getExternalFilesDir(".minecraft").getAbsolutePath();
 
         AUTHLIB_INJECTOR_PATH = PLUGIN_DIR + "/authlib-injector.jar";
-        LIB_FIXER_PATH = PLUGIN_DIR + "/LibFixer.jar";
-        LAUNCH_WRAPPER = PLUGIN_DIR + "/LaunchWrapper.jar";
+        LIB_FIXER_PATH = PLUGIN_DIR + "/MioLibFixer.jar";
+        LAUNCH_WRAPPER = PLUGIN_DIR + "/MioLaunchWrapper.jar";
 
         H2CO3_SETTING_DIR = "/org.koishi.launcher.h2co3/settings";
         H2CO3_CONFIG_NAME = "H2CO3Config.json";
