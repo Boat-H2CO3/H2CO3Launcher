@@ -43,7 +43,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="?colorOnPrimary"
-                    android:text="@string/app_name"
                     android:textSize="16sp" />
 
                 <org.koishi.launcher.h2co3library.component.view.H2CO3LauncherTextView
@@ -51,7 +50,6 @@
                     style="@style/Theme.H2CO3.CardTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/app_name"
                     android:maxLines="4"
                     android:textColor="?colorOnPrimary"
                     android:textSize="16sp" />
