@@ -22,7 +22,6 @@ import static org.koishi.launcher.h2co3core.util.Lang.thread;
 
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3.util.AndroidUtils;
-import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 import org.koishi.launcher.h2co3core.auth.AuthenticationException;
 import org.koishi.launcher.h2co3core.auth.OAuth;
 import org.koishi.launcher.h2co3core.event.Event;
@@ -31,8 +30,7 @@ import org.koishi.launcher.h2co3core.util.Logging;
 import org.koishi.launcher.h2co3core.util.StringUtils;
 import org.koishi.launcher.h2co3core.util.io.IOUtils;
 import org.koishi.launcher.h2co3core.util.io.NetworkUtils;
-
-import fi.iki.elonen.NanoHTTPD;
+import org.koishi.launcher.h2co3launcher.utils.H2CO3LauncherTools;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,6 +38,8 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
+
+import fi.iki.elonen.NanoHTTPD;
 
 public final class OAuthServer extends NanoHTTPD implements OAuth.Session {
     public static String lastlyOpenedURL;
@@ -157,8 +157,7 @@ public final class OAuthServer extends NanoHTTPD implements OAuth.Session {
 
         @Override
         public String getClientId() {
-            return "0";
-            //TODO: return H2CO3LauncherPath.CONTEXT.getString(R.string.oauth_client_id);
+            return H2CO3LauncherTools.CONTEXT.getString(R.string.oauth_api_key);
         }
 
         @Override
