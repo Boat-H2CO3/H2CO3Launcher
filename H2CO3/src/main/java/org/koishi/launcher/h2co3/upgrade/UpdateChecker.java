@@ -8,12 +8,13 @@ import android.content.pm.PackageManager;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
+
 import org.koishi.launcher.h2co3.R;
 import org.koishi.launcher.h2co3core.task.Schedulers;
 import org.koishi.launcher.h2co3core.task.Task;
+import org.koishi.launcher.h2co3core.util.LocaleUtils;
 import org.koishi.launcher.h2co3core.util.gson.JsonUtils;
 import org.koishi.launcher.h2co3core.util.io.NetworkUtils;
-import org.koishi.launcher.h2co3core.util.LocaleUtils;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class UpdateChecker {
 
     //TODO: 2022/12/18
     public static final String UPDATE_CHECK_URL = "https://raw.githubusercontent.com/Boat-H2CO3/H2CO3Launcher/main/version_map.json";
-    public static final String UPDATE_CHECK_URL_CN = "http://101.43.66.4:1145/api/getupdate";
+    public static final String UPDATE_CHECK_URL_CN = "https://gitee.com/cainiaohanhanyai/H2CO3Launcher/raw/H2CO3_Debug/version_map.json";
 
     private static UpdateChecker instance;
     private boolean isChecking = false;

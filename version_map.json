@@ -1,9 +1,9 @@
 [
   {
     "type": "release",
-    "versionCode": 1200,
-    "versionName": "1.2.0",
-    "date": "2025.05.17",
+    "versionCode": 1201,
+    "versionName": "1.2.1",
+    "date": "2025.05.18",
     "description": [
       {
         "lang": "en",
@@ -15,6 +15,6 @@
       }
     ],
     "netdiskUrl": "https://bing.com",
-    "url": "https://github.com/Boat-H2CO3/H2CO3Launcher/releases/download/1.2.0/H2CO3Launcher-release-1.2.0-all.apk"
+    "url": "https://github.com/Boat-H2CO3/H2CO3Launcher/releases/download/1.2.1/H2CO3Launcher-release-1.2.1-all.apk"
   }
 ]
