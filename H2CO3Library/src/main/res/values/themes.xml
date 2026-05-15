@@ -32,13 +32,15 @@
     <style name="Theme.H2CO3.Base" parent="Theme.H2CO3.Material">
         <item name="android:textCursorDrawable">@drawable/textfield_cursor</item>
         <item name="fontFamily">@font/josefin_sans</item>
-        <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>0
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
+        <item name="android:statusBarColor">?android:colorBackground</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
     </style>
 
     <style name="Theme.H2CO3.Styled" parent="Theme.H2CO3.Base">
